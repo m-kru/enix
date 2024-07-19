@@ -2,8 +2,17 @@
 
 # Features
 
+- No runtime dependencies except configuration and syntax highlighting files.
 - Multi-cursor support.
 - Tabs.
+- Built-in help.
+- Mouse support.
+- Improved whitespace management.
+  - Automatic removal of trailing whitespaces.
+  - Highlighting invalid indent whitespace (tab or space).
+- Configuration and syntax highlighting loaded dynamically.
+  No need to rebuilt or wait for weeks/months to get syntax highlighting fix or improvement.
+  Easy to use custom syntax highlighting.
 
 # No-features
 
