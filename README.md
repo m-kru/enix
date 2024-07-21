@@ -42,20 +42,25 @@ An example of selection-oriented command is `sh`, which forwards selection as a 
 
 # Default keybindings
 
-## Cursor Movement
+## Cursor
 
 - `Down` - cursor-down
 - `Left` - cursor-left
 - `Right` - cursor-right
 - `Up` - cursor-up
-- `Ctrl-Left` -
-- `Ctrl-Right` -
+- `Ctrl-Left` - cursor-
+- `Ctrl-Right` - cursor-
+- `Ctrl-Down` - cursor-down-spawn
+- `Ctrl-Up` - cursor-up-spawn
+- `Ctrl-{` - cursor-match-brace
+- `Ctrl-[` - cursor-match-bracket
+- `Ctrl-(` - cursor-match-paren
 
 ## Tab
 
-- `Ctrl-t` - open-tab
-- `Ctrl-w` - close-tab
-- `Ctrl-Tab` - next-tab
+- `Ctrl-t` - tab-open
+- `Ctrl-w` - tab-close
+- `Ctrl-Tab` - tab-next
 
 ## Find
 
@@ -69,15 +74,21 @@ An example of selection-oriented command is `sh`, which forwards selection as a 
 - `Ctrl-l` - select-line
 - `Shift-Right` - select-next-char
 - `Shift-Right` - select-prev-char
+- `Ctrl-}` - select-in-brace
+- `Ctrl-]` - select-in-bracket
+- `Ctrl-)` - select-in-paren
 
+## File
+
+- `Ctrl-o` - file-open
+- `Ctrl-s` - file-save
+-
 ## Miscellaneous
 
 - `Ctrl-c` - copy
 - `Ctrl-k` - cut-line
-- `Ctrl-o` - open-file
 - `Ctrl-p` - paste
 - `Ctrl-q` - quit
-- `Ctrl-s` - save
 
 # Help
 
