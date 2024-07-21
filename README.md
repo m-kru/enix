@@ -19,7 +19,10 @@
 - No integrated terminal.
   Simply `Ctrl-z` to execute shell commands.
 - No splits.
-  Just open multiple terminals and use your window manager capabilities or use a tmux like program.
+  Instead, simply do one of the following:
+  -  open multiple terminals and use your window manager capabilities,
+  -  use a [tmux](https://github.com/tmux/tmux) like program,
+  -  use a [tilix](https://github.com/gnunn1/tilix) like terminal.
 - No embedded plugin system.
   Plugins can be written as regular programs in any programming language.
   Plugins can be run using the `sh` command.
