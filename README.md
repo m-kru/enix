@@ -28,6 +28,8 @@
   Plugins can be run using the `sh` command.
   Each selection is a standard input for an externally called program and is replaced by the program standard output.
 
+# Glossary
+
 # Commands
 
 enix is build on the concept of built-in commands.
