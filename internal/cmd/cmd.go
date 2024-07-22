@@ -1,84 +1,83 @@
 package cmd
 
 var cmdDescriptions = map[string]string{
+	// Command
+
+	"cmd-list": `cmd-list # Lists all available commands in alphabetical order with one sentence summary.`
+	"cmd-prev": `cmd-prev # Executes previous command.`
+
 	// Cursor
-	"cursor-down": `Usage:
-  cursor-down
-Description:
-  Moves cursors down. If cursor is in the last line, nothing happens.`,
 
-	"cursor-left": `Usage:
-  cursor-left
-Description:
-  Moves cursors left. If cursor is in the first column of a line, then it is
-  moved into the last column of the previous line. Unless this is the first line.
-  In such a case, nothing happens.`,
-	"cursor-right": `Usage:
+	"cursor-down": `cursor-down # Moves cursor down.
 
-  cursor-right
-Description:
-  Moves cursors right. If cursor is in the last column of a line, then it is
-  moved into the first column of the next line. Unless this is the lastt line.
-  In such a case, nothing happens.`,
+If cursor is in the last line, nothing happens.`,
 
-	"cursor-up": `Usage:
-  cursor-up
-Description:
-  Moves cursors up. If cursor is in the fisrt line, nothing happens.`,
+	"cursor-left": `cursor-left # Moves cursors left.
+
+If cursor is in the first column of a line, then it is moved into the last
+column of the previous line. Unless this is the first line. In such a case,
+nothing happens.`,
+
+	"cursor-right": `cursor-right # Moves cursors right.
+
+If cursor is in the last column of a line, then it is moved into the first
+column of the next line. Unless this is the lastt line. In such a case,
+nothing happens.`,
+
+	"cursor-up": `cursor-up # Moves cursors up.
+
+If cursor is in the fisrt line, nothing happens.`,
 
 	// File
 
-	"file-open": `Usage:
-  file-open [path/to/file]
-Description:
-  Opens file in a new tab. If path to file is not provided, then it behaves
-  the same as the tab-open command.`,
+	"file-open": `file-open [path/to/file] # Opens file in a new tab.
 
-	"file-save": `Usage:
-  file-save [path/to/file]
-Description:
-  Saves file using the provided path to file. If path to file is not provided,
-  then it uses the current file path.`,
+If path to file is not provided, then it behaves the same as the
+tab-open command.`,
+
+	"file-save": `file-save [path/to/file] # Saves file using the provided path to file.
+
+If path to file is not provided, then it uses the current file path.`,
+
+	// Indent
+
+	"indent-increase": `indent-increase # Increases indent of lines with cursor.
+
+In the case of selections, it increases all selected lines. Even if the
+selection starts/ends in the middle of a line.`
+
+	"indent-decrease": `indent-increase # Decreases indent of lines with cursor.
+
+In the case of selections, it decreases all selected lines. Even if the
+selection starts/ends in the middle of a line.`
 
 	// Tab
 
-	"tab-open": `Usage:
-  tab-open
-Description:
-  Opens a new empty tab.`,
+	"tab-open": `tab-open # Opens a new empty tab.`,
 
-	"tab-next": `Usage:
-  tab-next
-Description:
-  Cycles to the next tab. If the current tab is the last tab, then it wraps
-  to the first tab.`,
+	"tab-next": `tab-next # Cycles to the next tab.
 
-	"tab-prev": `Usage:
-  tab-prev
-Description:
-  Cycles to the previous tab. If the current tab is the first tab, then it wraps
-  to the last tab.`,
+If the current tab is the last tab, then it wraps to the first tab.`,
+
+	"tab-prev": `tab-prev # Cycles to the previous tab.
+
+If the current tab is the first tab, then it wraps to the last tab.`,
 
 	// Miscellaneous
 
-	"escape": `Usage:
-  escape
-Description:
-  Escapes current context. The actual action depends on the context.
-  For example, if the focues is on the command prompt, then escape command
-  escapes the command prompt and allows user to continue file editing.
-  If the focus in on a file editing and there is any selection, then escape
-  command clears all selections.`,
+	"escape": `escape # Escapes the current context.
 
-	"help": `Usage:
-  help [topic|command-name]
-Description:
-  Displays help message for a given topic or command in a newly open tab.
-  If neither topic nor command name is provided displays help message
-  for the help command. The same as 'help help'. Valid topics are:
-    - XXX - lorem ipsum ...
-    - YYY - lorem ipsum ...
-    - ZZZ - lorem ipsum ...`,
+The actual action depends on the context. For example, if the focues is on the
+command prompt, then escape command escapes the command prompt and allows user
+to continue file editing. If the focus in on a file editing and there is any
+selection, then escape command clears all selections.`,
+
+	"help": `help [topic|command-name] # Displays help message for a given topic or command in a newly open tab.
+
+If neither topic nor command name is provided displays help message
+for the help command. The same as 'help help'. Valid topics are:
+  - commands - explanation of commands concept,
+  - keybindings - how to set, and what to watch out for.`
 	/*
 	   "cursor-down-spawn":    struct{}{},
 	   "cursor-up-spawn":      struct{}{},
