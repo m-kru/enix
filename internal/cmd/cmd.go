@@ -61,6 +61,15 @@ Description:
 
 	// Miscellaneous
 
+	"escape": `Usage:
+  escape
+Description:
+  Escapes current context. The actual action depends on the context.
+  For example, if the focues is on the command prompt, then escape command
+  escapes the command prompt and allows user to continue file editing.
+  If the focus in on a file editing and there is any selection, then escape
+  command clears all selections.`,
+
 	"help": `Usage:
   help [topic|command-name]
 Description:
