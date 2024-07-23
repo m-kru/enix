@@ -3,6 +3,7 @@ package cmd
 var cmdDescriptions = map[string]string{
 	// Command
 
+	"cmd":      `cmd # Start command prompt.`,
 	"cmd-list": `cmd-list # Lists all available commands in alphabetical order with one sentence summary.`,
 	"cmd-prev": `cmd-prev # Executes previous command.`,
 
@@ -77,7 +78,9 @@ selection, then escape command clears all selections.`,
 If neither topic nor command name is provided displays help message
 for the help command. The same as 'help help'. Valid topics are:
   - commands - explanation of commands concept,
-  - keybindings - how to set, and what to watch out for.`,
+  - cursors - what they are and how they work,
+  - keybindings - how to set, and what to watch out for,
+  - selections - what ther are and how they work.`,
 	/*
 	   "cursor-down-spawn":    struct{}{},
 	   "cursor-up-spawn":      struct{}{},

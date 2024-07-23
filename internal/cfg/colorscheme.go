@@ -17,6 +17,9 @@ type Colorscheme struct {
 
 	Selection tcell.Style
 
+	Prompt       tcell.Style
+	PromptShadow tcell.Style
+
 	// Syntax highlighting
 	Comment tcell.Style
 	Keyword tcell.Style
@@ -40,5 +43,8 @@ func ColorschemeDefault() Colorscheme {
 
 		Cursor:     tcell.StyleDefault.Reverse(true),
 		CursorWord: tcell.StyleDefault.Foreground(tcell.ColorWhite),
+
+		Prompt:       tcell.StyleDefault.Foreground(tcell.ColorWhite),
+		PromptShadow: tcell.StyleDefault.Foreground(tcell.ColorGray),
 	}
 }

@@ -8,6 +8,8 @@ type Keybindings map[string]string
 // KeybindingsDefault returns default keybindings.
 func KeybindingsDefault() Keybindings {
 	return map[string]string{
+		// Cmd
+		"Ctrl+E": "cmd",
 		// Cursor
 		"Down":  "cursor-down",
 		"Left":  "cursor-left",
