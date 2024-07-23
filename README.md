@@ -2,6 +2,8 @@
 
 # Features
 
+- Whole documentation embedded into the binary.
+  No need to access the Internet to get to know how things work.
 - No runtime dependencies except configuration and syntax highlighting files.
 - Multi-cursor support.
 - Tabs.

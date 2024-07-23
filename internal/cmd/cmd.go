@@ -3,8 +3,8 @@ package cmd
 var cmdDescriptions = map[string]string{
 	// Command
 
-	"cmd-list": `cmd-list # Lists all available commands in alphabetical order with one sentence summary.`
-	"cmd-prev": `cmd-prev # Executes previous command.`
+	"cmd-list": `cmd-list # Lists all available commands in alphabetical order with one sentence summary.`,
+	"cmd-prev": `cmd-prev # Executes previous command.`,
 
 	// Cursor
 
@@ -44,12 +44,12 @@ If path to file is not provided, then it uses the current file path.`,
 	"indent-increase": `indent-increase # Increases indent of lines with cursor.
 
 In the case of selections, it increases all selected lines. Even if the
-selection starts/ends in the middle of a line.`
+selection starts/ends in the middle of a line.`,
 
 	"indent-decrease": `indent-increase # Decreases indent of lines with cursor.
 
 In the case of selections, it decreases all selected lines. Even if the
-selection starts/ends in the middle of a line.`
+selection starts/ends in the middle of a line.`,
 
 	// Tab
 
@@ -77,7 +77,7 @@ selection, then escape command clears all selections.`,
 If neither topic nor command name is provided displays help message
 for the help command. The same as 'help help'. Valid topics are:
   - commands - explanation of commands concept,
-  - keybindings - how to set, and what to watch out for.`
+  - keybindings - how to set, and what to watch out for.`,
 	/*
 	   "cursor-down-spawn":    struct{}{},
 	   "cursor-up-spawn":      struct{}{},
@@ -88,7 +88,7 @@ for the help command. The same as 'help help'. Valid topics are:
 }
 
 // IsValid returns true if given command is a valid command.
-func IsValid(cmd string) {
+func IsValid(cmd string) bool {
 	if _, ok := cmdDescriptions[cmd]; ok {
 		return true
 	}

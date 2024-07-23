@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/m-kru/enix/internal/arg"
 	"github.com/m-kru/enix/internal/cfg"
-	"github.com/m-kru/enix/internal/window"
+	"github.com/m-kru/enix/internal/enix"
 	"log"
 )
 
@@ -12,10 +12,10 @@ func main() {
 
 	arg.Parse()
 
-	colors, err := cfg.Init()
+	colors, keys, err := cfg.Init()
 	if err != nil {
 		log.Fatalf("%v", err)
 	}
 
-	window.Start()
+	enix.Start(&colors, &keys)
 }

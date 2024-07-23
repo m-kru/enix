@@ -43,7 +43,7 @@ The following Ctrl keybindings are considered risky and are advised to be avoide
 - Ctrl+M - Enter,
 - Ctrl+; - some weird character,
 - Ctrl+/ - some weird action,
-- Ctrl+\` - Ctrl+Space,
+- Ctrl+` + "`" + ` - Ctrl+Space,
 - Ctrl+Tab - Tab,
 - Ctrl+Enter - Enter,
 - Ctrl+[1|2|3|4|5|6|7|8|9|0] - runes and control sequences.
