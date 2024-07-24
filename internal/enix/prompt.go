@@ -131,7 +131,9 @@ func (p *Prompt) HandleLeft() {
 func (p *Prompt) HandleRight() {
 	switch p.State {
 	case InShadow:
-		// Do nothing
+		p.Line.Append(p.ShadowText)
+		p.ShadowText = ""
+		p.State = InText
 	case InText:
 		p.Cursor.HandleRight()
 	}

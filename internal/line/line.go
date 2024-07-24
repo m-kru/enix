@@ -34,6 +34,10 @@ func (l *Line) Count() int {
 	return c
 }
 
+func (l *Line) Append(s string) {
+	l.Buf = fmt.Sprintf("%s%s", l.Buf, s)
+}
+
 func (l *Line) Delete(idx int, size int) {
 	l.Buf = l.Buf[0:idx] + l.Buf[idx+1:len(l.Buf)]
 }
