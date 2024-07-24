@@ -11,6 +11,8 @@ help:
 	@echo "Quality targets:"
 	@echo "  fmt   Format files with go fmt."
 	@echo "  lint  Lint files with golangci-lint."
+	@echo "Test targets:"
+	@echo "  test  Run go test."
 	@echo "Other targets:"
 	@echo "  help       Print help message."
 	@echo "  install    Install $(NAME) in /usr/bin."
@@ -29,6 +31,10 @@ fmt:
 
 lint:
 	golangci-lint run
+
+# Test targets
+test:
+	go test ./...
 
 
 # Installation targets
