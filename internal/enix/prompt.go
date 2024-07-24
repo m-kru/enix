@@ -30,8 +30,9 @@ type Prompt struct {
 	Window     *Window
 	CurrentTab *Tab
 
-	Line   *line.Line
-	Cursor *cursor.Cursor
+	Line      *line.Line
+	Cursor    *cursor.Cursor
+	ViewRange line.Range
 
 	ShadowText string
 
@@ -55,8 +56,6 @@ func (p *Prompt) Activate(text, shadowText string) {
 
 	p.Cursor = &cursor.Cursor{
 		Screen: p.Screen,
-		X:      2 + len(text) + len(shadowText),
-		Y:      p.Y,
 		Colors: p.Colors,
 		Line:   p.Line,
 		BufIdx: len(text),
@@ -69,13 +68,24 @@ func (p *Prompt) Activate(text, shadowText string) {
 		p.State = InShadow
 	}
 
+	p.ViewRange.Lower = 0
+	p.ViewRange.Upper = p.Width - 2 - 1
+
 	p.Render()
 }
 
 func (p *Prompt) Render() {
 	p.Screen.SetContent(0, p.Y, '>', []rune{' '}, p.Colors.Prompt)
 
-	p.Line.Render(2, p.Y, p.Width, 0)
+	if p.Cursor.BufIdx < p.ViewRange.Lower {
+		p.ViewRange.Lower = p.Cursor.BufIdx
+		p.ViewRange.Upper = p.ViewRange.Lower + p.Width - 2 - 1
+	} else if p.Cursor.BufIdx > p.ViewRange.Upper {
+		p.ViewRange.Upper = p.Cursor.BufIdx
+		p.ViewRange.Lower = p.ViewRange.Upper - p.Width + 2 + 1
+	}
+
+	p.Line.Render(2, p.Y, p.Width-2, p.ViewRange.Lower)
 
 	if len(p.ShadowText) > 0 {
 		for i, r := range p.ShadowText {
@@ -83,7 +93,7 @@ func (p *Prompt) Render() {
 		}
 	}
 
-	p.Cursor.Render()
+	p.Cursor.Render(2, p.Y, p.ViewRange.Lower)
 
 	p.Screen.Show()
 }
@@ -93,7 +103,6 @@ func (p *Prompt) HandleBackspace() {
 	case InShadow:
 		p.ShadowText = ""
 		p.State = InText
-		p.Cursor.X = p.Line.Len() + 2
 	case InText:
 		p.Cursor.HandleBackspace()
 	}
@@ -104,7 +113,6 @@ func (p *Prompt) HandleLeft() {
 	case InShadow:
 		p.ShadowText = ""
 		p.State = InText
-		p.Cursor.X = p.Line.Len() + 2
 	case InText:
 		p.Cursor.HandleLeft()
 	}
@@ -124,7 +132,6 @@ func (p *Prompt) HandleRune(r rune) {
 	case InShadow:
 		p.ShadowText = ""
 		p.State = InText
-		p.Cursor.X = p.Line.Len() + 2
 		p.Cursor.HandleRune(r)
 	case InText:
 		p.Cursor.HandleRune(r)

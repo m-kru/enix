@@ -10,8 +10,6 @@ import (
 // informed about line changes.
 type Cursor struct {
 	Screen tcell.Screen
-	X      int
-	Y      int
 
 	Colors *cfg.Colorscheme
 
@@ -39,12 +37,10 @@ func (c *Cursor) Prune() {
 func (c *Cursor) Left(n int) {
 	if n < c.BufIdx {
 		c.BufIdx -= n
-		c.X -= n
 		return
 	}
 
 	if c.Line.Prev == nil {
-		c.X -= c.BufIdx
 		c.BufIdx = 0
 		return
 	}
@@ -76,7 +72,6 @@ func (c *Cursor) HandleLeft() {
 		}
 	}
 	c.BufIdx--
-	c.X--
 }
 
 func (c *Cursor) HandleRight() {
@@ -89,7 +84,6 @@ func (c *Cursor) HandleRight() {
 		}
 	}
 	c.BufIdx++
-	c.X++
 }
 
 func (c *Cursor) HandleRune(r rune) {
@@ -104,7 +98,6 @@ func (c *Cursor) HandleRune(r rune) {
 
 	c.Line.InsertRune(r, c.BufIdx)
 	c.BufIdx++
-	c.X++
 }
 
 func (c *Cursor) HandleBackspace() {
@@ -128,10 +121,10 @@ func (c *Cursor) HandleBackspace() {
 
 	c.Line.Delete(c.BufIdx-1, 1)
 	c.BufIdx--
-	c.X--
 }
 
-func (c *Cursor) Render() {
-	r, _, _, _ := c.Screen.GetContent(c.X, c.Y)
-	c.Screen.SetContent(c.X, c.Y, r, nil, c.Colors.Cursor)
+func (c *Cursor) Render(x, y, offset int) {
+	x = x + c.BufIdx - offset
+	r, _, _, _ := c.Screen.GetContent(x, y)
+	c.Screen.SetContent(x, y, r, nil, c.Colors.Cursor)
 }

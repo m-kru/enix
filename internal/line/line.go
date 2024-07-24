@@ -46,8 +46,8 @@ func (l *Line) InsertRune(r rune, idx int) {
 
 func (l *Line) Render(x, y, width, offset int) {
 	i := 0
-	for _, r := range l.Buf {
-		if i+x > width {
+	for _, r := range l.Buf[offset:len(l.Buf)] {
+		if i == width-1 {
 			break
 		}
 
@@ -55,7 +55,7 @@ func (l *Line) Render(x, y, width, offset int) {
 		i++
 	}
 
-	for i+x < width {
+	for i < width {
 		l.Screen.SetContent(i+x, y, ' ', nil, l.Colors.Default)
 		i++
 	}
