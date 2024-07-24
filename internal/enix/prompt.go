@@ -108,6 +108,16 @@ func (p *Prompt) HandleBackspace() {
 	}
 }
 
+func (p *Prompt) HandleDelete() {
+	switch p.State {
+	case InShadow:
+		p.ShadowText = ""
+		p.State = InText
+	case InText:
+		p.Cursor.HandleDelete()
+	}
+}
+
 func (p *Prompt) HandleLeft() {
 	switch p.State {
 	case InShadow:
@@ -155,6 +165,8 @@ func (p *Prompt) RxEvent(ev tcell.Event) EventReceiver {
 			switch ev.Key() {
 			case tcell.KeyBackspace | tcell.KeyBackspace2:
 				p.HandleBackspace()
+			case tcell.KeyDelete:
+				p.HandleDelete()
 			case tcell.KeyLeft:
 				p.HandleLeft()
 			case tcell.KeyRight:

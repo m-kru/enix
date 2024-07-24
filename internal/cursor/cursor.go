@@ -116,11 +116,35 @@ func (c *Cursor) HandleBackspace() {
 		if cNext == nil {
 			break
 		}
-		cNext.InformDeletion(c.Line, c.BufIdx, 1)
+		cNext.InformDeletion(c.Line, c.BufIdx-1, 1)
+		cNext = cNext.Next
 	}
 
 	c.Line.Delete(c.BufIdx-1, 1)
 	c.BufIdx--
+}
+
+func (c *Cursor) HandleDelete() {
+	if c.BufIdx == c.Line.Len() {
+		if c.Line.Next == nil {
+			// Do nothing
+			return
+		} else {
+			panic("unimplemented")
+		}
+	}
+
+	// Inform other cursors about deletion.
+	cNext := c.Next
+	for {
+		if cNext == nil {
+			break
+		}
+		cNext.InformDeletion(c.Line, c.BufIdx, 1)
+		cNext = cNext.Next
+	}
+
+	c.Line.Delete(c.BufIdx, 1)
 }
 
 func (c *Cursor) Render(x, y, offset int) {
