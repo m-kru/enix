@@ -1,6 +1,9 @@
 package cfg
 
-import "github.com/gdamore/tcell/v2"
+import (
+	"github.com/gdamore/tcell/v2"
+	enix_tcell "github.com/m-kru/enix/internal/tcell"
+)
 
 // Keybindings struct represents configured keybindings.
 type Keybindings map[string]string
@@ -22,11 +25,13 @@ func KeybindingsDefault() Keybindings {
 		"Ctrl+T": "tab-open",
 		// Miscellaneous
 		"Esc":    "escape",
+		"Ctrl+H": "help",
 		"Ctrl+Q": "quit",
 	}
 }
+
 func (keys Keybindings) ToCmd(ev *tcell.EventKey) string {
-	name := ev.Name()
+	name := enix_tcell.EventKeyName(ev)
 
 	if cmd, ok := keys[name]; ok {
 		return cmd
