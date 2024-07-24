@@ -30,6 +30,12 @@ func (c *Cursor) Word() string {
 	return ""
 }
 
+// Prune function removes duplicates from cursor list.
+// A duplicate is a cursor pointing to the same line and buffer index.
+func (c *Cursor) Prune() {
+	panic("unimplemented")
+}
+
 func (c *Cursor) Left(n int) {
 	if n < c.BufIdx {
 		c.BufIdx -= n
