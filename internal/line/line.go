@@ -9,9 +9,6 @@ import (
 
 type Line struct {
 	Screen tcell.Screen
-	StartX int
-	EndX   int
-	StartY int
 
 	Colors *cfg.Colorscheme
 
@@ -23,6 +20,20 @@ type Line struct {
 
 func (l *Line) Len() int { return len(l.Buf) }
 
+// Count returns number of lines in the list starting from line l.
+// It does not take int account previous lines.
+func (l *Line) Count() int {
+	c := 1
+	for {
+		if l.Next == nil {
+			break
+		}
+		l = l.Next
+		c++
+	}
+	return c
+}
+
 func (l *Line) Delete(idx int, size int) {
 	l.Buf = l.Buf[0:idx] + l.Buf[idx+1:len(l.Buf)]
 }
@@ -33,19 +44,19 @@ func (l *Line) InsertRune(r rune, idx int) {
 	l.Buf = fmt.Sprintf("%s%c%s", left, r, right)
 }
 
-func (l *Line) Render() {
+func (l *Line) Render(x, y, width, offset int) {
 	i := 0
 	for _, r := range l.Buf {
-		if i+l.StartX > l.EndX {
+		if i+x > width {
 			break
 		}
 
-		l.Screen.SetContent(i+l.StartX, l.StartY, r, nil, l.Colors.Default)
+		l.Screen.SetContent(i+x, y, r, nil, l.Colors.Default)
 		i++
 	}
 
-	for i+l.StartX < l.EndX {
-		l.Screen.SetContent(i+l.StartX, l.StartY, ' ', nil, l.Colors.Default)
+	for i+x < width {
+		l.Screen.SetContent(i+x, y, ' ', nil, l.Colors.Default)
 		i++
 	}
 }

@@ -34,6 +34,8 @@ tab-open command.`,
 	"file-save": `file-save [path/to/file] # Saves file using the provided path to file.
 If path to file is not provided, then it uses the current file path.`,
 
+	"file-type": `file-type type # Enforces file type.`,
+
 	// Indent
 
 	"indent-increase": `indent-increase # Increases indent of lines with cursor.
