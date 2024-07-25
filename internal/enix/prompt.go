@@ -1,6 +1,7 @@
 package enix
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/m-kru/enix/internal/cfg"
@@ -278,13 +279,27 @@ func (p *Prompt) Exec() EventReceiver {
 	cmd, args, _ := strings.Cut(strings.TrimSpace(p.Line.Buf), " ")
 
 	switch cmd {
+	case "cmd":
+		p.Activate("", "")
+		return p
 	case "cmd-info":
 		p.ShowInfo(args)
 		return p.Window
 	case "cmd-error":
 		p.ShowError(args)
 		return p.Window
+	default:
+		p.ShowError(
+			fmt.Sprintf(
+				"invalid or unimplemented command '%s', if unimplemented report on https://github.com/m-kru/enix",
+				cmd,
+			),
+		)
+		return p.Window
 	}
+
+	p.Clear()
+		p.Clear()
 
 	return p
 }
