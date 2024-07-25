@@ -153,6 +153,18 @@ func (p *Prompt) Delete() {
 	}
 }
 
+func (p *Prompt) CursorDown() {
+	switch p.State {
+	case InShadow:
+		p.Line.Append(p.ShadowText)
+		p.ShadowText = ""
+		p.State = InText
+	case InText:
+		// Implement history handling here.
+		panic("unimplemeted")
+	}
+}
+
 func (p *Prompt) CursorLeft() {
 	switch p.State {
 	case InShadow:
@@ -198,6 +210,8 @@ func (p *Prompt) RxEvent(ev tcell.Event) EventReceiver {
 			p.Backspace()
 		case "del":
 			p.Delete()
+		case "cursor-down":
+			p.CursorDown()
 		case "cursor-left":
 			p.CursorLeft()
 		case "cursor-right":
