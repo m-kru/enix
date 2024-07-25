@@ -29,8 +29,8 @@ nothing happens.`,
 	"cursor-up": `cursor-up # Moves cursor up.
 If cursor is in the fisrt line, nothing happens.`,
 
-	"cursor-left-word":  `cursor-left-word # Moves cursor to the beginning of left word.`,
-	"cursor-right-word": `cursor-right-word # Moves cursor to the beginning of right word.`,
+	"cursor-word-start":  `cursor-word-start # Moves cursor to the word start`,
+	"cursor-word-end": `cursor-word-end # Moves cursor to the word end.`,
 
 	// Deletion
 

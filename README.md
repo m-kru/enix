@@ -1,6 +1,4 @@
 **enix** is a terminal-based text editor trying to follow the \*nix philosophy.
-enix is line and word oriented.
-TODO: Explain what it means.
 
 # Features
 
