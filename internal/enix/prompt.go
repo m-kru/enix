@@ -1,6 +1,8 @@
 package enix
 
 import (
+	"strings"
+
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/line"
@@ -210,6 +212,16 @@ func (p *Prompt) CursorWordEnd() {
 	}
 }
 
+func (p *Prompt) Enter() EventReceiver {
+	if p.State == InShadow {
+		p.Line.Append(p.ShadowText)
+		p.ShadowText = ""
+		p.State = InText
+	}
+
+	return p.Exec()
+}
+
 func (p *Prompt) HandleRune(r rune) {
 	switch p.State {
 	case InShadow:
@@ -243,6 +255,8 @@ func (p *Prompt) RxEvent(ev tcell.Event) EventReceiver {
 			p.CursorWordStart()
 		case "cursor-word-end":
 			p.CursorWordEnd()
+		case "enter":
+			return p.Enter()
 		case "escape", "quit":
 			p.Clear()
 			return p.Window
@@ -255,6 +269,22 @@ func (p *Prompt) RxEvent(ev tcell.Event) EventReceiver {
 	}
 
 	p.Render()
+
+	return p
+}
+
+// Exec executes command.
+func (p *Prompt) Exec() EventReceiver {
+	cmd, args, _ := strings.Cut(strings.TrimSpace(p.Line.Buf), " ")
+
+	switch cmd {
+	case "cmd-info":
+		p.ShowInfo(args)
+		return p.Window
+	case "cmd-error":
+		p.ShowError(args)
+		return p.Window
+	}
 
 	return p
 }

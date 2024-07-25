@@ -29,6 +29,7 @@ func KeybindingsDefault() Keybindings {
 		"Backspace":  "backspace",
 		"Backspace2": "backspace",
 		"Delete":     "del",
+		"Enter":      "enter",
 		"Esc":        "escape",
 		"Ctrl+H":     "help",
 		"Ctrl+Q":     "quit",
