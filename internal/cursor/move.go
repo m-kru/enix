@@ -1,5 +1,7 @@
 package cursor
 
+import "github.com/m-kru/enix/internal/util"
+
 func (c *Cursor) Left() {
 	if c.BufIdx == 0 {
 		if c.Line.Prev == nil {
@@ -22,4 +24,18 @@ func (c *Cursor) Right() {
 		}
 	}
 	c.BufIdx++
+}
+
+func (c *Cursor) WordStart() {
+	if idx, ok := util.WordStart(c.Line.Buf, c.BufIdx); ok {
+		c.BufIdx = idx
+		return
+	}
+
+	if c.Line.Prev == nil {
+		// Do nothing
+		return
+	}
+
+	panic("unimplemented")
 }

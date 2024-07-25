@@ -187,6 +187,17 @@ func (p *Prompt) CursorRight() {
 	}
 }
 
+func (p *Prompt) CursorWordStart() {
+	switch p.State {
+	case InShadow:
+		p.ShadowText = ""
+		p.State = InText
+		p.Cursor.WordStart()
+	case InText:
+		p.Cursor.WordStart()
+	}
+}
+
 func (p *Prompt) HandleRune(r rune) {
 	switch p.State {
 	case InShadow:
@@ -216,6 +227,8 @@ func (p *Prompt) RxEvent(ev tcell.Event) EventReceiver {
 			p.CursorLeft()
 		case "cursor-right":
 			p.CursorRight()
+		case "cursor-word-start":
+			p.CursorWordStart()
 		case "escape", "quit":
 			p.Clear()
 			return p.Window

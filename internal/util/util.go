@@ -1,6 +1,9 @@
 package util
 
-import "strings"
+import (
+	"strings"
+	"unicode"
+)
 
 var fileExtToType = map[string]string{
 	"c": "c", "h": "c",
@@ -51,4 +54,46 @@ func FileNameToType(name string) string {
 	}
 
 	return ""
+}
+
+func IsWordRune(r rune) bool {
+	return unicode.IsLetter(r) || unicode.IsDigit(r) || r == '_'
+}
+
+// WordStart finds previous word start index.
+func WordStart(str string, i int) (int, bool) {
+	if i == 0 {
+		return 0, false
+	}
+
+	/*
+		type State int
+		const (
+			AtWordStart State = iota
+			InWhitespace
+			InWord
+		)
+		state = AtWordStart
+
+		if i == len(str) || unicode.IsSpace(str[i]) {
+			state = InWhitespace
+		}
+	*/
+
+	for {
+		i--
+		if i == 0 {
+			if IsWordRune([]rune(str)[i]) {
+				return i, true
+			} else {
+				break
+			}
+		}
+
+		if IsWordRune([]rune(str)[i]) && !IsWordRune([]rune(str)[i-1]) {
+			return i, true
+		}
+	}
+
+	return 0, false
 }
