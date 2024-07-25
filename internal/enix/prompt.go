@@ -133,37 +133,37 @@ func (p *Prompt) Render() {
 	p.Screen.Show()
 }
 
-func (p *Prompt) HandleBackspace() {
+func (p *Prompt) Backspace() {
 	switch p.State {
 	case InShadow:
 		p.ShadowText = ""
 		p.State = InText
 	case InText:
-		p.Cursor.HandleBackspace()
+		p.Cursor.Backspace()
 	}
 }
 
-func (p *Prompt) HandleDelete() {
+func (p *Prompt) Delete() {
 	switch p.State {
 	case InShadow:
 		p.ShadowText = ""
 		p.State = InText
 	case InText:
-		p.Cursor.HandleDelete()
+		p.Cursor.Delete()
 	}
 }
 
-func (p *Prompt) HandleLeft() {
+func (p *Prompt) CursorLeft() {
 	switch p.State {
 	case InShadow:
 		p.ShadowText = ""
 		p.State = InText
 	case InText:
-		p.Cursor.HandleLeft()
+		p.Cursor.Left()
 	}
 }
 
-func (p *Prompt) HandleRight() {
+func (p *Prompt) CursorRight() {
 	switch p.State {
 	case InShadow:
 		p.Line.Append(p.ShadowText)
@@ -171,7 +171,7 @@ func (p *Prompt) HandleRight() {
 		p.ShadowText = ""
 		p.State = InText
 	case InText:
-		p.Cursor.HandleRight()
+		p.Cursor.Right()
 	}
 }
 
@@ -194,21 +194,19 @@ func (p *Prompt) RxEvent(ev tcell.Event) EventReceiver {
 	*/
 	case *tcell.EventKey:
 		switch p.Keys.ToCmd(ev) {
-		case "escape":
+		case "backspace":
+			p.Backspace()
+		case "del":
+			p.Delete()
+		case "cursor-left":
+			p.CursorLeft()
+		case "cursor-right":
+			p.CursorRight()
+		case "escape", "quit":
 			p.Clear()
 			return p.Window
-		case "quit":
-			return nil
 		default:
 			switch ev.Key() {
-			case tcell.KeyBackspace | tcell.KeyBackspace2:
-				p.HandleBackspace()
-			case tcell.KeyDelete:
-				p.HandleDelete()
-			case tcell.KeyLeft:
-				p.HandleLeft()
-			case tcell.KeyRight:
-				p.HandleRight()
 			case tcell.KeyRune:
 				p.HandleRune(ev.Rune())
 			}

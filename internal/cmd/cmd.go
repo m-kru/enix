@@ -29,6 +29,12 @@ nothing happens.`,
 	"cursor-up": `cursor-up # Moves cursors up.
 If cursor is in the fisrt line, nothing happens.`,
 
+	// Deletion
+
+	"del":      `del # Deletes text under cursors/selections.`,
+	"del-word": `del-word # Deletes words under cursors/selections.`,
+	"del-line": `del-line # Deletes lines with cursors/selections.`,
+
 	// File
 
 	"file-open": `file-open [path/to/file] # Opens file in a new tab.
@@ -69,6 +75,8 @@ The patterns must be unambiguous. If the second is absent, then it is assumed
 to be the current tab.`,
 
 	// Miscellaneous
+
+	"dump-colors": `dump-colors # Dumps colorscheme configuration to JSON format.`,
 
 	"escape": `escape # Escapes the current context.
 The actual action depends on the context. For example, if the focues is on the

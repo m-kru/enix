@@ -24,9 +24,12 @@ func KeybindingsDefault() Keybindings {
 		// Tab
 		"Ctrl+T": "tab-open",
 		// Miscellaneous
-		"Esc":    "escape",
-		"Ctrl+H": "help",
-		"Ctrl+Q": "quit",
+		"Backspace":  "backspace",
+		"Backspace2": "backspace",
+		"Delete":     "del",
+		"Esc":        "escape",
+		"Ctrl+H":     "help",
+		"Ctrl+Q":     "quit",
 	}
 }
 

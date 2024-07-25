@@ -34,18 +34,6 @@ func (c *Cursor) Prune() {
 	panic("unimplemented")
 }
 
-func (c *Cursor) Left(n int) {
-	if n < c.BufIdx {
-		c.BufIdx -= n
-		return
-	}
-
-	if c.Line.Prev == nil {
-		c.BufIdx = 0
-		return
-	}
-}
-
 // InformInsertion informs the cursor about content insertion into the line.
 func (c *Cursor) InformInsertion(l *line.Line, idx int, size int) {
 	if l != c.Line || idx > c.BufIdx {
@@ -62,7 +50,7 @@ func (c *Cursor) InformDeletion(l *line.Line, idx int, size int) {
 	panic("unimplemented")
 }
 
-func (c *Cursor) HandleLeft() {
+func (c *Cursor) Left() {
 	if c.BufIdx == 0 {
 		if c.Line.Prev == nil {
 			// Do nothing
@@ -74,7 +62,7 @@ func (c *Cursor) HandleLeft() {
 	c.BufIdx--
 }
 
-func (c *Cursor) HandleRight() {
+func (c *Cursor) Right() {
 	if c.BufIdx == c.Line.Len() {
 		if c.Line.Next == nil {
 			// Do nothing
@@ -100,7 +88,7 @@ func (c *Cursor) HandleRune(r rune) {
 	c.BufIdx++
 }
 
-func (c *Cursor) HandleBackspace() {
+func (c *Cursor) Backspace() {
 	if c.BufIdx == 0 {
 		if c.Line.Prev == nil {
 			// Do nothing
@@ -124,7 +112,7 @@ func (c *Cursor) HandleBackspace() {
 	c.BufIdx--
 }
 
-func (c *Cursor) HandleDelete() {
+func (c *Cursor) Delete() {
 	if c.BufIdx == c.Line.Len() {
 		if c.Line.Next == nil {
 			// Do nothing
