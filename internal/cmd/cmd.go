@@ -29,6 +29,8 @@ nothing happens.`,
 	"cursor-up": `cursor-up # Moves cursors up.
 If cursor is in the fisrt line, nothing happens.`,
 
+	"cursor-word-start": `cursor-word-start # Moves cursors up.`,
+
 	// Deletion
 
 	"del":      `del # Deletes text under cursors/selections.`,
@@ -55,6 +57,13 @@ selection starts/ends in the middle of a line.`,
 	"indent-decrease": `indent-increase # Decreases indent of lines with cursor.
 In the case of selections, it decreases all selected lines. Even if the
 selection starts/ends in the middle of a line.`,
+
+	// Selection
+
+	"sel-white": `sel-white # Selects sequence of whitespaces.
+If cursors is not placed on a whitespace character, nothing is selected.`,
+
+	"sel-word": `sel-word # Selects word under cursor.`,
 
 	// Tab
 
