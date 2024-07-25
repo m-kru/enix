@@ -213,6 +213,17 @@ func (p *Prompt) CursorWordEnd() {
 	}
 }
 
+func (p *Prompt) CursorLineStart() {
+	switch p.State {
+	case InShadow:
+		p.ShadowText = ""
+		p.State = InText
+		p.Cursor.LineStart()
+	case InText:
+		p.Cursor.LineStart()
+	}
+}
+
 func (p *Prompt) Enter() EventReceiver {
 	if p.State == InShadow {
 		p.Line.Append(p.ShadowText)
@@ -256,6 +267,8 @@ func (p *Prompt) RxEvent(ev tcell.Event) EventReceiver {
 			p.CursorWordStart()
 		case "cursor-word-end":
 			p.CursorWordEnd()
+		case "cursor-line-start":
+			p.CursorLineStart()
 		case "enter":
 			return p.Enter()
 		case "escape", "quit":
@@ -299,7 +312,6 @@ func (p *Prompt) Exec() EventReceiver {
 	}
 
 	p.Clear()
-		p.Clear()
 
 	return p
 }

@@ -53,3 +53,7 @@ func (c *Cursor) WordEnd() {
 
 	panic("unimplemented")
 }
+
+func (c *Cursor) LineStart() {
+	c.BufIdx = 0
+}

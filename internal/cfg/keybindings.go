@@ -20,6 +20,7 @@ func KeybindingsDefault() Keybindings {
 		"Up":         "cursor-up",
 		"Ctrl+Left":  "cursor-word-start",
 		"Ctrl+Right": "cursor-word-end",
+		"Ctrl+A":     "cursor-line-start",
 		// File
 		"Ctrl+O": "file-open",
 		"Ctrl+S": "file-save",
@@ -31,8 +32,13 @@ func KeybindingsDefault() Keybindings {
 		"Delete":     "del",
 		"Enter":      "enter",
 		"Esc":        "escape",
+		"Ctrl+C":     "copy",
+		"Ctrl+F":     "find",
 		"Ctrl+H":     "help",
 		"Ctrl+Q":     "quit",
+		"Ctrl+U":     "undo",
+		"Ctrl+V":     "paste",
+		"Ctrl+W":     "sel-word",
 	}
 }
 
