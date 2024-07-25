@@ -3,7 +3,11 @@ package cmd
 var cmdDescriptions = map[string]string{
 	// Command
 
-	"cmd":      `cmd # Start command prompt.`,
+	"cmd": `cmd # Start command prompt.`,
+	"cmd-error": `cmd-error # Displays error message in the command prompt.
+This command is useful for enix debugging and development.`,
+	"cmd-info": `cmd-info # Displays message in the command prompt.
+This command is useful for enix debugging and development.`,
 	"cmd-list": `cmd-list # Lists all available commands in alphabetical order with one sentence summary.`,
 	"cmd-prev": `cmd-prev # Executes previous command.`,
 

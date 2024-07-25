@@ -13,6 +13,7 @@ type PromptState int
 const (
 	InText PromptState = iota
 	InShadow
+	InError
 )
 
 // Prompt represents command line prompt.
@@ -44,6 +45,40 @@ func (p *Prompt) Clear() {
 		p.Screen.SetContent(x, p.Y, ' ', nil, p.Colors.Default)
 	}
 	p.Screen.Show()
+}
+
+func (p *Prompt) ShowError(msg string) {
+	x := 0
+	for _, r := range msg {
+		p.Screen.SetContent(x, p.Y, r, nil, p.Colors.Error)
+		x++
+	}
+	for {
+		if x == p.Width {
+			break
+		}
+		p.Screen.SetContent(x, p.Y, ' ', nil, p.Colors.Prompt)
+		x++
+	}
+	p.Screen.Show()
+	p.State = InError
+}
+
+func (p *Prompt) ShowInfo(msg string) {
+	x := 0
+	for _, r := range msg {
+		p.Screen.SetContent(x, p.Y, r, nil, p.Colors.Default)
+		x++
+	}
+	for {
+		if x == p.Width {
+			break
+		}
+		p.Screen.SetContent(x, p.Y, ' ', nil, p.Colors.Default)
+		x++
+	}
+	p.Screen.Show()
+	p.State = InError
 }
 
 // Currently assume text + shadow text always fits screen width.
@@ -132,6 +167,7 @@ func (p *Prompt) HandleRight() {
 	switch p.State {
 	case InShadow:
 		p.Line.Append(p.ShadowText)
+		p.Cursor.BufIdx += len(p.ShadowText)
 		p.ShadowText = ""
 		p.State = InText
 	case InText:

@@ -32,6 +32,8 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 		case "cmd":
 			w.Prompt.Activate("text ", "shadow")
 			return w.Prompt
+		case "escape":
+			w.Prompt.Clear()
 		case "help":
 			w.Prompt.Activate("help ", "")
 			return w.Prompt
