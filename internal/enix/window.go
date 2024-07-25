@@ -48,6 +48,20 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 	return w
 }
 
+// Resize handles all the required logic when screen is resized.
+func (w *Window) Resize() {
+	w.Screen.Clear()
+	w.Screen.Sync()
+
+	width, height := w.Screen.Size()
+
+	w.Width = width - 1
+	w.Height = height - 2
+
+	w.Prompt.Width = width
+	w.Prompt.Y = height - 1
+}
+
 func Start(colors *cfg.Colorscheme, keys *cfg.Keybindings) {
 	screen, err := tcell.NewScreen()
 	if err != nil {

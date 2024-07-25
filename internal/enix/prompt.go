@@ -247,10 +247,8 @@ func (p *Prompt) HandleRune(r rune) {
 
 func (p *Prompt) RxEvent(ev tcell.Event) EventReceiver {
 	switch ev := ev.(type) {
-	/*
-		case *tcell.EventResize:
-			p.Window.Render()
-	*/
+	case *tcell.EventResize:
+		p.Window.Resize()
 	case *tcell.EventKey:
 		switch p.Keys.ToCmd(ev) {
 		case "backspace":
