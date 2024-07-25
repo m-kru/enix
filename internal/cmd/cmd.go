@@ -16,20 +16,21 @@ This command is useful for enix debugging and development.`,
 	"cursor-down": `cursor-down # Moves cursor down.
 If cursor is in the last line, nothing happens.`,
 
-	"cursor-left": `cursor-left # Moves cursors left.
+	"cursor-left": `cursor-left # Moves cursor left.
 If cursor is in the first column of a line, then it is moved into the last
 column of the previous line. Unless this is the first line. In such a case,
 nothing happens.`,
 
-	"cursor-right": `cursor-right # Moves cursors right.
+	"cursor-right": `cursor-right # Moves cursor right.
 If cursor is in the last column of a line, then it is moved into the first
 column of the next line. Unless this is the lastt line. In such a case,
 nothing happens.`,
 
-	"cursor-up": `cursor-up # Moves cursors up.
+	"cursor-up": `cursor-up # Moves cursor up.
 If cursor is in the fisrt line, nothing happens.`,
 
-	"cursor-word-start": `cursor-word-start # Moves cursors up.`,
+	"cursor-left-word":  `cursor-left-word # Moves cursor to the beginning of left word.`,
+	"cursor-right-word": `cursor-right-word # Moves cursor to the beginning of right word.`,
 
 	// Deletion
 
