@@ -39,3 +39,17 @@ func (c *Cursor) WordStart() {
 
 	panic("unimplemented")
 }
+
+func (c *Cursor) WordEnd() {
+	if idx, ok := util.WordEnd(c.Line.Buf, c.BufIdx); ok {
+		c.BufIdx = idx + 1 // + 1 as we have found word end index.
+		return
+	}
+
+	if c.Line.Next == nil {
+		// Do nothing
+		return
+	}
+
+	panic("unimplemented")
+}

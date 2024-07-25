@@ -14,11 +14,12 @@ func KeybindingsDefault() Keybindings {
 		// Cmd
 		"Ctrl+E": "cmd",
 		// Cursor
-		"Down":      "cursor-down",
-		"Left":      "cursor-left",
-		"Right":     "cursor-right",
-		"Up":        "cursor-up",
-		"Ctrl+Left": "cursor-word-start",
+		"Down":       "cursor-down",
+		"Left":       "cursor-left",
+		"Right":      "cursor-right",
+		"Up":         "cursor-up",
+		"Ctrl+Left":  "cursor-word-start",
+		"Ctrl+Right": "cursor-word-end",
 		// File
 		"Ctrl+O": "file-open",
 		"Ctrl+S": "file-save",

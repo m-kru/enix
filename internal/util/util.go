@@ -66,20 +66,6 @@ func WordStart(str string, i int) (int, bool) {
 		return 0, false
 	}
 
-	/*
-		type State int
-		const (
-			AtWordStart State = iota
-			InWhitespace
-			InWord
-		)
-		state = AtWordStart
-
-		if i == len(str) || unicode.IsSpace(str[i]) {
-			state = InWhitespace
-		}
-	*/
-
 	for {
 		i--
 		if i == 0 {
@@ -91,6 +77,30 @@ func WordStart(str string, i int) (int, bool) {
 		}
 
 		if IsWordRune([]rune(str)[i]) && !IsWordRune([]rune(str)[i-1]) {
+			return i, true
+		}
+	}
+
+	return 0, false
+}
+
+// WordEnd finds next word end index.
+func WordEnd(str string, i int) (int, bool) {
+	if i >= len(str)-1 {
+		return 0, false
+	}
+
+	for {
+		i++
+		if i == len(str)-1 {
+			if IsWordRune([]rune(str)[i]) {
+				return i, true
+			} else {
+				break
+			}
+		}
+
+		if IsWordRune([]rune(str)[i]) && !IsWordRune([]rune(str)[i+1]) {
 			return i, true
 		}
 	}
