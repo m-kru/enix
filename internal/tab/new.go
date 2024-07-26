@@ -8,21 +8,10 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
-func Empty(
-	colors *cfg.Colorscheme,
-	screen tcell.Screen,
-	startX int,
-	endX int,
-	startY int,
-	endY int,
-) *Tab {
+func Empty(colors *cfg.Colorscheme, screen tcell.Screen) *Tab {
 	t := &Tab{
 		Colors:          colors,
 		Screen:          screen,
-		StartX:          startX,
-		EndX:            endX,
-		StartY:          startY,
-		EndY:            endY,
 		Name:            "No Name",
 		Newline:         "\n",
 		FileType:        "",
@@ -46,10 +35,6 @@ func Empty(
 func Open(
 	colors *cfg.Colorscheme,
 	screen tcell.Screen,
-	startX int,
-	endX int,
-	startY int,
-	endY int,
 	path string,
 	firstLine int, // First visible line
 ) *Tab {
@@ -64,14 +49,37 @@ func Open(
 	return &Tab{
 		Colors:          colors,
 		Screen:          screen,
-		StartX:          startX,
-		EndX:            endX,
-		StartY:          startY,
-		EndY:            endY,
 		Name:            path,
 		Newline:         "\n",
 		FileType:        fileType,
 		HasChanges:      false,
 		FirstVisLineIdx: firstLine,
 	}
+}
+
+func FromString(
+	colors *cfg.Colorscheme,
+	screen tcell.Screen,
+	str string,
+	name string,
+) *Tab {
+	t := &Tab{
+		Colors:          colors,
+		Screen:          screen,
+		Name:            name,
+		Newline:         "\n",
+		FileType:        "",
+		HasChanges:      false,
+		Lines:           line.FromString(str),
+		FirstVisLineIdx: 1,
+	}
+
+	c := &cursor.Cursor{
+		Colors: colors,
+		Screen: screen,
+		Line:   t.Lines,
+	}
+	t.Cursor = c
+
+	return t
 }

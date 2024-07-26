@@ -132,7 +132,8 @@ func Start(colors *cfg.Colorscheme, keys *cfg.Keybindings) {
 	p.Window = &w
 
 	if len(arg.Files) == 0 {
-		w.Tabs = tab.Empty(colors, screen, 0, width-1, 0, height-2)
+		//w.Tabs = tab.Empty(colors, screen)
+		w.Tabs = tab.FromString(colors, screen, "foo\nbar\nzaz", "No Name")
 		w.CurrentTab = w.Tabs
 	}
 

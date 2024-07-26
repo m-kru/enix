@@ -15,10 +15,6 @@ type Tab struct {
 	Colors *cfg.Colorscheme
 
 	Screen tcell.Screen
-	StartX int
-	EndX   int
-	StartY int
-	EndY   int
 
 	Name       string // Path of the file
 	Newline    string // Newline encoding
@@ -40,27 +36,27 @@ func (t *Tab) Save() error {
 
 func (t *Tab) RenderLineNums(frame frame.Frame) {
 	n := t.FirstVisLineIdx
-	y := t.StartY
+	y := frame.Y
 	lineCount := t.LineCount()
 
 	for {
 		str := fmt.Sprintf("%*d", frame.Width, n)
 		for i, r := range str {
-			t.Screen.SetContent(i+t.StartX, y, r, nil, t.Colors.LineNum)
+			frame.SetContent(i, y, r, t.Colors.LineNum)
 		}
 
 		n++
 		y++
 
-		if y > t.EndY-1 || n > lineCount {
+		if y > frame.Height || n > lineCount {
 			break
 		}
 	}
 
 	// Clear remaining line numbers.
-	for ; y < t.EndY-1; y++ {
+	for ; y < frame.Height; y++ {
 		for i := 0; i < frame.Width; i++ {
-			t.Screen.SetContent(i+t.StartX, y, ' ', nil, t.Colors.Default)
+			frame.SetContent(i, y, ' ', t.Colors.Default)
 		}
 	}
 }
@@ -69,4 +65,23 @@ func (t *Tab) Render(frame frame.Frame) {
 	lineCount := t.LineCount()
 	lineNumWidth := util.IntWidth(lineCount)
 	t.RenderLineNums(frame.Column(0, lineNumWidth))
+
+	linesFrame := frame.Column(lineNumWidth, frame.Width-lineNumWidth)
+
+	lineIdx := t.FirstVisLineIdx
+	renderedCount := 0
+	line := t.Lines.Get(lineIdx)
+	// TODO: Handle line clearing.
+	for {
+		if line == nil || lineCount == frame.Height {
+			break
+		}
+
+		lineFrame := linesFrame.Line(lineNumWidth, renderedCount)
+		line.Render(t.Colors, lineFrame, 0)
+
+		line = line.Next
+		lineIdx++
+		renderedCount++
+	}
 }
