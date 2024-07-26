@@ -86,8 +86,7 @@ func (p *Prompt) ShowInfo(msg string) {
 // Currently assume text + shadow text always fits screen width.
 func (p *Prompt) Activate(text, shadowText string) {
 	p.Line = &line.Line{
-		Colors: p.Colors,
-		Buf:    text,
+		Buf: text,
 	}
 
 	p.Cursor = &cursor.Cursor{
@@ -122,7 +121,7 @@ func (p *Prompt) Render() {
 		p.ViewRange.Lower = p.ViewRange.Upper - p.Frame.Width + 2 + 1
 	}
 
-	p.Line.Render(p.Frame.Line(2, 0), p.ViewRange.Lower)
+	p.Line.Render(p.Colors, p.Frame.Line(2, 0), p.ViewRange.Lower)
 
 	if len(p.ShadowText) > 0 {
 		for i, r := range p.ShadowText {

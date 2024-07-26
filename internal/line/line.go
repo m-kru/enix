@@ -8,8 +8,6 @@ import (
 )
 
 type Line struct {
-	Colors *cfg.Colorscheme
-
 	Buf string
 
 	Prev *Line
@@ -79,19 +77,19 @@ func (l *Line) InsertRune(r rune, idx int) {
 	l.Buf = fmt.Sprintf("%s%c%s", left, r, right)
 }
 
-func (l *Line) Render(frame frame.Frame, offset int) {
+func (l *Line) Render(colors *cfg.Colorscheme, frame frame.Frame, offset int) {
 	i := 0
 	for _, r := range l.Buf[offset:len(l.Buf)] {
 		if i == frame.Width-1 {
 			break
 		}
 
-		frame.SetContent(i, 0, r, l.Colors.Default)
+		frame.SetContent(i, 0, r, colors.Default)
 		i++
 	}
 
 	for i < frame.Width {
-		frame.SetContent(i, 0, ' ', l.Colors.Default)
+		frame.SetContent(i, 0, ' ', colors.Default)
 		i++
 	}
 }
