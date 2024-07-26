@@ -6,6 +6,7 @@ import (
 
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
+	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/line"
 
 	"github.com/gdamore/tcell/v2"
@@ -25,8 +26,7 @@ type Prompt struct {
 	Keys   *cfg.Keybindings
 
 	Screen tcell.Screen
-	Width  int // Screen Width
-	Y      int // Tcell Y coordinate of prompt line.
+	Frame  frame.Frame
 
 	// History of executed commands.
 	History []string
@@ -43,8 +43,8 @@ type Prompt struct {
 }
 
 func (p *Prompt) Clear() {
-	for x := 0; x < p.Width; x++ {
-		p.Screen.SetContent(x, p.Y, ' ', nil, p.Colors.Default)
+	for x := 0; x < p.Frame.Width; x++ {
+		p.Frame.SetContent(x, 0, ' ', p.Colors.Default)
 	}
 	p.Screen.Show()
 }
@@ -52,14 +52,14 @@ func (p *Prompt) Clear() {
 func (p *Prompt) ShowError(msg string) {
 	x := 0
 	for _, r := range msg {
-		p.Screen.SetContent(x, p.Y, r, nil, p.Colors.Error)
+		p.Frame.SetContent(x, 0, r, p.Colors.Error)
 		x++
 	}
 	for {
-		if x == p.Width {
+		if x == p.Frame.Width {
 			break
 		}
-		p.Screen.SetContent(x, p.Y, ' ', nil, p.Colors.Prompt)
+		p.Frame.SetContent(x, 0, ' ', p.Colors.Prompt)
 		x++
 	}
 	p.Screen.Show()
@@ -69,14 +69,14 @@ func (p *Prompt) ShowError(msg string) {
 func (p *Prompt) ShowInfo(msg string) {
 	x := 0
 	for _, r := range msg {
-		p.Screen.SetContent(x, p.Y, r, nil, p.Colors.Default)
+		p.Frame.SetContent(x, 0, r, p.Colors.Default)
 		x++
 	}
 	for {
-		if x == p.Width {
+		if x == p.Frame.Width {
 			break
 		}
-		p.Screen.SetContent(x, p.Y, ' ', nil, p.Colors.Default)
+		p.Frame.SetContent(x, 0, ' ', p.Colors.Default)
 		x++
 	}
 	p.Screen.Show()
@@ -106,31 +106,32 @@ func (p *Prompt) Activate(text, shadowText string) {
 	}
 
 	p.ViewRange.Lower = 0
-	p.ViewRange.Upper = p.Width - 2 - 1
+	p.ViewRange.Upper = p.Frame.Width - 2 - 1
 
 	p.Render()
 }
 
 func (p *Prompt) Render() {
-	p.Screen.SetContent(0, p.Y, '>', []rune{' '}, p.Colors.Prompt)
+	p.Frame.SetContent(0, 0, '>', p.Colors.Prompt)
+	p.Frame.SetContent(1, 0, ' ', p.Colors.Prompt)
 
 	if p.Cursor.BufIdx < p.ViewRange.Lower {
 		p.ViewRange.Lower = p.Cursor.BufIdx
-		p.ViewRange.Upper = p.ViewRange.Lower + p.Width - 2 - 1
+		p.ViewRange.Upper = p.ViewRange.Lower + p.Frame.Width - 2 - 1
 	} else if p.Cursor.BufIdx > p.ViewRange.Upper {
 		p.ViewRange.Upper = p.Cursor.BufIdx
-		p.ViewRange.Lower = p.ViewRange.Upper - p.Width + 2 + 1
+		p.ViewRange.Lower = p.ViewRange.Upper - p.Frame.Width + 2 + 1
 	}
 
-	p.Line.Render(2, p.Y, p.Width-2, p.ViewRange.Lower)
+	p.Line.Render(p.Frame.Line(2, 0), p.ViewRange.Lower)
 
 	if len(p.ShadowText) > 0 {
 		for i, r := range p.ShadowText {
-			p.Screen.SetContent(i+2+p.Line.Len(), p.Y, r, nil, p.Colors.PromptShadow)
+			p.Frame.SetContent(i+2+p.Line.Len(), 0, r, p.Colors.PromptShadow)
 		}
 	}
 
-	p.Cursor.Render(2, p.Y, p.ViewRange.Lower)
+	p.Cursor.Render(2, p.Frame.Y, p.ViewRange.Lower)
 
 	p.Screen.Show()
 }

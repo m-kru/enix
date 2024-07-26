@@ -5,6 +5,7 @@ import (
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/m-kru/enix/internal/cfg"
+	"github.com/m-kru/enix/internal/frame"
 )
 
 type Line struct {
@@ -81,19 +82,19 @@ func (l *Line) InsertRune(r rune, idx int) {
 	l.Buf = fmt.Sprintf("%s%c%s", left, r, right)
 }
 
-func (l *Line) Render(x, y, width, offset int) {
+func (l *Line) Render(frame frame.Frame, offset int) {
 	i := 0
 	for _, r := range l.Buf[offset:len(l.Buf)] {
-		if i == width-1 {
+		if i == frame.Width-1 {
 			break
 		}
 
-		l.Screen.SetContent(i+x, y, r, nil, l.Colors.Default)
+		frame.SetContent(i, 0, r, l.Colors.Default)
 		i++
 	}
 
-	for i < width {
-		l.Screen.SetContent(i+x, y, ' ', nil, l.Colors.Default)
+	for i < frame.Width {
+		frame.SetContent(i, 0, ' ', l.Colors.Default)
 		i++
 	}
 }

@@ -5,6 +5,7 @@ import (
 
 	"github.com/m-kru/enix/internal/arg"
 	"github.com/m-kru/enix/internal/cfg"
+	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/tab"
 
 	"github.com/gdamore/tcell/v2"
@@ -59,8 +60,13 @@ func (w *Window) Resize() {
 	w.Width = width - 1
 	w.Height = height - 2
 
-	w.Prompt.Width = width
-	w.Prompt.Y = height - 1
+	w.Prompt.Frame = frame.Frame{
+		Screen: w.Screen,
+		X:      0,
+		Y:      height - 1,
+		Width:  width,
+		Height: 1,
+	}
 }
 
 func (w *Window) Render() {
@@ -105,8 +111,13 @@ func Start(colors *cfg.Colorscheme, keys *cfg.Keybindings) {
 		Colors: colors,
 		Keys:   keys,
 		Screen: screen,
-		Width:  width,
-		Y:      height - 1,
+		Frame: frame.Frame{
+			Screen: screen,
+			X:      0,
+			Y:      height - 1,
+			Width:  width,
+			Height: 1,
+		},
 	}
 
 	w.Prompt = &p
