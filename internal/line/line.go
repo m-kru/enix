@@ -8,9 +8,9 @@ import (
 )
 
 type Line struct {
-	Screen tcell.Screen
-
 	Colors *cfg.Colorscheme
+
+	Screen tcell.Screen
 
 	Buf string
 

@@ -11,13 +11,13 @@ import (
 )
 
 type Tab struct {
+	Colors *cfg.Colorscheme
+
 	Screen tcell.Screen
 	StartX int
 	EndX   int
 	StartY int
 	EndY   int
-
-	Colors *cfg.Colorscheme
 
 	Name       string // Path of the file
 	Newline    string // Newline encoding

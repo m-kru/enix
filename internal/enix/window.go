@@ -11,12 +11,12 @@ import (
 )
 
 type Window struct {
+	Colors *cfg.Colorscheme
+	Keys   *cfg.Keybindings
+
 	Screen tcell.Screen
 	Width  int
 	Height int
-
-	Colors *cfg.Colorscheme
-	Keys   *cfg.Keybindings
 
 	Tabs       *tab.Tab // First tab pointer
 	CurrentTab *tab.Tab
@@ -94,26 +94,26 @@ func Start(colors *cfg.Colorscheme, keys *cfg.Keybindings) {
 	width, height := screen.Size()
 
 	w := Window{
+		Colors: colors,
+		Keys:   keys,
 		Screen: screen,
 		Width:  width - 1,
 		Height: height - 2, // One line for prompt
-		Colors: colors,
-		Keys:   keys,
 	}
 
 	p := Prompt{
+		Colors: colors,
+		Keys:   keys,
 		Screen: screen,
 		Width:  width,
 		Y:      height - 1,
-		Colors: colors,
-		Keys:   keys,
 	}
 
 	w.Prompt = &p
 	p.Window = &w
 
 	if len(arg.Files) == 0 {
-		w.Tabs = tab.Empty(screen, 0, width-1, 0, height-2, colors)
+		w.Tabs = tab.Empty(colors, screen, 0, width-1, 0, height-2)
 		w.CurrentTab = w.Tabs
 	}
 

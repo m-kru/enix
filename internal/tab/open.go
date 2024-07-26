@@ -9,20 +9,20 @@ import (
 )
 
 func Empty(
+	colors *cfg.Colorscheme,
 	screen tcell.Screen,
 	startX int,
 	endX int,
 	startY int,
 	endY int,
-	colors *cfg.Colorscheme,
 ) *Tab {
 	t := &Tab{
+		Colors:          colors,
 		Screen:          screen,
 		StartX:          startX,
 		EndX:            endX,
 		StartY:          startY,
 		EndY:            endY,
-		Colors:          colors,
 		Name:            "No Name",
 		Newline:         "\n",
 		FileType:        "",
@@ -32,8 +32,8 @@ func Empty(
 	}
 
 	c := &cursor.Cursor{
-		Screen: screen,
 		Colors: colors,
+		Screen: screen,
 		Line:   t.Lines,
 	}
 	t.Cursor = c
@@ -44,12 +44,12 @@ func Empty(
 // Open opens a new tab.
 // If path is "", then new empty tab is opened.
 func Open(
+	colors *cfg.Colorscheme,
 	screen tcell.Screen,
 	startX int,
 	endX int,
 	startY int,
 	endY int,
-	colors *cfg.Colorscheme,
 	path string,
 	firstLine int, // First visible line
 ) *Tab {
@@ -62,12 +62,12 @@ func Open(
 	}
 
 	return &Tab{
+		Colors:          colors,
 		Screen:          screen,
 		StartX:          startX,
 		EndX:            endX,
 		StartY:          startY,
 		EndY:            endY,
-		Colors:          colors,
 		Name:            path,
 		Newline:         "\n",
 		FileType:        fileType,

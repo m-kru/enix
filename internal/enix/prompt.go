@@ -21,15 +21,15 @@ const (
 
 // Prompt represents command line prompt.
 type Prompt struct {
+	Colors *cfg.Colorscheme
+	Keys   *cfg.Keybindings
+
 	Screen tcell.Screen
 	Width  int // Screen Width
 	Y      int // Tcell Y coordinate of prompt line.
 
 	// History of executed commands.
 	History []string
-
-	Colors *cfg.Colorscheme
-	Keys   *cfg.Keybindings
 
 	Window *Window
 
@@ -86,14 +86,14 @@ func (p *Prompt) ShowInfo(msg string) {
 // Currently assume text + shadow text always fits screen width.
 func (p *Prompt) Activate(text, shadowText string) {
 	p.Line = &line.Line{
-		Screen: p.Screen,
 		Colors: p.Colors,
+		Screen: p.Screen,
 		Buf:    text,
 	}
 
 	p.Cursor = &cursor.Cursor{
-		Screen: p.Screen,
 		Colors: p.Colors,
+		Screen: p.Screen,
 		Line:   p.Line,
 		BufIdx: len(text),
 	}

@@ -9,9 +9,9 @@ import (
 // Cursors must be stored in order. Thanks to this, only next cursors must be
 // informed about line changes.
 type Cursor struct {
-	Screen tcell.Screen
-
 	Colors *cfg.Colorscheme
+
+	Screen tcell.Screen
 
 	Line   *line.Line
 	BufIdx int // Index into line buffer.
