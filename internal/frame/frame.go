@@ -16,10 +16,10 @@ type Frame struct {
 
 func (f Frame) SetContent(x int, y int, r rune, style tcell.Style) {
 	if x >= f.Width {
-		panic(fmt.Sprintf("x (%d) >= frame.Width (%d)", x, f.Width))
+		panic(fmt.Sprintf("x (%d) >= f.Width (%d)", x, f.Width))
 	}
 	if y >= f.Height {
-		panic(fmt.Sprintf("y (%d) >= frame.Height (%d)", y, f.Height))
+		panic(fmt.Sprintf("y (%d) >= f.Height (%d)", y, f.Height))
 	}
 
 	f.Screen.SetContent(x+f.X, y+f.Y, r, nil, style)
@@ -28,10 +28,10 @@ func (f Frame) SetContent(x int, y int, r rune, style tcell.Style) {
 // Line returns frame f subframe for line rendering.
 func (f Frame) Line(x int, y int) Frame {
 	if x >= f.Width {
-		panic(fmt.Sprintf("x (%d) >= frame.Width (%d)", x, f.Width))
+		panic(fmt.Sprintf("x (%d) >= f.Width (%d)", x, f.Width))
 	}
 	if y >= f.Height {
-		panic(fmt.Sprintf("y (%d) >= frame.Height (%d)", y, f.Height))
+		panic(fmt.Sprintf("y (%d) >= f.Height (%d)", y, f.Height))
 	}
 
 	return Frame{
@@ -40,5 +40,22 @@ func (f Frame) Line(x int, y int) Frame {
 		Y:      f.Y + y,
 		Width:  f.Width - x,
 		Height: 1,
+	}
+}
+
+func (f Frame) Column(x int, width int) Frame {
+	if x >= f.Width {
+		panic(fmt.Sprintf("x (%d) >= frame.Width (%d)", x, f.Width))
+	}
+	if x+width > f.Width {
+		panic(fmt.Sprintf("x (%d) + width (%d) > f.Width %d", x, width, f.Width))
+	}
+
+	return Frame{
+		Screen: f.Screen,
+		X:      x,
+		Y:      f.Y,
+		Width:  width,
+		Height: f.Height,
 	}
 }

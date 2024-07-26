@@ -70,7 +70,15 @@ func (w *Window) Resize() {
 }
 
 func (w *Window) Render() {
-	w.CurrentTab.Render(0, 0)
+
+	tabFrame := frame.Frame{
+		Screen: w.Screen,
+		X:      0,
+		Y:      0,
+		Width:  w.Width,
+		Height: w.Height,
+	}
+	w.CurrentTab.Render(tabFrame)
 }
 
 func Start(colors *cfg.Colorscheme, keys *cfg.Keybindings) {
