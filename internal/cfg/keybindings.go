@@ -44,12 +44,12 @@ func KeybindingsDefault() Keybindings {
 		// Tab
 		"Ctrl+T": "tab-open",
 		// Miscellaneous
-		"Enter":      "enter",
-		"Esc":        "escape",
-		"Ctrl+C":     "copy",
-		"Ctrl+F":     "find",
-		"Ctrl+H":     "help",
-		"Ctrl+Q":     "quit",
+		"Enter":  "enter",
+		"Esc":    "escape",
+		"Ctrl+C": "copy",
+		"Ctrl+F": "find",
+		"Ctrl+H": "help",
+		"Ctrl+Q": "quit",
 		// "Ctrl+U":     "undo", Alt+U
 		"Ctrl+V": "paste",
 		"Ctrl+W": "sel-word",

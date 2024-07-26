@@ -3,8 +3,9 @@ package enix
 import (
 	"log"
 
+	"github.com/m-kru/enix/internal/arg"
 	"github.com/m-kru/enix/internal/cfg"
-	_ "github.com/m-kru/enix/internal/cmd"
+	"github.com/m-kru/enix/internal/tab"
 
 	"github.com/gdamore/tcell/v2"
 )
@@ -17,8 +18,8 @@ type Window struct {
 	Colors *cfg.Colorscheme
 	Keys   *cfg.Keybindings
 
-	Tab        *Tab // First tab
-	CurrentTab *Tab
+	Tabs       *tab.Tab // First tab pointer
+	CurrentTab *tab.Tab
 
 	Prompt *Prompt
 }
@@ -60,6 +61,10 @@ func (w *Window) Resize() {
 
 	w.Prompt.Width = width
 	w.Prompt.Y = height - 1
+}
+
+func (w *Window) Render() {
+	w.CurrentTab.Render(0, 0)
 }
 
 func Start(colors *cfg.Colorscheme, keys *cfg.Keybindings) {
@@ -106,6 +111,13 @@ func Start(colors *cfg.Colorscheme, keys *cfg.Keybindings) {
 
 	w.Prompt = &p
 	p.Window = &w
+
+	if len(arg.Files) == 0 {
+		w.Tabs = tab.Empty(screen, 0, width-1, 0, height-2, colors)
+		w.CurrentTab = w.Tabs
+	}
+
+	w.Render()
 
 	var evRcvr EventReceiver = &w
 

@@ -1,6 +1,7 @@
 package util
 
 import (
+	"fmt"
 	"strings"
 	"unicode"
 )
@@ -106,4 +107,10 @@ func WordEnd(str string, i int) (int, bool) {
 	}
 
 	return 0, false
+}
+
+// IntWidth returns number of digits required to print n.
+// TODO: Improbe speed, not the fastest implementation.
+func IntWidth(i int) int {
+	return len(fmt.Sprintf("%d", i))
 }

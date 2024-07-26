@@ -20,8 +20,41 @@ type Line struct {
 
 func (l *Line) Len() int { return len(l.Buf) }
 
-// Count returns number of lines in the list starting from line l.
-// It does not take int account previous lines.
+// Num returns line number in the line list.
+func (l *Line) Num() int {
+	n := 1
+	for {
+		if l.Prev == nil {
+			return n
+		}
+		l = l.Prev
+		n++
+	}
+}
+
+// Get returns nth line.
+// It panics if there is less than n lines.
+func (l *Line) Get(n int) *Line {
+	i := n
+
+	for {
+		if i == 1 {
+			return l
+		}
+
+		if l.Next == nil {
+			break
+		}
+
+		l = l.Next
+		i--
+	}
+
+	panic(fmt.Sprintf("cannot get %d ", n))
+}
+
+// Count returns number of lines in the list starting from the line l.
+// It does not take into account previous lines.
 func (l *Line) Count() int {
 	c := 1
 	for {

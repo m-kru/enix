@@ -31,8 +31,7 @@ type Prompt struct {
 	Colors *cfg.Colorscheme
 	Keys   *cfg.Keybindings
 
-	Window     *Window
-	CurrentTab *Tab
+	Window *Window
 
 	Line      *line.Line
 	Cursor    *cursor.Cursor
