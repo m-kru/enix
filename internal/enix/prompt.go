@@ -87,7 +87,6 @@ func (p *Prompt) ShowInfo(msg string) {
 func (p *Prompt) Activate(text, shadowText string) {
 	p.Line = &line.Line{
 		Colors: p.Colors,
-		Screen: p.Screen,
 		Buf:    text,
 	}
 

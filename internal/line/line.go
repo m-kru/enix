@@ -3,15 +3,12 @@ package line
 import (
 	"fmt"
 
-	"github.com/gdamore/tcell/v2"
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/frame"
 )
 
 type Line struct {
 	Colors *cfg.Colorscheme
-
-	Screen tcell.Screen
 
 	Buf string
 

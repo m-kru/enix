@@ -27,7 +27,7 @@ func Empty(
 		Newline:         "\n",
 		FileType:        "",
 		HasChanges:      false,
-		Lines:           line.Empty(screen, colors),
+		Lines:           line.Empty(colors),
 		FirstVisLineIdx: 1,
 	}
 
