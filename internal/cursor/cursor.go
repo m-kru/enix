@@ -9,8 +9,6 @@ import (
 // Cursors must be stored in order. Thanks to this, only next cursors must be
 // informed about line changes.
 type Cursor struct {
-	Colors *cfg.Colorscheme
-
 	Line   *line.Line
 	BufIdx int // Index into line buffer.
 
@@ -109,8 +107,8 @@ func (c *Cursor) Delete() {
 	c.Line.Delete(c.BufIdx, 1)
 }
 
-func (c *Cursor) Render(frame frame.Frame, offset int) {
+func (c *Cursor) Render(colors *cfg.Colorscheme, frame frame.Frame, offset int) {
 	x := c.BufIdx - offset
 	r := frame.GetContent(x, 0)
-	frame.SetContent(x, 0, r, c.Colors.Cursor)
+	frame.SetContent(x, 0, r, colors.Cursor)
 }

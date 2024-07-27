@@ -19,6 +19,7 @@ type Window struct {
 	Width  int
 	Height int
 
+	TabFrame   frame.Frame
 	Tabs       *tab.Tab // First tab pointer
 	CurrentTab *tab.Tab
 
@@ -34,6 +35,12 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 		case "cmd":
 			w.Prompt.Activate("text ", "shadow")
 			return w.Prompt
+		case "cursor-left":
+			w.CurrentTab.CursorLeft()
+		case "cursor-right":
+			w.CurrentTab.CursorRight()
+			w.CurrentTab.Render(w.TabFrame)
+			w.Screen.Show()
 		case "escape":
 			w.Prompt.Clear()
 		case "find":
@@ -46,6 +53,9 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 			return nil
 		}
 	}
+
+	w.CurrentTab.Render(w.TabFrame)
+	w.Screen.Show()
 
 	return w
 }
@@ -70,15 +80,7 @@ func (w *Window) Resize() {
 }
 
 func (w *Window) Render() {
-
-	tabFrame := frame.Frame{
-		Screen: w.Screen,
-		X:      0,
-		Y:      0,
-		Width:  w.Width,
-		Height: w.Height,
-	}
-	w.CurrentTab.Render(tabFrame)
+	w.CurrentTab.Render(w.TabFrame)
 }
 
 func Start(colors *cfg.Colorscheme, keys *cfg.Keybindings) {
@@ -126,6 +128,14 @@ func Start(colors *cfg.Colorscheme, keys *cfg.Keybindings) {
 			Width:  width,
 			Height: 1,
 		},
+	}
+
+	w.TabFrame = frame.Frame{
+		Screen: w.Screen,
+		X:      0,
+		Y:      0,
+		Width:  w.Width,
+		Height: w.Height,
 	}
 
 	w.Prompt = &p

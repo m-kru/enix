@@ -68,7 +68,7 @@ func (t *Tab) RenderCursors(frame frame.Frame) {
 			continue
 		}
 
-		c.Render(frame.Line(0, cIdx), 0)
+		c.Render(t.Colors, frame.Line(0, cIdx), 0)
 
 		c = c.Next
 	}
