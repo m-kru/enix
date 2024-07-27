@@ -43,6 +43,8 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 			w.CurrentTab.CursorRight()
 		case "cursor-up":
 			w.CurrentTab.CursorUp()
+		case "cursor-spawn-down":
+			w.CurrentTab.CursorSpawnDown()
 		case "escape":
 			w.Prompt.Clear()
 		case "find":

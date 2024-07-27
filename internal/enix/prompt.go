@@ -295,6 +295,9 @@ func (p *Prompt) Exec() EventReceiver {
 	case "cmd-error":
 		p.ShowError(args)
 		return p.Window
+	case "cursor-count":
+		p.ShowInfo(fmt.Sprintf("%d", p.Window.CurrentTab.Cursors.Count()))
+		return p.Window
 	default:
 		p.ShowError(
 			fmt.Sprintf(

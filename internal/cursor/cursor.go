@@ -18,6 +18,19 @@ type Cursor struct {
 	Next *Cursor
 }
 
+// Count returns the number of cursors in the list starting from the conter c.
+func (c *Cursor) Count() int {
+	cnt := 1
+	for {
+		if c.Next == nil {
+			break
+		}
+		c = c.Next
+		cnt++
+	}
+	return cnt
+}
+
 // Col returns column number of the cursor within the string in the buffer.
 func (c *Cursor) Column() int { return c.BufIdx + 1 }
 
@@ -43,9 +56,32 @@ func (c *Cursor) FarRightBufIdx() int {
 }
 
 // Prune function removes duplicates from cursor list.
-// A duplicate is a cursor pointing to the same line and buffer index.
+// A duplicate is a cursor pointing to the same line with the same index and buffer index.
 func (c *Cursor) Prune() {
-	panic("unimplemented")
+	for {
+		c2 := c.Next
+		if c2 == nil {
+			return
+		}
+
+		for {
+			if c.Eq(c2) {
+				c2.Prev.Next = c2.Next
+				if c2.Next != nil {
+					c2.Next.Prev = c2.Prev
+				}
+			}
+			c2 = c2.Next
+			if c2 == nil {
+				break
+			}
+		}
+
+		c = c.Next
+		if c == nil {
+			return
+		}
+	}
 }
 
 // InformInsertion informs the cursor about content insertion into the line.

@@ -27,6 +27,7 @@ func KeybindingsDefault() Keybindings {
 		"Left":       "cursor-left",
 		"Right":      "cursor-right",
 		"Up":         "cursor-up",
+		"Ctrl+Down":  "cursor-spawn-down",
 		"Ctrl+Left":  "cursor-word-start",
 		"Ctrl+Right": "cursor-word-end",
 		"Ctrl+A":     "cursor-line-start",

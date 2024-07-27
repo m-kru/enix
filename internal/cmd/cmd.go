@@ -13,6 +13,8 @@ This command is useful for enix debugging and development.`,
 
 	// Cursor
 
+	"cursor-count": `cursor-count # Prints the number of cursors in current tab.`,
+
 	"cursor-down": `cursor-down # Moves cursor down.
 If cursor is in the last line, nothing happens.`,
 
@@ -33,6 +35,8 @@ If cursor is in the fisrt line, nothing happens.`,
 	"cursor-word-end":   `cursor-word-end # Moves cursor to the word end.`,
 	"cursor-line-start": `cursor-line-start # Moves cursor to the line start.`,
 	"cursor-line-end":   `cursor-line-end # Moves cursor to the line end.`,
+
+	"cursor-down-spawn": `cursor-spawn-down # Spawns a new cursor in line below.`,
 
 	// Deletion
 
@@ -113,7 +117,6 @@ for the help command. The same as 'help help'. Valid topics are:
 	"view-up":    "view-up # Scrolls view down.",
 
 	/*
-	   "cursor-down-spawn":    struct{}{},
 	   "cursor-up-spawn":      struct{}{},
 	   "cursor-match-brace":   struct{}{},
 	   "cursor-match-bracket": struct{}{},
