@@ -10,6 +10,7 @@ import (
 // informed about line changes.
 type Cursor struct {
 	Line   *line.Line
+	Idx    int
 	BufIdx int // Index into line buffer.
 
 	Prev *Cursor

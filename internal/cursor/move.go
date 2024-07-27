@@ -2,6 +2,23 @@ package cursor
 
 import "github.com/m-kru/enix/internal/util"
 
+func (c *Cursor) Down() {
+	if c.Line.Next == nil {
+		return
+	}
+
+	bufIdx := c.BufIdx
+	nextLen := c.Line.Next.Len()
+	if c.Idx != bufIdx && c.Idx <= nextLen {
+		bufIdx = c.Idx
+	} else if bufIdx > nextLen {
+		bufIdx = nextLen
+	}
+
+	c.BufIdx = bufIdx
+	c.Line = c.Line.Next
+}
+
 func (c *Cursor) Left() {
 	if c.BufIdx == 0 {
 		if c.Line.Prev != nil {
@@ -11,6 +28,7 @@ func (c *Cursor) Left() {
 	} else {
 		c.BufIdx--
 	}
+	c.Idx = c.BufIdx
 }
 
 func (c *Cursor) Right() {
@@ -22,6 +40,24 @@ func (c *Cursor) Right() {
 	} else {
 		c.BufIdx++
 	}
+	c.Idx = c.BufIdx
+}
+
+func (c *Cursor) Up() {
+	if c.Line.Prev == nil {
+		return
+	}
+
+	bufIdx := c.BufIdx
+	prevLen := c.Line.Prev.Len()
+	if c.Idx != bufIdx && c.Idx <= prevLen {
+		bufIdx = c.Idx
+	} else if bufIdx > prevLen {
+		bufIdx = prevLen
+	}
+
+	c.BufIdx = bufIdx
+	c.Line = c.Line.Prev
 }
 
 func (c *Cursor) WordStart() {

@@ -35,12 +35,14 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 		case "cmd":
 			w.Prompt.Activate("", "")
 			return w.Prompt
+		case "cursor-down":
+			w.CurrentTab.CursorDown()
 		case "cursor-left":
 			w.CurrentTab.CursorLeft()
 		case "cursor-right":
 			w.CurrentTab.CursorRight()
-			w.CurrentTab.Render(w.TabFrame)
-			w.Screen.Show()
+		case "cursor-up":
+			w.CurrentTab.CursorUp()
 		case "escape":
 			w.Prompt.Clear()
 		case "find":
@@ -143,7 +145,7 @@ func Start(colors *cfg.Colorscheme, keys *cfg.Keybindings) {
 
 	if len(arg.Files) == 0 {
 		//w.Tabs = tab.Empty(colors, screen)
-		w.Tabs = tab.FromString(colors, screen, "foo\nbar\nzaz", "No Name")
+		w.Tabs = tab.FromString(colors, screen, "foo\nbarrr\nzaz", "No Name")
 		w.CurrentTab = w.Tabs
 	}
 

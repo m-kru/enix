@@ -89,7 +89,11 @@ func (p *Prompt) Activate(text, shadowText string) {
 		Buf: text,
 	}
 
-	p.Cursor = &cursor.Cursor{Line: p.Line, BufIdx: len(text)}
+	p.Cursor = &cursor.Cursor{
+		Line:   p.Line,
+		Idx:    len(text),
+		BufIdx: len(text),
+	}
 
 	p.ShadowText = shadowText
 
