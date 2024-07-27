@@ -21,7 +21,7 @@ type Tab struct {
 	FileType   string
 	HasChanges bool
 
-	Cursor *cursor.Cursor // First cursor
+	Cursors *cursor.Cursor // First cursor
 
 	Lines *line.Line // First line pointer
 
