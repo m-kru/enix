@@ -33,7 +33,7 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 	case *tcell.EventKey:
 		switch w.Keys.ToCmd(ev) {
 		case "cmd":
-			w.Prompt.Activate("text ", "shadow")
+			w.Prompt.Activate("", "")
 			return w.Prompt
 		case "cursor-left":
 			w.CurrentTab.CursorLeft()
@@ -54,7 +54,7 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 		}
 	}
 
-	w.CurrentTab.Render(w.TabFrame)
+	w.Render()
 	w.Screen.Show()
 
 	return w
