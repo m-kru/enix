@@ -5,6 +5,7 @@ import (
 
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/util"
+	"github.com/m-kru/enix/internal/view"
 )
 
 func (t *Tab) RenderLineNums(frame frame.Frame) {
@@ -44,7 +45,8 @@ func (t *Tab) RenderLines(frame frame.Frame) {
 			break
 		}
 
-		line.Render(t.Colors, frame.Line(0, renderedCount), 0)
+		// TODO: Fix view
+		line.Render(t.Colors, frame.Line(0, renderedCount), view.View{LineNum: 1, Column: 1})
 
 		line = line.Next
 		lineIdx++
@@ -68,7 +70,8 @@ func (t *Tab) RenderCursors(frame frame.Frame) {
 			continue
 		}
 
-		c.Render(t.Colors, frame.Line(0, cIdx), 0)
+		// TODO: Handle view
+		c.Render(t.Colors, frame.Line(0, cIdx), view.View{LineNum: 1, Column: 1})
 
 		c = c.Next
 	}

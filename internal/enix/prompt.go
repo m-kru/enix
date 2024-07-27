@@ -8,6 +8,7 @@ import (
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/line"
+	"github.com/m-kru/enix/internal/view"
 
 	"github.com/gdamore/tcell/v2"
 )
@@ -33,9 +34,9 @@ type Prompt struct {
 
 	Window *Window
 
-	Line      *line.Line
-	Cursor    *cursor.Cursor
-	ViewRange line.Range
+	Line   *line.Line
+	Cursor *cursor.Cursor
+	View   view.View
 
 	ShadowText string
 
@@ -102,8 +103,10 @@ func (p *Prompt) Activate(text, shadowText string) {
 		p.State = InShadow
 	}
 
-	p.ViewRange.Lower = 0
-	p.ViewRange.Upper = p.Frame.Width - 2 - 1
+	p.View.LineNum = 1
+	p.View.Column = 1
+	p.View.Width = p.Frame.Width - 2 - 1 // - 1 because of cursor
+	p.View.Height = 1
 
 	p.Render()
 }
@@ -112,15 +115,11 @@ func (p *Prompt) Render() {
 	p.Frame.SetContent(0, 0, '>', p.Colors.Prompt)
 	p.Frame.SetContent(1, 0, ' ', p.Colors.Prompt)
 
-	if p.Cursor.BufIdx < p.ViewRange.Lower {
-		p.ViewRange.Lower = p.Cursor.BufIdx
-		p.ViewRange.Upper = p.ViewRange.Lower + p.Frame.Width - 2 - 1
-	} else if p.Cursor.BufIdx > p.ViewRange.Upper {
-		p.ViewRange.Upper = p.Cursor.BufIdx
-		p.ViewRange.Lower = p.ViewRange.Upper - p.Frame.Width + 2 + 1
+	if !p.View.IsVisible(p.Cursor) {
+		p.View = p.View.MinAdjust(p.Cursor)
 	}
 
-	p.Line.Render(p.Colors, p.Frame.Line(2, 0), p.ViewRange.Lower)
+	p.Line.Render(p.Colors, p.Frame.Line(2, 0), p.View)
 
 	if len(p.ShadowText) > 0 {
 		for i, r := range p.ShadowText {
@@ -128,7 +127,7 @@ func (p *Prompt) Render() {
 		}
 	}
 
-	p.Cursor.Render(p.Colors, p.Frame.Line(2, 0), p.ViewRange.Lower)
+	p.Cursor.Render(p.Colors, p.Frame.Line(2, 0), p.View)
 
 	p.Screen.Show()
 }

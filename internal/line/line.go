@@ -5,6 +5,7 @@ import (
 
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/frame"
+	"github.com/m-kru/enix/internal/view"
 )
 
 type Line struct {
@@ -26,6 +27,15 @@ func (l *Line) Num() int {
 		l = l.Prev
 		n++
 	}
+}
+
+// LineNum is an alias to Num() to satisfy Visible interface.
+func (l *Line) LineNum() int {
+	return l.Num()
+}
+
+func (l *Line) Column() int {
+	return len(l.Buf)
 }
 
 // Get returns nth line.
@@ -77,9 +87,9 @@ func (l *Line) InsertRune(r rune, idx int) {
 	l.Buf = fmt.Sprintf("%s%c%s", left, r, right)
 }
 
-func (l *Line) Render(colors *cfg.Colorscheme, frame frame.Frame, offset int) {
+func (l *Line) Render(colors *cfg.Colorscheme, frame frame.Frame, view view.View) {
 	i := 0
-	for _, r := range l.Buf[offset:len(l.Buf)] {
+	for _, r := range l.Buf[view.Column-1 : len(l.Buf)] {
 		if i == frame.Width-1 {
 			break
 		}

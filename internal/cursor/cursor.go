@@ -4,6 +4,7 @@ import (
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/line"
+	"github.com/m-kru/enix/internal/view"
 )
 
 // Cursors must be stored in order. Thanks to this, only next cursors must be
@@ -18,7 +19,9 @@ type Cursor struct {
 }
 
 // Col returns column number of the cursor within the string in the buffer.
-func (c *Cursor) Col() int { return c.BufIdx + 1 }
+func (c *Cursor) Column() int { return c.BufIdx + 1 }
+
+func (c *Cursor) LineNum() int { return c.Line.Num() }
 
 // Word returns word under cursor.
 func (c *Cursor) Word() string {
@@ -122,8 +125,8 @@ func (c *Cursor) Delete() {
 	c.Line.Delete(c.BufIdx, 1)
 }
 
-func (c *Cursor) Render(colors *cfg.Colorscheme, frame frame.Frame, offset int) {
-	x := c.BufIdx - offset
+func (c *Cursor) Render(colors *cfg.Colorscheme, frame frame.Frame, view view.View) {
+	x := c.BufIdx - view.Column + 1
 	r := frame.GetContent(x, 0)
 	frame.SetContent(x, 0, r, colors.Cursor)
 }
