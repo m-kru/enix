@@ -106,6 +106,7 @@ for the help command. The same as 'help help'. Valid topics are:
 
 	// View
 
+	"view":       "view line-number column # Sets view start at provided line number and column.",
 	"view-down":  "view-down # Scrolls view down.",
 	"view-left":  "view-down # Scrolls view left.",
 	"view-right": "view-down # Scrolls view right.",

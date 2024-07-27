@@ -25,6 +25,20 @@ func (c *Cursor) Word() string {
 	return ""
 }
 
+// FarRightBufIdx returns the buf index of the far right cursor.
+func (c *Cursor) FarRightBufIdx() int {
+	idx := c.BufIdx
+	for {
+		c = c.Next
+		if c == nil {
+			return idx
+		}
+		if c.BufIdx > idx {
+			idx = c.BufIdx
+		}
+	}
+}
+
 // Prune function removes duplicates from cursor list.
 // A duplicate is a cursor pointing to the same line and buffer index.
 func (c *Cursor) Prune() {
