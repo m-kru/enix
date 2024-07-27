@@ -14,6 +14,19 @@ type Frame struct {
 	Height int
 }
 
+func (f Frame) GetContent(x int, y int) rune {
+	if x >= f.Width {
+		panic(fmt.Sprintf("x (%d) >= f.Width (%d)", x, f.Width))
+	}
+	if y >= f.Height {
+		panic(fmt.Sprintf("y (%d) >= f.Height (%d)", y, f.Height))
+	}
+
+	r, _, _, _ := f.Screen.GetContent(x+f.X, y+f.Y)
+
+	return r
+}
+
 func (f Frame) SetContent(x int, y int, r rune, style tcell.Style) {
 	if x >= f.Width {
 		panic(fmt.Sprintf("x (%d) >= f.Width (%d)", x, f.Width))

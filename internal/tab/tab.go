@@ -31,21 +31,24 @@ func (t *Tab) Save() error {
 	panic("unimplemented")
 }
 
+// IsLineVisible returns info whether line is visible on the screen.
+// If visible, the first return is y coordinate of frame used while
+// rendering lines.
 func (t *Tab) IsLineVisible(l *line.Line) (int, bool) {
-	n := 1
+	y := 0
 
 	if l == t.FirstVisLine {
-		return n, true
+		return y, true
 	}
 
 	for {
 		l = l.Prev
-		n++
+		y++
 
 		if l == t.LastVisLine || l == nil {
 			return 0, false
 		} else if l == t.FirstVisLine {
-			return n, true
+			return y, true
 		}
 	}
 }

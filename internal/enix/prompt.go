@@ -91,7 +91,6 @@ func (p *Prompt) Activate(text, shadowText string) {
 
 	p.Cursor = &cursor.Cursor{
 		Colors: p.Colors,
-		Screen: p.Screen,
 		Line:   p.Line,
 		BufIdx: len(text),
 	}
@@ -129,7 +128,7 @@ func (p *Prompt) Render() {
 		}
 	}
 
-	p.Cursor.Render(2, p.Frame.Y, p.ViewRange.Lower)
+	p.Cursor.Render(p.Frame.Line(2, 0), p.ViewRange.Lower)
 
 	p.Screen.Show()
 }

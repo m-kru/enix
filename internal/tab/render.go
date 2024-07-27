@@ -54,6 +54,26 @@ func (t *Tab) RenderLines(frame frame.Frame) {
 	t.LastVisLine = t.FirstVisLine.Get(renderedCount)
 }
 
+func (t *Tab) RenderCursors(frame frame.Frame) {
+	c := t.Cursors
+
+	for {
+		if c == nil {
+			break
+		}
+
+		cIdx, ok := t.IsLineVisible(c.Line)
+		if !ok {
+			c = c.Next
+			continue
+		}
+
+		c.Render(frame.Line(0, cIdx), 0)
+
+		c = c.Next
+	}
+}
+
 func (t *Tab) Render(frame frame.Frame) {
 	// Render line numbers
 	lineCount := t.LineCount()
@@ -61,8 +81,9 @@ func (t *Tab) Render(frame frame.Frame) {
 	t.RenderLineNums(frame.Column(0, lineNumWidth))
 
 	// Render lines
-	linesFrame := frame.Column(lineNumWidth + 1, frame.Width-lineNumWidth-1)
+	linesFrame := frame.Column(lineNumWidth+1, frame.Width-lineNumWidth-1)
 	t.RenderLines(linesFrame)
 
 	// Render cursors
+	t.RenderCursors(linesFrame)
 }

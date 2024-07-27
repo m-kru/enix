@@ -24,7 +24,6 @@ func Empty(colors *cfg.Colorscheme, screen tcell.Screen) *Tab {
 
 	c := &cursor.Cursor{
 		Colors: colors,
-		Screen: screen,
 		Line:   t.Lines,
 	}
 	t.Cursors = c
@@ -84,7 +83,6 @@ func FromString(
 
 	c := &cursor.Cursor{
 		Colors: colors,
-		Screen: screen,
 		Line:   t.Lines,
 	}
 	t.Cursors = c

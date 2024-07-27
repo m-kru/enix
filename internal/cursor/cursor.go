@@ -1,8 +1,8 @@
 package cursor
 
 import (
-	"github.com/gdamore/tcell/v2"
 	"github.com/m-kru/enix/internal/cfg"
+	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/line"
 )
 
@@ -10,8 +10,6 @@ import (
 // informed about line changes.
 type Cursor struct {
 	Colors *cfg.Colorscheme
-
-	Screen tcell.Screen
 
 	Line   *line.Line
 	BufIdx int // Index into line buffer.
@@ -111,8 +109,8 @@ func (c *Cursor) Delete() {
 	c.Line.Delete(c.BufIdx, 1)
 }
 
-func (c *Cursor) Render(x, y, offset int) {
-	x = x + c.BufIdx - offset
-	r, _, _, _ := c.Screen.GetContent(x, y)
-	c.Screen.SetContent(x, y, r, nil, c.Colors.Cursor)
+func (c *Cursor) Render(frame frame.Frame, offset int) {
+	x := c.BufIdx - offset
+	r := frame.GetContent(x, 0)
+	frame.SetContent(x, 0, r, c.Colors.Cursor)
 }
