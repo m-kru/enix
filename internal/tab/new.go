@@ -10,15 +10,17 @@ import (
 
 func Empty(colors *cfg.Colorscheme, screen tcell.Screen) *Tab {
 	t := &Tab{
-		Colors:          colors,
-		Screen:          screen,
-		Name:            "No Name",
-		Newline:         "\n",
-		FileType:        "",
-		HasChanges:      false,
-		Lines:           line.Empty(),
-		FirstVisLineIdx: 1,
+		Colors:     colors,
+		Screen:     screen,
+		Name:       "No Name",
+		Newline:    "\n",
+		FileType:   "",
+		HasChanges: false,
+		Lines:      line.Empty(),
 	}
+
+	t.FirstVisLine = t.Lines
+	t.LastVisLine = t.Lines
 
 	c := &cursor.Cursor{
 		Colors: colors,
@@ -46,15 +48,19 @@ func Open(
 		path = "No Name"
 	}
 
-	return &Tab{
-		Colors:          colors,
-		Screen:          screen,
-		Name:            path,
-		Newline:         "\n",
-		FileType:        fileType,
-		HasChanges:      false,
-		FirstVisLineIdx: firstLine,
+	t := &Tab{
+		Colors:     colors,
+		Screen:     screen,
+		Name:       path,
+		Newline:    "\n",
+		FileType:   fileType,
+		HasChanges: false,
 	}
+
+	t.FirstVisLine = t.Lines
+	t.LastVisLine = t.Lines
+
+	return t
 }
 
 func FromString(
@@ -64,15 +70,17 @@ func FromString(
 	name string,
 ) *Tab {
 	t := &Tab{
-		Colors:          colors,
-		Screen:          screen,
-		Name:            name,
-		Newline:         "\n",
-		FileType:        "",
-		HasChanges:      false,
-		Lines:           line.FromString(str),
-		FirstVisLineIdx: 1,
+		Colors:     colors,
+		Screen:     screen,
+		Name:       name,
+		Newline:    "\n",
+		FileType:   "",
+		HasChanges: false,
+		Lines:      line.FromString(str),
 	}
+
+	t.FirstVisLine = t.Lines
+	t.LastVisLine = t.Lines
 
 	c := &cursor.Cursor{
 		Colors: colors,

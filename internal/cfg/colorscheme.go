@@ -39,7 +39,7 @@ func ColorschemeDefault() Colorscheme {
 
 		Error: tcell.StyleDefault.Foreground(tcell.ColorMaroon),
 
-		LineNum: tcell.StyleDefault.Foreground(tcell.ColorSilver),
+		LineNum: tcell.StyleDefault.Foreground(tcell.ColorGray),
 
 		Cursor:     tcell.StyleDefault.Reverse(true),
 		CursorWord: tcell.StyleDefault.Foreground(tcell.ColorWhite),
