@@ -103,6 +103,14 @@ for the help command. The same as 'help help'. Valid topics are:
   - cursors - what they are and how they work,
   - keybindings - how to set, and what to watch out for,
   - selections - what ther are and how they work.`,
+
+	// View
+
+	"view-down":  "view-down # Scrolls view down.",
+	"view-left":  "view-down # Scrolls view left.",
+	"view-right": "view-down # Scrolls view right.",
+	"view-up":    "view-up # Scrolls view down.",
+
 	/*
 	   "cursor-down-spawn":    struct{}{},
 	   "cursor-up-spawn":      struct{}{},
