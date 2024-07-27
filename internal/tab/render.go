@@ -5,11 +5,10 @@ import (
 
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/util"
-	"github.com/m-kru/enix/internal/view"
 )
 
 func (t *Tab) RenderLineNums(frame frame.Frame) {
-	n := t.FirstVisLine.Num()
+	n := t.View.LineNum
 	y := frame.Y
 	lineCount := t.LineCount()
 
@@ -36,9 +35,10 @@ func (t *Tab) RenderLineNums(frame frame.Frame) {
 }
 
 func (t *Tab) RenderLines(frame frame.Frame) {
-	lineIdx := t.FirstVisLine.Num()
+	lineIdx := t.View.LineNum
 	renderedCount := 0
 	line := t.Lines.Get(lineIdx)
+
 	// TODO: Handle line clearing.
 	for {
 		if line == nil || renderedCount == frame.Height {
@@ -46,14 +46,12 @@ func (t *Tab) RenderLines(frame frame.Frame) {
 		}
 
 		// TODO: Fix view
-		line.Render(t.Colors, frame.Line(0, renderedCount), view.View{LineNum: 1, Column: 1})
+		line.Render(t.Colors, frame.Line(0, renderedCount), t.View)
 
 		line = line.Next
 		lineIdx++
 		renderedCount++
 	}
-
-	t.LastVisLine = t.FirstVisLine.Get(renderedCount)
 }
 
 func (t *Tab) RenderCursors(frame frame.Frame) {
@@ -64,14 +62,13 @@ func (t *Tab) RenderCursors(frame frame.Frame) {
 			break
 		}
 
-		cIdx, ok := t.IsLineVisible(c.Line)
-		if !ok {
+		if !t.View.IsVisible(c) {
 			c = c.Next
 			continue
 		}
 
 		// TODO: Handle view
-		c.Render(t.Colors, frame.Line(0, cIdx), view.View{LineNum: 1, Column: 1})
+		c.Render(t.Colors, frame.Line(0, c.LineNum()-t.View.LineNum), t.View)
 
 		c = c.Next
 	}
@@ -84,6 +81,8 @@ func (t *Tab) Render(frame frame.Frame) {
 	t.RenderLineNums(frame.Column(0, lineNumWidth))
 
 	// Render lines
+	t.View.Width = frame.Width - lineNumWidth
+	t.View.Height = frame.Height
 	linesFrame := frame.Column(lineNumWidth+1, frame.Width-lineNumWidth-1)
 	t.RenderLines(linesFrame)
 

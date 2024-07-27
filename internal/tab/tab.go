@@ -5,6 +5,7 @@ import (
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/line"
+	"github.com/m-kru/enix/internal/view"
 )
 
 type Tab struct {
@@ -21,34 +22,11 @@ type Tab struct {
 
 	Lines *line.Line // First line pointer
 
-	FirstVisLine *line.Line // First visible line
-	LastVisLine  *line.Line // Last visible line
+	View view.View
 }
 
 func (t *Tab) LineCount() int { return t.Lines.Count() }
 
 func (t *Tab) Save() error {
 	panic("unimplemented")
-}
-
-// IsLineVisible returns info whether line is visible on the screen.
-// If visible, the first return is y coordinate of frame used while
-// rendering lines.
-func (t *Tab) IsLineVisible(l *line.Line) (int, bool) {
-	y := 0
-
-	if l == t.FirstVisLine {
-		return y, true
-	}
-
-	for {
-		l = l.Prev
-		y++
-
-		if l == t.LastVisLine || l == nil {
-			return 0, false
-		} else if l == t.FirstVisLine {
-			return y, true
-		}
-	}
 }
