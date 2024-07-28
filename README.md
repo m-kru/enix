@@ -1,3 +1,5 @@
+[![Tests](https://github.com/m-kru/enix/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/m-kru/enix/actions?query=master)
+
 **enix** is a terminal-based text editor trying to follow the \*nix philosophy.
 
 # Features
