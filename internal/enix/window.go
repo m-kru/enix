@@ -45,7 +45,7 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 		case "cursor-right":
 			w.CurrentTab.CursorRight()
 		case "cursor-up":
-			w.CurrentTab.CursorUp()
+			cmd.CursorUp(args, w.CurrentTab)
 		case "cursor-spawn-down":
 			w.CurrentTab.CursorSpawnDown()
 		case "escape":
@@ -151,7 +151,7 @@ func Start(colors *cfg.Colorscheme, keys *cfg.Keybindings) {
 
 	if len(arg.Files) == 0 {
 		//w.Tabs = tab.Empty(colors, screen)
-		w.Tabs = tab.FromString(colors, screen, "foo\nbarrr\nzaz", "No Name")
+		w.Tabs = tab.FromString(colors, screen, "fo\nbarr\nzaz\nabc def\nfof\nroff", "No Name")
 		w.CurrentTab = w.Tabs
 	}
 

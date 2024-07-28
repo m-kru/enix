@@ -9,8 +9,12 @@ func (c *Cursor) Down() {
 
 	bufIdx := c.BufIdx
 	nextLen := c.Line.Next.Len()
-	if c.Idx != bufIdx && c.Idx <= nextLen {
-		bufIdx = c.Idx
+	if c.Idx != bufIdx {
+		if c.Idx <= nextLen {
+			bufIdx = c.Idx
+		} else {
+			bufIdx = nextLen
+		}
 	} else if bufIdx > nextLen {
 		bufIdx = nextLen
 	}
@@ -50,8 +54,12 @@ func (c *Cursor) Up() {
 
 	bufIdx := c.BufIdx
 	prevLen := c.Line.Prev.Len()
-	if c.Idx != bufIdx && c.Idx <= prevLen {
-		bufIdx = c.Idx
+	if c.Idx != bufIdx {
+		if c.Idx <= prevLen {
+			bufIdx = c.Idx
+		} else {
+			bufIdx = prevLen
+		}
 	} else if bufIdx > prevLen {
 		bufIdx = prevLen
 	}

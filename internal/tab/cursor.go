@@ -32,20 +32,6 @@ func (t *Tab) CursorRight() {
 	t.Cursors.Prune()
 }
 
-func (t *Tab) CursorUp() {
-	c := t.Cursors
-
-	for {
-		if c == nil {
-			break
-		}
-		c.Up()
-		c = c.Next
-	}
-
-	t.Cursors.Prune()
-}
-
 func (t *Tab) CursorSpawnDown() {
 	var newCursors *cursor.Cursor
 	var lastNewCursor *cursor.Cursor

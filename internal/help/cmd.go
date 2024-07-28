@@ -15,7 +15,8 @@ This command is useful for enix debugging and development.`,
 
 	"cursor-count": `cursor-count # Prints the number of cursors in current tab.`,
 
-	"cursor-down": `cursor-down # Moves cursor down.
+	"cursor-down": `cursor-down [N=1] # Moves cursor down.
+The N parameter specifies how many lines cursor should be moved.
 If cursor is in the last line, nothing happens.`,
 
 	"cursor-left": `cursor-left # Moves cursor left.
@@ -28,7 +29,8 @@ If cursor is in the last column of a line, then it is moved into the first
 column of the next line. Unless this is the lastt line. In such a case,
 nothing happens.`,
 
-	"cursor-up": `cursor-up # Moves cursor up.
+	"cursor-up": `cursor-up [N=1] # Moves cursor up.
+The N parameter specifies how many lines cursor should be moved.
 If cursor is in the fisrt line, nothing happens.`,
 
 	"cursor-word-start": `cursor-word-start # Moves cursor to the word start.`,
