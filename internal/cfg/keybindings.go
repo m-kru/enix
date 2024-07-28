@@ -1,6 +1,8 @@
 package cfg
 
 import (
+	"strings"
+
 	"github.com/gdamore/tcell/v2"
 	enix_tcell "github.com/m-kru/enix/internal/tcell"
 )
@@ -60,12 +62,15 @@ func KeybindingsDefault() Keybindings {
 	}
 }
 
-func (keys Keybindings) ToCmd(ev *tcell.EventKey) string {
+func (keys Keybindings) ToCmd(ev *tcell.EventKey) (string, string) {
 	name := enix_tcell.EventKeyName(ev)
 
-	if cmd, ok := keys[name]; ok {
-		return cmd
+	str, ok := keys[name]
+	if !ok {
+		return "", ""
 	}
 
-	return ""
+	cmd, args, _ := strings.Cut(strings.TrimSpace(str), " ")
+
+	return cmd, args
 }

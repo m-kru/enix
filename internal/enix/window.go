@@ -5,6 +5,7 @@ import (
 
 	"github.com/m-kru/enix/internal/arg"
 	"github.com/m-kru/enix/internal/cfg"
+	"github.com/m-kru/enix/internal/cmd"
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/tab"
 
@@ -31,12 +32,14 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 	case *tcell.EventResize:
 		w.Screen.Sync()
 	case *tcell.EventKey:
-		switch w.Keys.ToCmd(ev) {
+		name, args := w.Keys.ToCmd(ev)
+
+		switch name {
 		case "cmd":
 			w.Prompt.Activate("", "")
 			return w.Prompt
 		case "cursor-down":
-			w.CurrentTab.CursorDown()
+			cmd.CursorDown(args, w.CurrentTab)
 		case "cursor-left":
 			w.CurrentTab.CursorLeft()
 		case "cursor-right":
@@ -59,7 +62,6 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 	}
 
 	w.Render()
-	w.Screen.Show()
 
 	return w
 }
@@ -85,6 +87,8 @@ func (w *Window) Resize() {
 
 func (w *Window) Render() {
 	w.CurrentTab.Render(w.TabFrame)
+
+	w.Screen.Show()
 }
 
 func Start(colors *cfg.Colorscheme, keys *cfg.Keybindings) {

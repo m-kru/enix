@@ -1,20 +1,8 @@
 package tab
 
-import "github.com/m-kru/enix/internal/cursor"
-
-func (t *Tab) CursorDown() {
-	c := t.Cursors
-
-	for {
-		if c == nil {
-			break
-		}
-		c.Down()
-		c = c.Next
-	}
-
-	t.Cursors.Prune()
-}
+import (
+	"github.com/m-kru/enix/internal/cursor"
+)
 
 func (t *Tab) CursorLeft() {
 	c := t.Cursors

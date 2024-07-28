@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/m-kru/enix/internal/cfg"
+	"github.com/m-kru/enix/internal/cmd"
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/line"
@@ -246,7 +247,9 @@ func (p *Prompt) RxEvent(ev tcell.Event) EventReceiver {
 	case *tcell.EventResize:
 		p.Window.Resize()
 	case *tcell.EventKey:
-		switch p.Keys.ToCmd(ev) {
+		cmd, _ := p.Keys.ToCmd(ev)
+
+		switch cmd {
 		case "backspace":
 			p.Backspace()
 		case "del":
@@ -283,9 +286,12 @@ func (p *Prompt) RxEvent(ev tcell.Event) EventReceiver {
 
 // Exec executes command.
 func (p *Prompt) Exec() EventReceiver {
-	cmd, args, _ := strings.Cut(strings.TrimSpace(p.Line.Buf), " ")
+	name, args, _ := strings.Cut(strings.TrimSpace(p.Line.Buf), " ")
 
-	switch cmd {
+	var err error
+	var ret EventReceiver = p
+
+	switch name {
 	case "cmd":
 		p.Activate("", "")
 		return p
@@ -295,6 +301,9 @@ func (p *Prompt) Exec() EventReceiver {
 	case "cmd-error":
 		p.ShowError(args)
 		return p.Window
+	case "cursor-down":
+		err = cmd.CursorDown(args, p.Window.CurrentTab)
+		ret = p.Window
 	case "cursor-count":
 		p.ShowInfo(fmt.Sprintf("%d", p.Window.CurrentTab.Cursors.Count()))
 		return p.Window
@@ -302,13 +311,22 @@ func (p *Prompt) Exec() EventReceiver {
 		p.ShowError(
 			fmt.Sprintf(
 				"invalid or unimplemented command '%s', if unimplemented report on https://github.com/m-kru/enix",
-				cmd,
+				name,
 			),
 		)
 		return p.Window
 	}
 
+	if err != nil {
+		p.ShowError(fmt.Sprintf("%v", err))
+		return p.Window
+	}
+
 	p.Clear()
 
-	return p
+	if ret == p.Window {
+		p.Window.Render()
+	}
+
+	return ret
 }
