@@ -4,34 +4,6 @@ import (
 	"github.com/m-kru/enix/internal/cursor"
 )
 
-func (t *Tab) CursorLeft() {
-	c := t.Cursors
-
-	for {
-		if c == nil {
-			break
-		}
-		c.Left()
-		c = c.Next
-	}
-
-	t.Cursors.Prune()
-}
-
-func (t *Tab) CursorRight() {
-	c := t.Cursors
-
-	for {
-		if c == nil {
-			break
-		}
-		c.Right()
-		c = c.Next
-	}
-
-	t.Cursors.Prune()
-}
-
 func (t *Tab) CursorSpawnDown() {
 	var newCursors *cursor.Cursor
 	var lastNewCursor *cursor.Cursor

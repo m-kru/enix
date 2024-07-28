@@ -304,6 +304,12 @@ func (p *Prompt) Exec() EventReceiver {
 	case "cursor-down":
 		err = cmd.CursorDown(args, p.Window.CurrentTab)
 		ret = p.Window
+	case "cursor-left":
+		err = cmd.CursorLeft(args, p.Window.CurrentTab)
+		ret = p.Window
+	case "cursor-right":
+		err = cmd.CursorRight(args, p.Window.CurrentTab)
+		ret = p.Window
 	case "cursor-up":
 		err = cmd.CursorUp(args, p.Window.CurrentTab)
 		ret = p.Window

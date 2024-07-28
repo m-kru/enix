@@ -1,6 +1,7 @@
 package enix
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/m-kru/enix/internal/arg"
@@ -28,6 +29,8 @@ type Window struct {
 }
 
 func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
+	var err error
+
 	switch ev := ev.(type) {
 	case *tcell.EventResize:
 		w.Screen.Sync()
@@ -39,13 +42,13 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 			w.Prompt.Activate("", "")
 			return w.Prompt
 		case "cursor-down":
-			cmd.CursorDown(args, w.CurrentTab)
+			err = cmd.CursorDown(args, w.CurrentTab)
 		case "cursor-left":
-			w.CurrentTab.CursorLeft()
+			err = cmd.CursorLeft(args, w.CurrentTab)
 		case "cursor-right":
-			w.CurrentTab.CursorRight()
+			err = cmd.CursorRight(args, w.CurrentTab)
 		case "cursor-up":
-			cmd.CursorUp(args, w.CurrentTab)
+			err = cmd.CursorUp(args, w.CurrentTab)
 		case "cursor-spawn-down":
 			w.CurrentTab.CursorSpawnDown()
 		case "escape":
@@ -59,6 +62,10 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 		case "quit":
 			return nil
 		}
+	}
+
+	if err != nil {
+		w.Prompt.ShowError(fmt.Sprintf("%v", err))
 	}
 
 	w.Render()
