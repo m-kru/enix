@@ -1,6 +1,6 @@
-package cmd
+package help
 
-var cmdDescriptions = map[string]string{
+var cmds = map[string]string{
 	// Command
 
 	"cmd": `cmd # Start command prompt.`,
@@ -117,17 +117,8 @@ for the help command. The same as 'help help'. Valid topics are:
 	"view-up":    "view-up # Scrolls view down.",
 
 	/*
-	   "cursor-up-spawn":      struct{}{},
 	   "cursor-match-brace":   struct{}{},
 	   "cursor-match-bracket": struct{}{},
 	   "cursor-match-paren":   struct{}{},
 	*/
-}
-
-// IsValid returns true if given command is a valid command.
-func IsValid(cmd string) bool {
-	if _, ok := cmdDescriptions[cmd]; ok {
-		return true
-	}
-	return false
 }
