@@ -8,7 +8,7 @@ import (
 )
 
 func (t *Tab) RenderLineNums(frame frame.Frame) {
-	n := t.View.LineNum
+	n := t.View.Line
 	y := frame.Y
 	lineCount := t.LineCount()
 
@@ -35,9 +35,9 @@ func (t *Tab) RenderLineNums(frame frame.Frame) {
 }
 
 func (t *Tab) RenderLines(frame frame.Frame) {
-	lineIdx := t.View.LineNum
+	lineNum := t.View.Line
 	renderedCount := 0
-	line := t.Lines.Get(lineIdx)
+	line := t.Lines.Get(lineNum)
 
 	// TODO: Handle line clearing.
 	for {
@@ -49,7 +49,7 @@ func (t *Tab) RenderLines(frame frame.Frame) {
 		line.Render(t.Colors, frame.Line(0, renderedCount), t.View)
 
 		line = line.Next
-		lineIdx++
+		lineNum++
 		renderedCount++
 	}
 }
@@ -68,7 +68,7 @@ func (t *Tab) RenderCursors(frame frame.Frame) {
 		}
 
 		// TODO: Handle view
-		c.Render(t.Colors, frame.Line(0, c.LineNum()-t.View.LineNum), t.View)
+		c.Render(t.Colors, frame.Line(0, c.LineNum()-t.View.Line), t.View)
 
 		c = c.Next
 	}

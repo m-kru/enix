@@ -18,7 +18,7 @@ func Empty(colors *cfg.Colorscheme, screen tcell.Screen) *Tab {
 		FileType:   "",
 		HasChanges: false,
 		Lines:      line.Empty(),
-		View:       view.View{LineNum: 1, Column: 1},
+		View:       view.View{Line: 1, Column: 1},
 	}
 
 	c := &cursor.Cursor{Line: t.Lines}
@@ -69,7 +69,7 @@ func FromString(
 		FileType:   "",
 		HasChanges: false,
 		Lines:      line.FromString(str),
-		View:       view.View{LineNum: 1, Column: 1},
+		View:       view.View{Line: 1, Column: 1},
 	}
 
 	c := &cursor.Cursor{Line: t.Lines}

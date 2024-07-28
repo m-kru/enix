@@ -104,7 +104,7 @@ func (p *Prompt) Activate(text, shadowText string) {
 		p.State = InShadow
 	}
 
-	p.View.LineNum = 1
+	p.View.Line = 1
 	p.View.Column = 1
 	p.View.Width = p.Frame.Width - 2 - 1 // - 1 because of cursor
 	p.View.Height = 1

@@ -1,17 +1,17 @@
 package view
 
 type View struct {
-	LineNum int // Start line number
-	Column  int // Start column
-	Width   int
-	Height  int
+	Line   int // Start line number
+	Column int // Start column
+	Width  int
+	Height int
 }
 
 func (v View) IsVisible(vis Visible) bool {
 	ln := vis.LineNum()
 	c := vis.Column()
 
-	if v.LineNum <= ln && ln < v.LineNum+v.Height && v.Column <= c && c < v.Column+v.Width {
+	if v.Line <= ln && ln < v.Line+v.Height && v.Column <= c && c < v.Column+v.Width {
 		return true
 	}
 
@@ -26,8 +26,8 @@ func (v View) MinAdjust(vis Visible) View {
 	}
 
 	ln := vis.LineNum()
-	if ln < v.LineNum || v.LineNum+v.Height <= ln {
-		v.LineNum = ln
+	if ln < v.Line || v.Line+v.Height <= ln {
+		v.Line = ln
 	}
 
 	return v
