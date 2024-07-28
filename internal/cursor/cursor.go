@@ -65,7 +65,7 @@ func (c *Cursor) Prune() {
 		}
 
 		for {
-			if c.Eq(c2) {
+			if Equal(c, c2) {
 				c2.Prev.Next = c2.Next
 				if c2.Next != nil {
 					c2.Next.Prev = c2.Prev
