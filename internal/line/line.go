@@ -62,15 +62,15 @@ func (l *Line) Get(n int) *Line {
 // Count returns number of lines in the list starting from the line l.
 // It does not take into account previous lines.
 func (l *Line) Count() int {
-	c := 1
+	cnt := 1
 	for {
 		if l.Next == nil {
 			break
 		}
 		l = l.Next
-		c++
+		cnt++
 	}
-	return c
+	return cnt
 }
 
 func (l *Line) Append(s string) {
