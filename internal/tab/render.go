@@ -2,10 +2,41 @@ package tab
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/util"
 )
+
+func (t *Tab) RenderStatusLine(frame frame.Frame) {
+	// Fill the background
+	for i := 0; i < frame.Width; i++ {
+		frame.SetContent(i, 0, ' ', t.Colors.StatusLine)
+	}
+
+	// TODO: Handle case when file path is wider than frame width.
+	for i, r := range t.Name {
+		frame.SetContent(i, 0, r, t.Colors.StatusLine)
+	}
+
+	b := strings.Builder{}
+	if t.Cursors != nil {
+		b.WriteString(
+			fmt.Sprintf("%d:%d | ", t.Cursors.LineNum(), t.Cursors.Column()),
+		)
+	}
+	b.WriteString(fmt.Sprintf("%s ", t.FileType))
+	statusStr := b.String()
+
+	if len(statusStr) > frame.Width {
+		return
+	}
+
+	startIdx := frame.Width - len(statusStr)
+	for i, r := range statusStr {
+		frame.SetContent(startIdx+i, 0, r, t.Colors.StatusLine)
+	}
+}
 
 func (t *Tab) RenderLineNums(frame frame.Frame) {
 	n := t.View.Line
@@ -75,6 +106,13 @@ func (t *Tab) RenderCursors(frame frame.Frame) {
 }
 
 func (t *Tab) Render(frame frame.Frame) {
+	// Render status line
+	t.RenderStatusLine(frame.LastLine())
+
+	if frame.Height > 1 {
+		frame.Height -= 1
+	}
+
 	// Render line numbers
 	lineCount := t.LineCount()
 	lineNumWidth := util.IntWidth(lineCount)

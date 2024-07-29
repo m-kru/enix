@@ -17,6 +17,8 @@ type Colorscheme struct {
 
 	Selection tcell.Style
 
+	StatusLine tcell.Style
+
 	Prompt       tcell.Style
 	PromptShadow tcell.Style
 
@@ -43,6 +45,8 @@ func ColorschemeDefault() Colorscheme {
 
 		Cursor:     tcell.StyleDefault.Reverse(true),
 		CursorWord: tcell.StyleDefault.Foreground(tcell.ColorWhite),
+
+		StatusLine: tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorGray),
 
 		Prompt:       tcell.StyleDefault.Foreground(tcell.ColorWhite),
 		PromptShadow: tcell.StyleDefault.Foreground(tcell.ColorGray),

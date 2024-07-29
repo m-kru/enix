@@ -80,8 +80,8 @@ func (w *Window) Resize() {
 
 	width, height := w.Screen.Size()
 
-	w.Width = width - 1
-	w.Height = height - 2
+	w.Width = width
+	w.Height = height - 1
 
 	w.Prompt.Frame = frame.Frame{
 		Screen: w.Screen,
@@ -128,8 +128,8 @@ func Start(colors *cfg.Colorscheme, keys *cfg.Keybindings) {
 		Colors: colors,
 		Keys:   keys,
 		Screen: screen,
-		Width:  width - 1,
-		Height: height - 2, // One line for prompt
+		Width:  width,
+		Height: height - 1, // One line for prompt
 	}
 
 	p := Prompt{

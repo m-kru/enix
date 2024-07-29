@@ -56,6 +56,15 @@ func (f Frame) Line(x int, y int) Frame {
 	}
 }
 
+// LastLine returns subframe containing only the last line of frame f.
+func (f Frame) LastLine() Frame {
+	if f.Height > 1 {
+		f.Y = f.Y + f.Height - 1
+		f.Height = 1
+	}
+	return f
+}
+
 func (f Frame) Column(x int, width int) Frame {
 	if x >= f.Width {
 		panic(fmt.Sprintf("x (%d) >= frame.Width (%d)", x, f.Width))

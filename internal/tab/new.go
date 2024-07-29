@@ -66,7 +66,7 @@ func FromString(
 		Screen:     screen,
 		Name:       name,
 		Newline:    "\n",
-		FileType:   "",
+		FileType:   "None",
 		HasChanges: false,
 		Lines:      line.FromString(str),
 		View:       view.View{Line: 1, Column: 1},
