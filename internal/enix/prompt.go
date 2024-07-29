@@ -246,6 +246,7 @@ func (p *Prompt) RxEvent(ev tcell.Event) EventReceiver {
 	switch ev := ev.(type) {
 	case *tcell.EventResize:
 		p.Window.Resize()
+		p.Window.Render()
 	case *tcell.EventKey:
 		cmd, _ := p.Keys.ToCmd(ev)
 

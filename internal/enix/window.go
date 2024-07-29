@@ -33,7 +33,7 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 
 	switch ev := ev.(type) {
 	case *tcell.EventResize:
-		w.Screen.Sync()
+		w.Resize()
 	case *tcell.EventKey:
 		name, args := w.Keys.ToCmd(ev)
 
@@ -82,6 +82,14 @@ func (w *Window) Resize() {
 
 	w.Width = width
 	w.Height = height - 1
+
+	w.TabFrame = frame.Frame{
+		Screen: w.Screen,
+		X:      0,
+		Y:      0,
+		Width:  w.Width,
+		Height: w.Height,
+	}
 
 	w.Prompt.Frame = frame.Frame{
 		Screen: w.Screen,
