@@ -3,19 +3,18 @@ package line
 import (
 	"fmt"
 
-	"github.com/m-kru/enix/internal/cfg"
-	"github.com/m-kru/enix/internal/frame"
-	"github.com/m-kru/enix/internal/view"
+	"github.com/m-kru/enix/internal/util"
 )
 
 type Line struct {
-	Buf string
+	buf []rune
 
 	Prev *Line
 	Next *Line
 }
 
-func (l *Line) Len() int { return len(l.Buf) }
+func (l *Line) Len() int       { return len(l.buf) }
+func (l *Line) String() string { return string(l.buf) }
 
 // Num returns line number in the line list.
 func (l *Line) Num() int {
@@ -35,7 +34,8 @@ func (l *Line) LineNum() int {
 }
 
 func (l *Line) Column() int {
-	return len(l.Buf)
+	// TODO: Handle tabs.
+	return len(l.buf)
 }
 
 // Get returns nth line.
@@ -74,32 +74,44 @@ func (l *Line) Count() int {
 }
 
 func (l *Line) Append(s string) {
-	l.Buf = fmt.Sprintf("%s%s", l.Buf, s)
+	newLen := len(l.buf) + len(s)
+	if newLen > cap(l.buf) {
+		newBuf := make([]rune, 0, util.NextPowerOfTwo(newLen))
+		newBuf = append(newBuf, l.buf...)
+		l.buf = newBuf
+	}
+
+	l.buf = append(l.buf, []rune(s)...)
 }
 
 func (l *Line) Delete(idx int, size int) {
-	l.Buf = l.Buf[0:idx] + l.Buf[idx+1:len(l.Buf)]
+	l.buf = append(l.buf[0:idx], l.buf[idx+1:len(l.buf)]...)
 }
 
 func (l *Line) InsertRune(r rune, idx int) {
-	left := l.Buf[0:idx]
-	right := l.Buf[idx:len(l.Buf)]
-	l.Buf = fmt.Sprintf("%s%c%s", left, r, right)
+	newLen := len(l.buf) + 1
+	if newLen > cap(l.buf) {
+		newBuf := make([]rune, 0, util.NextPowerOfTwo(newLen))
+		newBuf = append(newBuf, l.buf...)
+		l.buf = newBuf
+	}
+
+	right := l.buf[idx:len(l.buf)]
+	l.buf = l.buf[0:idx]
+	l.buf = append(l.buf, r)
+	l.buf = append(l.buf, right...)
 }
 
-func (l *Line) Render(colors *cfg.Colorscheme, frame frame.Frame, view view.View) {
-	i := 0
-	for _, r := range l.Buf[view.Column-1 : len(l.Buf)] {
-		if i == frame.Width-1 {
-			break
-		}
-
-		frame.SetContent(i, 0, r, colors.Default)
-		i++
+func (l *Line) Insert(s string, idx int) {
+	newLen := len(l.buf) + len(s)
+	if newLen > cap(l.buf) {
+		newBuf := make([]rune, 0, util.NextPowerOfTwo(newLen))
+		newBuf = append(newBuf, l.buf...)
+		l.buf = newBuf
 	}
 
-	for i < frame.Width {
-		frame.SetContent(i, 0, ' ', colors.Default)
-		i++
-	}
+	right := l.buf[idx:len(l.buf)]
+	l.buf = l.buf[0:idx]
+	l.buf = append(l.buf, []rune(s)...)
+	l.buf = append(l.buf, right...)
 }

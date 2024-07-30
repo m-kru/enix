@@ -69,7 +69,7 @@ func (c *Cursor) Up() {
 }
 
 func (c *Cursor) WordStart() {
-	if idx, ok := util.WordStart(c.Line.Buf, c.BufIdx); ok {
+	if idx, ok := util.WordStart(c.Line.String(), c.BufIdx); ok {
 		c.BufIdx = idx
 		return
 	}
@@ -83,7 +83,7 @@ func (c *Cursor) WordStart() {
 }
 
 func (c *Cursor) WordEnd() {
-	if idx, ok := util.WordEnd(c.Line.Buf, c.BufIdx); ok {
+	if idx, ok := util.WordEnd(c.Line.String(), c.BufIdx); ok {
 		c.BufIdx = idx + 1 // + 1 as we have found word end index.
 		return
 	}

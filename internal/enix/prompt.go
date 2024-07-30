@@ -87,9 +87,7 @@ func (p *Prompt) ShowInfo(msg string) {
 
 // Currently assume text + shadow text always fits screen width.
 func (p *Prompt) Activate(text, shadowText string) {
-	p.Line = &line.Line{
-		Buf: text,
-	}
+	p.Line = line.FromString(text)
 
 	p.Cursor = &cursor.Cursor{
 		Line:   p.Line,
@@ -287,7 +285,7 @@ func (p *Prompt) RxEvent(ev tcell.Event) EventReceiver {
 
 // Exec executes command.
 func (p *Prompt) Exec() EventReceiver {
-	name, args, _ := strings.Cut(strings.TrimSpace(p.Line.Buf), " ")
+	name, args, _ := strings.Cut(strings.TrimSpace(p.Line.String()), " ")
 
 	var err error
 	var ret EventReceiver = p
