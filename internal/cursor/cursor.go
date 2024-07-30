@@ -32,7 +32,9 @@ func (c *Cursor) Count() int {
 }
 
 // Col returns column number of the cursor within the string in the buffer.
-func (c *Cursor) Column() int { return c.BufIdx + 1 }
+func (c *Cursor) Column() int {
+	return c.Line.ColumnIdx(c.BufIdx)
+}
 
 func (c *Cursor) LineNum() int { return c.Line.Num() }
 
@@ -41,17 +43,13 @@ func (c *Cursor) Word() string {
 	return ""
 }
 
-// FarRightBufIdx returns the buf index of the far right cursor.
-func (c *Cursor) FarRightBufIdx() int {
-	idx := c.BufIdx
+// Last returns last cursor in the cursor list.
+func (c *Cursor) Last() *Cursor {
 	for {
+		if c.Next == nil {
+			return c
+		}
 		c = c.Next
-		if c == nil {
-			return idx
-		}
-		if c.BufIdx > idx {
-			idx = c.BufIdx
-		}
 	}
 }
 
@@ -163,6 +161,11 @@ func (c *Cursor) Delete() {
 
 func (c *Cursor) Render(colors *cfg.Colorscheme, frame frame.Frame, view view.View) {
 	x := c.Line.ColumnIdx(c.BufIdx) - view.Column
+	/*
+		if x >= frame.Width {
+			return
+		}
+	*/
 	r := frame.GetContent(x, 0)
 	frame.SetContent(x, 0, r, colors.Cursor)
 }

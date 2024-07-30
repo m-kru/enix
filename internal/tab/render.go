@@ -8,6 +8,12 @@ import (
 	"github.com/m-kru/enix/internal/util"
 )
 
+// Currently view updating works in such a way, that the last cursor is always visible.
+func (t *Tab) UpdateView() {
+	c := t.Cursors.Last()
+	t.View = t.View.MinAdjust(c)
+}
+
 func (t *Tab) RenderStatusLine(frame frame.Frame) {
 	// Fill the background
 	for i := 0; i < frame.Width; i++ {
@@ -106,6 +112,8 @@ func (t *Tab) RenderCursors(frame frame.Frame) {
 }
 
 func (t *Tab) Render(frame frame.Frame) {
+	t.UpdateView()
+
 	// Render status line
 	t.RenderStatusLine(frame.LastLine())
 
@@ -119,7 +127,8 @@ func (t *Tab) Render(frame frame.Frame) {
 	t.RenderLineNums(frame.Column(0, lineNumWidth))
 
 	// Render lines
-	t.View.Width = frame.Width - lineNumWidth
+	// TODO: Should view Width and Height be set here?
+	t.View.Width = frame.Width - lineNumWidth - 1
 	t.View.Height = frame.Height
 	linesFrame := frame.Column(lineNumWidth+1, frame.Width-lineNumWidth-1)
 	t.RenderLines(linesFrame)

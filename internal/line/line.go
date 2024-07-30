@@ -103,6 +103,7 @@ func (l *Line) RuneIdx(c int) (int, bool, bool) {
 			} else if colIdx+rw > c {
 				return i, false, true
 			}
+			colIdx += rw
 		}
 	}
 

@@ -28,7 +28,7 @@ func (l *Line) Render(colors *cfg.Colorscheme, frame frame.Frame, view view.View
 	frameIdx += runewidth.RuneWidth(r)
 
 	for {
-		if runeIdx == l.Len() || frameIdx >= frame.Width-1 {
+		if runeIdx == l.Len() || frameIdx >= frame.Width {
 			break
 		}
 
