@@ -4,6 +4,8 @@ import (
 	"fmt"
 
 	"github.com/m-kru/enix/internal/util"
+
+	"github.com/mattn/go-runewidth"
 )
 
 type Line struct {
@@ -13,8 +15,9 @@ type Line struct {
 	Next *Line
 }
 
-func (l *Line) Len() int       { return len(l.buf) }
-func (l *Line) String() string { return string(l.buf) }
+func (l *Line) Len() int          { return len(l.buf) }
+func (l *Line) String() string    { return string(l.buf) }
+func (l *Line) Rune(idx int) rune { return l.buf[idx] }
 
 // Num returns line number in the line list.
 func (l *Line) Num() int {
@@ -57,6 +60,53 @@ func (l *Line) Get(n int) *Line {
 	}
 
 	panic(fmt.Sprintf("cannot get %d ", n))
+}
+
+// ColumnIdx returns first column index for provided rune index.
+func (l *Line) ColumnIdx(runeIdx int) int {
+	if runeIdx > len(l.buf) {
+		panic(fmt.Sprintf("rune idx (%d) > len(l.buf) (%d)", runeIdx, len(l.buf)))
+	}
+
+	col := 0
+	for i, r := range l.buf {
+		if i == runeIdx {
+			col += 1
+			break
+		} else {
+			col += runewidth.RuneWidth(r)
+		}
+	}
+
+	if runeIdx == len(l.buf) {
+		col++
+	}
+
+	return col
+}
+
+// RuneIdx returns rune index for provided column index.
+// The second return indicates whether the column is the first column of a rune.
+// The third return is false if column c does not exists in line.
+func (l *Line) RuneIdx(c int) (int, bool, bool) {
+	colIdx := 0
+	for i, r := range l.buf {
+		rw := runewidth.RuneWidth(r)
+		if rw == 1 {
+			colIdx++
+			if colIdx == c {
+				return i, true, true
+			}
+		} else {
+			if colIdx+1 == c {
+				return i, true, true
+			} else if colIdx+rw > c {
+				return i, false, true
+			}
+		}
+	}
+
+	return 0, false, false
 }
 
 // Count returns number of lines in the list starting from the line l.

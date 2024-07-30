@@ -166,7 +166,7 @@ func Start(colors *cfg.Colorscheme, keys *cfg.Keybindings) {
 
 	if len(arg.Files) == 0 {
 		//w.Tabs = tab.Empty(colors, screen)
-		w.Tabs = tab.FromString(colors, screen, "fo\nbarr\nzaz\nabc def\nfof\nroff\n世界\nss", "No Name")
+		w.Tabs = tab.FromString(colors, screen, "fo\nbarr\nzaz\nabc def\nfof\nroff\n世界世界\nss", "No Name")
 		w.CurrentTab = w.Tabs
 	}
 

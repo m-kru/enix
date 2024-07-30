@@ -162,7 +162,7 @@ func (c *Cursor) Delete() {
 }
 
 func (c *Cursor) Render(colors *cfg.Colorscheme, frame frame.Frame, view view.View) {
-	x := c.BufIdx - view.Column + 1
+	x := c.Line.ColumnIdx(c.BufIdx) - view.Column
 	r := frame.GetContent(x, 0)
 	frame.SetContent(x, 0, r, colors.Cursor)
 }
