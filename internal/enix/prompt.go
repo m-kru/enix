@@ -315,6 +315,9 @@ func (p *Prompt) Exec() EventReceiver {
 	case "cursor-count":
 		p.ShowInfo(fmt.Sprintf("%d", p.Window.CurrentTab.Cursors.Count()))
 		return p.Window
+	case "tab-count":
+		p.ShowInfo(fmt.Sprintf("%d", p.Window.Tabs.Count()))
+		return p.Window
 	default:
 		p.ShowError(
 			fmt.Sprintf(

@@ -109,6 +109,15 @@ func (w *Window) Render() {
 func (w *Window) OpenArgFiles() {
 	w.Tabs = tab.Open(w.Colors, arg.Files[0])
 
+	prevT := w.Tabs
+
+	for i := 1; i < len(arg.Files); i++ {
+		t := tab.Open(w.Colors, arg.Files[0])
+		prevT.Next = t
+		t.Prev = prevT
+		prevT = t
+	}
+
 	w.CurrentTab = w.Tabs
 }
 

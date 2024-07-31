@@ -76,6 +76,8 @@ If cursors is not placed on a whitespace character, nothing is selected.`,
 
 	// Tab
 
+	"tab-count": `tab-count # Prints the number of opened tabs.`,
+
 	"tab-open": `tab-open # Opens a new empty tab.`,
 
 	"tab-next": `tab-next # Cycles to the next tab.

@@ -21,9 +21,24 @@ type Tab struct {
 	Lines *line.Line // First line
 
 	View view.View
+
+	Prev *Tab
+	Next *Tab
 }
 
 func (t *Tab) LineCount() int { return t.Lines.Count() }
+
+func (t *Tab) Count() int {
+	cnt := 1
+	for {
+		if t.Next == nil {
+			break
+		}
+		t = t.Next
+		cnt++
+	}
+	return cnt
+}
 
 func (t *Tab) Save() error {
 	panic("unimplemented")
