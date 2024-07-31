@@ -59,7 +59,7 @@ func (l *Line) Get(n int) *Line {
 		i--
 	}
 
-	panic(fmt.Sprintf("cannot get %d ", n))
+	panic(fmt.Sprintf("cannot get line %d ", n))
 }
 
 // ColumnIdx returns first column index for provided rune index.

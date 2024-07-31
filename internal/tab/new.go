@@ -5,14 +5,11 @@ import (
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/view"
-
-	"github.com/gdamore/tcell/v2"
 )
 
-func Empty(colors *cfg.Colorscheme, screen tcell.Screen) *Tab {
+func Empty(colors *cfg.Colorscheme) *Tab {
 	t := &Tab{
 		Colors:     colors,
-		Screen:     screen,
 		Name:       "No Name",
 		Path:       "",
 		Newline:    "\n",
@@ -32,7 +29,6 @@ func Empty(colors *cfg.Colorscheme, screen tcell.Screen) *Tab {
 // If path is "", then new empty tab is opened.
 func Open(
 	colors *cfg.Colorscheme,
-	screen tcell.Screen,
 	path string,
 	firstLine int, // First visible line
 ) *Tab {
@@ -46,7 +42,6 @@ func Open(
 
 	t := &Tab{
 		Colors:     colors,
-		Screen:     screen,
 		Name:       "",
 		Path:       path,
 		Newline:    "\n",
@@ -59,13 +54,11 @@ func Open(
 
 func FromString(
 	colors *cfg.Colorscheme,
-	screen tcell.Screen,
 	str string,
 	name string,
 ) *Tab {
 	t := &Tab{
 		Colors:     colors,
-		Screen:     screen,
 		Name:       name,
 		Path:       "",
 		Newline:    "\n",

@@ -106,6 +106,10 @@ func (w *Window) Render() {
 	w.Screen.Show()
 }
 
+func (w *Window) OpenArgFiles() {
+
+}
+
 func Start(colors *cfg.Colorscheme, keys *cfg.Keybindings) {
 	screen, err := tcell.NewScreen()
 	if err != nil {
@@ -165,16 +169,10 @@ func Start(colors *cfg.Colorscheme, keys *cfg.Keybindings) {
 	p.Window = &w
 
 	if len(arg.Files) == 0 {
-		//w.Tabs = tab.Empty(colors, screen)
-		w.Tabs = tab.FromString(colors, screen, `fo
-barr
-zaz
-abc def laskdj 12lj lasjdf lj1 jk2-- -12 3jklsdafj a01 jsldafkj lsadjfsaldklksadjlkasdj
-fof
-roff
-世界世界世界世界世界世界世界世界世界世界世界世界世界世界世界世界世界世界世界
-ss`, "No Name")
+		w.Tabs = tab.FromString(colors, "", "No Name")
 		w.CurrentTab = w.Tabs
+	} else {
+		w.OpenArgFiles()
 	}
 
 	w.Render()

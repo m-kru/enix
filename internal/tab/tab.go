@@ -1,7 +1,6 @@
 package tab
 
 import (
-	"github.com/gdamore/tcell/v2"
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/line"
@@ -10,8 +9,6 @@ import (
 
 type Tab struct {
 	Colors *cfg.Colorscheme
-
-	Screen tcell.Screen
 
 	Name       string
 	Path       string // File path
