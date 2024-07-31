@@ -66,7 +66,7 @@ func (t *Tab) RenderLineNums(frame frame.Frame) {
 		n++
 		y++
 
-		if y > frame.Height || n > lineCount {
+		if y >= frame.Height || n > lineCount {
 			break
 		}
 	}

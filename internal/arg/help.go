@@ -11,7 +11,7 @@ Version: %s
 
 Usage:
 
-  enix [flags] [parameters] [path/to/text/file ...]
+  enix [flags] [parameters] [path/to/text/file ...] [+line[:column]]
 
 Flags:
 

@@ -1,10 +1,78 @@
 package arg
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
+	"strconv"
+	"strings"
 )
+
+func handleLineAndColumn(arg string) {
+	// Handle line only case
+	if !strings.Contains(arg, ":") {
+		n, err := strconv.Atoi(arg[1 : len(arg)-1])
+		if err != nil {
+			handleFile(arg)
+		}
+		Line = n
+		return
+	}
+
+	// Handle line and column case
+	lineStr, colStr, _ := strings.Cut(arg[1:len(arg)-1], ":")
+	var line, col int
+	var err error
+	line, err = strconv.Atoi(lineStr)
+	if err != nil {
+		handleFile(arg)
+		return
+	}
+	col, err = strconv.Atoi(colStr)
+	if err != nil {
+		handleFile(arg)
+		return
+	}
+
+	Line = line
+	Column = col
+}
+
+// addFile adds file path to the Files list if the path is not yet in the list.
+func addFile(path string) {
+	fileInfo, err := os.Stat(path)
+	if errors.Is(err, os.ErrNotExist) {
+		// Do nothing, file will be created later.
+	} else if err == nil && fileInfo.IsDir() {
+		log.Fatalf("cannot open '%s', it is a directory", path)
+	} else if err != nil {
+		log.Fatalf("file '%s': %v", path, err)
+	}
+
+	for _, f := range Files {
+		if path == f {
+			return
+		}
+	}
+	Files = append(Files, path)
+}
+
+func handleFile(path string) {
+	matches, err := filepath.Glob(path)
+	if err != nil {
+		log.Fatalf("cannot glob '%s' path: %v", path, err)
+	}
+
+	if len(matches) == 0 {
+		addFile(path)
+	}
+
+	for _, m := range matches {
+		addFile(m)
+	}
+}
 
 // Prase parses command line arguments.
 func Parse() {
@@ -47,10 +115,12 @@ func Parse() {
 			handleFlag(arg)
 		} else if isValidParam(arg) {
 			handleParam(arg)
+		} else if arg[0] == '+' {
+			handleLineAndColumn(arg)
 		} else if arg[0] == '-' {
 			log.Fatalf("invalid option '%s'", arg)
 		} else {
-			Files = append(Files, arg)
+			handleFile(arg)
 		}
 	}
 

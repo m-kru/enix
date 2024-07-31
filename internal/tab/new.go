@@ -1,10 +1,14 @@
 package tab
 
 import (
+	"errors"
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/line"
+	"github.com/m-kru/enix/internal/util"
 	"github.com/m-kru/enix/internal/view"
+	"io/ioutil"
+	"os"
 )
 
 func Empty(colors *cfg.Colorscheme) *Tab {
@@ -26,18 +30,13 @@ func Empty(colors *cfg.Colorscheme) *Tab {
 }
 
 // Open opens a new tab.
-// If path is "", then new empty tab is opened.
+// It panics if "", then new empty tab is opened.
 func Open(
 	colors *cfg.Colorscheme,
 	path string,
-	firstLine int, // First visible line
 ) *Tab {
-	fileType := ""
-
-	if path != "" {
-
-	} else {
-		path = "No Name"
+	if path == "" {
+		return Empty(colors)
 	}
 
 	t := &Tab{
@@ -45,9 +44,28 @@ func Open(
 		Name:       "",
 		Path:       path,
 		Newline:    "\n",
-		FileType:   fileType,
+		FileType:   util.FileNameToType(path),
 		HasChanges: false,
+		View:       view.View{Line: 1, Column: 1},
 	}
+
+	// Lines initialization
+	_, err := os.Stat(path)
+	if errors.Is(err, os.ErrNotExist) {
+		t.Lines = line.FromString("")
+	} else if err != nil {
+		panic("unimplemented")
+	} else {
+		bytes, err := ioutil.ReadFile(path)
+		if err != nil {
+			panic("unimplemented")
+		}
+		t.Lines = line.FromString(string(bytes))
+	}
+
+	// Cursor initialization
+	c := &cursor.Cursor{Line: t.Lines}
+	t.Cursors = c
 
 	return t
 }

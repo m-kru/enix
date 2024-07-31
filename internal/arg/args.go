@@ -1,7 +1,9 @@
 package arg
 
 var Batch bool
-var Script string  // Path to the script to be run.
+var Script string // Path to the script to be run.
+var Line int = 1
+var Column int = 1
 var Files []string // Paths to text files.
 
 func isValidFlag(f string) bool {

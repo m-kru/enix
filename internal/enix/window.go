@@ -22,7 +22,7 @@ type Window struct {
 	Height int
 
 	TabFrame   frame.Frame
-	Tabs       *tab.Tab // First tab pointer
+	Tabs       *tab.Tab // First tab
 	CurrentTab *tab.Tab
 
 	Prompt *Prompt
@@ -107,7 +107,9 @@ func (w *Window) Render() {
 }
 
 func (w *Window) OpenArgFiles() {
+	w.Tabs = tab.Open(w.Colors, arg.Files[0])
 
+	w.CurrentTab = w.Tabs
 }
 
 func Start(colors *cfg.Colorscheme, keys *cfg.Keybindings) {
