@@ -9,6 +9,9 @@ type Colorscheme struct {
 	// Error displaying
 	Error tcell.Style
 
+	TabBar     tcell.Style
+	CurrentTab tcell.Style
+
 	// Line Number
 	LineNum tcell.Style
 
@@ -40,6 +43,9 @@ func ColorschemeDefault() Colorscheme {
 		Default: tcell.StyleDefault,
 
 		Error: tcell.StyleDefault.Foreground(tcell.ColorMaroon),
+
+		TabBar:     tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorGray),
+		CurrentTab: tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorWhite),
 
 		LineNum: tcell.StyleDefault.Foreground(tcell.ColorGray),
 
