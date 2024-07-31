@@ -32,8 +32,13 @@ func FromString(str string) *Line {
 	for i, r := range str {
 		if r == '\n' || i == len(str)-1 {
 			if firstLine == nil {
-				firstLine = &Line{buf: make([]rune, 0, bufCap(str[startIdx:i]))}
-				firstLine.Insert(str[startIdx:i], 0)
+				if r == '\n' {
+					firstLine = &Line{buf: make([]rune, 0, bufCap(str[startIdx:i]))}
+					firstLine.Insert(str[startIdx:i], 0)
+				} else {
+					firstLine = &Line{buf: make([]rune, 0, bufCap(str[startIdx:i+1]))}
+					firstLine.Insert(str[startIdx:i+1], 0)
+				}
 
 				line = firstLine
 				startIdx = i + 1
@@ -50,6 +55,12 @@ func FromString(str string) *Line {
 				startIdx = i + 1
 			}
 		}
+	}
+
+	// Add one extra line if string ends with newline
+	if str[len(str)-1] == '\n' {
+		nextLine = &Line{buf: make([]rune, 0, bufCap("")), Prev: line}
+		line.Next = nextLine
 	}
 
 	return firstLine

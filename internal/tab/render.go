@@ -90,7 +90,6 @@ func (t *Tab) RenderLines(frame frame.Frame) {
 			break
 		}
 
-		// TODO: Fix view
 		line.Render(t.Colors, frame.Line(0, renderedCount), t.View)
 
 		line = line.Next
@@ -112,7 +111,6 @@ func (t *Tab) RenderCursors(frame frame.Frame) {
 			continue
 		}
 
-		// TODO: Handle view
 		c.Render(t.Colors, frame.Line(0, c.LineNum()-t.View.Line), t.View)
 
 		c = c.Next
@@ -120,8 +118,6 @@ func (t *Tab) RenderCursors(frame frame.Frame) {
 }
 
 func (t *Tab) Render(frame frame.Frame) {
-	t.UpdateView()
-
 	// Render status line
 	t.RenderStatusLine(frame.LastLine())
 
@@ -138,6 +134,7 @@ func (t *Tab) Render(frame frame.Frame) {
 	// TODO: Should view Width and Height be set here?
 	t.View.Width = frame.Width - lineNumWidth - 1
 	t.View.Height = frame.Height
+	t.UpdateView()
 	linesFrame := frame.Column(lineNumWidth+1, frame.Width-lineNumWidth-1)
 	t.RenderLines(linesFrame)
 

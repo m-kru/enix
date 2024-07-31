@@ -18,7 +18,7 @@ type Tab struct {
 
 	Cursors *cursor.Cursor // First cursor
 
-	Lines *line.Line // First line pointer
+	Lines *line.Line // First line
 
 	View view.View
 }
