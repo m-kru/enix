@@ -20,11 +20,19 @@ func (t *Tab) RenderStatusLine(frame frame.Frame) {
 		frame.SetContent(i, 0, ' ', t.Colors.StatusLine)
 	}
 
-	// TODO: Handle case when file path is wider than frame width.
-	for i, r := range t.Name {
+	// Render file path or name
+	path := t.Path
+	if len(path) == 0 {
+		path = t.Name
+	}
+	for i, r := range path {
+		if i >= frame.Width {
+			break
+		}
 		frame.SetContent(i, 0, r, t.Colors.StatusLine)
 	}
 
+	// Render extra status information
 	b := strings.Builder{}
 	if t.Cursors != nil {
 		b.WriteString(

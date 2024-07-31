@@ -13,7 +13,8 @@ type Tab struct {
 
 	Screen tcell.Screen
 
-	Name       string // Path of the file
+	Name       string
+	Path       string // File path
 	Newline    string // Newline encoding
 	FileType   string
 	HasChanges bool
