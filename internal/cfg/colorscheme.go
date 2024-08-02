@@ -15,8 +15,11 @@ type Colorscheme struct {
 	// Line Number
 	LineNum tcell.Style
 
+	Whitespace tcell.Style
+
 	Cursor     tcell.Style
 	CursorWord tcell.Style // Color of the word under cursor
+
 
 	Selection tcell.Style
 
@@ -48,6 +51,8 @@ func ColorschemeDefault() Colorscheme {
 		CurrentTab: tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorWhite),
 
 		LineNum: tcell.StyleDefault.Foreground(tcell.ColorGray),
+
+		Whitespace: tcell.StyleDefault.Foreground(tcell.ColorGray),
 
 		Cursor:     tcell.StyleDefault.Reverse(true),
 		CursorWord: tcell.StyleDefault.Foreground(tcell.ColorWhite),
