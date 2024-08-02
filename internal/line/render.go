@@ -8,7 +8,7 @@ import (
 	"github.com/mattn/go-runewidth"
 )
 
-func (l *Line) Render(colors *cfg.Colorscheme, frame frame.Frame, view view.View) {
+func (l *Line) Render(cfg *cfg.Config, colors *cfg.Colorscheme, frame frame.Frame, view view.View) {
 	frameIdx := 0
 	runeIdx, runeFirstCol, ok := l.RuneIdx(view.Column)
 	var r rune
@@ -33,9 +33,23 @@ func (l *Line) Render(colors *cfg.Colorscheme, frame frame.Frame, view view.View
 		}
 
 		r = l.buf[runeIdx]
-		frame.SetContent(frameIdx, 0, r, colors.Default)
 
-		frameIdx += runewidth.RuneWidth(r)
+		if r == '\t' {
+			frame.SetContent(frameIdx, 0, cfg.TabRune, colors.Whitespace)
+			frameIdx++
+			colIdx := l.ColumnIdx(runeIdx, cfg.TabWidth) + 1
+			for {
+				if colIdx%cfg.TabWidth == 1 || frameIdx >= frame.Width {
+					break
+				}
+				frame.SetContent(frameIdx, 0, cfg.TabPadRune, colors.Whitespace)
+				frameIdx++
+				colIdx++
+			}
+		} else {
+			frame.SetContent(frameIdx, 0, r, colors.Default)
+			frameIdx += runewidth.RuneWidth(r)
+		}
 		runeIdx++
 	}
 

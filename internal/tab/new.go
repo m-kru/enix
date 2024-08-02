@@ -11,8 +11,9 @@ import (
 	"os"
 )
 
-func Empty(colors *cfg.Colorscheme) *Tab {
+func Empty(config *cfg.Config, colors *cfg.Colorscheme) *Tab {
 	t := &Tab{
+		Config:     config,
 		Colors:     colors,
 		Name:       "No Name",
 		Path:       "",
@@ -23,7 +24,7 @@ func Empty(colors *cfg.Colorscheme) *Tab {
 		View:       view.View{Line: 1, Column: 1},
 	}
 
-	c := &cursor.Cursor{Line: t.Lines}
+	c := &cursor.Cursor{Config: config, Line: t.Lines}
 	t.Cursors = c
 
 	return t
@@ -32,14 +33,16 @@ func Empty(colors *cfg.Colorscheme) *Tab {
 // Open opens a new tab.
 // It panics if "", then new empty tab is opened.
 func Open(
+	config *cfg.Config,
 	colors *cfg.Colorscheme,
 	path string,
 ) *Tab {
 	if path == "" {
-		return Empty(colors)
+		return Empty(config, colors)
 	}
 
 	t := &Tab{
+		Config:     config,
 		Colors:     colors,
 		Name:       "",
 		Path:       path,
@@ -64,18 +67,20 @@ func Open(
 	}
 
 	// Cursor initialization
-	c := &cursor.Cursor{Line: t.Lines}
+	c := &cursor.Cursor{Config: config, Line: t.Lines}
 	t.Cursors = c
 
 	return t
 }
 
 func FromString(
+	config *cfg.Config,
 	colors *cfg.Colorscheme,
 	str string,
 	name string,
 ) *Tab {
 	t := &Tab{
+		Config:     config,
 		Colors:     colors,
 		Name:       name,
 		Path:       "",
@@ -86,7 +91,7 @@ func FromString(
 		View:       view.View{Line: 1, Column: 1},
 	}
 
-	c := &cursor.Cursor{Line: t.Lines}
+	c := &cursor.Cursor{Config: config, Line: t.Lines}
 	t.Cursors = c
 
 	return t

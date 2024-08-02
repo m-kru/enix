@@ -8,8 +8,8 @@ type Config struct {
 
 func ConfigDefault() Config {
 	return Config{
-		TabWidth: 4,
-		TabRune: '▸',
+		TabWidth:   4,
+		TabRune:    '▸',
 		TabPadRune: '·',
 	}
 }

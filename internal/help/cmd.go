@@ -11,6 +11,9 @@ This command is useful for enix debugging and development.`,
 	"cmd-list": `cmd-list # Lists all available commands in alphabetical order with one sentence summary.`,
 	"cmd-prev": `cmd-prev # Executes previous command.`,
 
+	// Config
+	"cfg-tab-width": `cfg-tab-width N # Sets tab width to N.`,
+
 	// Cursor
 
 	"cursor-count": `cursor-count # Prints the number of cursors in current tab.`,

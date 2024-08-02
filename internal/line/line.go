@@ -63,7 +63,7 @@ func (l *Line) Get(n int) *Line {
 }
 
 // ColumnIdx returns first column index for provided rune index.
-func (l *Line) ColumnIdx(runeIdx int) int {
+func (l *Line) ColumnIdx(runeIdx int, tabWidth int) int {
 	if runeIdx > len(l.buf) {
 		panic(fmt.Sprintf("rune idx (%d) > len(l.buf) (%d)", runeIdx, len(l.buf)))
 	}
@@ -74,7 +74,11 @@ func (l *Line) ColumnIdx(runeIdx int) int {
 			col += 1
 			break
 		} else {
-			col += runewidth.RuneWidth(r)
+			if r == '\t' {
+				col += tabWidth - (col % tabWidth)
+			} else {
+				col += runewidth.RuneWidth(r)
+			}
 		}
 	}
 

@@ -14,6 +14,7 @@ import (
 )
 
 type Window struct {
+	Config *cfg.Config
 	Colors *cfg.Colorscheme
 	Keys   *cfg.Keybindings
 
@@ -107,12 +108,12 @@ func (w *Window) Render() {
 }
 
 func (w *Window) OpenArgFiles() {
-	w.Tabs = tab.Open(w.Colors, arg.Files[0])
+	w.Tabs = tab.Open(w.Config, w.Colors, arg.Files[0])
 
 	prevT := w.Tabs
 
 	for i := 1; i < len(arg.Files); i++ {
-		t := tab.Open(w.Colors, arg.Files[0])
+		t := tab.Open(w.Config, w.Colors, arg.Files[0])
 		prevT.Next = t
 		t.Prev = prevT
 		prevT = t
@@ -121,7 +122,7 @@ func (w *Window) OpenArgFiles() {
 	w.CurrentTab = w.Tabs
 }
 
-func Start(colors *cfg.Colorscheme, keys *cfg.Keybindings) {
+func Start(config *cfg.Config, colors *cfg.Colorscheme, keys *cfg.Keybindings) {
 	screen, err := tcell.NewScreen()
 	if err != nil {
 		log.Fatalf("%v", err)
@@ -148,6 +149,7 @@ func Start(colors *cfg.Colorscheme, keys *cfg.Keybindings) {
 	width, height := screen.Size()
 
 	w := Window{
+		Config: config,
 		Colors: colors,
 		Keys:   keys,
 		Screen: screen,
@@ -156,6 +158,7 @@ func Start(colors *cfg.Colorscheme, keys *cfg.Keybindings) {
 	}
 
 	p := Prompt{
+		Config: config,
 		Colors: colors,
 		Keys:   keys,
 		Screen: screen,
@@ -180,7 +183,7 @@ func Start(colors *cfg.Colorscheme, keys *cfg.Keybindings) {
 	p.Window = &w
 
 	if len(arg.Files) == 0 {
-		w.Tabs = tab.FromString(colors, "", "No Name")
+		w.Tabs = tab.FromString(config, colors, "", "No Name")
 		w.CurrentTab = w.Tabs
 	} else {
 		w.OpenArgFiles()

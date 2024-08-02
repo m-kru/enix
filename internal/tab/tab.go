@@ -8,6 +8,7 @@ import (
 )
 
 type Tab struct {
+	Config *cfg.Config
 	Colors *cfg.Colorscheme
 
 	Name       string

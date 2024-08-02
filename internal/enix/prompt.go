@@ -24,6 +24,7 @@ const (
 
 // Prompt represents command line prompt.
 type Prompt struct {
+	Config *cfg.Config
 	Colors *cfg.Colorscheme
 	Keys   *cfg.Keybindings
 
@@ -90,6 +91,7 @@ func (p *Prompt) Activate(text, shadowText string) {
 	p.Line = line.FromString(text)
 
 	p.Cursor = &cursor.Cursor{
+		Config: p.Config,
 		Line:   p.Line,
 		Idx:    len(text),
 		BufIdx: len(text),
@@ -118,7 +120,7 @@ func (p *Prompt) Render() {
 		p.View = p.View.MinAdjust(p.Cursor)
 	}
 
-	p.Line.Render(p.Colors, p.Frame.Line(2, 0), p.View)
+	p.Line.Render(p.Config, p.Colors, p.Frame.Line(2, 0), p.View)
 
 	if len(p.ShadowText) > 0 {
 		for i, r := range p.ShadowText {
@@ -126,7 +128,7 @@ func (p *Prompt) Render() {
 		}
 	}
 
-	p.Cursor.Render(p.Colors, p.Frame.Line(2, 0), p.View)
+	p.Cursor.Render(p.Config, p.Colors, p.Frame.Line(2, 0), p.View)
 
 	p.Screen.Show()
 }
@@ -318,6 +320,9 @@ func (p *Prompt) Exec() EventReceiver {
 	case "tab-count":
 		p.ShowInfo(fmt.Sprintf("%d", p.Window.Tabs.Count()))
 		return p.Window
+	case "cfg-tab-width":
+		err = cmd.CfgTabWidth(args, p.Config)
+		ret = p.Window
 	default:
 		p.ShowError(
 			fmt.Sprintf(

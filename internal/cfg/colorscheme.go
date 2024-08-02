@@ -20,7 +20,6 @@ type Colorscheme struct {
 	Cursor     tcell.Style
 	CursorWord tcell.Style // Color of the word under cursor
 
-
 	Selection tcell.Style
 
 	StatusLine tcell.Style

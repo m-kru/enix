@@ -10,6 +10,7 @@ import (
 // Cursors must be stored in order. Thanks to this, only next cursors must be
 // informed about line changes.
 type Cursor struct {
+	Config *cfg.Config
 	Line   *line.Line
 	Idx    int
 	BufIdx int // Index into line buffer.
@@ -33,7 +34,7 @@ func (c *Cursor) Count() int {
 
 // Col returns column number of the cursor within the string in the buffer.
 func (c *Cursor) Column() int {
-	return c.Line.ColumnIdx(c.BufIdx)
+	return c.Line.ColumnIdx(c.BufIdx, c.Config.TabWidth)
 }
 
 func (c *Cursor) LineNum() int { return c.Line.Num() }
@@ -159,8 +160,8 @@ func (c *Cursor) Delete() {
 	c.Line.Delete(c.BufIdx, 1)
 }
 
-func (c *Cursor) Render(colors *cfg.Colorscheme, frame frame.Frame, view view.View) {
-	x := c.Line.ColumnIdx(c.BufIdx) - view.Column
+func (c *Cursor) Render(config *cfg.Config, colors *cfg.Colorscheme, frame frame.Frame, view view.View) {
+	x := c.Line.ColumnIdx(c.BufIdx, config.TabWidth) - view.Column
 	/*
 		if x >= frame.Width {
 			return

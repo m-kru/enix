@@ -90,7 +90,7 @@ func (t *Tab) RenderLines(frame frame.Frame) {
 			break
 		}
 
-		line.Render(t.Colors, frame.Line(0, renderedCount), t.View)
+		line.Render(t.Config, t.Colors, frame.Line(0, renderedCount), t.View)
 
 		line = line.Next
 		lineNum++
@@ -111,7 +111,7 @@ func (t *Tab) RenderCursors(frame frame.Frame) {
 			continue
 		}
 
-		c.Render(t.Colors, frame.Line(0, c.LineNum()-t.View.Line), t.View)
+		c.Render(t.Config, t.Colors, frame.Line(0, c.LineNum()-t.View.Line), t.View)
 
 		c = c.Next
 	}
