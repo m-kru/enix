@@ -51,7 +51,7 @@ func ColorschemeDefault() Colorscheme {
 
 		LineNum: tcell.StyleDefault.Foreground(tcell.ColorGray),
 
-		Whitespace: tcell.StyleDefault.Foreground(tcell.ColorGray),
+		Whitespace: tcell.StyleDefault.Foreground(tcell.ColorBlack),
 
 		Cursor:     tcell.StyleDefault.Reverse(true),
 		CursorWord: tcell.StyleDefault.Foreground(tcell.ColorWhite),

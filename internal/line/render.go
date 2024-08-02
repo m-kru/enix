@@ -55,7 +55,11 @@ func (l *Line) Render(cfg *cfg.Config, colors *cfg.Colorscheme, frame frame.Fram
 	runeIdx++
 
 	for {
-		if runeIdx == l.Len() || frameIdx >= frame.Width {
+		if frameIdx >= frame.Width {
+			break
+		} else if runeIdx == l.Len() {
+			frame.SetContent(frameIdx, 0, cfg.NewlineRune, colors.Whitespace)
+			frameIdx++
 			break
 		}
 
