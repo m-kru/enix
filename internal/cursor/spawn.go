@@ -6,6 +6,7 @@ func (c *Cursor) SpawnDown() *Cursor {
 	}
 
 	nc := &Cursor{
+		Config: c.Config,
 		Line:   c.Line.Next,
 		Idx:    c.Idx,
 		BufIdx: c.BufIdx,

@@ -60,7 +60,11 @@ func (t *Tab) RenderLineNums(frame frame.Frame) {
 	for {
 		str := fmt.Sprintf("%*d", frame.Width, n)
 		for i, r := range str {
-			frame.SetContent(i, y, r, t.Colors.LineNum)
+			if t.HasCursorInLine(n) {
+				frame.SetContent(i, y, r, t.Colors.Cursor)
+			} else {
+				frame.SetContent(i, y, r, t.Colors.LineNum)
+			}
 		}
 
 		n++

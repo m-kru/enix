@@ -41,6 +41,20 @@ func (t *Tab) Count() int {
 	return cnt
 }
 
+func (t *Tab) HasCursorInLine(n int) bool {
+	c := t.Cursors
+	for {
+		if c == nil {
+			break
+		}
+		if c.LineNum() == n {
+			return true
+		}
+		c = c.Next
+	}
+	return false
+}
+
 func (t *Tab) Save() error {
 	panic("unimplemented")
 }
