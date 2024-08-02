@@ -36,7 +36,7 @@ func (t *Tab) RenderStatusLine(frame frame.Frame) {
 	b := strings.Builder{}
 	if t.Cursors != nil {
 		b.WriteString(
-			fmt.Sprintf("%d:%d | ", t.Cursors.LineNum(), t.Cursors.Column()),
+			fmt.Sprintf("%d:%d | ", t.Cursors.LineNum(), t.Cursors.BufIdx+1),
 		)
 	}
 	b.WriteString(fmt.Sprintf("%s ", t.FileType))

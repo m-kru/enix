@@ -90,28 +90,42 @@ func (l *Line) ColumnIdx(runeIdx int, tabWidth int) int {
 }
 
 // RuneIdx returns rune index for provided column index.
-// The second return indicates whether the column is the first column of a rune.
+// The second return is a rune subcolumn index.
 // The third return is false if column c does not exists in line.
-func (l *Line) RuneIdx(c int) (int, bool, bool) {
-	colIdx := 0
+func (l *Line) RuneIdx(col int, tabWidth int) (int, int, bool) {
+	if col == 0 {
+		panic("internal logic error")
+	}
+
+	c := 1
 	for i, r := range l.buf {
 		rw := runewidth.RuneWidth(r)
-		if rw == 1 {
-			colIdx++
-			if colIdx == c {
-				return i, true, true
+		if r == '\t' {
+			if c == col {
+				return i, 0, true
 			}
+
+			width := tabWidth - ((c - 1) % tabWidth)
+			if c+width > col {
+				return i, col - c, true
+			}
+			c += width
+		} else if rw == 1 {
+			if c == col {
+				return i, 0, true
+			}
+			c++
 		} else {
-			if colIdx+1 == c {
-				return i, true, true
-			} else if colIdx+rw > c {
-				return i, false, true
+			if c == col {
+				return i, 0, true
+			} else if c+rw > col {
+				return i, 1, true
 			}
-			colIdx += rw
+			c += rw
 		}
 	}
 
-	return 0, false, false
+	return 0, 0, false
 }
 
 // Count returns number of lines in the list starting from the line l.

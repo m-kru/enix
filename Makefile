@@ -35,17 +35,22 @@ lint:
 	golangci-lint run
 
 # Test targets
+.PHONY: test-all
 test-all: test test-arg
 
+.PHONY: test
 test:
 	go test ./...
 
+.PHONY: test-arg
 test-arg:
 	@./scripts/test-arg.sh
 
 # Installation targets
+.PHONY: install
 install:
 	cp $(NAME) /usr/bin
 
+.PHONY: uninstall
 uninstall:
 	rm /usr/bin/$(NAME)
