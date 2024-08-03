@@ -74,6 +74,27 @@ func TestRuneIdx(t *testing.T) {
 			tabWidth: 1,
 			want:     Want{3, 0, true},
 		},
+		{
+			idx:      8,
+			line:     FromString("世界"),
+			col:      4,
+			tabWidth: 8,
+			want:     Want{1, 1, true},
+		},
+		{
+			idx:      9,
+			line:     FromString("世a界"),
+			col:      4,
+			tabWidth: 8,
+			want:     Want{2, 0, true},
+		},
+		{
+			idx:      10,
+			line:     FromString("a界世"),
+			col:      5,
+			tabWidth: 8,
+			want:     Want{2, 1, true},
+		},
 	}
 
 	for _, test := range tests {
