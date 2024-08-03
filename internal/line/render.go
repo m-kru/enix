@@ -48,7 +48,6 @@ func (l *Line) Render(cfg *cfg.Config, colors *cfg.Colorscheme, frame frame.Fram
 		setTab(runeSubcol)
 	} else if runeSubcol > 0 {
 		r = ' '
-	} else {
 		frame.SetContent(frameIdx, 0, r, colors.Default)
 		frameIdx += runewidth.RuneWidth(r)
 	}
