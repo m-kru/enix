@@ -11,7 +11,7 @@ import (
 // Currently view updating works in such a way, that the last cursor is always visible.
 func (t *Tab) UpdateView() {
 	c := t.Cursors.Last()
-	t.View = t.View.MinAdjust(c)
+	t.View = t.View.MinAdjust(c.View())
 }
 
 func (t *Tab) RenderStatusLine(frame frame.Frame) {
@@ -36,7 +36,7 @@ func (t *Tab) RenderStatusLine(frame frame.Frame) {
 	b := strings.Builder{}
 	if t.Cursors != nil {
 		b.WriteString(
-			fmt.Sprintf("%d:%d | ", t.Cursors.LineNum(), t.Cursors.BufIdx+1),
+			fmt.Sprintf("%d:%d | ", t.Cursors.Line.Num(), t.Cursors.BufIdx+1),
 		)
 	}
 	b.WriteString(fmt.Sprintf("%s ", t.FileType))
@@ -110,12 +110,12 @@ func (t *Tab) RenderCursors(frame frame.Frame) {
 			break
 		}
 
-		if !t.View.IsVisible(c) {
+		if !t.View.IsVisible(c.View()) {
 			c = c.Next
 			continue
 		}
 
-		c.Render(t.Config, t.Colors, frame.Line(0, c.LineNum()-t.View.Line), t.View)
+		c.Render(t.Config, t.Colors, frame.Line(0, c.Line.Num()-t.View.Line), t.View)
 
 		c = c.Next
 	}

@@ -47,7 +47,7 @@ func (t *Tab) HasCursorInLine(n int) bool {
 		if c == nil {
 			break
 		}
-		if c.LineNum() == n {
+		if c.Line.Num() == n {
 			return true
 		}
 		c = c.Next

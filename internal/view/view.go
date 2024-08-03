@@ -15,31 +15,32 @@ func (v View) LastLine() int {
 	return v.Line + v.Height - 1
 }
 
-func (v View) IsVisible(vis Visible) bool {
-	ln := vis.LineNum()
-	c := vis.Column()
-
-	if v.Line <= ln && ln < v.Line+v.Height && v.Column <= c && c < v.Column+v.Width {
-		return true
+func (v View) IsVisible(v2 View) bool {
+	if v2.LastColumn() < v.Column ||
+		v2.Column > v.LastColumn() ||
+		v2.LastLine() < v.Line ||
+		v2.Line > v.LastLine() {
+		return false
 	}
-
-	return false
+	return true
 }
 
-// MinAdjust returns a new View with minimal adjustments so that vis becomes visible.
-func (v View) MinAdjust(vis Visible) View {
-	c := vis.Column()
-	if c < v.Column {
-		v.Column = c
-	} else if c > v.LastColumn() {
-		v.Column += c - v.LastColumn()
+// MinAdjust returns a new View with minimal adjustments so that inner view (iv) is visible.
+func (v View) MinAdjust(iv View) View {
+	if iv.Width > v.Width || iv.Height > v.Height {
+		panic("unimplemented")
 	}
 
-	ln := vis.LineNum()
-	if ln < v.Line {
-		v.Line = ln
-	} else if ln > v.LastLine() {
-		v.Line += ln - v.LastLine()
+	if iv.Column < v.Column {
+		v.Column = iv.Column
+	} else if iv.LastColumn() > v.LastColumn() {
+		v.Column += iv.LastColumn() - v.LastColumn()
+	}
+
+	if iv.Line < v.Line {
+		v.Line = iv.Line
+	} else if iv.LastLine() > v.LastLine() {
+		v.Line += iv.LastLine() - v.LastLine()
 	}
 
 	return v

@@ -116,8 +116,8 @@ func (p *Prompt) Render() {
 	p.Frame.SetContent(0, 0, '>', p.Colors.Prompt)
 	p.Frame.SetContent(1, 0, ' ', p.Colors.Prompt)
 
-	if !p.View.IsVisible(p.Cursor) {
-		p.View = p.View.MinAdjust(p.Cursor)
+	if !p.View.IsVisible(p.Cursor.View()) {
+		p.View = p.View.MinAdjust(p.Cursor.View())
 	}
 
 	p.Line.Render(p.Config, p.Colors, p.Frame.Line(2, 0), p.View)

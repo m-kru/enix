@@ -5,6 +5,8 @@ import (
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/view"
+
+	"github.com/mattn/go-runewidth"
 )
 
 // Cursors must be stored in order. Thanks to this, only next cursors must be
@@ -37,11 +39,35 @@ func (c *Cursor) Column() int {
 	return c.Line.ColumnIdx(c.BufIdx, c.Config.TabWidth)
 }
 
-func (c *Cursor) LineNum() int { return c.Line.Num() }
+// Width returns width of the rune under the cursor.
+func (c *Cursor) Width() int {
+	if c.BufIdx == c.Line.Len() {
+		rw := runewidth.RuneWidth(c.Config.NewlineRune)
+		if rw == 0 {
+			return 1
+		}
+		return rw
+	}
+
+	r := c.Line.Rune(c.BufIdx)
+	if r == '\t' {
+		return 1
+	}
+	return runewidth.RuneWidth(r)
+}
 
 // Word returns word under cursor.
 func (c *Cursor) Word() string {
 	return ""
+}
+
+func (c *Cursor) View() view.View {
+	return view.View{
+		Line:   c.Line.Num(),
+		Column: c.Column(),
+		Width:  c.Width(),
+		Height: 1,
+	}
 }
 
 // Last returns last cursor in the cursor list.
