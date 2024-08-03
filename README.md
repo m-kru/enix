@@ -34,6 +34,9 @@
 
 # Glossary
 
+- rune length - number of bytes required to store a rune.
+- rune width - number of screen cells required to display a rune..
+
 # Commands
 
 enix is build on the concept of built-in commands.
