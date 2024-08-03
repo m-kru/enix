@@ -25,43 +25,43 @@ func FromString(str string) *Line {
 	}
 
 	startIdx := 0
-	var firstLine *Line = nil
-	var line *Line
-	var nextLine *Line
+	var first *Line = nil
+	var prev *Line
+	var next *Line
 
 	for i, r := range str {
 		if r == '\n' || i == len(str)-1 {
-			if firstLine == nil {
+			if first == nil {
 				if r == '\n' {
-					firstLine = &Line{buf: make([]rune, 0, bufCap(str[startIdx:i]))}
-					firstLine.Insert(str[startIdx:i], 0)
+					first = &Line{buf: make([]rune, 0, bufCap(str[startIdx:i]))}
+					first.Insert(str[startIdx:i], 0)
 				} else {
-					firstLine = &Line{buf: make([]rune, 0, bufCap(str[startIdx:i+1]))}
-					firstLine.Insert(str[startIdx:i+1], 0)
+					first = &Line{buf: make([]rune, 0, bufCap(str[startIdx:i+1]))}
+					first.Insert(str[startIdx:i+1], 0)
 				}
 
-				line = firstLine
+				prev = first
 				startIdx = i + 1
 			} else {
 				if r == '\n' {
-					nextLine = &Line{buf: make([]rune, 0, bufCap(str[startIdx:i])), Prev: line}
-					nextLine.Insert(str[startIdx:i], 0)
+					next = &Line{buf: make([]rune, 0, bufCap(str[startIdx:i])), Prev: prev}
+					next.Insert(str[startIdx:i], 0)
 				} else {
-					nextLine = &Line{buf: make([]rune, 0, bufCap(str[startIdx:i+1])), Prev: line}
-					nextLine.Insert(str[startIdx:i+1], 0)
+					next = &Line{buf: make([]rune, 0, bufCap(str[startIdx:i+1])), Prev: prev}
+					next.Insert(str[startIdx:i+1], 0)
 				}
-				line.Next = nextLine
-				line = nextLine
+				prev.Next = next
+				prev = next
 				startIdx = i + 1
 			}
 		}
 	}
 
-	// Add one extra line if string ends with newline
+	// Add one extra prev if string ends with newprev
 	if str[len(str)-1] == '\n' {
-		nextLine = &Line{buf: make([]rune, 0, bufCap("")), Prev: line}
-		line.Next = nextLine
+		next = &Line{buf: make([]rune, 0, bufCap("")), Prev: prev}
+		prev.Next = next
 	}
 
-	return firstLine
+	return first
 }
