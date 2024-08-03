@@ -7,7 +7,6 @@ import (
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/util"
 	"github.com/m-kru/enix/internal/view"
-	"io/ioutil"
 	"os"
 )
 
@@ -59,7 +58,7 @@ func Open(
 	} else if err != nil {
 		panic("unimplemented")
 	} else {
-		bytes, err := ioutil.ReadFile(path)
+		bytes, err := os.ReadFile(path)
 		if err != nil {
 			panic("unimplemented")
 		}

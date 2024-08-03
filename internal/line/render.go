@@ -50,6 +50,9 @@ func (l *Line) Render(cfg *cfg.Config, colors *cfg.Colorscheme, frame frame.Fram
 		r = ' '
 		frame.SetContent(frameIdx, 0, r, colors.Default)
 		frameIdx += runewidth.RuneWidth(r)
+	} else {
+		frame.SetContent(frameIdx, 0, r, colors.Default)
+		frameIdx += runewidth.RuneWidth(r)
 	}
 	runeIdx++
 
