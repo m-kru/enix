@@ -3,7 +3,7 @@ package help
 var cmds = map[string]string{
 	// Command
 
-	"cmd": `cmd # Start command prompt.`,
+	"cmd": `cmd # Starts command prompt.`,
 	"cmd-error": `cmd-error # Displays error message in the command prompt.
 This command is useful for enix debugging and development.`,
 	"cmd-info": `cmd-info # Displays message in the command prompt.
