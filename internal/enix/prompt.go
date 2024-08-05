@@ -153,7 +153,7 @@ func (p *Prompt) Delete() {
 	}
 }
 
-func (p *Prompt) CursorDown() {
+func (p *Prompt) Down() {
 	switch p.State {
 	case InShadow:
 		p.Line.Append(p.ShadowText)
@@ -165,7 +165,7 @@ func (p *Prompt) CursorDown() {
 	}
 }
 
-func (p *Prompt) CursorLeft() {
+func (p *Prompt) Left() {
 	switch p.State {
 	case InShadow:
 		p.ShadowText = ""
@@ -175,7 +175,7 @@ func (p *Prompt) CursorLeft() {
 	}
 }
 
-func (p *Prompt) CursorRight() {
+func (p *Prompt) Right() {
 	switch p.State {
 	case InShadow:
 		p.Line.Append(p.ShadowText)
@@ -187,7 +187,7 @@ func (p *Prompt) CursorRight() {
 	}
 }
 
-func (p *Prompt) CursorWordStart() {
+func (p *Prompt) WordStart() {
 	switch p.State {
 	case InShadow:
 		p.ShadowText = ""
@@ -198,7 +198,7 @@ func (p *Prompt) CursorWordStart() {
 	}
 }
 
-func (p *Prompt) CursorWordEnd() {
+func (p *Prompt) WordEnd() {
 	switch p.State {
 	case InShadow:
 		p.Line.Append(p.ShadowText)
@@ -210,7 +210,7 @@ func (p *Prompt) CursorWordEnd() {
 	}
 }
 
-func (p *Prompt) CursorLineStart() {
+func (p *Prompt) LineStart() {
 	switch p.State {
 	case InShadow:
 		p.ShadowText = ""
@@ -255,21 +255,21 @@ func (p *Prompt) RxEvent(ev tcell.Event) EventReceiver {
 			p.Backspace()
 		case "del":
 			p.Delete()
-		case "cursor-down":
-			p.CursorDown()
-		case "cursor-left":
-			p.CursorLeft()
-		case "cursor-right":
-			p.CursorRight()
-		case "cursor-word-start":
-			p.CursorWordStart()
-		case "cursor-word-end":
-			p.CursorWordEnd()
-		case "cursor-line-start":
-			p.CursorLineStart()
+		case "down":
+			p.Down()
+		case "left":
+			p.Left()
+		case "right":
+			p.Right()
+		case "word-start":
+			p.WordStart()
+		case "word-end":
+			p.WordEnd()
+		case "line-start":
+			p.LineStart()
 		case "enter":
 			return p.Enter()
-		case "escape", "quit":
+		case "esc", "quit":
 			p.Clear()
 			return p.Window
 		default:
@@ -302,17 +302,17 @@ func (p *Prompt) Exec() EventReceiver {
 	case "cmd-error":
 		p.ShowError(args)
 		return p.Window
-	case "cursor-down":
-		err = cmd.CursorDown(args, p.Window.CurrentTab)
+	case "down":
+		err = cmd.Down(args, p.Window.CurrentTab)
 		ret = p.Window
-	case "cursor-left":
-		err = cmd.CursorLeft(args, p.Window.CurrentTab)
+	case "left":
+		err = cmd.Left(args, p.Window.CurrentTab)
 		ret = p.Window
-	case "cursor-right":
-		err = cmd.CursorRight(args, p.Window.CurrentTab)
+	case "right":
+		err = cmd.Right(args, p.Window.CurrentTab)
 		ret = p.Window
-	case "cursor-up":
-		err = cmd.CursorUp(args, p.Window.CurrentTab)
+	case "up":
+		err = cmd.Up(args, p.Window.CurrentTab)
 		ret = p.Window
 	case "cursor-count":
 		p.ShowInfo(fmt.Sprintf("%d", p.Window.CurrentTab.Cursors.Count()))
@@ -320,7 +320,7 @@ func (p *Prompt) Exec() EventReceiver {
 	case "tab-count":
 		p.ShowInfo(fmt.Sprintf("%d", p.Window.Tabs.Count()))
 		return p.Window
-	case "cfg-tab-width":
+	case "tab-width":
 		err = cmd.CfgTabWidth(args, p.Config)
 		ret = p.Window
 	default:

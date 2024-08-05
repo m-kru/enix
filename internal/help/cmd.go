@@ -1,6 +1,35 @@
 package help
 
 var cmds = map[string]string{
+	// Cursor
+
+	"cursor-count": `cursor-count # Prints the number of cursors in current tab.`,
+
+	"down": `down [N=1] # Moves cursor down.
+The N parameter specifies how many lines cursor should be moved.
+If cursor is in the last line, nothing happens.`,
+
+	"left": `left # Moves cursor left.
+If cursor is in the first column of a line, then it is moved into the last
+column of the previous line. Unless this is the first line. In such a case,
+nothing happens.`,
+
+	"right": `right # Moves cursor right.
+If cursor is in the last column of a line, then it is moved into the first
+column of the next line. Unless this is the lastt line. In such a case,
+nothing happens.`,
+
+	"up": `up [N=1] # Moves cursor up.
+The N parameter specifies how many lines cursor should be moved.
+If cursor is in the fisrt line, nothing happens.`,
+
+	"word-start": `word-start # Moves cursor to the word start.`,
+	"word-end":   `word-end # Moves cursor to the word end.`,
+	"line-start": `line-start # Moves cursor to the line start.`,
+	"line-end":   `line-end # Moves cursor to the line end.`,
+
+	"spawn-down": `spawn-down # Spawns a new cursor in the below line.`,
+
 	// Command
 
 	"cmd": `cmd # Starts command prompt.`,
@@ -12,62 +41,33 @@ This command is useful for enix debugging and development.`,
 	"cmd-prev": `cmd-prev # Executes previous command.`,
 
 	// Config
-	"cfg-tab-width": `cfg-tab-width N # Sets tab width to N.`,
 
-	// Cursor
-
-	"cursor-count": `cursor-count # Prints the number of cursors in current tab.`,
-
-	"cursor-down": `cursor-down [N=1] # Moves cursor down.
-The N parameter specifies how many lines cursor should be moved.
-If cursor is in the last line, nothing happens.`,
-
-	"cursor-left": `cursor-left # Moves cursor left.
-If cursor is in the first column of a line, then it is moved into the last
-column of the previous line. Unless this is the first line. In such a case,
-nothing happens.`,
-
-	"cursor-right": `cursor-right # Moves cursor right.
-If cursor is in the last column of a line, then it is moved into the first
-column of the next line. Unless this is the lastt line. In such a case,
-nothing happens.`,
-
-	"cursor-up": `cursor-up [N=1] # Moves cursor up.
-The N parameter specifies how many lines cursor should be moved.
-If cursor is in the fisrt line, nothing happens.`,
-
-	"cursor-word-start": `cursor-word-start # Moves cursor to the word start.`,
-	"cursor-word-end":   `cursor-word-end # Moves cursor to the word end.`,
-	"cursor-line-start": `cursor-line-start # Moves cursor to the line start.`,
-	"cursor-line-end":   `cursor-line-end # Moves cursor to the line end.`,
-
-	"cursor-down-spawn": `cursor-spawn-down # Spawns a new cursor in line below.`,
+	"tab-width": `tab-width N # Sets tab width to N.`,
 
 	// Deletion
 
-	"del":      `del # Deletes text under cursors/selections.`,
-	"del-word": `del-word # Deletes words under cursors/selections.`,
-	"del-line": `del-line # Deletes lines with cursors/selections.`,
+	"del":      `del # Deletes text under cursor/selection.`,
+	"del-word": `del-word # Deletes words under cursor/selection.`,
+	"del-line": `del-line # Deletes lines with cursor/selection.`,
 
 	// File
 
-	"file-open": `file-open [path/to/file] # Opens file in a new tab.
-If path to file is not provided, then it behaves the same as the
-tab-open command.`,
+	"open": `open [path/to/file] # Opens file in a new tab.
+If path to file is not provided, then it opens a new empty tab.`,
 
-	"file-save": `file-save [path/to/file] # Saves file using the provided path to file.
+	"save": `save [path/to/file] # Saves file using the provided path to file.
 If path to file is not provided, then it uses the current file path.`,
 
-	"file-type": `file-type type # Enforces file type.`,
+	"type": `type type # Enforces file type.`,
 
 	// Indent
 
-	"indent-increase": `indent-increase # Increases indent of lines with cursor.
+	"indent": `indent # Increases indent of lines with cursor.
 In the case of selections, it increases all selected lines. Even if the
 selection starts/ends in the middle of a line.`,
 
-	"indent-decrease": `indent-increase # Decreases indent of lines with cursor.
-In the case of selections, it decreases all selected lines. Even if the
+	"deindent": `deindent # Decreases indent of lines with cursor.
+In the case of selections, it deindents all selected lines. Even if the
 selection starts/ends in the middle of a line.`,
 
 	// Selection
@@ -101,7 +101,7 @@ to be the current tab.`,
 
 	"dump-colors": `dump-colors # Dumps colorscheme configuration to JSON format.`,
 
-	"escape": `escape # Escapes the current context.
+	"esc": `esc # Escapes the current context.
 The actual action depends on the context. For example, if the focues is on the
 command prompt, then escape command escapes the command prompt and allows user
 to continue file editing. If the focus in on a file editing and there is any
@@ -124,8 +124,8 @@ for the help command. The same as 'help help'. Valid topics are:
 	"view-up":    "view-up # Scrolls view down.",
 
 	/*
-	   "cursor-match-brace":   struct{}{},
-	   "cursor-match-bracket": struct{}{},
-	   "cursor-match-paren":   struct{}{},
+	   "match-brace":   struct{}{},
+	   "match-bracket": struct{}{},
+	   "match-paren":   struct{}{},
 	*/
 }

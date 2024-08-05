@@ -14,25 +14,25 @@ type Keybindings map[string]string
 func KeybindingsDefault() Keybindings {
 	return map[string]string{
 		// Alternation
-		"Alt+Up":    "move-up",
-		"Alt+Down":  "move-down",
-		"Alt+Left":  "indent-decrease",
-		"Alt+Right": "indent-increase",
+		"Alt+Up":    "line-up",
+		"Alt+Down":  "line-down",
+		"Alt+Left":  "deindent",
+		"Alt+Right": "indent",
 		"Alt+R":     "replace",
 		"Alt+U":     "undo",
-		"Alt+J":     "line-join-below",
-		"Alt+K":     "line-join-above",
+		"Alt+J":     "join-below",
+		"Alt+K":     "join-above",
 		// Cmd
 		"Ctrl+E": "cmd",
 		// Cursor
-		"Down":       "cursor-down",
-		"Left":       "cursor-left",
-		"Right":      "cursor-right",
-		"Up":         "cursor-up",
-		"Ctrl+Down":  "cursor-spawn-down",
-		"Ctrl+Left":  "cursor-word-start",
-		"Ctrl+Right": "cursor-word-end",
-		"Ctrl+A":     "cursor-line-start",
+		"Down":       "down",
+		"Left":       "left",
+		"Right":      "right",
+		"Up":         "up",
+		"Ctrl+Down":  "spawn-down",
+		"Ctrl+Left":  "word-start",
+		"Ctrl+Right": "word-end",
+		"Ctrl+A":     "line-start",
 		// Deletion
 		"Backspace":  "backspace",
 		"Backspace2": "backspace",
@@ -42,13 +42,13 @@ func KeybindingsDefault() Keybindings {
 		"Alt+[":      "del-within-bracket",
 		"Alt+(":      "del-within-paren",
 		// File
-		"Ctrl+O": "file-open",
-		"Ctrl+S": "file-save",
+		"Ctrl+O": "open",
+		"Ctrl+S": "save",
 		// Tab
 		"Ctrl+T": "tab-open",
 		// Miscellaneous
 		"Enter":  "enter",
-		"Esc":    "escape",
+		"Esc":    "esc",
 		"Ctrl+C": "copy",
 		"Ctrl+F": "find",
 		"Ctrl+H": "help",

@@ -7,11 +7,11 @@ import (
 	"strings"
 )
 
-func CursorDown(args string, tab *tab.Tab) error {
+func Down(args string, tab *tab.Tab) error {
 	sstr := strings.Fields(args)
 	if len(sstr) > 1 {
 		return fmt.Errorf(
-			"cursor-down: provided %d args, expected at most 1", len(sstr),
+			"down: provided %d args, expected at most 1", len(sstr),
 		)
 	}
 
@@ -20,16 +20,16 @@ func CursorDown(args string, tab *tab.Tab) error {
 	if len(sstr) > 0 {
 		n, err = strconv.Atoi(sstr[0])
 		if err != nil {
-			return fmt.Errorf("cursor-down: %v", err)
+			return fmt.Errorf("down: %v", err)
 		}
 	}
 
-	cursorDown(n, tab)
+	down(n, tab)
 
 	return nil
 }
 
-func cursorDown(n int, tab *tab.Tab) {
+func down(n int, tab *tab.Tab) {
 	c := tab.Cursors
 
 	for {
@@ -45,11 +45,11 @@ func cursorDown(n int, tab *tab.Tab) {
 	tab.Cursors.Prune()
 }
 
-func CursorLeft(args string, tab *tab.Tab) error {
+func Left(args string, tab *tab.Tab) error {
 	sstr := strings.Fields(args)
 	if len(sstr) > 1 {
 		return fmt.Errorf(
-			"cursor-left: provided %d args, expected at most 1", len(sstr),
+			"left: provided %d args, expected at most 1", len(sstr),
 		)
 	}
 
@@ -58,16 +58,16 @@ func CursorLeft(args string, tab *tab.Tab) error {
 	if len(sstr) > 0 {
 		n, err = strconv.Atoi(sstr[0])
 		if err != nil {
-			return fmt.Errorf("cursor-left: %v", err)
+			return fmt.Errorf("left: %v", err)
 		}
 	}
 
-	cursorLeft(n, tab)
+	left(n, tab)
 
 	return nil
 }
 
-func cursorLeft(n int, tab *tab.Tab) {
+func left(n int, tab *tab.Tab) {
 	c := tab.Cursors
 
 	for {
@@ -83,11 +83,11 @@ func cursorLeft(n int, tab *tab.Tab) {
 	tab.Cursors.Prune()
 }
 
-func CursorRight(args string, tab *tab.Tab) error {
+func Right(args string, tab *tab.Tab) error {
 	sstr := strings.Fields(args)
 	if len(sstr) > 1 {
 		return fmt.Errorf(
-			"cursor-right: provided %d args, expected at most 1", len(sstr),
+			"right: provided %d args, expected at most 1", len(sstr),
 		)
 	}
 
@@ -96,16 +96,16 @@ func CursorRight(args string, tab *tab.Tab) error {
 	if len(sstr) > 0 {
 		n, err = strconv.Atoi(sstr[0])
 		if err != nil {
-			return fmt.Errorf("cursor-right: %v", err)
+			return fmt.Errorf("right: %v", err)
 		}
 	}
 
-	cursorRight(n, tab)
+	right(n, tab)
 
 	return nil
 }
 
-func cursorRight(n int, tab *tab.Tab) {
+func right(n int, tab *tab.Tab) {
 	c := tab.Cursors
 
 	for {
@@ -121,11 +121,11 @@ func cursorRight(n int, tab *tab.Tab) {
 	tab.Cursors.Prune()
 }
 
-func CursorUp(args string, tab *tab.Tab) error {
+func Up(args string, tab *tab.Tab) error {
 	sstr := strings.Fields(args)
 	if len(sstr) > 1 {
 		return fmt.Errorf(
-			"cursor-up: provided %d args, expected at most 1", len(sstr),
+			"up: provided %d args, expected at most 1", len(sstr),
 		)
 	}
 
@@ -134,16 +134,16 @@ func CursorUp(args string, tab *tab.Tab) error {
 	if len(sstr) > 0 {
 		n, err = strconv.Atoi(sstr[0])
 		if err != nil {
-			return fmt.Errorf("cursor-up: %v", err)
+			return fmt.Errorf("up: %v", err)
 		}
 	}
 
-	cursorUp(n, tab)
+	up(n, tab)
 
 	return nil
 }
 
-func cursorUp(n int, tab *tab.Tab) {
+func up(n int, tab *tab.Tab) {
 	c := tab.Cursors
 
 	for {

@@ -42,17 +42,17 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 		case "cmd":
 			w.Prompt.Activate("", "")
 			return w.Prompt
-		case "cursor-down":
-			err = cmd.CursorDown(args, w.CurrentTab)
-		case "cursor-left":
-			err = cmd.CursorLeft(args, w.CurrentTab)
-		case "cursor-right":
-			err = cmd.CursorRight(args, w.CurrentTab)
-		case "cursor-up":
-			err = cmd.CursorUp(args, w.CurrentTab)
-		case "cursor-spawn-down":
+		case "down":
+			err = cmd.Down(args, w.CurrentTab)
+		case "left":
+			err = cmd.Left(args, w.CurrentTab)
+		case "right":
+			err = cmd.Right(args, w.CurrentTab)
+		case "up":
+			err = cmd.Up(args, w.CurrentTab)
+		case "spawn-down":
 			w.CurrentTab.CursorSpawnDown()
-		case "escape":
+		case "esc":
 			w.Prompt.Clear()
 		case "find":
 			w.Prompt.Activate("find ", "todo")
