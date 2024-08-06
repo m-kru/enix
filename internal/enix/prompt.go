@@ -293,6 +293,8 @@ func (p *Prompt) Exec() EventReceiver {
 	var ret EventReceiver = p
 
 	switch name {
+	case "":
+		// Do nothing
 	case "cmd":
 		p.Activate("", "")
 		return p
