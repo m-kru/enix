@@ -50,6 +50,7 @@ func FromString(str string) *Line {
 			} else {
 				next = &Line{buf: make([]rune, 0, bufCap(str[startIdx:i+runeLen])), Prev: prev}
 				next.Insert(str[startIdx:i+runeLen], 0)
+				prev.Next = next
 			}
 			startIdx = i + runeLen
 		}
