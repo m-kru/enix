@@ -316,6 +316,9 @@ func (p *Prompt) Exec() EventReceiver {
 	case "up":
 		err = cmd.Up(args, p.Window.CurrentTab)
 		ret = p.Window
+	case "end":
+		err = cmd.End(args, p.Window.CurrentTab)
+		ret = p.Window
 	case "cursor-count":
 		p.ShowInfo(fmt.Sprintf("%d", p.Window.CurrentTab.Cursors.Count()))
 		return p.Window

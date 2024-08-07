@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/tab"
 	"strconv"
 	"strings"
@@ -157,4 +158,17 @@ func up(n int, tab *tab.Tab) {
 	}
 
 	tab.Cursors.Prune()
+}
+
+func End(args string, tab *tab.Tab) error {
+	sstr := strings.Fields(args)
+	if len(sstr) > 0 {
+		return fmt.Errorf(
+			"end: expected 0 arguments, provided %d", len(sstr),
+		)
+	}
+
+	tab.Cursors = &cursor.Cursor{Config: tab.Config, Line: tab.Lines.Last()}
+
+	return nil
 }

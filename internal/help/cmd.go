@@ -23,6 +23,9 @@ nothing happens.`,
 The N parameter specifies how many lines cursor should be moved.
 If cursor is in the fisrt line, nothing happens.`,
 
+	"end": `end # Moves cursor to the last line.
+If there are multiple cursors, they are first reduced to a single cursor.`,
+
 	"word-start": `word-start # Moves cursor to the word start.`,
 	"word-end":   `word-end # Moves cursor to the word end.`,
 	"line-start": `line-start # Moves cursor to the line start.`,

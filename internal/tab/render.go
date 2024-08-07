@@ -129,16 +129,18 @@ func (t *Tab) Render(frame frame.Frame) {
 		frame.Height -= 1
 	}
 
-	// Render line numbers
 	lineCount := t.LineCount()
 	lineNumWidth := util.IntWidth(lineCount)
-	t.RenderLineNums(frame.Column(0, lineNumWidth))
 
-	// Render lines
 	// TODO: Should view Width and Height be set here?
 	t.View.Width = frame.Width - lineNumWidth - 1
 	t.View.Height = frame.Height
 	t.UpdateView()
+
+	// Render line numbers
+	t.RenderLineNums(frame.Column(0, lineNumWidth))
+
+	// Render lines
 	linesFrame := frame.Column(lineNumWidth+1, frame.Width-lineNumWidth-1)
 	t.RenderLines(linesFrame)
 

@@ -62,6 +62,16 @@ func (l *Line) Get(n int) *Line {
 	panic(fmt.Sprintf("cannot get line %d ", n))
 }
 
+// Last returns last line in the list.
+func (l *Line) Last() *Line {
+	for {
+		if l.Next == nil {
+			return l
+		}
+		l = l.Next
+	}
+}
+
 // ColumnIdx returns first column index for provided rune index.
 func (l *Line) ColumnIdx(runeIdx int, tabWidth int) int {
 	if runeIdx > len(l.buf) {
