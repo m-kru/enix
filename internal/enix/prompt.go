@@ -3,6 +3,7 @@ package enix
 import (
 	"fmt"
 	"strings"
+	"unicode"
 
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cmd"
@@ -292,6 +293,13 @@ func (p *Prompt) Exec() EventReceiver {
 	var err error
 	var ret EventReceiver = p
 
+	// If the first word is a number, then treat it as a goto command.
+	if unicode.IsDigit([]rune(name)[0]) {
+		err = cmd.Goto(p.Line.String(), p.Window.CurrentTab)
+		ret = p.Window
+		goto errorCheck
+	}
+
 	switch name {
 	case "":
 		// Do nothing
@@ -319,6 +327,9 @@ func (p *Prompt) Exec() EventReceiver {
 	case "end":
 		err = cmd.End(args, p.Window.CurrentTab)
 		ret = p.Window
+	case "goto":
+		err = cmd.Goto(args, p.Window.CurrentTab)
+		ret = p.Window
 	case "cursor-count":
 		p.ShowInfo(fmt.Sprintf("%d", p.Window.CurrentTab.Cursors.Count()))
 		return p.Window
@@ -338,6 +349,7 @@ func (p *Prompt) Exec() EventReceiver {
 		return p.Window
 	}
 
+errorCheck:
 	if err != nil {
 		p.ShowError(fmt.Sprintf("%v", err))
 		return p.Window
