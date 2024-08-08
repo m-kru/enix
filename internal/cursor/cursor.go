@@ -193,6 +193,10 @@ func (c *Cursor) Render(config *cfg.Config, colors *cfg.Colorscheme, frame frame
 			return
 		}
 	*/
-	r := frame.GetContent(x, 0)
-	frame.SetContent(x, 0, r, colors.Cursor)
+	if c.Next == nil {
+		frame.ShowCursor(x, 0)
+	} else {
+		r := frame.GetContent(x, 0)
+		frame.SetContent(x, 0, r, colors.Cursor)
+	}
 }
