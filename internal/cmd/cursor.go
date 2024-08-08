@@ -228,8 +228,8 @@ func goTo(line, col int, tab *tab.Tab) {
 	}
 
 	l := tab.Lines.Get(line)
-	if col > l.Len() {
-		col = l.Len()
+	if col > l.Len()+1 {
+		col = l.Len() + 1
 	}
 
 	tab.Cursors = &cursor.Cursor{Config: tab.Config, Line: l, BufIdx: col - 1, Idx: col - 1}
