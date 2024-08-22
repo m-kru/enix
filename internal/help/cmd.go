@@ -104,6 +104,8 @@ to be the current tab.`,
 
 	"dump-colors": `dump-colors # Dumps colorscheme configuration to JSON format.`,
 
+	"insert": `insert # Enters insert mode.`,
+
 	"esc": `esc # Escapes the current context.
 The actual action depends on the context. For example, if the focues is on the
 command prompt, then escape command escapes the command prompt and allows user

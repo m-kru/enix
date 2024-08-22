@@ -10,6 +10,19 @@ import (
 // Keybindings struct represents configured keybindings.
 type Keybindings map[string]string
 
+func (keys Keybindings) ToCmd(ev *tcell.EventKey) (string, string) {
+	name := enix_tcell.EventKeyName(ev)
+
+	str, ok := keys[name]
+	if !ok {
+		return "", ""
+	}
+
+	cmd, args, _ := strings.Cut(strings.TrimSpace(str), " ")
+
+	return cmd, args
+}
+
 // KeybindingsDefault returns default keybindings.
 func KeybindingsDefault() Keybindings {
 	return map[string]string{
@@ -23,7 +36,7 @@ func KeybindingsDefault() Keybindings {
 		"Alt+J":    "join-below",
 		"Alt+K":    "join-above",
 		// Cmd
-		"Rune[e]": "cmd",
+		"Rune[:]": "cmd",
 		// Cursor
 		"Rune[j]":    "down",
 		"Rune[k]":    "up",
@@ -62,15 +75,15 @@ func KeybindingsDefault() Keybindings {
 	}
 }
 
-func (keys Keybindings) ToCmd(ev *tcell.EventKey) (string, string) {
-	name := enix_tcell.EventKeyName(ev)
-
-	str, ok := keys[name]
-	if !ok {
-		return "", ""
+// PromptKeybindingsDefault returns default keybindings for command prompt.
+func PromptKeybindingsDefault() Keybindings {
+	return map[string]string{
+		"Ctrl+Left":  "word-start",
+		"Ctrl+Right": "word-end",
+		"Ctrl+A":     "line-start",
+		"Backspace":  "backspace",
+		"Backspace2": "backspace",
+		"Delete":     "del",
+		"Enter":      "enter",
 	}
-
-	cmd, args, _ := strings.Cut(strings.TrimSpace(str), " ")
-
-	return cmd, args
 }

@@ -122,7 +122,12 @@ func (w *Window) OpenArgFiles() {
 	w.CurrentTab = w.Tabs
 }
 
-func Start(config *cfg.Config, colors *cfg.Colorscheme, keys *cfg.Keybindings) {
+func Start(
+	config *cfg.Config,
+	colors *cfg.Colorscheme,
+	keys *cfg.Keybindings,
+	promptKeys *cfg.Keybindings,
+) {
 	screen, err := tcell.NewScreen()
 	if err != nil {
 		log.Fatalf("%v", err)
@@ -160,7 +165,7 @@ func Start(config *cfg.Config, colors *cfg.Colorscheme, keys *cfg.Keybindings) {
 	p := Prompt{
 		Config: config,
 		Colors: colors,
-		Keys:   keys,
+		Keys:   promptKeys,
 		Screen: screen,
 		Frame: frame.Frame{
 			Screen: screen,

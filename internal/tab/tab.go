@@ -17,6 +17,8 @@ type Tab struct {
 	FileType   string
 	HasChanges bool
 
+	InInsertMode bool
+
 	Cursors *cursor.Cursor // First cursor
 
 	Lines *line.Line // First line

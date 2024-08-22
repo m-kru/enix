@@ -114,22 +114,21 @@ func (p *Prompt) Activate(text, shadowText string) {
 }
 
 func (p *Prompt) Render() {
-	p.Frame.SetContent(0, 0, '>', p.Colors.Prompt)
-	p.Frame.SetContent(1, 0, ' ', p.Colors.Prompt)
+	p.Frame.SetContent(0, 0, ':', p.Colors.Prompt)
 
 	if !p.View.IsVisible(p.Cursor.View()) {
 		p.View = p.View.MinAdjust(p.Cursor.View())
 	}
 
-	p.Line.Render(p.Config, p.Colors, p.Frame.Line(2, 0), p.View)
+	p.Line.Render(p.Config, p.Colors, p.Frame.Line(1, 0), p.View)
 
 	if len(p.ShadowText) > 0 {
 		for i, r := range p.ShadowText {
-			p.Frame.SetContent(i+2+p.Line.Len(), 0, r, p.Colors.PromptShadow)
+			p.Frame.SetContent(i+1+p.Line.Len(), 0, r, p.Colors.PromptShadow)
 		}
 	}
 
-	p.Cursor.Render(p.Config, p.Colors, p.Frame.Line(2, 0), p.View)
+	p.Cursor.Render(p.Config, p.Colors, p.Frame.Line(1, 0), p.View)
 
 	p.Screen.Show()
 }
@@ -339,6 +338,8 @@ func (p *Prompt) Exec() EventReceiver {
 	case "tab-width":
 		err = cmd.CfgTabWidth(args, p.Config)
 		ret = p.Window
+	case "quit":
+		return nil
 	default:
 		p.ShowError(
 			fmt.Sprintf(
