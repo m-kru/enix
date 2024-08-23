@@ -115,7 +115,11 @@ func (t *Tab) RenderCursors(frame frame.Frame) {
 			continue
 		}
 
-		c.Render(t.Config, t.Colors, frame.Line(0, c.Line.Num()-t.View.Line), t.View)
+		primary := false
+		if t.HasFocus && c.Next == nil {
+			primary = true
+		}
+		c.Render(t.Config, t.Colors, frame.Line(0, c.Line.Num()-t.View.Line), t.View, primary)
 
 		c = c.Next
 	}

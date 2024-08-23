@@ -40,6 +40,7 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 
 		switch name {
 		case "cmd":
+			w.CurrentTab.HasFocus = false
 			w.Prompt.Activate("", "")
 			return w.Prompt
 		case "down":
@@ -55,9 +56,11 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 		case "esc":
 			w.Prompt.Clear()
 		case "find":
+			w.CurrentTab.HasFocus = false
 			w.Prompt.Activate("find ", "todo")
 			return w.Prompt
 		case "help":
+			w.CurrentTab.HasFocus = false
 			w.Prompt.Activate("help ", "")
 			return w.Prompt
 		case "quit":
@@ -68,8 +71,6 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 	if err != nil {
 		w.Prompt.ShowError(fmt.Sprintf("%v", err))
 	}
-
-	w.Render()
 
 	return w
 }
@@ -201,8 +202,12 @@ func Start(
 	for {
 		ev := screen.PollEvent()
 		evRcvr = evRcvr.RxEvent(ev)
-		if evRcvr == nil {
+		if evRcvr == &w {
+			w.CurrentTab.HasFocus = true
+		} else if evRcvr == nil {
 			return
 		}
+
+		w.Render()
 	}
 }

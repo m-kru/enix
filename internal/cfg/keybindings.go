@@ -85,5 +85,6 @@ func PromptKeybindingsDefault() Keybindings {
 		"Backspace2": "backspace",
 		"Delete":     "del",
 		"Enter":      "enter",
+		"Esc":        "esc",
 	}
 }

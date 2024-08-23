@@ -11,12 +11,13 @@ type Tab struct {
 	Config *cfg.Config
 	Colors *cfg.Colorscheme
 
-	Name       string
-	Path       string // File path
-	Newline    string // Newline encoding
-	FileType   string
-	HasChanges bool
+	Name     string
+	Path     string // File path
+	Newline  string // Newline encoding
+	FileType string
 
+	HasFocus     bool
+	HasChanges   bool
 	InInsertMode bool
 
 	Cursors *cursor.Cursor // First cursor

@@ -18,6 +18,7 @@ func Empty(config *cfg.Config, colors *cfg.Colorscheme) *Tab {
 		Path:       "",
 		Newline:    "\n",
 		FileType:   "",
+		HasFocus:   true,
 		HasChanges: false,
 		Lines:      line.Empty(),
 		View:       view.View{Line: 1, Column: 1},
@@ -47,6 +48,7 @@ func Open(
 		Path:       path,
 		Newline:    "\n",
 		FileType:   util.FileNameToType(path),
+		HasFocus:   true,
 		HasChanges: false,
 		View:       view.View{Line: 1, Column: 1},
 	}
@@ -85,6 +87,7 @@ func FromString(
 		Path:       "",
 		Newline:    "\n",
 		FileType:   "None",
+		HasFocus:   true,
 		HasChanges: false,
 		Lines:      line.FromString(str),
 		View:       view.View{Line: 1, Column: 1},

@@ -186,14 +186,20 @@ func (c *Cursor) Delete() {
 	c.Line.Delete(c.BufIdx, 1)
 }
 
-func (c *Cursor) Render(config *cfg.Config, colors *cfg.Colorscheme, frame frame.Frame, view view.View) {
+func (c *Cursor) Render(
+	config *cfg.Config,
+	colors *cfg.Colorscheme,
+	frame frame.Frame,
+	view view.View,
+	primary bool,
+) {
 	x := c.Line.ColumnIdx(c.BufIdx, config.TabWidth) - view.Column
 	/*
 		if x >= frame.Width {
 			return
 		}
 	*/
-	if c.Next == nil {
+	if primary {
 		frame.ShowCursor(x, 0)
 	} else {
 		r := frame.GetContent(x, 0)

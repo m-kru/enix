@@ -50,6 +50,7 @@ func (p *Prompt) Clear() {
 	for x := 0; x < p.Frame.Width; x++ {
 		p.Frame.SetContent(x, 0, ' ', p.Colors.Default)
 	}
+	p.Screen.HideCursor()
 	p.Screen.Show()
 }
 
@@ -128,7 +129,7 @@ func (p *Prompt) Render() {
 		}
 	}
 
-	p.Cursor.Render(p.Config, p.Colors, p.Frame.Line(1, 0), p.View)
+	p.Cursor.Render(p.Config, p.Colors, p.Frame.Line(1, 0), p.View, true)
 
 	p.Screen.Show()
 }
