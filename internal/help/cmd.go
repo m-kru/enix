@@ -121,6 +121,7 @@ for the help command. The same as 'help help'. Valid topics are:
   - selections - what ther are and how they work.`,
 
 	"space": `space # Inserts space rune.`,
+	"tab":   `tab # Inserts tab rune.`,
 
 	// View
 

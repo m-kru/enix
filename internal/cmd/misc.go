@@ -29,3 +29,27 @@ func space(tab *tab.Tab) {
 		c = c.Next
 	}
 }
+
+func Tab(args string, tab *tab.Tab) error {
+	sstr := strings.Fields(args)
+	if len(sstr) > 0 {
+		return fmt.Errorf(
+			"tab: provided %d args, expected 0", len(sstr),
+		)
+	}
+
+	tabCmd(tab)
+
+	return nil
+}
+
+func tabCmd(tab *tab.Tab) {
+	c := tab.Cursors
+	for {
+		if c == nil {
+			break
+		}
+		c.InsertRune('\t')
+		c = c.Next
+	}
+}

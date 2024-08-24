@@ -339,6 +339,10 @@ func (p *Prompt) Exec() EventReceiver {
 	case "tab-width":
 		err = cmd.CfgTabWidth(args, p.Config)
 		ret = p.Window
+	case "space":
+		err = cmd.Space(args, p.Window.CurrentTab)
+	case "tab":
+		err = cmd.Tab(args, p.Window.CurrentTab)
 	case "quit":
 		return nil
 	default:

@@ -7,8 +7,6 @@ func EventKeyName(ev *tcell.EventKey) string {
 	switch ev.Key() {
 	case tcell.KeyCtrlH:
 		return "Ctrl+H"
-	case tcell.KeyCtrlI:
-		return "Ctrl+I"
 	}
 
 	return ev.Name()

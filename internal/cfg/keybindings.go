@@ -70,6 +70,7 @@ func KeybindingsDefault() Keybindings {
 		"Rune[v]": "paste",
 		"Rune[w]": "sel-word",
 		"Rune[ ]": "space",
+		"Tab":     "tab",
 		// Selection
 		"Ctrl+K": "sel-line-end",
 		"Ctrl+L": "sel-line",
