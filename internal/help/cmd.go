@@ -120,6 +120,8 @@ for the help command. The same as 'help help'. Valid topics are:
   - keybindings - how to set, and what to watch out for,
   - selections - what ther are and how they work.`,
 
+	"space": `space # Inserts space rune.`,
+
 	// View
 
 	"view":       "view line-number column # Sets view start at provided line number and column.",

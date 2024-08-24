@@ -63,6 +63,8 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 			w.CurrentTab.HasFocus = false
 			w.Prompt.Activate("help ", "")
 			return w.Prompt
+		case "space":
+			err = cmd.Space(args, w.CurrentTab)
 		case "quit":
 			return nil
 		}

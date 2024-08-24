@@ -175,10 +175,12 @@ func (l *Line) InsertRune(r rune, idx int) {
 		l.buf = newBuf
 	}
 
-	right := l.buf[idx:len(l.buf)]
-	l.buf = l.buf[0:idx]
-	l.buf = append(l.buf, r)
-	l.buf = append(l.buf, right...)
+	// Append one rune at the end to increase the rune slice length.
+	l.buf = append(l.buf, ' ')
+	for i := l.Len() - 1; i > idx; i-- {
+		l.buf[i] = l.buf[i-1]
+	}
+	l.buf[idx] = r
 }
 
 func (l *Line) Insert(s string, idx int) {
@@ -189,6 +191,7 @@ func (l *Line) Insert(s string, idx int) {
 		l.buf = newBuf
 	}
 
+	// TODO: Below code probably needs fix.
 	right := l.buf[idx:len(l.buf)]
 	l.buf = l.buf[0:idx]
 	l.buf = append(l.buf, []rune(s)...)

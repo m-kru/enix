@@ -69,6 +69,7 @@ func KeybindingsDefault() Keybindings {
 		// "Ctrl+U":     "undo", Alt+U
 		"Rune[v]": "paste",
 		"Rune[w]": "sel-word",
+		"Rune[ ]": "space",
 		// Selection
 		"Ctrl+K": "sel-line-end",
 		"Ctrl+L": "sel-line",
@@ -78,6 +79,8 @@ func KeybindingsDefault() Keybindings {
 // PromptKeybindingsDefault returns default keybindings for command prompt.
 func PromptKeybindingsDefault() Keybindings {
 	return map[string]string{
+		"Left":       "left",
+		"Right":      "right",
 		"Ctrl+Left":  "word-start",
 		"Ctrl+Right": "word-end",
 		"Ctrl+A":     "line-start",

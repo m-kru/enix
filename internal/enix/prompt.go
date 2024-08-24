@@ -237,9 +237,9 @@ func (p *Prompt) HandleRune(r rune) {
 	case InShadow:
 		p.ShadowText = ""
 		p.State = InText
-		p.Cursor.HandleRune(r)
+		p.Cursor.InsertRune(r)
 	case InText:
-		p.Cursor.HandleRune(r)
+		p.Cursor.InsertRune(r)
 	}
 }
 

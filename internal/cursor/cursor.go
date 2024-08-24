@@ -109,12 +109,12 @@ func (c *Cursor) Prune() {
 	}
 }
 
-// InformInsertion informs the cursor about content insertion into the line.
-func (c *Cursor) InformInsertion(l *line.Line, idx int, size int) {
+// InformRuneInsert informs the cursor about content insertion into the line.
+func (c *Cursor) InformRuneInsert(l *line.Line, idx int) {
 	if l != c.Line || idx > c.BufIdx {
 		return
 	}
-	panic("unimplemented")
+	c.BufIdx++
 }
 
 // InformDeletion informs the cursor about content deletion from the line.
@@ -125,14 +125,16 @@ func (c *Cursor) InformDeletion(l *line.Line, idx int, size int) {
 	panic("unimplemented")
 }
 
-func (c *Cursor) HandleRune(r rune) {
-	// Inform other cursors about deletion.
-	cNext := c.Next
+func (c *Cursor) InsertRune(r rune) {
+	c2 := c.Last()
 	for {
-		if cNext == nil {
+		if c2 == nil {
 			break
 		}
-		cNext.InformDeletion(c.Line, c.BufIdx, 1)
+		if c2 != c {
+			c2.InformRuneInsert(c.Line, c.BufIdx)
+		}
+		c2 = c2.Prev
 	}
 
 	c.Line.InsertRune(r, c.BufIdx)
