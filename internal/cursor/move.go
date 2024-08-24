@@ -83,15 +83,25 @@ func (c *Cursor) WordStart() {
 func (c *Cursor) WordEnd() {
 	if idx, ok := c.Line.WordEnd(c.BufIdx); ok {
 		c.BufIdx = idx + 1 // + 1 as we have found word end index.
+		c.Idx = c.BufIdx
 		return
 	}
 
-	if c.Line.Next == nil {
-		// Do nothing
-		return
-	}
+	line := c.Line.Next
+	for {
+		if line == nil {
+			return
+		}
 
-	panic("unimplemented")
+		if idx, ok := line.WordEnd(0); ok {
+			c.Line = line
+			c.BufIdx = idx + 1
+			c.Idx = c.BufIdx
+			return
+		}
+
+		line = line.Next
+	}
 }
 
 func (c *Cursor) LineStart() {

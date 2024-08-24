@@ -234,3 +234,32 @@ func goTo(line, col int, tab *tab.Tab) {
 
 	tab.Cursors = &cursor.Cursor{Config: tab.Config, Line: l, BufIdx: col - 1, Idx: col - 1}
 }
+
+func WordEnd(args string, tab *tab.Tab) error {
+	sstr := strings.Fields(args)
+	if len(sstr) > 0 {
+		return fmt.Errorf(
+			"word-end: expected 0 args, provided %d", len(sstr),
+		)
+	}
+
+	return wordEnd(tab)
+}
+
+func wordEnd(tab *tab.Tab) error {
+	c := tab.Cursors
+
+	for {
+		if c == nil {
+			break
+		}
+
+		c.WordEnd()
+
+		c = c.Next
+	}
+
+	tab.Cursors.Prune()
+
+	return nil
+}
