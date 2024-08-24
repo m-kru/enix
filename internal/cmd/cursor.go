@@ -263,3 +263,32 @@ func wordEnd(tab *tab.Tab) error {
 
 	return nil
 }
+
+func WordStart(args string, tab *tab.Tab) error {
+	sstr := strings.Fields(args)
+	if len(sstr) > 0 {
+		return fmt.Errorf(
+			"word-start: expected 0 args, provided %d", len(sstr),
+		)
+	}
+
+	return wordStart(tab)
+}
+
+func wordStart(tab *tab.Tab) error {
+	c := tab.Cursors
+
+	for {
+		if c == nil {
+			break
+		}
+
+		c.WordStart()
+
+		c = c.Next
+	}
+
+	tab.Cursors.Prune()
+
+	return nil
+}

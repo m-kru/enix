@@ -38,6 +38,7 @@ func KeybindingsDefault() Keybindings {
 		// Cmd
 		"Rune[:]": "cmd",
 		// Cursor
+		"Rune[b]":    "word-start",
 		"Rune[e]":    "word-end",
 		"Rune[j]":    "down",
 		"Rune[k]":    "up",

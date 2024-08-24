@@ -72,12 +72,21 @@ func (c *Cursor) WordStart() {
 		return
 	}
 
-	if c.Line.Prev == nil {
-		// Do nothing
-		return
-	}
+	line := c.Line.Prev
+	for {
+		if line == nil {
+			return
+		}
 
-	panic("unimplemented")
+		if idx, ok := line.WordStart(line.Len()); ok {
+			c.Line = line
+			c.BufIdx = idx + 1
+			c.Idx = c.BufIdx
+			return
+		}
+
+		line = line.Prev
+	}
 }
 
 func (c *Cursor) WordEnd() {

@@ -65,6 +65,8 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 			return w.Prompt
 		case "word-end":
 			err = cmd.WordEnd(args, w.CurrentTab)
+		case "word-start":
+			err = cmd.WordStart(args, w.CurrentTab)
 		case "space":
 			err = cmd.Space(args, w.CurrentTab)
 		case "tab":
