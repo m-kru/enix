@@ -61,54 +61,6 @@ func IsWordRune(r rune) bool {
 	return unicode.IsLetter(r) || unicode.IsDigit(r) || r == '_'
 }
 
-// WordStart finds previous word start index.
-func WordStart(str string, i int) (int, bool) {
-	if i == 0 {
-		return 0, false
-	}
-
-	for {
-		i--
-		if i == 0 {
-			if IsWordRune([]rune(str)[i]) {
-				return i, true
-			} else {
-				break
-			}
-		}
-
-		if IsWordRune([]rune(str)[i]) && !IsWordRune([]rune(str)[i-1]) {
-			return i, true
-		}
-	}
-
-	return 0, false
-}
-
-// WordEnd finds next word end index.
-func WordEnd(str string, i int) (int, bool) {
-	if i >= len(str)-1 {
-		return 0, false
-	}
-
-	for {
-		i++
-		if i == len(str)-1 {
-			if IsWordRune([]rune(str)[i]) {
-				return i, true
-			} else {
-				break
-			}
-		}
-
-		if IsWordRune([]rune(str)[i]) && !IsWordRune([]rune(str)[i+1]) {
-			return i, true
-		}
-	}
-
-	return 0, false
-}
-
 // IntWidth returns number of digits required to print n.
 // TODO: Improbe speed, not the fastest implementation.
 func IntWidth(i int) int {
