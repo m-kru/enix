@@ -67,6 +67,8 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 			err = cmd.Space(args, w.CurrentTab)
 		case "tab":
 			err = cmd.Tab(args, w.CurrentTab)
+		case "newline":
+			err = cmd.Newline(args, w.CurrentTab)
 		case "quit":
 			return nil
 		}

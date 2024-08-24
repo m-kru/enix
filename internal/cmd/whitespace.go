@@ -53,3 +53,27 @@ func tabCmd(tab *tab.Tab) {
 		c = c.Next
 	}
 }
+
+func Newline(args string, tab *tab.Tab) error {
+	sstr := strings.Fields(args)
+	if len(sstr) > 0 {
+		return fmt.Errorf(
+			"newline: provided %d args, expected 0", len(sstr),
+		)
+	}
+
+	newline(tab)
+
+	return nil
+}
+
+func newline(tab *tab.Tab) {
+	c := tab.Cursors
+	for {
+		if c == nil {
+			break
+		}
+		c.InsertNewline()
+		c = c.Next
+	}
+}

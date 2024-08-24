@@ -183,6 +183,21 @@ func (l *Line) InsertRune(r rune, idx int) {
 	l.buf[idx] = r
 }
 
+// InsertNewline inserts a newline at index idx and returns the new line.
+func (l *Line) InsertNewline(idx int) *Line {
+	newLine := FromString(string(l.buf[idx:l.Len()]))
+	l.buf = l.buf[0:idx]
+
+	newLine.Prev = l
+	newLine.Next = l.Next
+	if l.Next != nil {
+		l.Next.Prev = newLine
+	}
+	l.Next = newLine
+
+	return newLine
+}
+
 func (l *Line) Insert(s string, idx int) {
 	newLen := len(l.buf) + len(s)
 	if newLen > cap(l.buf) {

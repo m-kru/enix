@@ -60,7 +60,7 @@ func KeybindingsDefault() Keybindings {
 		// Tab
 		"Ctrl+T": "tab-open",
 		// Miscellaneous
-		"Enter":   "enter",
+		"Enter":   "newline",
 		"Esc":     "esc",
 		"Rune[c]": "copy",
 		"Rune[f]": "find",

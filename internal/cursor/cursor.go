@@ -141,6 +141,30 @@ func (c *Cursor) InsertRune(r rune) {
 	c.BufIdx++
 }
 
+func (c *Cursor) InsertNewline() {
+	newLine := c.Line.InsertNewline(c.BufIdx)
+
+	// Update line pointer for all cursors in the same line as c, but after c.
+	c2 := c.Last()
+	for {
+		if c2 == nil {
+			break
+		}
+
+		if c2.Line == c.Line && c2.BufIdx > c.BufIdx {
+			c2.Line = newLine
+			c2.BufIdx -= c.BufIdx
+			c2.Idx = c2.BufIdx
+		}
+
+		c2 = c2.Prev
+	}
+
+	c.Line = newLine
+	c.BufIdx = 0
+	c.Idx = 0
+}
+
 func (c *Cursor) Backspace() {
 	if c.BufIdx == 0 {
 		if c.Line.Prev == nil {
