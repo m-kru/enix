@@ -258,21 +258,21 @@ func (p *Prompt) RxEvent(ev tcell.Event) EventReceiver {
 			p.Delete()
 		case "down":
 			p.Down()
+		case "enter":
+			return p.Enter()
+		case "esc", "quit":
+			p.Clear()
+			return p.Window
 		case "left":
 			p.Left()
+		case "line-start":
+			p.LineStart()
 		case "right":
 			p.Right()
 		case "word-start":
 			p.WordStart()
 		case "word-end":
 			p.WordEnd()
-		case "line-start":
-			p.LineStart()
-		case "enter":
-			return p.Enter()
-		case "esc", "quit":
-			p.Clear()
-			return p.Window
 		default:
 			switch ev.Key() {
 			case tcell.KeyRune:
@@ -306,23 +306,17 @@ func (p *Prompt) Exec() EventReceiver {
 	case "cmd":
 		p.Activate("", "")
 		return p
-	case "cmd-info":
-		p.ShowInfo(args)
-		return p.Window
 	case "cmd-error":
 		p.ShowError(args)
 		return p.Window
+	case "cmd-info":
+		p.ShowInfo(args)
+		return p.Window
+	case "cursor-count":
+		p.ShowInfo(fmt.Sprintf("%d", p.Window.CurrentTab.Cursors.Count()))
+		return p.Window
 	case "down":
 		err = cmd.Down(args, p.Window.CurrentTab)
-		ret = p.Window
-	case "left":
-		err = cmd.Left(args, p.Window.CurrentTab)
-		ret = p.Window
-	case "right":
-		err = cmd.Right(args, p.Window.CurrentTab)
-		ret = p.Window
-	case "up":
-		err = cmd.Up(args, p.Window.CurrentTab)
 		ret = p.Window
 	case "end":
 		err = cmd.End(args, p.Window.CurrentTab)
@@ -330,21 +324,27 @@ func (p *Prompt) Exec() EventReceiver {
 	case "goto":
 		err = cmd.Goto(args, p.Window.CurrentTab)
 		ret = p.Window
-	case "cursor-count":
-		p.ShowInfo(fmt.Sprintf("%d", p.Window.CurrentTab.Cursors.Count()))
-		return p.Window
+	case "left":
+		err = cmd.Left(args, p.Window.CurrentTab)
+		ret = p.Window
+	case "right":
+		err = cmd.Right(args, p.Window.CurrentTab)
+		ret = p.Window
+	case "quit":
+		return nil
+	case "space":
+		err = cmd.Space(args, p.Window.CurrentTab)
+	case "tab":
+		err = cmd.Tab(args, p.Window.CurrentTab)
 	case "tab-count":
 		p.ShowInfo(fmt.Sprintf("%d", p.Window.Tabs.Count()))
 		return p.Window
 	case "tab-width":
 		err = cmd.CfgTabWidth(args, p.Config)
 		ret = p.Window
-	case "space":
-		err = cmd.Space(args, p.Window.CurrentTab)
-	case "tab":
-		err = cmd.Tab(args, p.Window.CurrentTab)
-	case "quit":
-		return nil
+	case "up":
+		err = cmd.Up(args, p.Window.CurrentTab)
+		ret = p.Window
 	default:
 		p.ShowError(
 			fmt.Sprintf(

@@ -45,14 +45,6 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 			return w.Prompt
 		case "down":
 			err = cmd.Down(args, w.CurrentTab)
-		case "left":
-			err = cmd.Left(args, w.CurrentTab)
-		case "right":
-			err = cmd.Right(args, w.CurrentTab)
-		case "up":
-			err = cmd.Up(args, w.CurrentTab)
-		case "spawn-down":
-			err = cmd.SpawnDown(args, w.CurrentTab)
 		case "esc":
 			w.Prompt.Clear()
 		case "find":
@@ -63,18 +55,26 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 			w.CurrentTab.HasFocus = false
 			w.Prompt.Activate("help ", "")
 			return w.Prompt
-		case "word-end":
-			err = cmd.WordEnd(args, w.CurrentTab)
-		case "word-start":
-			err = cmd.WordStart(args, w.CurrentTab)
-		case "space":
-			err = cmd.Space(args, w.CurrentTab)
-		case "tab":
-			err = cmd.Tab(args, w.CurrentTab)
+		case "left":
+			err = cmd.Left(args, w.CurrentTab)
 		case "newline":
 			err = cmd.Newline(args, w.CurrentTab)
 		case "quit":
 			return nil
+		case "right":
+			err = cmd.Right(args, w.CurrentTab)
+		case "space":
+			err = cmd.Space(args, w.CurrentTab)
+		case "spawn-down":
+			err = cmd.SpawnDown(args, w.CurrentTab)
+		case "tab":
+			err = cmd.Tab(args, w.CurrentTab)
+		case "up":
+			err = cmd.Up(args, w.CurrentTab)
+		case "word-end":
+			err = cmd.WordEnd(args, w.CurrentTab)
+		case "word-start":
+			err = cmd.WordStart(args, w.CurrentTab)
 		}
 	}
 
