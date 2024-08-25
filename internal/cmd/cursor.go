@@ -292,3 +292,47 @@ func wordStart(tab *tab.Tab) error {
 
 	return nil
 }
+
+func SpawnDown(args string, tab *tab.Tab) error {
+	sstr := strings.Fields(args)
+	if len(sstr) > 0 {
+		return fmt.Errorf(
+			"spawn-down: expected 0 args, provided %d", len(sstr),
+		)
+	}
+
+	return spawnDown(tab)
+}
+
+func spawnDown(tab *tab.Tab) error {
+	var newCursors *cursor.Cursor
+	var lastNewCursor *cursor.Cursor
+
+	c := tab.Cursors
+	for {
+		nc := c.SpawnDown()
+
+		if nc != nil {
+			if newCursors == nil {
+				newCursors = nc
+				lastNewCursor = nc
+			} else {
+				lastNewCursor.Next = nc
+				nc.Prev = lastNewCursor
+				lastNewCursor = nc
+			}
+		}
+
+		if c.Next == nil {
+			break
+		}
+		c = c.Next
+	}
+
+	c.Next = newCursors
+	newCursors.Prev = c
+
+	tab.Cursors.Prune()
+
+	return nil
+}

@@ -52,7 +52,7 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 		case "up":
 			err = cmd.Up(args, w.CurrentTab)
 		case "spawn-down":
-			w.CurrentTab.CursorSpawnDown()
+			err = cmd.SpawnDown(args, w.CurrentTab)
 		case "esc":
 			w.Prompt.Clear()
 		case "find":
