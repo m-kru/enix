@@ -67,6 +67,8 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 			err = cmd.Space(args, w.CurrentTab)
 		case "spawn-down":
 			err = cmd.SpawnDown(args, w.CurrentTab)
+		case "spawn-up":
+			err = cmd.SpawnUp(args, w.CurrentTab)
 		case "tab":
 			err = cmd.Tab(args, w.CurrentTab)
 		case "up":

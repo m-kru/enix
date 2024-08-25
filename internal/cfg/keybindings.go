@@ -45,6 +45,7 @@ func KeybindingsDefault() Keybindings {
 		"Rune[h]":    "left",
 		"Rune[l]":    "right",
 		"Ctrl+J":     "spawn-down",
+		"Ctrl+K":     "spawn-up",
 		"Ctrl+Left":  "word-start",
 		"Ctrl+Right": "word-end",
 		"Ctrl+A":     "line-start",
@@ -74,7 +75,7 @@ func KeybindingsDefault() Keybindings {
 		"Rune[ ]": "space",
 		"Tab":     "tab",
 		// Selection
-		"Ctrl+K": "sel-line-end",
+		//"Ctrl+K": "sel-line-end",
 		"Ctrl+L": "sel-line",
 	}
 }
