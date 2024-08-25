@@ -46,6 +46,7 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 		case "down":
 			err = cmd.Down(args, w.CurrentTab)
 		case "esc":
+			err = cmd.Esc(args, w.CurrentTab)
 			w.Prompt.Clear()
 		case "find":
 			w.CurrentTab.HasFocus = false
