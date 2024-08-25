@@ -10,10 +10,11 @@ import (
 	"os"
 )
 
-func Empty(config *cfg.Config, colors *cfg.Colorscheme) *Tab {
+func Empty(config *cfg.Config, colors *cfg.Colorscheme, keys *cfg.Keybindings) *Tab {
 	t := &Tab{
 		Config:     config,
 		Colors:     colors,
+		Keys:       keys,
 		Name:       "No Name",
 		Path:       "",
 		Newline:    "\n",
@@ -35,15 +36,17 @@ func Empty(config *cfg.Config, colors *cfg.Colorscheme) *Tab {
 func Open(
 	config *cfg.Config,
 	colors *cfg.Colorscheme,
+	keys *cfg.Keybindings,
 	path string,
 ) *Tab {
 	if path == "" {
-		return Empty(config, colors)
+		return Empty(config, colors, keys)
 	}
 
 	t := &Tab{
 		Config:     config,
 		Colors:     colors,
+		Keys:       keys,
 		Name:       "",
 		Path:       path,
 		Newline:    "\n",
@@ -77,12 +80,14 @@ func Open(
 func FromString(
 	config *cfg.Config,
 	colors *cfg.Colorscheme,
+	keys *cfg.Keybindings,
 	str string,
 	name string,
 ) *Tab {
 	t := &Tab{
 		Config:     config,
 		Colors:     colors,
+		Keys:       keys,
 		Name:       name,
 		Path:       "",
 		Newline:    "\n",

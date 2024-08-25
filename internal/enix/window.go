@@ -14,9 +14,10 @@ import (
 )
 
 type Window struct {
-	Config *cfg.Config
-	Colors *cfg.Colorscheme
-	Keys   *cfg.Keybindings
+	Config     *cfg.Config
+	Colors     *cfg.Colorscheme
+	Keys       *cfg.Keybindings
+	InsertKeys *cfg.Keybindings // Insert mode keybindings
 
 	Screen tcell.Screen
 	Width  int
@@ -36,6 +37,11 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 	case *tcell.EventResize:
 		w.Resize()
 	case *tcell.EventKey:
+		if w.CurrentTab.InInsertMode {
+			w.CurrentTab.RxEventKey(ev)
+			return w
+		}
+
 		name, args := w.Keys.ToCmd(ev)
 
 		switch name {
@@ -56,6 +62,8 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 			w.CurrentTab.HasFocus = false
 			w.Prompt.Activate("help ", "")
 			return w.Prompt
+		case "insert":
+			w.CurrentTab.InInsertMode = true
 		case "left":
 			err = cmd.Left(args, w.CurrentTab)
 		case "newline":
@@ -122,12 +130,12 @@ func (w *Window) Render() {
 }
 
 func (w *Window) OpenArgFiles() {
-	w.Tabs = tab.Open(w.Config, w.Colors, arg.Files[0])
+	w.Tabs = tab.Open(w.Config, w.Colors, w.InsertKeys, arg.Files[0])
 
 	prevT := w.Tabs
 
 	for i := 1; i < len(arg.Files); i++ {
-		t := tab.Open(w.Config, w.Colors, arg.Files[0])
+		t := tab.Open(w.Config, w.Colors, w.InsertKeys, arg.Files[0])
 		prevT.Next = t
 		t.Prev = prevT
 		prevT = t
@@ -141,6 +149,7 @@ func Start(
 	colors *cfg.Colorscheme,
 	keys *cfg.Keybindings,
 	promptKeys *cfg.Keybindings,
+	insertKeys *cfg.Keybindings,
 ) {
 	screen, err := tcell.NewScreen()
 	if err != nil {
@@ -168,12 +177,13 @@ func Start(
 	width, height := screen.Size()
 
 	w := Window{
-		Config: config,
-		Colors: colors,
-		Keys:   keys,
-		Screen: screen,
-		Width:  width,
-		Height: height - 1, // One line for prompt
+		Config:     config,
+		Colors:     colors,
+		Keys:       keys,
+		InsertKeys: insertKeys,
+		Screen:     screen,
+		Width:      width,
+		Height:     height - 1, // One line for prompt
 	}
 
 	p := Prompt{
@@ -202,7 +212,7 @@ func Start(
 	p.Window = &w
 
 	if len(arg.Files) == 0 {
-		w.Tabs = tab.FromString(config, colors, "", "No Name")
+		w.Tabs = tab.FromString(config, colors, insertKeys, "", "No Name")
 		w.CurrentTab = w.Tabs
 	} else {
 		w.OpenArgFiles()

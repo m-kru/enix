@@ -67,6 +67,7 @@ func KeybindingsDefault() Keybindings {
 		"Esc":     "esc",
 		"Rune[c]": "copy",
 		"Rune[f]": "find",
+		"Rune[i]": "insert",
 		//"Rune[h]": "help",
 		"Rune[q]": "quit",
 		// "Ctrl+U":     "undo", Alt+U
@@ -85,6 +86,20 @@ func PromptKeybindingsDefault() Keybindings {
 	return map[string]string{
 		"Left":       "left",
 		"Right":      "right",
+		"Ctrl+Left":  "word-start",
+		"Ctrl+Right": "word-end",
+		"Ctrl+A":     "line-start",
+		"Backspace":  "backspace",
+		"Backspace2": "backspace",
+		"Delete":     "del",
+		"Enter":      "enter",
+		"Esc":        "esc",
+	}
+}
+
+// InsertKeybindingsDefault returns default keybindings for tab insert mode.
+func InsertKeybindingsDefault() Keybindings {
+	return map[string]string{
 		"Ctrl+Left":  "word-start",
 		"Ctrl+Right": "word-end",
 		"Ctrl+A":     "line-start",

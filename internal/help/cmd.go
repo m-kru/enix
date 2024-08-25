@@ -104,7 +104,7 @@ to be the current tab.`,
 
 	"dump-colors": `dump-colors # Dumps colorscheme configuration to JSON format.`,
 
-	"insert": `insert # Enters insert mode.`,
+	"insert": `insert # Enters tab insert mode.`,
 
 	"esc": `esc # Escapes the current context.
 The actual action depends on the context. For example, if the focues is on the

@@ -34,6 +34,11 @@ func (t *Tab) RenderStatusLine(frame frame.Frame) {
 
 	// Render extra status information
 	b := strings.Builder{}
+
+	if t.InInsertMode {
+		b.WriteString("insert ")
+	}
+
 	if t.Cursors != nil {
 		b.WriteString(
 			fmt.Sprintf("%d:%d | ", t.Cursors.Line.Num(), t.Cursors.BufIdx+1),
