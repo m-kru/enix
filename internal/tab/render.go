@@ -53,7 +53,11 @@ func (t *Tab) RenderStatusLine(frame frame.Frame) {
 
 	startIdx := frame.Width - len(statusStr)
 	for i, r := range statusStr {
-		frame.SetContent(startIdx+i, 0, r, t.Colors.StatusLine)
+		style := t.Colors.StatusLine
+		if t.InInsertMode && i < 6 {
+			style = t.Colors.InsertMark
+		}
+		frame.SetContent(startIdx+i, 0, r, style)
 	}
 }
 
