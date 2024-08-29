@@ -1,5 +1,7 @@
 package cursor
 
+import "unicode"
+
 func (c *Cursor) Down() {
 	if c.Line.Next == nil {
 		return
@@ -114,5 +116,15 @@ func (c *Cursor) WordEnd() {
 }
 
 func (c *Cursor) LineStart() {
+	for i, r := range c.Line.Buf {
+		if !unicode.IsSpace(r) {
+			if c.BufIdx == i {
+				c.BufIdx = 0
+			} else {
+				c.BufIdx = i
+			}
+			return
+		}
+	}
 	c.BufIdx = 0
 }

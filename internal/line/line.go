@@ -9,15 +9,15 @@ import (
 )
 
 type Line struct {
-	buf []rune
+	Buf []rune
 
 	Prev *Line
 	Next *Line
 }
 
-func (l *Line) Len() int          { return len(l.buf) }
-func (l *Line) String() string    { return string(l.buf) }
-func (l *Line) Rune(idx int) rune { return l.buf[idx] }
+func (l *Line) Len() int          { return len(l.Buf) }
+func (l *Line) String() string    { return string(l.Buf) }
+func (l *Line) Rune(idx int) rune { return l.Buf[idx] }
 
 // Num returns line number in the line list.
 func (l *Line) Num() int {
@@ -38,7 +38,7 @@ func (l *Line) LineNum() int {
 
 func (l *Line) Column() int {
 	// TODO: Handle tabs.
-	return len(l.buf)
+	return len(l.Buf)
 }
 
 // Get returns nth line.
@@ -74,12 +74,12 @@ func (l *Line) Last() *Line {
 
 // ColumnIdx returns first column index for provided rune index.
 func (l *Line) ColumnIdx(runeIdx int, tabWidth int) int {
-	if runeIdx > len(l.buf) {
-		panic(fmt.Sprintf("rune idx (%d) > len(l.buf) (%d)", runeIdx, len(l.buf)))
+	if runeIdx > len(l.Buf) {
+		panic(fmt.Sprintf("rune idx (%d) > len(l.Buf) (%d)", runeIdx, len(l.Buf)))
 	}
 
 	col := 0
-	for i, r := range l.buf {
+	for i, r := range l.Buf {
 		if i == runeIdx {
 			col += 1
 			break
@@ -92,7 +92,7 @@ func (l *Line) ColumnIdx(runeIdx int, tabWidth int) int {
 		}
 	}
 
-	if runeIdx == len(l.buf) {
+	if runeIdx == len(l.Buf) {
 		col++
 	}
 
@@ -108,7 +108,7 @@ func (l *Line) RuneIdx(col int, tabWidth int) (int, int, bool) {
 	}
 
 	c := 1
-	for i, r := range l.buf {
+	for i, r := range l.Buf {
 		rw := runewidth.RuneWidth(r)
 		if r == '\t' {
 			if c == col {
@@ -161,14 +161,14 @@ func (l *Line) WordStart(idx int) (int, bool) {
 	for {
 		idx--
 		if idx == 0 {
-			if util.IsWordRune(l.buf[idx]) {
+			if util.IsWordRune(l.Buf[idx]) {
 				return idx, true
 			} else {
 				break
 			}
 		}
 
-		if util.IsWordRune(l.buf[idx]) && !util.IsWordRune(l.buf[idx-1]) {
+		if util.IsWordRune(l.Buf[idx]) && !util.IsWordRune(l.Buf[idx-1]) {
 			return idx, true
 		}
 	}
@@ -185,14 +185,14 @@ func (l *Line) WordEnd(idx int) (int, bool) {
 	for {
 		idx++
 		if idx == l.Len()-1 {
-			if util.IsWordRune(l.buf[idx]) {
+			if util.IsWordRune(l.Buf[idx]) {
 				return idx, true
 			} else {
 				break
 			}
 		}
 
-		if util.IsWordRune(l.buf[idx]) && !util.IsWordRune(l.buf[idx+1]) {
+		if util.IsWordRune(l.Buf[idx]) && !util.IsWordRune(l.Buf[idx+1]) {
 			return idx, true
 		}
 	}
@@ -201,16 +201,16 @@ func (l *Line) WordEnd(idx int) (int, bool) {
 }
 
 func (l *Line) Append(s string) {
-	newLen := len(l.buf) + len(s)
-	if newLen > cap(l.buf) {
+	newLen := len(l.Buf) + len(s)
+	if newLen > cap(l.Buf) {
 		newBuf := make([]rune, 0, util.NextPowerOfTwo(newLen))
-		newBuf = append(newBuf, l.buf...)
-		l.buf = newBuf
+		newBuf = append(newBuf, l.Buf...)
+		l.Buf = newBuf
 	}
 
-	l.buf = append(l.buf, []rune(s)...)
+	l.Buf = append(l.Buf, []rune(s)...)
 }
 
 func (l *Line) Delete(idx int, size int) {
-	l.buf = append(l.buf[0:idx], l.buf[idx+1:len(l.buf)]...)
+	l.Buf = append(l.Buf[0:idx], l.Buf[idx+1:len(l.Buf)]...)
 }

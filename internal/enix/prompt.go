@@ -327,6 +327,9 @@ func (p *Prompt) Exec() EventReceiver {
 	case "left":
 		err = cmd.Left(args, p.Window.CurrentTab)
 		ret = p.Window
+	case "line-start":
+		err = cmd.LineStart(args, p.Window.CurrentTab)
+		ret = p.Window
 	case "right":
 		err = cmd.Right(args, p.Window.CurrentTab)
 		ret = p.Window
@@ -344,6 +347,12 @@ func (p *Prompt) Exec() EventReceiver {
 		ret = p.Window
 	case "up":
 		err = cmd.Up(args, p.Window.CurrentTab)
+		ret = p.Window
+	case "word-start":
+		err = cmd.WordStart(args, p.Window.CurrentTab)
+		ret = p.Window
+	case "word-end":
+		err = cmd.WordEnd(args, p.Window.CurrentTab)
 		ret = p.Window
 	default:
 		p.ShowError(

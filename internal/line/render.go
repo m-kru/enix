@@ -43,7 +43,7 @@ func (l *Line) Render(cfg *cfg.Config, colors *cfg.Colorscheme, frame frame.Fram
 
 	// Handle first column in a little bit different way.
 	// The column might start at the second column of a rune.
-	r = l.buf[runeIdx]
+	r = l.Buf[runeIdx]
 	if r == '\t' {
 		setTab(runeSubcol)
 	} else if runeSubcol > 0 {
@@ -65,7 +65,7 @@ func (l *Line) Render(cfg *cfg.Config, colors *cfg.Colorscheme, frame frame.Fram
 			break
 		}
 
-		r = l.buf[runeIdx]
+		r = l.Buf[runeIdx]
 
 		if r == '\t' {
 			setTab(0)

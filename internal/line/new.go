@@ -16,7 +16,7 @@ func bufCap(str string) int {
 }
 
 func Empty() *Line {
-	return &Line{buf: make([]rune, 0, 64), Prev: nil, Next: nil}
+	return &Line{Buf: make([]rune, 0, 64), Prev: nil, Next: nil}
 }
 
 func FromString(str string) *Line {
@@ -32,11 +32,11 @@ func FromString(str string) *Line {
 	for i, r := range str {
 		if r == '\n' {
 			if first == nil {
-				first = &Line{buf: make([]rune, 0, bufCap(str[startIdx:i]))}
+				first = &Line{Buf: make([]rune, 0, bufCap(str[startIdx:i]))}
 				first.Insert(str[startIdx:i], 0)
 				prev = first
 			} else {
-				next = &Line{buf: make([]rune, 0, bufCap(str[startIdx:i])), Prev: prev}
+				next = &Line{Buf: make([]rune, 0, bufCap(str[startIdx:i])), Prev: prev}
 				next.Insert(str[startIdx:i], 0)
 				prev.Next = next
 				prev = next
@@ -45,10 +45,10 @@ func FromString(str string) *Line {
 		} else if i == len(str)-utf8.RuneLen(r) {
 			runeLen := utf8.RuneLen(r)
 			if first == nil {
-				first = &Line{buf: make([]rune, 0, bufCap(str[startIdx:i+runeLen]))}
+				first = &Line{Buf: make([]rune, 0, bufCap(str[startIdx:i+runeLen]))}
 				first.Insert(str[startIdx:i+runeLen], 0)
 			} else {
-				next = &Line{buf: make([]rune, 0, bufCap(str[startIdx:i+runeLen])), Prev: prev}
+				next = &Line{Buf: make([]rune, 0, bufCap(str[startIdx:i+runeLen])), Prev: prev}
 				next.Insert(str[startIdx:i+runeLen], 0)
 				prev.Next = next
 			}
@@ -58,7 +58,7 @@ func FromString(str string) *Line {
 
 	// Add one extra line if string ends with newline
 	if str[len(str)-1] == '\n' {
-		next = &Line{buf: make([]rune, 0, bufCap("")), Prev: prev}
+		next = &Line{Buf: make([]rune, 0, bufCap("")), Prev: prev}
 		prev.Next = next
 	}
 

@@ -384,3 +384,32 @@ func spawnUp(tab *tab.Tab) error {
 
 	return nil
 }
+
+func LineStart(args string, tab *tab.Tab) error {
+	sstr := strings.Fields(args)
+	if len(sstr) > 0 {
+		return fmt.Errorf(
+			"line-start: expected 0 args, provided %d", len(sstr),
+		)
+	}
+
+	return lineStart(tab)
+}
+
+func lineStart(tab *tab.Tab) error {
+	c := tab.Cursors
+
+	for {
+		if c == nil {
+			break
+		}
+
+		c.LineStart()
+
+		c = c.Next
+	}
+
+	tab.Cursors.Prune()
+
+	return nil
+}

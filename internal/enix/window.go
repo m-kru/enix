@@ -66,6 +66,8 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 			w.CurrentTab.InInsertMode = true
 		case "left":
 			err = cmd.Left(args, w.CurrentTab)
+		case "line-start":
+			err = cmd.LineStart(args, w.CurrentTab)
 		case "newline":
 			err = cmd.Newline(args, w.CurrentTab)
 		case "quit":
