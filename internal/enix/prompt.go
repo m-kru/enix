@@ -327,6 +327,9 @@ func (p *Prompt) Exec() EventReceiver {
 	case "left":
 		err = cmd.Left(args, p.Window.CurrentTab)
 		ret = p.Window
+	case "line-end":
+		err = cmd.LineEnd(args, p.Window.CurrentTab)
+		ret = p.Window
 	case "line-start":
 		err = cmd.LineStart(args, p.Window.CurrentTab)
 		ret = p.Window

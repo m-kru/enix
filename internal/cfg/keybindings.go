@@ -49,6 +49,7 @@ func KeybindingsDefault() Keybindings {
 		"Ctrl+Left":  "word-start",
 		"Ctrl+Right": "word-end",
 		"Rune[a]":    "line-start",
+		"Rune[$]":    "line-end",
 		// Deletion
 		"Backspace":  "backspace",
 		"Backspace2": "backspace",
@@ -76,7 +77,6 @@ func KeybindingsDefault() Keybindings {
 		"Rune[ ]": "space",
 		"Tab":     "tab",
 		// Selection
-		//"Ctrl+K": "sel-line-end",
 		"Ctrl+L": "sel-line",
 	}
 }

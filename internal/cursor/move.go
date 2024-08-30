@@ -128,3 +128,18 @@ func (c *Cursor) LineStart() {
 	}
 	c.BufIdx = 0
 }
+
+func (c *Cursor) LineEnd() {
+	for i := c.Line.Len() - 1; i > 0; i-- {
+		r := c.Line.Buf[i]
+		if !unicode.IsSpace(r) {
+			if c.BufIdx == i {
+				c.BufIdx = c.Line.Len() - 1
+			} else {
+				c.BufIdx = i
+			}
+			return
+		}
+	}
+	c.BufIdx = c.Line.Len()
+}
