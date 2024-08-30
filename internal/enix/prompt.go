@@ -291,12 +291,10 @@ func (p *Prompt) Exec() EventReceiver {
 	name, args, _ := strings.Cut(strings.TrimSpace(p.Line.String()), " ")
 
 	var err error
-	var ret EventReceiver = p
 
 	// If the first word is a number, then treat it as a goto command.
 	if unicode.IsDigit([]rune(name)[0]) {
 		err = cmd.Goto(p.Line.String(), p.Window.CurrentTab)
-		ret = p.Window
 		goto errorCheck
 	}
 
@@ -317,25 +315,18 @@ func (p *Prompt) Exec() EventReceiver {
 		return p.Window
 	case "down":
 		err = cmd.Down(args, p.Window.CurrentTab)
-		ret = p.Window
 	case "end":
 		err = cmd.End(args, p.Window.CurrentTab)
-		ret = p.Window
 	case "goto":
 		err = cmd.Goto(args, p.Window.CurrentTab)
-		ret = p.Window
 	case "left":
 		err = cmd.Left(args, p.Window.CurrentTab)
-		ret = p.Window
 	case "line-end":
 		err = cmd.LineEnd(args, p.Window.CurrentTab)
-		ret = p.Window
 	case "line-start":
 		err = cmd.LineStart(args, p.Window.CurrentTab)
-		ret = p.Window
 	case "right":
 		err = cmd.Right(args, p.Window.CurrentTab)
-		ret = p.Window
 	case "quit":
 		return nil
 	case "space":
@@ -347,16 +338,12 @@ func (p *Prompt) Exec() EventReceiver {
 		return p.Window
 	case "tab-width":
 		err = cmd.CfgTabWidth(args, p.Config)
-		ret = p.Window
 	case "up":
 		err = cmd.Up(args, p.Window.CurrentTab)
-		ret = p.Window
 	case "prev-word-start":
 		err = cmd.PrevWordStart(args, p.Window.CurrentTab)
-		ret = p.Window
 	case "word-end":
 		err = cmd.WordEnd(args, p.Window.CurrentTab)
-		ret = p.Window
 	default:
 		p.ShowError(
 			fmt.Sprintf(
@@ -375,9 +362,7 @@ errorCheck:
 
 	p.Clear()
 
-	if ret == p.Window {
-		p.Window.Render()
-	}
+	p.Window.Render()
 
-	return ret
+	return p.Window
 }
