@@ -38,18 +38,17 @@ func KeybindingsDefault() Keybindings {
 		// Cmd
 		"Rune[:]": "cmd",
 		// Cursor
-		"Rune[b]":    "prev-word-start",
-		"Rune[e]":    "word-end",
-		"Rune[j]":    "down",
-		"Rune[k]":    "up",
-		"Rune[h]":    "left",
-		"Rune[l]":    "right",
-		"Ctrl+J":     "spawn-down",
-		"Ctrl+K":     "spawn-up",
-		"Ctrl+Left":  "prev-word-start",
-		"Ctrl+Right": "word-end",
-		"Rune[a]":    "line-start",
-		"Rune[$]":    "line-end",
+		"Rune[b]": "prev-word-start",
+		"Rune[e]": "word-end",
+		"Rune[w]": "word-start",
+		"Rune[j]": "down",
+		"Rune[k]": "up",
+		"Rune[h]": "left",
+		"Rune[l]": "right",
+		"Ctrl+J":  "spawn-down",
+		"Ctrl+K":  "spawn-up",
+		"Rune[a]": "line-start",
+		"Rune[$]": "line-end",
 		// Deletion
 		"Backspace":  "backspace",
 		"Backspace2": "backspace",
@@ -73,7 +72,7 @@ func KeybindingsDefault() Keybindings {
 		"Rune[q]": "quit",
 		// "Ctrl+U":     "undo", Alt+U
 		"Rune[v]": "paste",
-		"Rune[w]": "sel-word",
+		"Rune[W]": "sel-word",
 		"Rune[ ]": "space",
 		"Tab":     "tab",
 		// Selection

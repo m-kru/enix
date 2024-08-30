@@ -31,6 +31,33 @@ func TestFileNameToType(t *testing.T) {
 	}
 }
 
+func TestPrevWordStart(t *testing.T) {
+	var tests = []struct {
+		line     []rune
+		startIdx int
+		wantIdx  int
+		wantOk   bool
+	}{
+		{[]rune("foo"), 0, 0, false},
+		{[]rune("    "), 3, 0, false},
+		{[]rune("Hello World!"), 6, 0, true},
+		{[]rune("a-b"), 2, 0, true},
+		{[]rune("foo + bar"), 6, 0, true},
+		{[]rune("abc def  agh"), 9, 4, true},
+		{[]rune("aa bb_cc dd"), 9, 3, true},
+	}
+
+	for _, test := range tests {
+		idx, ok := PrevWordStart(test.line, test.startIdx)
+		if idx != test.wantIdx || ok != test.wantOk {
+			t.Fatalf(
+				"str: \"%s\", startIdx: %d, ok: %t, want idx: %d, want ok: %t",
+				string(test.line), test.startIdx, ok, test.wantIdx, test.wantOk,
+			)
+		}
+	}
+}
+
 func TestWordEnd(t *testing.T) {
 	var tests = []struct {
 		line     []rune
@@ -55,24 +82,21 @@ func TestWordEnd(t *testing.T) {
 	}
 }
 
-func TestPrevWordStart(t *testing.T) {
+func TestWordStart(t *testing.T) {
 	var tests = []struct {
 		line     []rune
 		startIdx int
 		wantIdx  int
 		wantOk   bool
 	}{
-		{[]rune("foo"), 0, 0, false},
-		{[]rune("    "), 3, 0, false},
-		{[]rune("Hello World!"), 6, 0, true},
-		{[]rune("a-b"), 2, 0, true},
-		{[]rune("foo + bar"), 6, 0, true},
-		{[]rune("abc def  agh"), 9, 4, true},
-		{[]rune("aa bb_cc dd"), 9, 3, true},
+		{[]rune("    "), 1, 0, false},
+		{[]rune("  abc"), 0, 2, true},
+		{[]rune("  abc def"), 2, 6, true},
+		{[]rune("  def12"), 4, 0, false},
 	}
 
 	for _, test := range tests {
-		idx, ok := PrevWordStart(test.line, test.startIdx)
+		idx, ok := WordStart(test.line, test.startIdx)
 		if idx != test.wantIdx || ok != test.wantOk {
 			t.Fatalf(
 				"str: \"%s\", startIdx: %d, ok: %t, want idx: %d, want ok: %t",

@@ -344,6 +344,8 @@ func (p *Prompt) Exec() EventReceiver {
 		err = cmd.PrevWordStart(args, p.Window.CurrentTab)
 	case "word-end":
 		err = cmd.WordEnd(args, p.Window.CurrentTab)
+	case "word-start":
+		err = cmd.WordStart(args, p.Window.CurrentTab)
 	default:
 		p.ShowError(
 			fmt.Sprintf(

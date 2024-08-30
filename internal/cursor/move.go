@@ -118,6 +118,30 @@ func (c *Cursor) WordEnd() {
 	}
 }
 
+func (c *Cursor) WordStart() {
+	if idx, ok := util.WordStart(c.Line.Buf, c.BufIdx); ok {
+		c.BufIdx = idx
+		c.Idx = c.BufIdx
+		return
+	}
+
+	line := c.Line.Next
+	for {
+		if line == nil {
+			return
+		}
+
+		if idx, ok := util.WordStart(line.Buf, 0); ok {
+			c.Line = line
+			c.BufIdx = idx
+			c.Idx = c.BufIdx
+			return
+		}
+
+		line = line.Next
+	}
+}
+
 func (c *Cursor) LineStart() {
 	for i, r := range c.Line.Buf {
 		if !unicode.IsSpace(r) {

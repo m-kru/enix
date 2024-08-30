@@ -235,6 +235,35 @@ func goTo(line, col int, tab *tab.Tab) {
 	tab.Cursors = &cursor.Cursor{Config: tab.Config, Line: l, BufIdx: col - 1, Idx: col - 1}
 }
 
+func PrevWordStart(args string, tab *tab.Tab) error {
+	sstr := strings.Fields(args)
+	if len(sstr) > 0 {
+		return fmt.Errorf(
+			"prev-word-start: expected 0 args, provided %d", len(sstr),
+		)
+	}
+
+	return prevWordStart(tab)
+}
+
+func prevWordStart(tab *tab.Tab) error {
+	c := tab.Cursors
+
+	for {
+		if c == nil {
+			break
+		}
+
+		c.PrevWordStart()
+
+		c = c.Next
+	}
+
+	tab.Cursors.Prune()
+
+	return nil
+}
+
 func WordEnd(args string, tab *tab.Tab) error {
 	sstr := strings.Fields(args)
 	if len(sstr) > 0 {
@@ -264,18 +293,18 @@ func wordEnd(tab *tab.Tab) error {
 	return nil
 }
 
-func PrevWordStart(args string, tab *tab.Tab) error {
+func WordStart(args string, tab *tab.Tab) error {
 	sstr := strings.Fields(args)
 	if len(sstr) > 0 {
 		return fmt.Errorf(
-			"prev-word-start: expected 0 args, provided %d", len(sstr),
+			"word-start: expected 0 args, provided %d", len(sstr),
 		)
 	}
 
-	return prevWordStart(tab)
+	return wordStart(tab)
 }
 
-func prevWordStart(tab *tab.Tab) error {
+func wordStart(tab *tab.Tab) error {
 	c := tab.Cursors
 
 	for {
@@ -283,7 +312,7 @@ func prevWordStart(tab *tab.Tab) error {
 			break
 		}
 
-		c.PrevWordStart()
+		c.WordStart()
 
 		c = c.Next
 	}

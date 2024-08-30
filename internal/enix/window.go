@@ -88,6 +88,8 @@ func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
 			err = cmd.Up(args, w.CurrentTab)
 		case "word-end":
 			err = cmd.WordEnd(args, w.CurrentTab)
+		case "word-start":
+			err = cmd.WordStart(args, w.CurrentTab)
 		case "prev-word-start":
 			err = cmd.PrevWordStart(args, w.CurrentTab)
 		}

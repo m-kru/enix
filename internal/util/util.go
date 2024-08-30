@@ -114,3 +114,23 @@ func WordEnd(line []rune, idx int) (int, bool) {
 
 	return 0, false
 }
+
+// WordStart finds next word start index.
+func WordStart(line []rune, idx int) (int, bool) {
+	if idx >= len(line)-1 {
+		return 0, false
+	}
+
+	for {
+		idx++
+		if IsWordRune(line[idx]) && !IsWordRune(line[idx-1]) {
+			return idx, true
+		}
+
+		if idx == len(line)-1 {
+			break
+		}
+	}
+
+	return 0, false
+}
