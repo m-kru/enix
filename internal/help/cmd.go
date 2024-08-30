@@ -26,10 +26,11 @@ If cursor is in the fisrt line, nothing happens.`,
 	"end": `end # Moves cursor to the last line.
 If there are multiple cursors, they are first reduced to a single cursor.`,
 
-	"word-start": `word-start # Moves cursor to the word start.`,
-	"word-end":   `word-end # Moves cursor to the word end.`,
-	"line-start": `line-start # Moves cursor to the line start.`,
-	"line-end":   `line-end # Moves cursor to the line end.`,
+	"word-start":      `word-start # Moves cursor to the next word start.`,
+	"prev-word-start": `word-start # Moves cursor to the previous word start.`,
+	"word-end":        `word-end # Moves cursor to the word end.`,
+	"line-start":      `line-start # Moves cursor to the line start.`,
+	"line-end":        `line-end # Moves cursor to the line end.`,
 
 	"spawn-down": `spawn-down # Spawns a new cursor in the below line.`,
 

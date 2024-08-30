@@ -38,7 +38,7 @@ func KeybindingsDefault() Keybindings {
 		// Cmd
 		"Rune[:]": "cmd",
 		// Cursor
-		"Rune[b]":    "word-start",
+		"Rune[b]":    "prev-word-start",
 		"Rune[e]":    "word-end",
 		"Rune[j]":    "down",
 		"Rune[k]":    "up",
@@ -46,7 +46,7 @@ func KeybindingsDefault() Keybindings {
 		"Rune[l]":    "right",
 		"Ctrl+J":     "spawn-down",
 		"Ctrl+K":     "spawn-up",
-		"Ctrl+Left":  "word-start",
+		"Ctrl+Left":  "prev-word-start",
 		"Ctrl+Right": "word-end",
 		"Rune[a]":    "line-start",
 		"Rune[$]":    "line-end",
@@ -86,7 +86,7 @@ func PromptKeybindingsDefault() Keybindings {
 	return map[string]string{
 		"Left":       "left",
 		"Right":      "right",
-		"Ctrl+Left":  "word-start",
+		"Ctrl+Left":  "prev-word-start",
 		"Ctrl+Right": "word-end",
 		"Ctrl+A":     "line-start",
 		"Backspace":  "backspace",
@@ -100,7 +100,7 @@ func PromptKeybindingsDefault() Keybindings {
 // InsertKeybindingsDefault returns default keybindings for tab insert mode.
 func InsertKeybindingsDefault() Keybindings {
 	return map[string]string{
-		"Ctrl+Left":  "word-start",
+		"Ctrl+Left":  "prev-word-start",
 		"Ctrl+Right": "word-end",
 		"Ctrl+A":     "line-start",
 		"Backspace":  "backspace",

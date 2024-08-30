@@ -152,8 +152,8 @@ func (l *Line) Count() int {
 	return cnt
 }
 
-// WordStart finds previous word start index.
-func (l *Line) WordStart(idx int) (int, bool) {
+// PrevWordStart finds previous word start index.
+func (l *Line) PrevWordStart(idx int) (int, bool) {
 	if idx == 0 {
 		return 0, false
 	}

@@ -188,14 +188,14 @@ func (p *Prompt) Right() {
 	}
 }
 
-func (p *Prompt) WordStart() {
+func (p *Prompt) PrevWordStart() {
 	switch p.State {
 	case InShadow:
 		p.ShadowText = ""
 		p.State = InText
-		p.Cursor.WordStart()
+		p.Cursor.PrevWordStart()
 	case InText:
-		p.Cursor.WordStart()
+		p.Cursor.PrevWordStart()
 	}
 }
 
@@ -269,8 +269,8 @@ func (p *Prompt) RxEvent(ev tcell.Event) EventReceiver {
 			p.LineStart()
 		case "right":
 			p.Right()
-		case "word-start":
-			p.WordStart()
+		case "prev-word-start":
+			p.PrevWordStart()
 		case "word-end":
 			p.WordEnd()
 		default:
@@ -351,8 +351,8 @@ func (p *Prompt) Exec() EventReceiver {
 	case "up":
 		err = cmd.Up(args, p.Window.CurrentTab)
 		ret = p.Window
-	case "word-start":
-		err = cmd.WordStart(args, p.Window.CurrentTab)
+	case "prev-word-start":
+		err = cmd.PrevWordStart(args, p.Window.CurrentTab)
 		ret = p.Window
 	case "word-end":
 		err = cmd.WordEnd(args, p.Window.CurrentTab)

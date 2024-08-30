@@ -68,8 +68,8 @@ func (c *Cursor) Up() {
 	c.Line = c.Line.Prev
 }
 
-func (c *Cursor) WordStart() {
-	if idx, ok := c.Line.WordStart(c.BufIdx); ok {
+func (c *Cursor) PrevWordStart() {
+	if idx, ok := c.Line.PrevWordStart(c.BufIdx); ok {
 		c.BufIdx = idx
 		return
 	}
@@ -80,7 +80,7 @@ func (c *Cursor) WordStart() {
 			return
 		}
 
-		if idx, ok := line.WordStart(line.Len()); ok {
+		if idx, ok := line.PrevWordStart(line.Len()); ok {
 			c.Line = line
 			c.BufIdx = idx + 1
 			c.Idx = c.BufIdx

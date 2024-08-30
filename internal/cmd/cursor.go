@@ -264,18 +264,18 @@ func wordEnd(tab *tab.Tab) error {
 	return nil
 }
 
-func WordStart(args string, tab *tab.Tab) error {
+func PrevWordStart(args string, tab *tab.Tab) error {
 	sstr := strings.Fields(args)
 	if len(sstr) > 0 {
 		return fmt.Errorf(
-			"word-start: expected 0 args, provided %d", len(sstr),
+			"prev-word-start: expected 0 args, provided %d", len(sstr),
 		)
 	}
 
-	return wordStart(tab)
+	return prevWordStart(tab)
 }
 
-func wordStart(tab *tab.Tab) error {
+func prevWordStart(tab *tab.Tab) error {
 	c := tab.Cursors
 
 	for {
@@ -283,7 +283,7 @@ func wordStart(tab *tab.Tab) error {
 			break
 		}
 
-		c.WordStart()
+		c.PrevWordStart()
 
 		c = c.Next
 	}

@@ -133,7 +133,7 @@ func TestWordEnd(t *testing.T) {
 	}
 }
 
-func TestWordStart(t *testing.T) {
+func TestPrevWordStart(t *testing.T) {
 	var tests = []struct {
 		line     *Line
 		startIdx int
@@ -150,7 +150,7 @@ func TestWordStart(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		idx, ok := test.line.WordStart(test.startIdx)
+		idx, ok := test.line.PrevWordStart(test.startIdx)
 		if idx != test.wantIdx || ok != test.wantOk {
 			t.Fatalf(
 				"str: \"%s\", startIdx: %d, ok: %t, want idx: %d, want ok: %t",
