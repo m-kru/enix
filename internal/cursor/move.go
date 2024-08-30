@@ -123,10 +123,12 @@ func (c *Cursor) LineStart() {
 			} else {
 				c.BufIdx = i
 			}
+			c.Idx = c.BufIdx
 			return
 		}
 	}
 	c.BufIdx = 0
+	c.Idx = c.BufIdx
 }
 
 func (c *Cursor) LineEnd() {
@@ -138,8 +140,10 @@ func (c *Cursor) LineEnd() {
 			} else {
 				c.BufIdx = i
 			}
+			c.Idx = c.BufIdx
 			return
 		}
 	}
 	c.BufIdx = c.Line.Len()
+	c.Idx = c.BufIdx
 }
