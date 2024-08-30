@@ -66,3 +66,51 @@ func IsWordRune(r rune) bool {
 func IntWidth(i int) int {
 	return len(fmt.Sprintf("%d", i))
 }
+
+// PrevWordStart finds previous word start index.
+func PrevWordStart(line []rune, idx int) (int, bool) {
+	if idx == 0 {
+		return 0, false
+	}
+
+	for {
+		idx--
+		if idx == 0 {
+			if IsWordRune(line[idx]) {
+				return idx, true
+			} else {
+				break
+			}
+		}
+
+		if IsWordRune(line[idx]) && !IsWordRune(line[idx-1]) {
+			return idx, true
+		}
+	}
+
+	return 0, false
+}
+
+// WordEnd finds next word end index.
+func WordEnd(line []rune, idx int) (int, bool) {
+	if idx >= len(line)-1 {
+		return 0, false
+	}
+
+	for {
+		idx++
+		if idx == len(line)-1 {
+			if IsWordRune(line[idx]) {
+				return idx, true
+			} else {
+				break
+			}
+		}
+
+		if IsWordRune(line[idx]) && !IsWordRune(line[idx+1]) {
+			return idx, true
+		}
+	}
+
+	return 0, false
+}

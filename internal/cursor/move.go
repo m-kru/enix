@@ -1,6 +1,9 @@
 package cursor
 
-import "unicode"
+import (
+	"github.com/m-kru/enix/internal/util"
+	"unicode"
+)
 
 func (c *Cursor) Down() {
 	if c.Line.Next == nil {
@@ -69,7 +72,7 @@ func (c *Cursor) Up() {
 }
 
 func (c *Cursor) PrevWordStart() {
-	if idx, ok := c.Line.PrevWordStart(c.BufIdx); ok {
+	if idx, ok := util.PrevWordStart(c.Line.Buf, c.BufIdx); ok {
 		c.BufIdx = idx
 		return
 	}
@@ -80,7 +83,7 @@ func (c *Cursor) PrevWordStart() {
 			return
 		}
 
-		if idx, ok := line.PrevWordStart(line.Len()); ok {
+		if idx, ok := util.PrevWordStart(line.Buf, line.Len()); ok {
 			c.Line = line
 			c.BufIdx = idx + 1
 			c.Idx = c.BufIdx
@@ -92,7 +95,7 @@ func (c *Cursor) PrevWordStart() {
 }
 
 func (c *Cursor) WordEnd() {
-	if idx, ok := c.Line.WordEnd(c.BufIdx); ok {
+	if idx, ok := util.WordEnd(c.Line.Buf, c.BufIdx); ok {
 		c.BufIdx = idx + 1 // + 1 as we have found word end index.
 		c.Idx = c.BufIdx
 		return
@@ -104,7 +107,7 @@ func (c *Cursor) WordEnd() {
 			return
 		}
 
-		if idx, ok := line.WordEnd(0); ok {
+		if idx, ok := util.WordEnd(line.Buf, 0); ok {
 			c.Line = line
 			c.BufIdx = idx + 1
 			c.Idx = c.BufIdx

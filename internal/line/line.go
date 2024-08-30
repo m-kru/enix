@@ -152,54 +152,6 @@ func (l *Line) Count() int {
 	return cnt
 }
 
-// PrevWordStart finds previous word start index.
-func (l *Line) PrevWordStart(idx int) (int, bool) {
-	if idx == 0 {
-		return 0, false
-	}
-
-	for {
-		idx--
-		if idx == 0 {
-			if util.IsWordRune(l.Buf[idx]) {
-				return idx, true
-			} else {
-				break
-			}
-		}
-
-		if util.IsWordRune(l.Buf[idx]) && !util.IsWordRune(l.Buf[idx-1]) {
-			return idx, true
-		}
-	}
-
-	return 0, false
-}
-
-// WordEnd finds next word end index.
-func (l *Line) WordEnd(idx int) (int, bool) {
-	if idx >= l.Len()-1 {
-		return 0, false
-	}
-
-	for {
-		idx++
-		if idx == l.Len()-1 {
-			if util.IsWordRune(l.Buf[idx]) {
-				return idx, true
-			} else {
-				break
-			}
-		}
-
-		if util.IsWordRune(l.Buf[idx]) && !util.IsWordRune(l.Buf[idx+1]) {
-			return idx, true
-		}
-	}
-
-	return 0, false
-}
-
 func (l *Line) Append(s string) {
 	newLen := len(l.Buf) + len(s)
 	if newLen > cap(l.Buf) {
