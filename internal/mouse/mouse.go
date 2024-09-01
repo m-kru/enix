@@ -10,10 +10,10 @@ import (
 type State int
 
 const (
-	Idle State = iota
-	PrimaryClick
-	DoublePrimaryClick
-	TriplePrimaryClick
+	idle State = iota
+	primaryClick
+	doublePrimaryClick
+	triplePrimaryClick
 )
 
 type Mouse struct {
@@ -28,7 +28,7 @@ func (m *Mouse) TimerFunc() {
 	defer m.mtx.Unlock()
 
 	switch m.state {
-	case PrimaryClick:
+	case primaryClick:
 		panic("unimplemented")
 	default:
 		panic("unimplemented")
@@ -40,9 +40,9 @@ func (m *Mouse) RxTcellEventMouse(ev *tcell.EventMouse) {
 	defer m.mtx.Unlock()
 
 	switch m.state {
-	case Idle:
+	case idle:
 		m.rxEventIdle(ev)
-	case PrimaryClick:
+	case primaryClick:
 		m.rxEventPrimaryClick(ev)
 	default:
 		panic("unimplemented")
@@ -54,7 +54,8 @@ func (m *Mouse) rxEventIdle(ev *tcell.EventMouse) {
 	case tcell.ButtonNone:
 		// Do nothing, just mouse movement.
 	case tcell.Button1:
-		m.state = PrimaryClick
+		m.state = primaryClick
+		m.PrevEvent = ev
 		time.AfterFunc(500*time.Millisecond, m.TimerFunc)
 	default:
 		// Do nothing, other mouse event
