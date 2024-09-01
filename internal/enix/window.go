@@ -231,19 +231,22 @@ func Start(
 	w.Render()
 
 	var tcellEvRcvr TcellEventReceiver = &w
+	tcellEventChan := make(chan tcell.Event)
+	go screen.ChannelEvents(tcellEventChan, nil)
 
 	for {
-		tcellEv := screen.PollEvent()
-
-		switch ev := tcellEv.(type) {
-		case *tcell.EventMouse:
-			w.Mouse.RxTcellEventMouse(ev)
-		default:
-			tcellEvRcvr = tcellEvRcvr.RxTcellEvent(tcellEv)
-			if tcellEvRcvr == &w {
-				w.CurrentTab.HasFocus = true
-			} else if tcellEvRcvr == nil {
-				return
+		select {
+		case tcellEv := <-tcellEventChan:
+			switch ev := tcellEv.(type) {
+			case *tcell.EventMouse:
+				w.Mouse.RxTcellEventMouse(ev)
+			default:
+				tcellEvRcvr = tcellEvRcvr.RxTcellEvent(tcellEv)
+				if tcellEvRcvr == &w {
+					w.CurrentTab.HasFocus = true
+				} else if tcellEvRcvr == nil {
+					return
+				}
 			}
 		}
 
