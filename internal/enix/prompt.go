@@ -222,7 +222,7 @@ func (p *Prompt) LineStart() {
 	}
 }
 
-func (p *Prompt) Enter() EventReceiver {
+func (p *Prompt) Enter() TcellEventReceiver {
 	if p.State == InShadow {
 		p.Line.Append(p.ShadowText)
 		p.ShadowText = ""
@@ -243,7 +243,7 @@ func (p *Prompt) HandleRune(r rune) {
 	}
 }
 
-func (p *Prompt) RxEvent(ev tcell.Event) EventReceiver {
+func (p *Prompt) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 	switch ev := ev.(type) {
 	case *tcell.EventResize:
 		p.Window.Resize()
@@ -287,7 +287,7 @@ func (p *Prompt) RxEvent(ev tcell.Event) EventReceiver {
 }
 
 // Exec executes command.
-func (p *Prompt) Exec() EventReceiver {
+func (p *Prompt) Exec() TcellEventReceiver {
 	name, args, _ := strings.Cut(strings.TrimSpace(p.Line.String()), " ")
 
 	var err error

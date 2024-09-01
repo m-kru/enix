@@ -2,6 +2,6 @@ package enix
 
 import "github.com/gdamore/tcell/v2"
 
-type EventReceiver interface {
-	RxEvent(ev tcell.Event) EventReceiver
+type TcellEventReceiver interface {
+	RxTcellEvent(ev tcell.Event) TcellEventReceiver
 }

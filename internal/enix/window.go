@@ -8,6 +8,7 @@ import (
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cmd"
 	"github.com/m-kru/enix/internal/frame"
+	"github.com/m-kru/enix/internal/mouse"
 	"github.com/m-kru/enix/internal/tab"
 
 	"github.com/gdamore/tcell/v2"
@@ -18,6 +19,8 @@ type Window struct {
 	Colors     *cfg.Colorscheme
 	Keys       *cfg.Keybindings
 	InsertKeys *cfg.Keybindings // Insert mode keybindings
+
+	Mouse mouse.Mouse
 
 	Screen tcell.Screen
 	Width  int
@@ -30,7 +33,7 @@ type Window struct {
 	Prompt *Prompt
 }
 
-func (w *Window) RxEvent(ev tcell.Event) EventReceiver {
+func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 	var err error
 
 	switch ev := ev.(type) {
@@ -168,6 +171,7 @@ func Start(
 	}
 
 	screen.Clear()
+	screen.EnableMouse()
 
 	// Catch panics in a defer, clean up, and re-raise them.
 	// Otherwise the application can  die without leaving any diagnostic trace.
@@ -226,15 +230,21 @@ func Start(
 
 	w.Render()
 
-	var evRcvr EventReceiver = &w
+	var tcellEvRcvr TcellEventReceiver = &w
 
 	for {
-		ev := screen.PollEvent()
-		evRcvr = evRcvr.RxEvent(ev)
-		if evRcvr == &w {
-			w.CurrentTab.HasFocus = true
-		} else if evRcvr == nil {
-			return
+		tcellEv := screen.PollEvent()
+
+		switch ev := tcellEv.(type) {
+		case *tcell.EventMouse:
+			w.Mouse.RxTcellEventMouse(ev)
+		default:
+			tcellEvRcvr = tcellEvRcvr.RxTcellEvent(tcellEv)
+			if tcellEvRcvr == &w {
+				w.CurrentTab.HasFocus = true
+			} else if tcellEvRcvr == nil {
+				return
+			}
 		}
 
 		w.Render()
