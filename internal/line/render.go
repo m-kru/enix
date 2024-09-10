@@ -77,6 +77,11 @@ func (l *Line) Render(cfg *cfg.Config, colors *cfg.Colorscheme, frame frame.Fram
 	}
 
 clear:
+	if l.Len() == 0 && l.Next != nil {
+		frame.SetContent(0, 0, cfg.NewlineRune, colors.Whitespace)
+		frameIdx = 1
+	}
+
 	for frameIdx < frame.Width {
 		frame.SetContent(frameIdx, 0, ' ', colors.Default)
 		frameIdx++
