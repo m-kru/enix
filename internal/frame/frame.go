@@ -92,3 +92,17 @@ func (f Frame) Column(x int, width int) Frame {
 		Height: f.Height,
 	}
 }
+
+// Within returns true if cell with x and y coordinates is located within the frame.
+func (f Frame) Within(x, y int) bool {
+	if f.X <= x && x < f.X+f.Width && f.Y <= y && y < f.Y+f.Height {
+		return true
+	}
+	return false
+}
+
+// ToFramePosition transforms screen position with coordinates x, y to frame position.
+// It is user's responsibility to make sure the initial point is within the frame.
+func (f Frame) ToFramePosition(x, y int) (int, int) {
+	return x - f.X, y - f.Y
+}

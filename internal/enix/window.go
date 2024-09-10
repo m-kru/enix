@@ -33,6 +33,22 @@ type Window struct {
 	Prompt *Prompt
 }
 
+func (w *Window) RxMouseEvent(ev mouse.Event) {
+	if !w.TabFrame.Within(ev.X(), ev.Y()) {
+		// Currently only mouse events within tab frame are handled.
+		return
+	}
+
+	x, y := w.TabFrame.ToFramePosition(ev.X(), ev.Y())
+
+	switch ev.(type) {
+	case mouse.PrimaryClick:
+		w.CurrentTab.PrimaryClick(x, y)
+	case mouse.DoublePrimaryClick:
+		// Implement word selection here.
+	}
+}
+
 func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 	var err error
 
@@ -196,6 +212,9 @@ func Start(
 		Height:     height - 1, // One line for prompt
 	}
 
+	// Create buffered channel to prevent deadlocks.
+	w.Mouse.EventChan = make(chan mouse.Event, 8)
+
 	p := Prompt{
 		Config: config,
 		Colors: colors,
@@ -236,18 +255,20 @@ func Start(
 
 	for {
 		select {
-		case tcellEv := <-tcellEventChan:
-			switch ev := tcellEv.(type) {
+		case ev := <-tcellEventChan:
+			switch ev := ev.(type) {
 			case *tcell.EventMouse:
 				w.Mouse.RxTcellEventMouse(ev)
 			default:
-				tcellEvRcvr = tcellEvRcvr.RxTcellEvent(tcellEv)
+				tcellEvRcvr = tcellEvRcvr.RxTcellEvent(ev)
 				if tcellEvRcvr == &w {
 					w.CurrentTab.HasFocus = true
 				} else if tcellEvRcvr == nil {
 					return
 				}
 			}
+		case ev := <-w.Mouse.EventChan:
+			w.RxMouseEvent(ev)
 		}
 
 		w.Render()

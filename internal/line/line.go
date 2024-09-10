@@ -42,7 +42,7 @@ func (l *Line) Column() int {
 }
 
 // Get returns nth line.
-// It panics if there is less than n lines.
+// If there is less than n lines, it returns nil.
 func (l *Line) Get(n int) *Line {
 	i := n
 
@@ -59,7 +59,7 @@ func (l *Line) Get(n int) *Line {
 		i--
 	}
 
-	panic(fmt.Sprintf("cannot get line %d ", n))
+	return nil
 }
 
 // Last returns last line in the list.
