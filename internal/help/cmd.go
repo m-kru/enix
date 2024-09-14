@@ -93,7 +93,7 @@ If the current tab is the last tab, then it wraps to the first tab.`,
 	"tab-prev": `tab-prev # Cycles to the previous tab.
 If the current tab is the first tab, then it wraps to the last tab.`,
 
-	"tab-move": `tab-move [N] [pattern] # Moves tab which name matches pattern to position N.
+	"tab-move": `tab-move N [pattern] # Moves tab which name matches pattern to position N.
 If pattern is not provided, then current tab is moved. The pattern must be
 unambiguous. If N is not provided, then it is assumed to be equal 1.`,
 
@@ -121,6 +121,7 @@ for the help command. The same as 'help help'. Valid topics are:
   - keybindings - how to set, and what to watch out for,
   - selections - what ther are and how they work.`,
 
+	"rune":    `rune r # Inserts rune r under the cursor position.`,
 	"space":   `space # Inserts space rune.`,
 	"tab":     `tab # Inserts tab rune.`,
 	"newline": `newline # Inserts a newline.`,
