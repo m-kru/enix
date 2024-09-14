@@ -14,6 +14,8 @@ func (t *Tab) RxEventKey(ev *tcell.EventKey) {
 		panic("unimplemented backspace2")
 	case tcell.KeyDelete:
 		panic("unimplemented delete")
+	case tcell.KeyEnter:
+		t.InsertNewline()
 	}
 
 	name, _ := t.Keys.ToCmd(ev)
