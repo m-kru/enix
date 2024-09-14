@@ -6,7 +6,7 @@ import (
 
 func (t *Tab) RxEventKey(ev *tcell.EventKey) {
 	if ev.Key() == tcell.KeyRune {
-		//tab.InsertRune()
+		t.InsertRune(ev.Rune())
 	}
 
 	name, _ := t.Keys.ToCmd(ev)
