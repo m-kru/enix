@@ -81,8 +81,6 @@ func Parse() {
 
 	handleFlag := func(f string) {
 		switch f {
-		case "-batch":
-			Batch = true
 		case "-help":
 			printHelp()
 		case "-version":
@@ -129,7 +127,5 @@ func Parse() {
 
 // Function validate validates arguments after parsing.
 func validate() {
-	if Batch && Script == "" {
-		log.Fatalf("batch mode requires the '-script' parameter to be set")
-	}
+	// Nothing to be validated so far.
 }

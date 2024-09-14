@@ -15,18 +15,16 @@ Usage:
 
 Flags:
 
-  -batch    Run in batch mode instead of tui mode.
   -help     Display help.
   -version  Display version.
 
 Parameters:
 
-  -script  Path to the script with commands to be executed on the files in the
-           batch mode. For the batch mode, this parameter is obligatory.
-           In the case of the tui mode, the commands are executed on the files
-           after program start before the user gains control. Each command must
-           be placed in a separate line. Empty lines are ignored. Lines
-           starting with the '#' character are treated as comment lines.
+  -script  Instead of opening files in the interactive tui mode, execute
+           commands from the script on each file. Each command in the script
+           file must be placed in a separate line. Empty lines are ignored.
+           Lines starting with the '#' character are treated as comment lines.
+           This parameter is mostly useful for enix internal regression tests.
 `
 
 func printHelp() {
