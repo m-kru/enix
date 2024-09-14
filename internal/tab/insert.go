@@ -5,8 +5,15 @@ import (
 )
 
 func (t *Tab) RxEventKey(ev *tcell.EventKey) {
-	if ev.Key() == tcell.KeyRune {
+	switch ev.Key() {
+	case tcell.KeyRune:
 		t.InsertRune(ev.Rune())
+	case tcell.KeyTab:
+		panic("unimplemented tab")
+	case tcell.KeyBackspace2:
+		panic("unimplemented backspace2")
+	case tcell.KeyDelete:
+		panic("unimplemented delete")
 	}
 
 	name, _ := t.Keys.ToCmd(ev)
