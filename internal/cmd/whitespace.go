@@ -7,10 +7,10 @@ import (
 )
 
 func Space(args string, tab *tab.Tab) error {
-	sstr := strings.Fields(args)
-	if len(sstr) > 0 {
+	fields := strings.Fields(args)
+	if len(fields) > 0 {
 		return fmt.Errorf(
-			"space: expected 0 args, provided %d", len(sstr),
+			"space: expected 0 args, provided %d", len(fields),
 		)
 	}
 
@@ -31,10 +31,10 @@ func space(tab *tab.Tab) {
 }
 
 func Tab(args string, tab *tab.Tab) error {
-	sstr := strings.Fields(args)
-	if len(sstr) > 0 {
+	fields := strings.Fields(args)
+	if len(fields) > 0 {
 		return fmt.Errorf(
-			"tab: expected 0 args, provided %d", len(sstr),
+			"tab: expected 0 args, provided %d", len(fields),
 		)
 	}
 
@@ -55,10 +55,10 @@ func tabCmd(tab *tab.Tab) {
 }
 
 func Newline(args string, tab *tab.Tab) error {
-	sstr := strings.Fields(args)
-	if len(sstr) > 0 {
+	fields := strings.Fields(args)
+	if len(fields) > 0 {
 		return fmt.Errorf(
-			"newline: expected 0 args, provided %d", len(sstr),
+			"newline: expected 0 args, provided %d", len(fields),
 		)
 	}
 

@@ -8,14 +8,14 @@ import (
 )
 
 func CfgTabWidth(args string, config *cfg.Config) error {
-	sstr := strings.Fields(args)
-	if len(sstr) != 1 {
+	fields := strings.Fields(args)
+	if len(fields) != 1 {
 		return fmt.Errorf(
-			"tab-width: provided %d args, expected 1", len(sstr),
+			"tab-width: provided %d args, expected 1", len(fields),
 		)
 	}
 
-	n, err := strconv.Atoi(sstr[0])
+	n, err := strconv.Atoi(fields[0])
 	if err != nil {
 		return fmt.Errorf("tab-width: %v", err)
 	}

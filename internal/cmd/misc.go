@@ -8,10 +8,10 @@ import (
 )
 
 func Esc(args string, tab *tab.Tab) error {
-	sstr := strings.Fields(args)
-	if len(sstr) > 0 {
+	fields := strings.Fields(args)
+	if len(fields) > 0 {
 		return fmt.Errorf(
-			"esc: expected 0 args, provided %d", len(sstr),
+			"esc: expected 0 args, provided %d", len(fields),
 		)
 	}
 
@@ -28,21 +28,21 @@ func esc(tab *tab.Tab) error {
 }
 
 func Rune(args string, tab *tab.Tab) error {
-	sstr := strings.Fields(args)
-	if len(sstr) != 1 {
+	fields := strings.Fields(args)
+	if len(fields) != 1 {
 		return fmt.Errorf(
-			"rune: expected 1 arg, provided %d", len(sstr),
+			"rune: expected 1 arg, provided %d", len(fields),
 		)
 	}
 
-	runeCount := utf8.RuneCountInString(sstr[0])
+	runeCount := utf8.RuneCountInString(fields[0])
 	if runeCount != 1 {
 		return fmt.Errorf(
 			"rune: expected 1 rune, provided %d", runeCount,
 		)
 	}
 
-	r, _ := utf8.DecodeRuneInString(sstr[0])
+	r, _ := utf8.DecodeRuneInString(fields[0])
 	if r == utf8.RuneError {
 		return fmt.Errorf("rune: invalid rune provided")
 	}
