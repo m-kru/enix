@@ -1,10 +1,13 @@
 package main
 
 import (
+	"log"
+	"os"
+
 	"github.com/m-kru/enix/internal/arg"
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/enix"
-	"log"
+	"github.com/m-kru/enix/internal/script"
 )
 
 func main() {
@@ -15,6 +18,14 @@ func main() {
 	config, colors, keys, promptKeys, insertKeys, err := cfg.Init()
 	if err != nil {
 		log.Fatalf("%v", err)
+	}
+
+	if arg.Script != "" {
+		err := script.Exec()
+		if err != nil {
+			log.Fatalf("%v", err)
+		}
+		os.Exit(0)
 	}
 
 	enix.Start(&config, &colors, &keys, &promptKeys, &insertKeys)

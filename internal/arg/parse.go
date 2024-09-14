@@ -127,5 +127,7 @@ func Parse() {
 
 // Function validate validates arguments after parsing.
 func validate() {
-	// Nothing to be validated so far.
+	if Script != "" && len(Files) == 0 {
+		log.Fatalf("script file provided, but no files to execute script on")
+	}
 }
