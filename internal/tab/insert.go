@@ -15,3 +15,25 @@ func (t *Tab) RxEventKey(ev *tcell.EventKey) {
 		t.InInsertMode = false
 	}
 }
+
+func (t *Tab) InsertRune(r rune) {
+	c := t.Cursors
+	for {
+		if c == nil {
+			break
+		}
+		c.InsertRune(r)
+		c = c.Next
+	}
+}
+
+func (t *Tab) InsertNewline() {
+	c := t.Cursors
+	for {
+		if c == nil {
+			break
+		}
+		c.InsertNewline()
+		c = c.Next
+	}
+}

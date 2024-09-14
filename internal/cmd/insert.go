@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/m-kru/enix/internal/tab"
 	"strings"
+	"unicode/utf8"
 )
 
 func Space(args string, tab *tab.Tab) error {
@@ -14,20 +15,9 @@ func Space(args string, tab *tab.Tab) error {
 		)
 	}
 
-	space(tab)
+	tab.InsertRune(' ')
 
 	return nil
-}
-
-func space(tab *tab.Tab) {
-	c := tab.Cursors
-	for {
-		if c == nil {
-			break
-		}
-		c.InsertRune(' ')
-		c = c.Next
-	}
 }
 
 func Tab(args string, tab *tab.Tab) error {
@@ -38,20 +28,9 @@ func Tab(args string, tab *tab.Tab) error {
 		)
 	}
 
-	tabCmd(tab)
+	tab.InsertRune('\t')
 
 	return nil
-}
-
-func tabCmd(tab *tab.Tab) {
-	c := tab.Cursors
-	for {
-		if c == nil {
-			break
-		}
-		c.InsertRune('\t')
-		c = c.Next
-	}
 }
 
 func Newline(args string, tab *tab.Tab) error {
@@ -62,18 +41,32 @@ func Newline(args string, tab *tab.Tab) error {
 		)
 	}
 
-	newline(tab)
+	tab.InsertNewline()
 
 	return nil
 }
 
-func newline(tab *tab.Tab) {
-	c := tab.Cursors
-	for {
-		if c == nil {
-			break
-		}
-		c.InsertNewline()
-		c = c.Next
+func Rune(args string, tab *tab.Tab) error {
+	fields := strings.Fields(args)
+	if len(fields) != 1 {
+		return fmt.Errorf(
+			"rune: expected 1 arg, provided %d", len(fields),
+		)
 	}
+
+	runeCount := utf8.RuneCountInString(fields[0])
+	if runeCount != 1 {
+		return fmt.Errorf(
+			"rune: expected 1 rune, provided %d", runeCount,
+		)
+	}
+
+	r, _ := utf8.DecodeRuneInString(fields[0])
+	if r == utf8.RuneError {
+		return fmt.Errorf("rune: invalid rune provided")
+	}
+
+	tab.InsertRune(r)
+
+	return nil
 }
