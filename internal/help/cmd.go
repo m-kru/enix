@@ -126,6 +126,14 @@ for the help command. The same as 'help help'. Valid topics are:
 	"tab":     `tab # Inserts tab rune.`,
 	"newline": `newline # Inserts a newline.`,
 
+	"quit": `quit # Quits tab.
+If the tab is the last tab opened tab, then quit also quits the enix editor.
+Quit returns an error if current tab has unsaved changes.`,
+	"q": `q # An alias to the quit command.`,
+	"quit!": `quit! # Force quit.,
+Forced version of the quit command. It quits the tab even if there are unsaved changes.`,
+	"q!": `q! # An alias to the quit! command.`,
+
 	// View
 
 	"view":       "view line-number column # Sets view start at provided line number and column.",
