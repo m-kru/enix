@@ -94,12 +94,12 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 		case "newline":
 			err = cmd.Newline(args, w.CurrentTab)
 		case "quit", "q":
-			err = cmd.Quit(w.CurrentTab, false)
+			err = cmd.Quit(args, w.CurrentTab, false)
 			if err == nil {
 				return nil
 			}
 		case "quit!", "q!":
-			_ = cmd.Quit(w.CurrentTab, true)
+			_ = cmd.Quit(args, w.CurrentTab, true)
 			return nil
 		case "right":
 			err = cmd.Right(args, w.CurrentTab)

@@ -331,12 +331,12 @@ func (p *Prompt) Exec() TcellEventReceiver {
 	case "rune":
 		err = cmd.Rune(args, p.Window.CurrentTab)
 	case "quit", "q":
-		err = cmd.Quit(p.Window.CurrentTab, false)
+		err = cmd.Quit(args, p.Window.CurrentTab, false)
 		if err == nil {
 			return nil
 		}
 	case "quit!", "q!":
-		_ = cmd.Quit(p.Window.CurrentTab, true)
+		_ = cmd.Quit(args, p.Window.CurrentTab, true)
 		return nil
 	case "space":
 		err = cmd.Space(args, p.Window.CurrentTab)
