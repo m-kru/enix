@@ -34,6 +34,8 @@ func (t *Tab) InsertRune(r rune) {
 		c.InsertRune(r)
 		c = c.Next
 	}
+
+	t.HasChanges = true
 }
 
 func (t *Tab) InsertNewline() {
@@ -45,4 +47,6 @@ func (t *Tab) InsertNewline() {
 		c.InsertNewline()
 		c = c.Next
 	}
+
+	t.HasChanges = true
 }
