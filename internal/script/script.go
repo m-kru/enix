@@ -12,8 +12,8 @@ import (
 )
 
 type command struct {
-	name string // Command name
-	args string // Command arguments
+	name string   // Command name
+	args []string // Command arguments
 }
 
 func parseScript() ([]command, error) {
@@ -35,7 +35,13 @@ func parseScript() ([]command, error) {
 		}
 
 		name, args, _ := strings.Cut(line, " ")
-		cmds = append(cmds, command{strings.TrimSpace(name), strings.TrimSpace(args)})
+		cmds = append(
+			cmds,
+			command{
+				strings.TrimSpace(name),
+				strings.Fields(args),
+			},
+		)
 	}
 
 	if err := scanner.Err(); err != nil {

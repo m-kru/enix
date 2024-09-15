@@ -8,18 +8,17 @@ import (
 	"strings"
 )
 
-func Down(args string, tab *tab.Tab) error {
-	fields := strings.Fields(args)
-	if len(fields) > 1 {
+func Down(args []string, tab *tab.Tab) error {
+	if len(args) > 1 {
 		return fmt.Errorf(
-			"down: provided %d args, expected at most 1", len(fields),
+			"down: provided %d args, expected at most 1", len(args),
 		)
 	}
 
 	n := 1
 	var err error
-	if len(fields) > 0 {
-		n, err = strconv.Atoi(fields[0])
+	if len(args) > 0 {
+		n, err = strconv.Atoi(args[0])
 		if err != nil {
 			return fmt.Errorf("down: %v", err)
 		}
@@ -46,18 +45,17 @@ func down(n int, tab *tab.Tab) {
 	tab.Cursors.Prune()
 }
 
-func Left(args string, tab *tab.Tab) error {
-	fields := strings.Fields(args)
-	if len(fields) > 1 {
+func Left(args []string, tab *tab.Tab) error {
+	if len(args) > 1 {
 		return fmt.Errorf(
-			"left: provided %d args, expected at most 1", len(fields),
+			"left: provided %d args, expected at most 1", len(args),
 		)
 	}
 
 	n := 1
 	var err error
-	if len(fields) > 0 {
-		n, err = strconv.Atoi(fields[0])
+	if len(args) > 0 {
+		n, err = strconv.Atoi(args[0])
 		if err != nil {
 			return fmt.Errorf("left: %v", err)
 		}
@@ -84,18 +82,17 @@ func left(n int, tab *tab.Tab) {
 	tab.Cursors.Prune()
 }
 
-func Right(args string, tab *tab.Tab) error {
-	fields := strings.Fields(args)
-	if len(fields) > 1 {
+func Right(args []string, tab *tab.Tab) error {
+	if len(args) > 1 {
 		return fmt.Errorf(
-			"right: provided %d args, expected at most 1", len(fields),
+			"right: provided %d args, expected at most 1", len(args),
 		)
 	}
 
 	n := 1
 	var err error
-	if len(fields) > 0 {
-		n, err = strconv.Atoi(fields[0])
+	if len(args) > 0 {
+		n, err = strconv.Atoi(args[0])
 		if err != nil {
 			return fmt.Errorf("right: %v", err)
 		}
@@ -122,18 +119,17 @@ func right(n int, tab *tab.Tab) {
 	tab.Cursors.Prune()
 }
 
-func Up(args string, tab *tab.Tab) error {
-	fields := strings.Fields(args)
-	if len(fields) > 1 {
+func Up(args []string, tab *tab.Tab) error {
+	if len(args) > 1 {
 		return fmt.Errorf(
-			"up: provided %d args, expected at most 1", len(fields),
+			"up: provided %d args, expected at most 1", len(args),
 		)
 	}
 
 	n := 1
 	var err error
-	if len(fields) > 0 {
-		n, err = strconv.Atoi(fields[0])
+	if len(args) > 0 {
+		n, err = strconv.Atoi(args[0])
 		if err != nil {
 			return fmt.Errorf("up: %v", err)
 		}
@@ -160,11 +156,10 @@ func up(n int, tab *tab.Tab) {
 	tab.Cursors.Prune()
 }
 
-func End(args string, tab *tab.Tab) error {
-	fields := strings.Fields(args)
-	if len(fields) > 0 {
+func End(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
 		return fmt.Errorf(
-			"end: expected 0 args, provided %d", len(fields),
+			"end: expected 0 args, provided %d", len(args),
 		)
 	}
 
@@ -173,17 +168,16 @@ func End(args string, tab *tab.Tab) error {
 	return nil
 }
 
-func Goto(args string, tab *tab.Tab) error {
+func Goto(args []string, tab *tab.Tab) error {
 	var err error
 	line := 0
 	col := 0
 
-	fields := strings.Fields(args)
-	if len(fields) == 0 {
+	if len(args) == 0 {
 		return fmt.Errorf("goto: missing at least line number")
-	} else if len(fields) == 1 {
-		if strings.Contains(fields[0], ":") {
-			lineStr, colStr, _ := strings.Cut(fields[0], ":")
+	} else if len(args) == 1 {
+		if strings.Contains(args[0], ":") {
+			lineStr, colStr, _ := strings.Cut(args[0], ":")
 			line, err = strconv.Atoi(lineStr)
 			if err != nil {
 				return fmt.Errorf("goto: %v", err)
@@ -193,22 +187,22 @@ func Goto(args string, tab *tab.Tab) error {
 				return fmt.Errorf("goto: %v", err)
 			}
 		} else {
-			line, err = strconv.Atoi(fields[0])
+			line, err = strconv.Atoi(args[0])
 			if err != nil {
 				return fmt.Errorf("goto: %v", err)
 			}
 		}
-	} else if len(fields) == 2 {
-		line, err = strconv.Atoi(fields[0])
+	} else if len(args) == 2 {
+		line, err = strconv.Atoi(args[0])
 		if err != nil {
 			return fmt.Errorf("goto: %v", err)
 		}
-		col, err = strconv.Atoi(fields[1])
+		col, err = strconv.Atoi(args[1])
 		if err != nil {
 			return fmt.Errorf("goto: %v", err)
 		}
 	} else {
-		return fmt.Errorf("goto: expected at most 2 args, provided %d", len(fields))
+		return fmt.Errorf("goto: expected at most 2 args, provided %d", len(args))
 	}
 
 	goTo(line, col, tab)
@@ -235,11 +229,10 @@ func goTo(line, col int, tab *tab.Tab) {
 	tab.Cursors = &cursor.Cursor{Config: tab.Config, Line: l, BufIdx: col - 1, Idx: col - 1}
 }
 
-func PrevWordStart(args string, tab *tab.Tab) error {
-	fields := strings.Fields(args)
-	if len(fields) > 0 {
+func PrevWordStart(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
 		return fmt.Errorf(
-			"prev-word-start: expected 0 args, provided %d", len(fields),
+			"prev-word-start: expected 0 args, provided %d", len(args),
 		)
 	}
 
@@ -264,11 +257,10 @@ func prevWordStart(tab *tab.Tab) error {
 	return nil
 }
 
-func WordEnd(args string, tab *tab.Tab) error {
-	fields := strings.Fields(args)
-	if len(fields) > 0 {
+func WordEnd(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
 		return fmt.Errorf(
-			"word-end: expected 0 args, provided %d", len(fields),
+			"word-end: expected 0 args, provided %d", len(args),
 		)
 	}
 
@@ -293,11 +285,10 @@ func wordEnd(tab *tab.Tab) error {
 	return nil
 }
 
-func WordStart(args string, tab *tab.Tab) error {
-	fields := strings.Fields(args)
-	if len(fields) > 0 {
+func WordStart(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
 		return fmt.Errorf(
-			"word-start: expected 0 args, provided %d", len(fields),
+			"word-start: expected 0 args, provided %d", len(args),
 		)
 	}
 
@@ -322,11 +313,10 @@ func wordStart(tab *tab.Tab) error {
 	return nil
 }
 
-func SpawnDown(args string, tab *tab.Tab) error {
-	fields := strings.Fields(args)
-	if len(fields) > 0 {
+func SpawnDown(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
 		return fmt.Errorf(
-			"spawn-down: expected 0 args, provided %d", len(fields),
+			"spawn-down: expected 0 args, provided %d", len(args),
 		)
 	}
 
@@ -368,11 +358,10 @@ func spawnDown(tab *tab.Tab) error {
 	return nil
 }
 
-func SpawnUp(args string, tab *tab.Tab) error {
-	fields := strings.Fields(args)
-	if len(fields) > 0 {
+func SpawnUp(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
 		return fmt.Errorf(
-			"spawn-up: expected 0 args, provided %d", len(fields),
+			"spawn-up: expected 0 args, provided %d", len(args),
 		)
 	}
 
@@ -414,11 +403,10 @@ func spawnUp(tab *tab.Tab) error {
 	return nil
 }
 
-func LineStart(args string, tab *tab.Tab) error {
-	fields := strings.Fields(args)
-	if len(fields) > 0 {
+func LineStart(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
 		return fmt.Errorf(
-			"line-start: expected 0 args, provided %d", len(fields),
+			"line-start: expected 0 args, provided %d", len(args),
 		)
 	}
 
@@ -443,11 +431,10 @@ func lineStart(tab *tab.Tab) error {
 	return nil
 }
 
-func LineEnd(args string, tab *tab.Tab) error {
-	fields := strings.Fields(args)
-	if len(fields) > 0 {
+func LineEnd(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
 		return fmt.Errorf(
-			"line-end: expected 0 args, provided %d", len(fields),
+			"line-end: expected 0 args, provided %d", len(args),
 		)
 	}
 

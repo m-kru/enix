@@ -3,6 +3,7 @@ package enix
 import (
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/m-kru/enix/internal/arg"
 	"github.com/m-kru/enix/internal/cfg"
@@ -61,7 +62,8 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 			return w
 		}
 
-		name, args := w.Keys.ToCmd(ev)
+		name, argStr := w.Keys.ToCmd(ev)
+		args := strings.Fields(argStr)
 
 		switch name {
 		case "cmd":

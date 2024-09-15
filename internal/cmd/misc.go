@@ -3,14 +3,12 @@ package cmd
 import (
 	"fmt"
 	"github.com/m-kru/enix/internal/tab"
-	"strings"
 )
 
-func Esc(args string, tab *tab.Tab) error {
-	fields := strings.Fields(args)
-	if len(fields) > 0 {
+func Esc(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
 		return fmt.Errorf(
-			"esc: expected 0 args, provided %d", len(fields),
+			"esc: expected 0 args, provided %d", len(args),
 		)
 	}
 

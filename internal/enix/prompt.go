@@ -288,13 +288,14 @@ func (p *Prompt) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 
 // Exec executes command.
 func (p *Prompt) Exec() TcellEventReceiver {
-	name, args, _ := strings.Cut(strings.TrimSpace(p.Line.String()), " ")
+	name, argStr, _ := strings.Cut(strings.TrimSpace(p.Line.String()), " ")
+	args := strings.Fields(argStr)
 
 	var err error
 
 	// If the first word is a number, then treat it as a goto command.
 	if unicode.IsDigit([]rune(name)[0]) {
-		err = cmd.Goto(p.Line.String(), p.Window.CurrentTab)
+		err = cmd.Goto(strings.Fields(p.Line.String()), p.Window.CurrentTab)
 		goto errorCheck
 	}
 
@@ -305,10 +306,10 @@ func (p *Prompt) Exec() TcellEventReceiver {
 		p.Activate("", "")
 		return p
 	case "cmd-error":
-		p.ShowError(args)
+		p.ShowError(argStr)
 		return p.Window
 	case "cmd-info":
-		p.ShowInfo(args)
+		p.ShowInfo(argStr)
 		return p.Window
 	case "cursor-count":
 		p.ShowInfo(fmt.Sprintf("%d", p.Window.CurrentTab.Cursors.Count()))

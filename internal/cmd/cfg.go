@@ -4,18 +4,16 @@ import (
 	"fmt"
 	"github.com/m-kru/enix/internal/cfg"
 	"strconv"
-	"strings"
 )
 
-func CfgTabWidth(args string, config *cfg.Config) error {
-	fields := strings.Fields(args)
-	if len(fields) != 1 {
+func CfgTabWidth(args []string, config *cfg.Config) error {
+	if len(args) != 1 {
 		return fmt.Errorf(
-			"tab-width: provided %d args, expected 1", len(fields),
+			"tab-width: provided %d args, expected 1", len(args),
 		)
 	}
 
-	n, err := strconv.Atoi(fields[0])
+	n, err := strconv.Atoi(args[0])
 	if err != nil {
 		return fmt.Errorf("tab-width: %v", err)
 	}
