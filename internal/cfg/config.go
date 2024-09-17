@@ -1,6 +1,10 @@
 package cfg
 
 type Config struct {
+	// Trim trailing whitespaces on save.
+	// It affects only saves explicitly called by the user.
+	// Neither automatic nor backup saves depend on this value.
+	TrimOnSave   bool
 	SafeFileSave bool
 
 	// Whiespace

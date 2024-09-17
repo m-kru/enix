@@ -89,8 +89,6 @@ func (t *Tab) Trim() {
 
 		c = c.Next
 	}
-
-	return
 }
 
 func (t *Tab) Save() error {

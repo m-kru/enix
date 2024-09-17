@@ -103,6 +103,8 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 			return nil
 		case "right":
 			err = cmd.Right(args, w.CurrentTab)
+		case "save":
+			err = cmd.Save(args, w.CurrentTab, w.Config.TrimOnSave)
 		case "space":
 			err = cmd.Space(args, w.CurrentTab)
 		case "spawn-down":

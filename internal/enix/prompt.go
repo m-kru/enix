@@ -338,6 +338,8 @@ func (p *Prompt) Exec() TcellEventReceiver {
 	case "quit!", "q!":
 		_ = cmd.Quit(args, p.Window.CurrentTab, true)
 		return nil
+	case "save":
+		err = cmd.Save(args, p.Window.CurrentTab, p.Config.TrimOnSave)
 	case "space":
 		err = cmd.Space(args, p.Window.CurrentTab)
 	case "tab":
