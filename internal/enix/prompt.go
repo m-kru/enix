@@ -290,12 +290,13 @@ func (p *Prompt) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 func (p *Prompt) Exec() TcellEventReceiver {
 	name, argStr, _ := strings.Cut(strings.TrimSpace(p.Line.String()), " ")
 	args := strings.Fields(argStr)
+	tab := p.Window.CurrentTab
 
 	var err error
 
 	// If the first word is a number, then treat it as a goto command.
 	if unicode.IsDigit([]rune(name)[0]) {
-		err = cmd.Goto(strings.Fields(p.Line.String()), p.Window.CurrentTab)
+		err = cmd.Goto(strings.Fields(p.Line.String()), tab)
 		goto errorCheck
 	}
 
@@ -312,53 +313,53 @@ func (p *Prompt) Exec() TcellEventReceiver {
 		p.ShowInfo(argStr)
 		return p.Window
 	case "cursor-count":
-		p.ShowInfo(fmt.Sprintf("%d", p.Window.CurrentTab.Cursors.Count()))
+		p.ShowInfo(fmt.Sprintf("%d", tab.Cursors.Count()))
 		return p.Window
 	case "down":
-		err = cmd.Down(args, p.Window.CurrentTab)
+		err = cmd.Down(args, tab)
 	case "end":
-		err = cmd.End(args, p.Window.CurrentTab)
+		err = cmd.End(args, tab)
 	case "goto":
-		err = cmd.Goto(args, p.Window.CurrentTab)
+		err = cmd.Goto(args, tab)
 	case "left":
-		err = cmd.Left(args, p.Window.CurrentTab)
+		err = cmd.Left(args, tab)
 	case "line-end":
-		err = cmd.LineEnd(args, p.Window.CurrentTab)
+		err = cmd.LineEnd(args, tab)
 	case "line-start":
-		err = cmd.LineStart(args, p.Window.CurrentTab)
+		err = cmd.LineStart(args, tab)
 	case "right":
-		err = cmd.Right(args, p.Window.CurrentTab)
+		err = cmd.Right(args, tab)
 	case "rune":
-		err = cmd.Rune(args, p.Window.CurrentTab)
+		err = cmd.Rune(args, tab)
 	case "quit", "q":
-		err = cmd.Quit(args, p.Window.CurrentTab, false)
+		err = cmd.Quit(args, tab, false)
 		if err == nil {
 			return nil
 		}
 	case "quit!", "q!":
-		_ = cmd.Quit(args, p.Window.CurrentTab, true)
+		_ = cmd.Quit(args, tab, true)
 		return nil
 	case "save":
-		err = cmd.Save(args, p.Window.CurrentTab, p.Config.TrimOnSave)
+		err = cmd.Save(args, tab, p.Config.TrimOnSave)
 	case "space":
-		err = cmd.Space(args, p.Window.CurrentTab)
+		err = cmd.Space(args, tab)
 	case "tab":
-		err = cmd.Tab(args, p.Window.CurrentTab)
+		err = cmd.Tab(args, tab)
 	case "tab-count":
 		p.ShowInfo(fmt.Sprintf("%d", p.Window.Tabs.Count()))
 		return p.Window
 	case "tab-width":
 		err = cmd.CfgTabWidth(args, p.Config)
 	case "trim":
-		err = cmd.Trim(args, p.Window.CurrentTab)
+		err = cmd.Trim(args, tab)
 	case "up":
-		err = cmd.Up(args, p.Window.CurrentTab)
+		err = cmd.Up(args, tab)
 	case "prev-word-start":
-		err = cmd.PrevWordStart(args, p.Window.CurrentTab)
+		err = cmd.PrevWordStart(args, tab)
 	case "word-end":
-		err = cmd.WordEnd(args, p.Window.CurrentTab)
+		err = cmd.WordEnd(args, tab)
 	case "word-start":
-		err = cmd.WordStart(args, p.Window.CurrentTab)
+		err = cmd.WordStart(args, tab)
 	default:
 		p.ShowError(
 			fmt.Sprintf(
