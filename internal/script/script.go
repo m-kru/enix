@@ -80,6 +80,8 @@ func exec(c command, t *tab.Tab) error {
 		err = cmd.End(c.args, t)
 	case "goto":
 		err = cmd.Goto(c.args, t)
+	case "trim":
+		err = cmd.Trim(c.args, t)
 	case "up":
 		err = cmd.Up(c.args, t)
 	default:

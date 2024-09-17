@@ -59,6 +59,40 @@ func (t *Tab) HasCursorInLine(n int) bool {
 	return false
 }
 
+func (t *Tab) Trim() {
+	var trimmedLines []*line.Line
+
+	l := t.Lines
+	for {
+		if l == nil {
+			break
+		}
+		if l.Trim() > 0 {
+			trimmedLines = append(trimmedLines, l)
+		}
+		l = l.Next
+	}
+
+	c := t.Cursors
+	for {
+		if c == nil {
+			break
+		}
+
+		for _, tl := range trimmedLines {
+			if c.Line == tl {
+				if c.BufIdx > tl.Len() {
+					c.BufIdx = tl.Len()
+				}
+			}
+		}
+
+		c = c.Next
+	}
+
+	return
+}
+
 func (t *Tab) Save() error {
 	panic("unimplemented")
 }

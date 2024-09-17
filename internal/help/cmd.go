@@ -126,6 +126,8 @@ for the help command. The same as 'help help'. Valid topics are:
 	"tab":     `tab # Inserts tab rune.`,
 	"newline": `newline # Inserts a newline.`,
 
+	"trim": `trim # Trims trailing whitespaces from all lines.`,
+
 	"quit": `quit # Quits tab.
 If the tab is the last tab opened tab, then quit also quits the enix editor.
 Quit returns an error if current tab has unsaved changes.`,

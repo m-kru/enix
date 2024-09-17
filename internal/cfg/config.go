@@ -1,6 +1,8 @@
 package cfg
 
 type Config struct {
+	SafeFileSave bool
+
 	// Whiespace
 	NewlineRune rune
 	TabWidth    int
@@ -10,9 +12,10 @@ type Config struct {
 
 func ConfigDefault() Config {
 	return Config{
-		NewlineRune: '¬',
-		TabWidth:    4,
-		TabRune:     '▸',
-		TabPadRune:  '·',
+		SafeFileSave: true,
+		NewlineRune:  '¬',
+		TabWidth:     4,
+		TabRune:      '▸',
+		TabPadRune:   '·',
 	}
 }

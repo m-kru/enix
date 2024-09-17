@@ -347,6 +347,8 @@ func (p *Prompt) Exec() TcellEventReceiver {
 		return p.Window
 	case "tab-width":
 		err = cmd.CfgTabWidth(args, p.Config)
+	case "trim":
+		err = cmd.Trim(args, p.Window.CurrentTab)
 	case "up":
 		err = cmd.Up(args, p.Window.CurrentTab)
 	case "prev-word-start":
