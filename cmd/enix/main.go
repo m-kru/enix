@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 
@@ -18,6 +20,15 @@ func main() {
 	config, colors, keys, promptKeys, insertKeys, err := cfg.Init()
 	if err != nil {
 		log.Fatalf("%v", err)
+	}
+
+	if arg.DumpConfig {
+		data, err := json.MarshalIndent(config, "", "\t")
+		if err != nil {
+			log.Fatalf("%v", err)
+		}
+		fmt.Printf("%s\n", string(data))
+		os.Exit(0)
 	}
 
 	if arg.Script != "" {

@@ -1,6 +1,50 @@
 package cfg
 
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+
+	"github.com/m-kru/enix/internal/arg"
+)
+
 // Function Init initializes and returns various configurations at the program start.
 func Init() (Config, Colorscheme, Keybindings, Keybindings, Keybindings, error) {
-	return ConfigDefault(), ColorschemeDefault(), KeybindingsDefault(), PromptKeybindingsDefault(), InsertKeybindingsDefault(), nil
+	config := ConfigDefault()
+	colorscheme := ColorschemeDefault()
+	keys := KeybindingsDefault()
+	promptKeys := PromptKeybindingsDefault()
+	insertKeys := InsertKeybindingsDefault()
+
+	var err error
+
+	if arg.Config != "" {
+		config, err = configFromFile(arg.Config)
+		if err != nil {
+			goto exit
+		}
+	}
+
+exit:
+	return config, colorscheme, keys, promptKeys, insertKeys, err
+}
+
+func configFromFile(path string) (Config, error) {
+	config := ConfigDefault()
+
+	file, err := os.ReadFile(path)
+	if err != nil {
+		return config, fmt.Errorf(
+			"reading config from file %s: %v", path, err,
+		)
+	}
+
+	err = json.Unmarshal(file, &config)
+	if err != nil {
+		return config, fmt.Errorf(
+			"reading config from file %s: %v", path, err,
+		)
+	}
+
+	return config, nil
 }

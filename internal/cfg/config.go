@@ -16,7 +16,7 @@ type Config struct {
 
 func ConfigDefault() Config {
 	return Config{
-		TrimOnSave:   false,
+		TrimOnSave:   true,
 		SafeFileSave: true,
 		NewlineRune:  '¬',
 		TabWidth:     4,

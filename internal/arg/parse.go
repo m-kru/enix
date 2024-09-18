@@ -81,6 +81,8 @@ func Parse() {
 
 	handleFlag := func(f string) {
 		switch f {
+		case "-dump-config":
+			DumpConfig = true
 		case "-help":
 			printHelp()
 		case "-version":
@@ -104,6 +106,8 @@ func Parse() {
 			val = false
 
 			switch param {
+			case "-config":
+				Config = arg
 			case "-script":
 				Script = arg
 			default:
@@ -120,6 +124,10 @@ func Parse() {
 		} else {
 			handleFile(arg)
 		}
+	}
+
+	if val {
+		log.Fatalf("missing vlaue for %s parameter", param)
 	}
 
 	validate()
