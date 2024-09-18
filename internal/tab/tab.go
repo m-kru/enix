@@ -89,6 +89,8 @@ func (t *Tab) Trim() {
 
 		c = c.Next
 	}
+
+	t.Cursors.Prune()
 }
 
 func (t *Tab) Save() error {
