@@ -89,6 +89,8 @@ func exec(c command, t *tab.Tab) error {
 		err = cmd.Save(c.args, t, false)
 	case "space":
 		err = cmd.Space(c.args, t)
+	case "tab":
+		err = cmd.Tab(c.args, t)
 	case "trim":
 		err = cmd.Trim(c.args, t)
 	case "up":
