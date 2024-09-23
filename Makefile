@@ -15,6 +15,7 @@ help:
 	@echo "  test-all  Run all tests."
 	@echo "  test      Run go test."
 	@echo "  test-arg  Run command line argument parsing tests."
+	@echo "  test-cmd  Run command regression tests."
 	@echo "Other targets:"
 	@echo "  help       Print help message."
 	@echo "  install    Install $(NAME) in /usr/bin."
