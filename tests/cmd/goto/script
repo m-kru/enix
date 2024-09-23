@@ -1,0 +1,7 @@
+goto 2 8
+rune X
+goto 5 7
+rune Y
+goto 1
+rune Z
+save got
