@@ -79,6 +79,8 @@ func exec(c command, t *tab.Tab) error {
 		err = cmd.Down(c.args, t)
 	case "end":
 		err = cmd.End(c.args, t)
+	case "esc":
+		err = cmd.Esc(c.args, t)
 	case "goto":
 		err = cmd.Goto(c.args, t)
 	case "left":
@@ -91,6 +93,8 @@ func exec(c command, t *tab.Tab) error {
 		err = cmd.Save(c.args, t, false)
 	case "space":
 		err = cmd.Space(c.args, t)
+	case "spawn-down":
+		err = cmd.SpawnDown(c.args, t)
 	case "tab":
 		err = cmd.Tab(c.args, t)
 	case "trim":
