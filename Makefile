@@ -36,7 +36,7 @@ lint:
 
 # Test targets
 .PHONY: test-all
-test-all: test test-arg
+test-all: test test-arg test-cmd
 
 .PHONY: test
 test:
@@ -45,6 +45,10 @@ test:
 .PHONY: test-arg
 test-arg:
 	@./scripts/test-arg.sh
+
+.PHONY: test-cmd
+test-cmd:
+	@./scripts/test-cmd.sh
 
 # Installation targets
 .PHONY: install

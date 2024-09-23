@@ -13,9 +13,11 @@ func (t *Tab) Save(strWr io.StringWriter) error {
 			break
 		}
 
-		_, err := strWr.WriteString(
-			fmt.Sprintf("%s%s", l.String(), t.Newline),
-		)
+		nl := t.Newline
+		if l.Next == nil {
+			nl = ""
+		}
+		_, err := strWr.WriteString(fmt.Sprintf("%s%s", l.String(), nl))
 		if err != nil {
 			return fmt.Errorf("%s:%d: %v", t.Path, i, err)
 		}

@@ -2,11 +2,11 @@
 
 update=false
 
-help_msg="Script for managing command line arguments parsing tests.
+help_msg="Script for managing command regression tests.
 Must be run from the project's root.
 
 Usage:
-  scripts/test-arg.sh <command>
+  scripts/test-cmd.sh <command>
 
 Commands:
   help    Display help message.
@@ -20,19 +20,16 @@ while true ; do
 	case "$1" in
 		help) printf "$help_msg" ; exit 0 ;;
 		run) shift ;;
-		update) update=true ; shift ;;
 		"") shift ; break ;;
 		*) echo "invalid argument '$1'" ; exit 1 ;;
 	esac
 done
 
-if ! $update; then
-	set -e
-fi
+set -e
 
-cd tests/arg/
+cd tests/cmd/
 
-echo -e "\nRunning command line argument parsing tests\n"
+echo -e "\nRunning command regression tests\n"
 
 for dir in $(find . -maxdepth 1 -mindepth 1 -type d | sort);
 do
@@ -44,17 +41,10 @@ do
 
 	echo "  $dir"
 	cd "$dir"
-	./run.sh || true
+	../../../enix -config ../../config.json -script script file || true
 	diff --color got want
-	if $update; then
-		cp got want
-	fi
 	rm got
 	cd ..
 done
 
-if $update; then
-	echo -e "\nwant files updated\n"
-else
-	echo -e "\nAll \e[1;32mPASSED\e[0m!"
-fi
+echo -e "\nAll \e[1;32mPASSED\e[0m!"

@@ -29,7 +29,7 @@ func Save(args []string, tab *tab.Tab, trim bool) error {
 }
 
 func save(tab *tab.Tab, path string) error {
-	file, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666)
+	file, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0664)
 	if err != nil {
 		return fmt.Errorf("save: %v", err)
 	}
