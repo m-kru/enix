@@ -91,7 +91,3 @@ func (t *Tab) Trim() {
 
 	t.Cursors.Prune()
 }
-
-func (t *Tab) Save() error {
-	panic("unimplemented")
-}
