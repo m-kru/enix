@@ -32,7 +32,7 @@ func main() {
 	}
 
 	if arg.Script != "" {
-		err := script.Exec()
+		err := script.Exec(&config)
 		if err != nil {
 			log.Fatalf("%v", err)
 		}
