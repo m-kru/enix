@@ -127,7 +127,7 @@ func Parse() {
 	}
 
 	if val {
-		log.Fatalf("missing vlaue for %s parameter", param)
+		log.Fatalf("missing value for %s parameter", param)
 	}
 
 	validate()
