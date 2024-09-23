@@ -12,7 +12,6 @@ type Tab struct {
 	Colors *cfg.Colorscheme
 	Keys   *cfg.Keybindings
 
-	Name     string
 	Path     string // File path
 	Newline  string // Newline encoding
 	FileType string

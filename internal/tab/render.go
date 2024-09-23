@@ -20,12 +20,8 @@ func (t *Tab) RenderStatusLine(frame frame.Frame) {
 		frame.SetContent(i, 0, ' ', t.Colors.StatusLine)
 	}
 
-	// Render file path or name
-	path := t.Path
-	if len(path) == 0 {
-		path = t.Name
-	}
-	for i, r := range path {
+	// Render file path
+	for i, r := range t.Path {
 		if i >= frame.Width {
 			break
 		}

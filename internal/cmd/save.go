@@ -17,8 +17,13 @@ func Save(args []string, tab *tab.Tab, trim bool) error {
 	if tab.Config.SafeFileSave {
 		return safeSave(tab)
 	} else {
-		panic("unsafe save not yet implemented")
+		return save(tab)
 	}
+}
+
+func save(tab *tab.Tab) error {
+
+	return nil
 }
 
 func safeSave(tab *tab.Tab) error {
