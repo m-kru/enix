@@ -97,6 +97,8 @@ func exec(c command, t *tab.Tab) error {
 		err = cmd.Space(c.args, t)
 	case "spawn-down":
 		err = cmd.SpawnDown(c.args, t)
+	case "spawn-up":
+		err = cmd.SpawnUp(c.args, t)
 	case "tab":
 		err = cmd.Tab(c.args, t)
 	case "trim":
