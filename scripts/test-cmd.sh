@@ -31,7 +31,7 @@ cd tests/cmd/
 
 echo -e "\nRunning command regression tests\n"
 
-for dir in $(find . -maxdepth 1 -mindepth 1 -type d | sort);
+for dir in $(find . -maxdepth 2 -mindepth 2 -type d | sort);
 do
 	testname=`basename $dir`
 	# Ignore tests starting with '_' character.
@@ -41,10 +41,10 @@ do
 
 	echo "  $dir"
 	cd "$dir"
-	../../../enix -config ../../config.json -script script file || true
+	../../../../enix -config ../../../config.json -script script file || true
 	diff --color got want
 	rm got
-	cd ..
+	cd ../..
 done
 
 echo -e "\nAll \e[1;32mPASSED\e[0m!"
