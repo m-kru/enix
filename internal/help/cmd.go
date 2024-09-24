@@ -33,6 +33,12 @@ If there are multiple cursors, they are first reduced to a single cursor.`,
 	"line-end":        `line-end # Moves cursor to the line end.`,
 
 	"spawn-down": `spawn-down # Spawns a new cursor in the below line.`,
+	"spawn-up":   `spawn-up # Spawns a new cursor in the above line.`,
+
+	"add-cursor": `add-cursor L [C=1] # Creates new cursor at line L and columnc C.
+If L is greater than the number of lines in the file, then the cursor is placed
+in the last line. If C is greater than the number of columns in a given line,
+then the cursor is placed in the last column.`,
 
 	// Command
 

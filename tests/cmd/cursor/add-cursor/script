@@ -1,0 +1,5 @@
+add-cursor 2 5
+rune b
+esc
+rune c
+save got

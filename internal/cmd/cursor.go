@@ -458,3 +458,64 @@ func lineEnd(tab *tab.Tab) error {
 
 	return nil
 }
+
+func AddCursor(args []string, tab *tab.Tab) error {
+	if len(args) < 1 || 2 < len(args) {
+		return fmt.Errorf(
+			"add-cursor: provided %d args, expected 1 or 2", len(args),
+		)
+	}
+
+	line, err := strconv.Atoi(args[0])
+	if err != nil {
+		return fmt.Errorf("add-cursor: %v", err)
+	}
+	if line < 1 {
+		return fmt.Errorf(
+			"add-cursor: line number must be positive, current value %d", line,
+		)
+	}
+
+	col := 1
+	if len(args) == 2 {
+		col, err = strconv.Atoi(args[1])
+		if err != nil {
+			return fmt.Errorf("add-cursor: %v", err)
+		}
+	}
+	if col < 1 {
+		return fmt.Errorf(
+			"add-cursor: column number must be positive, current value %d", col,
+		)
+	}
+
+	addCursor(line, col, tab)
+
+	return nil
+}
+
+func addCursor(line int, col int, tab *tab.Tab) {
+	l := tab.Lines.Get(line)
+	if l == nil {
+		l = tab.Lines.Last()
+	}
+
+	if col > l.Len() {
+		col = l.Len()
+	}
+
+	lastCur := tab.Cursors.Last()
+
+	c := cursor.Cursor{
+		Config: lastCur.Config,
+		Line:   l,
+		Idx:    col - 1,
+		BufIdx: col - 1,
+		Prev:   lastCur,
+		Next:   nil,
+	}
+
+	lastCur.Next = &c
+
+	tab.Cursors.Prune()
+}

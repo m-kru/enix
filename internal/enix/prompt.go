@@ -302,6 +302,8 @@ func (p *Prompt) Exec() TcellEventReceiver {
 
 	switch name {
 	case "":
+	case "add-cursor":
+		err = cmd.AddCursor(args, tab)
 		// Do nothing
 	case "cmd":
 		p.Activate("", "")

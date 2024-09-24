@@ -75,6 +75,8 @@ func exec(c command, t *tab.Tab) error {
 	var err error
 
 	switch c.name {
+	case "add-cursor":
+		err = cmd.AddCursor(c.args, t)
 	case "down":
 		err = cmd.Down(c.args, t)
 	case "end":
