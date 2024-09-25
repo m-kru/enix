@@ -121,6 +121,8 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 			err = cmd.Trim(args, w.CurrentTab)
 		case "up":
 			err = cmd.Up(args, w.CurrentTab)
+		case "view-down":
+			err = cmd.ViewDown(args, w.CurrentTab)
 		case "word-end":
 			err = cmd.WordEnd(args, w.CurrentTab)
 		case "word-start":

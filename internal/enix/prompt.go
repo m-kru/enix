@@ -356,6 +356,8 @@ func (p *Prompt) Exec() TcellEventReceiver {
 		err = cmd.Trim(args, tab)
 	case "up":
 		err = cmd.Up(args, tab)
+	case "view-down":
+		err = cmd.ViewDown(args, tab)
 	case "prev-word-start":
 		err = cmd.PrevWordStart(args, tab)
 	case "word-end":

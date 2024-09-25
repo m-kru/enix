@@ -45,3 +45,8 @@ func (v View) MinAdjust(iv View) View {
 
 	return v
 }
+
+func (v View) Down(n int) View {
+	v.Line += n
+	return v
+}
