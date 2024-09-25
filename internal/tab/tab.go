@@ -101,7 +101,7 @@ func (tab *Tab) AddCursor(lineNum int, colIdx int) {
 
 	runeIdx, _, ok := line.RuneIdx(colIdx, tab.Config.TabWidth)
 	if !ok {
-		runeIdx = line.Len() - 1
+		runeIdx = line.Len()
 	}
 
 	lastCur := tab.Cursors.Last()
