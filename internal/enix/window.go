@@ -66,69 +66,70 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 
 		name, argStr := w.Keys.ToCmd(ev)
 		args := strings.Fields(argStr)
+		tab := w.CurrentTab
 
 		switch name {
 		case "add-cursor":
-			err = cmd.AddCursor(args, w.CurrentTab)
+			err = cmd.AddCursor(args, tab)
 		case "cmd":
-			w.CurrentTab.HasFocus = false
+			tab.HasFocus = false
 			w.Prompt.Activate("", "")
 			return w.Prompt
 		case "down":
-			err = cmd.Down(args, w.CurrentTab)
+			err = cmd.Down(args, tab)
 		case "esc":
-			err = cmd.Esc(args, w.CurrentTab)
+			err = cmd.Esc(args, tab)
 			w.Prompt.Clear()
 		case "find":
-			w.CurrentTab.HasFocus = false
+			tab.HasFocus = false
 			w.Prompt.Activate("find ", "todo")
 			return w.Prompt
 		case "help":
-			w.CurrentTab.HasFocus = false
+			tab.HasFocus = false
 			w.Prompt.Activate("help ", "")
 			return w.Prompt
 		case "insert":
-			w.CurrentTab.InInsertMode = true
+			tab.InInsertMode = true
 		case "left":
-			err = cmd.Left(args, w.CurrentTab)
+			err = cmd.Left(args, tab)
 		case "line-end":
-			err = cmd.LineEnd(args, w.CurrentTab)
+			err = cmd.LineEnd(args, tab)
 		case "line-start":
-			err = cmd.LineStart(args, w.CurrentTab)
+			err = cmd.LineStart(args, tab)
 		case "newline":
-			err = cmd.Newline(args, w.CurrentTab)
+			err = cmd.Newline(args, tab)
 		case "quit", "q":
-			err = cmd.Quit(args, w.CurrentTab, false)
+			err = cmd.Quit(args, tab, false)
 			if err == nil {
 				return nil
 			}
 		case "quit!", "q!":
-			_ = cmd.Quit(args, w.CurrentTab, true)
+			_ = cmd.Quit(args, tab, true)
 			return nil
 		case "right":
-			err = cmd.Right(args, w.CurrentTab)
+			err = cmd.Right(args, tab)
 		case "save":
-			err = cmd.Save(args, w.CurrentTab, w.Config.TrimOnSave)
+			err = cmd.Save(args, tab, w.Config.TrimOnSave)
 		case "space":
-			err = cmd.Space(args, w.CurrentTab)
+			err = cmd.Space(args, tab)
 		case "spawn-down":
-			err = cmd.SpawnDown(args, w.CurrentTab)
+			err = cmd.SpawnDown(args, tab)
 		case "spawn-up":
-			err = cmd.SpawnUp(args, w.CurrentTab)
+			err = cmd.SpawnUp(args, tab)
 		case "tab":
-			err = cmd.Tab(args, w.CurrentTab)
+			err = cmd.Tab(args, tab)
 		case "trim":
-			err = cmd.Trim(args, w.CurrentTab)
+			err = cmd.Trim(args, tab)
 		case "up":
-			err = cmd.Up(args, w.CurrentTab)
+			err = cmd.Up(args, tab)
 		case "view-down":
-			err = cmd.ViewDown(args, w.CurrentTab)
+			err = cmd.ViewDown(args, tab)
 		case "word-end":
-			err = cmd.WordEnd(args, w.CurrentTab)
+			err = cmd.WordEnd(args, tab)
 		case "word-start":
-			err = cmd.WordStart(args, w.CurrentTab)
+			err = cmd.WordStart(args, tab)
 		case "prev-word-start":
-			err = cmd.PrevWordStart(args, w.CurrentTab)
+			err = cmd.PrevWordStart(args, tab)
 		}
 	}
 
