@@ -14,6 +14,7 @@ const (
 	primaryClick
 	doublePrimaryClick
 	triplePrimaryClick
+	primaryClickCtrl
 )
 
 type Mouse struct {
@@ -34,6 +35,8 @@ func (m *Mouse) TimerFunc() {
 		m.state = idle
 	case doublePrimaryClick:
 		m.state = idle
+	case primaryClickCtrl:
+		m.state = idle
 	default:
 		panic("unimplemented")
 	}
@@ -50,6 +53,8 @@ func (m *Mouse) RxTcellEventMouse(ev *tcell.EventMouse) {
 		m.rxEventPrimaryClick(ev)
 	case doublePrimaryClick:
 		m.rxEventDoublePrimaryClick(ev)
+	case primaryClickCtrl:
+		m.rxEventPrimaryClickCtrl(ev)
 	default:
 		panic("unimplemented")
 	}
@@ -60,10 +65,17 @@ func (m *Mouse) rxEventIdle(ev *tcell.EventMouse) {
 	case tcell.ButtonNone:
 		// Do nothing, just mouse movement.
 	case tcell.Button1:
-		m.state = primaryClick
 		m.prevEvent = ev
 		x, y := ev.Position()
-		m.EventChan <- PrimaryClick{x: x, y: y}
+
+		if ev.Modifiers()&tcell.ModCtrl != 0 {
+			m.state = primaryClickCtrl
+			m.EventChan <- PrimaryClickCtrl{x: x, y: y}
+		} else {
+			m.state = primaryClick
+			m.EventChan <- PrimaryClick{x: x, y: y}
+		}
+
 		time.AfterFunc(500*time.Millisecond, m.TimerFunc)
 	default:
 		// Do nothing, other mouse event
@@ -95,6 +107,28 @@ func (m *Mouse) rxEventDoublePrimaryClick(ev *tcell.EventMouse) {
 		// Do nothing, just mouse movement.
 	case tcell.Button1:
 		// Implement TriplePrimaryClick event handling here.
+	default:
+		// Do nothing, other mouse event
+	}
+}
+
+func (m *Mouse) rxEventPrimaryClickCtrl(ev *tcell.EventMouse) {
+	switch ev.Buttons() {
+	case tcell.ButtonNone:
+		// Do nothing, just mouse movement.
+	case tcell.Button1:
+		m.prevEvent = ev
+		x, y := ev.Position()
+
+		if ev.Modifiers()&tcell.ModCtrl != 0 {
+			m.state = primaryClickCtrl
+			m.EventChan <- PrimaryClickCtrl{x: x, y: y}
+		} else {
+			m.state = primaryClick
+			m.EventChan <- PrimaryClick{x: x, y: y}
+		}
+
+		time.AfterFunc(500*time.Millisecond, m.TimerFunc)
 	default:
 		// Do nothing, other mouse event
 	}

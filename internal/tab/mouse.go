@@ -34,3 +34,26 @@ func (t *Tab) PrimaryClick(x, y int) {
 
 	t.Cursors = &c
 }
+
+// PrimaryClickCtrl handles mouse primary button click with Ctrl modifier.
+// x and y are tab frame coordinates.
+func (t *Tab) PrimaryClickCtrl(x, y int) {
+	lineNumWidth := util.IntWidth(t.LineCount())
+	x -= lineNumWidth + 1
+	if x < 0 {
+		x = 0
+	}
+
+	line := t.Lines.Get(t.View.Line + y)
+	if line == nil {
+		line = t.Lines.Last()
+	}
+
+	cfg := t.Cursors.Config
+	idx, _, ok := line.RuneIdx(t.View.Column+x, cfg.TabWidth)
+	if !ok {
+		idx = line.Len()
+	}
+
+	t.AddCursor(line.LineNum(), line.ColumnIdx(idx, t.Config.TabWidth))
+}

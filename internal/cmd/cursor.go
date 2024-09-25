@@ -489,33 +489,7 @@ func AddCursor(args []string, tab *tab.Tab) error {
 		)
 	}
 
-	addCursor(line, col, tab)
+	tab.AddCursor(line, col)
 
 	return nil
-}
-
-func addCursor(line int, col int, tab *tab.Tab) {
-	l := tab.Lines.Get(line)
-	if l == nil {
-		l = tab.Lines.Last()
-	}
-
-	if col > l.Len() {
-		col = l.Len()
-	}
-
-	lastCur := tab.Cursors.Last()
-
-	c := cursor.Cursor{
-		Config: lastCur.Config,
-		Line:   l,
-		Idx:    col - 1,
-		BufIdx: col - 1,
-		Prev:   lastCur,
-		Next:   nil,
-	}
-
-	lastCur.Next = &c
-
-	tab.Cursors.Prune()
 }

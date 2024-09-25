@@ -47,6 +47,8 @@ func (w *Window) RxMouseEvent(ev mouse.Event) {
 		w.CurrentTab.PrimaryClick(x, y)
 	case mouse.DoublePrimaryClick:
 		// Implement word selection here.
+	case mouse.PrimaryClickCtrl:
+		w.CurrentTab.PrimaryClickCtrl(x, y)
 	}
 }
 

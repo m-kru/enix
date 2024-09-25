@@ -91,3 +91,30 @@ func (t *Tab) Trim() {
 
 	t.Cursors.Prune()
 }
+
+func (t *Tab) AddCursor(line int, col int) {
+	l := t.Lines.Get(line)
+	if l == nil {
+		l = t.Lines.Last()
+	}
+
+	idx, _, ok := l.RuneIdx(col, t.Config.TabWidth)
+	if !ok {
+		idx = l.Len() - 1
+	}
+
+	lastCur := t.Cursors.Last()
+
+	c := cursor.Cursor{
+		Config: lastCur.Config,
+		Line:   l,
+		Idx:    idx,
+		BufIdx: idx,
+		Prev:   lastCur,
+		Next:   nil,
+	}
+
+	lastCur.Next = &c
+
+	t.Cursors.Prune()
+}
