@@ -54,26 +54,26 @@ func (w *Window) RxMouseEvent(ev mouse.Event) {
 
 func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 	var err error
+	updateView := true
+	tab := w.CurrentTab
 
 	switch ev := ev.(type) {
 	case *tcell.EventResize:
 		w.Resize()
 	case *tcell.EventKey:
-		if w.CurrentTab.InInsertMode {
-			w.CurrentTab.RxEventKey(ev)
+		if tab.InInsertMode {
+			tab.RxEventKey(ev)
 			return w
 		}
 
 		name, argStr := w.Keys.ToCmd(ev)
 		args := strings.Fields(argStr)
-		tab := w.CurrentTab
 
 		switch name {
 		case "add-cursor":
 			err = cmd.AddCursor(args, tab)
 		case "cmd":
 			tab.HasFocus = false
-			tab.KeepView = true
 			w.Prompt.Activate("", "")
 			return w.Prompt
 		case "down":
@@ -125,6 +125,7 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 			err = cmd.Up(args, tab)
 		case "view-down":
 			err = cmd.ViewDown(args, tab)
+			updateView = false
 		case "word-end":
 			err = cmd.WordEnd(args, tab)
 		case "word-start":
@@ -132,8 +133,12 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 		case "prev-word-start":
 			err = cmd.PrevWordStart(args, tab)
 		default:
-			tab.KeepView = true
+			updateView = false
 		}
+	}
+
+	if updateView {
+		tab.UpdateView()
 	}
 
 	if err != nil {
@@ -293,8 +298,6 @@ func Start(
 			w.RxMouseEvent(ev)
 		}
 
-		if tcellEvRcvr == &w {
-			w.Render()
-		}
+		w.Render()
 	}
 }

@@ -19,7 +19,6 @@ type Tab struct {
 	HasFocus     bool
 	HasChanges   bool
 	InInsertMode bool
-	KeepView     bool // Keep view after the last command
 
 	Cursors *cursor.Cursor // First cursor
 

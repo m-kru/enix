@@ -293,6 +293,7 @@ func (p *Prompt) Exec() TcellEventReceiver {
 	tab := p.Window.CurrentTab
 
 	var err error
+	updateView := true
 
 	// If the first word is a number, then treat it as a goto command.
 	if unicode.IsDigit([]rune(name)[0]) {
@@ -358,6 +359,7 @@ func (p *Prompt) Exec() TcellEventReceiver {
 		err = cmd.Up(args, tab)
 	case "view-down":
 		err = cmd.ViewDown(args, tab)
+		updateView = false
 	case "prev-word-start":
 		err = cmd.PrevWordStart(args, tab)
 	case "word-end":
@@ -378,6 +380,10 @@ errorCheck:
 	if err != nil {
 		p.ShowError(fmt.Sprintf("%v", err))
 		return p.Window
+	}
+
+	if updateView {
+		tab.UpdateView()
 	}
 
 	p.Clear()

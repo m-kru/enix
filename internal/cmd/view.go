@@ -21,7 +21,6 @@ func ViewDown(args []string, tab *tab.Tab) error {
 		}
 	}
 
-	tab.KeepView = true
 	view := tab.View
 
 	if view.LastLine() > tab.Lines.Count() {
