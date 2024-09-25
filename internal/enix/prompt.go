@@ -382,7 +382,5 @@ errorCheck:
 
 	p.Clear()
 
-	p.Window.Render()
-
 	return p.Window
 }

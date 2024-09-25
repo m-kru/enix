@@ -144,7 +144,11 @@ func (tab *Tab) Render(frame frame.Frame) {
 	// TODO: Should view Width and Height be set here?
 	tab.View.Width = frame.Width - lineNumWidth - 1
 	tab.View.Height = frame.Height
-	tab.UpdateView()
+	if !tab.KeepView {
+		tab.UpdateView()
+	} else {
+		tab.KeepView = false
+	}
 
 	// Render line numbers
 	tab.RenderLineNums(frame.Column(0, lineNumWidth))

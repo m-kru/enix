@@ -77,6 +77,8 @@ func KeybindingsDefault() Keybindings {
 		"Tab":     "tab",
 		// Selection
 		"Ctrl+L": "sel-line",
+		// View
+		"Down": "view-down",
 	}
 }
 

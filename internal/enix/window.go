@@ -73,6 +73,7 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 			err = cmd.AddCursor(args, tab)
 		case "cmd":
 			tab.HasFocus = false
+			tab.KeepView = true
 			w.Prompt.Activate("", "")
 			return w.Prompt
 		case "down":
@@ -130,6 +131,8 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 			err = cmd.WordStart(args, tab)
 		case "prev-word-start":
 			err = cmd.PrevWordStart(args, tab)
+		default:
+			tab.KeepView = true
 		}
 	}
 
@@ -290,6 +293,8 @@ func Start(
 			w.RxMouseEvent(ev)
 		}
 
-		w.Render()
+		if tcellEvRcvr == &w {
+			w.Render()
+		}
 	}
 }

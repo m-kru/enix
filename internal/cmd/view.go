@@ -21,7 +21,17 @@ func ViewDown(args []string, tab *tab.Tab) error {
 		}
 	}
 
-	tab.View = tab.View.Down(n)
+	tab.KeepView = true
+	view := tab.View
+
+	if view.LastLine() > tab.Lines.Count() {
+		return nil
+	}
+
+	if n+view.LastLine() > tab.Lines.Count() {
+		n = tab.Lines.Count() - view.LastLine()
+	}
+	tab.View = view.Down(n)
 
 	return nil
 }
