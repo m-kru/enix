@@ -7,20 +7,20 @@ import (
 
 // PrimaryClick handles mouse primary button click.
 // x and y are tab frame coordinates.
-func (t *Tab) PrimaryClick(x, y int) {
-	lineNumWidth := util.IntWidth(t.LineCount())
+func (tab *Tab) PrimaryClick(x, y int) {
+	lineNumWidth := util.IntWidth(tab.LineCount())
 	x -= lineNumWidth + 1
 	if x < 0 {
 		x = 0
 	}
 
-	line := t.Lines.Get(t.View.Line + y)
+	line := tab.Lines.Get(tab.View.Line + y)
 	if line == nil {
-		line = t.Lines.Last()
+		line = tab.Lines.Last()
 	}
 
-	cfg := t.Cursors.Config
-	idx, _, ok := line.RuneIdx(t.View.Column+x, cfg.TabWidth)
+	cfg := tab.Config
+	idx, _, ok := line.RuneIdx(tab.View.Column+x, cfg.TabWidth)
 	if !ok {
 		idx = line.Len()
 	}
@@ -32,28 +32,29 @@ func (t *Tab) PrimaryClick(x, y int) {
 		BufIdx: idx,
 	}
 
-	t.Cursors = &c
+	tab.Cursors = &c
 }
 
 // PrimaryClickCtrl handles mouse primary button click with Ctrl modifier.
 // x and y are tab frame coordinates.
-func (t *Tab) PrimaryClickCtrl(x, y int) {
-	lineNumWidth := util.IntWidth(t.LineCount())
+func (tab *Tab) PrimaryClickCtrl(x, y int) {
+	lineNumWidth := util.IntWidth(tab.LineCount())
 	x -= lineNumWidth + 1
 	if x < 0 {
 		x = 0
 	}
 
-	line := t.Lines.Get(t.View.Line + y)
+	line := tab.Lines.Get(tab.View.Line + y)
 	if line == nil {
-		line = t.Lines.Last()
+		line = tab.Lines.Last()
 	}
 
-	cfg := t.Cursors.Config
-	idx, _, ok := line.RuneIdx(t.View.Column+x, cfg.TabWidth)
+	idx, _, ok := line.RuneIdx(tab.View.Column+x, tab.Config.TabWidth)
 	if !ok {
 		idx = line.Len()
 	}
 
-	t.AddCursor(line.LineNum(), line.ColumnIdx(idx, t.Config.TabWidth))
+	tab.AddCursor(
+		line.LineNum(), line.ColumnIdx(idx, tab.Config.TabWidth),
+	)
 }

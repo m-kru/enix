@@ -30,22 +30,22 @@ type Tab struct {
 	Next *Tab
 }
 
-func (t *Tab) LineCount() int { return t.Lines.Count() }
+func (tab *Tab) LineCount() int { return tab.Lines.Count() }
 
-func (t *Tab) Count() int {
+func (tab *Tab) Count() int {
 	cnt := 1
 	for {
-		if t.Next == nil {
+		if tab.Next == nil {
 			break
 		}
-		t = t.Next
+		tab = tab.Next
 		cnt++
 	}
 	return cnt
 }
 
-func (t *Tab) HasCursorInLine(n int) bool {
-	c := t.Cursors
+func (tab *Tab) HasCursorInLine(n int) bool {
+	c := tab.Cursors
 	for {
 		if c == nil {
 			break
@@ -58,10 +58,10 @@ func (t *Tab) HasCursorInLine(n int) bool {
 	return false
 }
 
-func (t *Tab) Trim() {
+func (tab *Tab) Trim() {
 	var trimmedLines []*line.Line
 
-	l := t.Lines
+	l := tab.Lines
 	for {
 		if l == nil {
 			break
@@ -72,7 +72,7 @@ func (t *Tab) Trim() {
 		l = l.Next
 	}
 
-	c := t.Cursors
+	c := tab.Cursors
 	for {
 		if c == nil {
 			break
@@ -89,22 +89,22 @@ func (t *Tab) Trim() {
 		c = c.Next
 	}
 
-	t.Cursors.Prune()
+	tab.Cursors.Prune()
 }
 
 // AddCursor spawns a new cursor in given line and column.
-func (t *Tab) AddCursor(lineNum int, colIdx int) {
-	line := t.Lines.Get(lineNum)
+func (tab *Tab) AddCursor(lineNum int, colIdx int) {
+	line := tab.Lines.Get(lineNum)
 	if line == nil {
-		line = t.Lines.Last()
+		line = tab.Lines.Last()
 	}
 
-	runeIdx, _, ok := line.RuneIdx(colIdx, t.Config.TabWidth)
+	runeIdx, _, ok := line.RuneIdx(colIdx, tab.Config.TabWidth)
 	if !ok {
 		runeIdx = line.Len() - 1
 	}
 
-	lastCur := t.Cursors.Last()
+	lastCur := tab.Cursors.Last()
 
 	c := cursor.Cursor{
 		Config: lastCur.Config,
@@ -117,5 +117,5 @@ func (t *Tab) AddCursor(lineNum int, colIdx int) {
 
 	lastCur.Next = &c
 
-	t.Cursors.Prune()
+	tab.Cursors.Prune()
 }

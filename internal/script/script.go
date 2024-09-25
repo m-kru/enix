@@ -71,42 +71,42 @@ func Exec(config *cfg.Config) error {
 	return nil
 }
 
-func exec(c command, t *tab.Tab) error {
+func exec(c command, tab *tab.Tab) error {
 	var err error
 
 	switch c.name {
 	case "add-cursor":
-		err = cmd.AddCursor(c.args, t)
+		err = cmd.AddCursor(c.args, tab)
 	case "down":
-		err = cmd.Down(c.args, t)
+		err = cmd.Down(c.args, tab)
 	case "end":
-		err = cmd.End(c.args, t)
+		err = cmd.End(c.args, tab)
 	case "esc":
-		err = cmd.Esc(c.args, t)
+		err = cmd.Esc(c.args, tab)
 	case "goto":
-		err = cmd.Goto(c.args, t)
+		err = cmd.Goto(c.args, tab)
 	case "left":
-		err = cmd.Left(c.args, t)
+		err = cmd.Left(c.args, tab)
 	case "newline":
-		err = cmd.Newline(c.args, t)
+		err = cmd.Newline(c.args, tab)
 	case "right":
-		err = cmd.Right(c.args, t)
+		err = cmd.Right(c.args, tab)
 	case "rune":
-		err = cmd.Rune(c.args, t)
+		err = cmd.Rune(c.args, tab)
 	case "save":
-		err = cmd.Save(c.args, t, false)
+		err = cmd.Save(c.args, tab, false)
 	case "space":
-		err = cmd.Space(c.args, t)
+		err = cmd.Space(c.args, tab)
 	case "spawn-down":
-		err = cmd.SpawnDown(c.args, t)
+		err = cmd.SpawnDown(c.args, tab)
 	case "spawn-up":
-		err = cmd.SpawnUp(c.args, t)
+		err = cmd.SpawnUp(c.args, tab)
 	case "tab":
-		err = cmd.Tab(c.args, t)
+		err = cmd.Tab(c.args, tab)
 	case "trim":
-		err = cmd.Trim(c.args, t)
+		err = cmd.Trim(c.args, tab)
 	case "up":
-		err = cmd.Up(c.args, t)
+		err = cmd.Up(c.args, tab)
 	default:
 		err = fmt.Errorf("invalid or unimplemented command '%s'", c.name)
 	}

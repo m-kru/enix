@@ -9,38 +9,38 @@ import (
 )
 
 // Currently view updating works in such a way, that the last cursor is always visible.
-func (t *Tab) UpdateView() {
-	c := t.Cursors.Last()
-	t.View = t.View.MinAdjust(c.View())
+func (tab *Tab) UpdateView() {
+	c := tab.Cursors.Last()
+	tab.View = tab.View.MinAdjust(c.View())
 }
 
-func (t *Tab) RenderStatusLine(frame frame.Frame) {
+func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 	// Fill the background
 	for i := 0; i < frame.Width; i++ {
-		frame.SetContent(i, 0, ' ', t.Colors.StatusLine)
+		frame.SetContent(i, 0, ' ', tab.Colors.StatusLine)
 	}
 
 	// Render file path
-	for i, r := range t.Path {
+	for i, r := range tab.Path {
 		if i >= frame.Width {
 			break
 		}
-		frame.SetContent(i, 0, r, t.Colors.StatusLine)
+		frame.SetContent(i, 0, r, tab.Colors.StatusLine)
 	}
 
 	// Render extra status information
 	b := strings.Builder{}
 
-	if t.InInsertMode {
+	if tab.InInsertMode {
 		b.WriteString("insert ")
 	}
 
-	if t.Cursors != nil {
+	if tab.Cursors != nil {
 		b.WriteString(
-			fmt.Sprintf("%d:%d | ", t.Cursors.Line.Num(), t.Cursors.BufIdx+1),
+			fmt.Sprintf("%d:%d | ", tab.Cursors.Line.Num(), tab.Cursors.BufIdx+1),
 		)
 	}
-	b.WriteString(fmt.Sprintf("%s ", t.FileType))
+	b.WriteString(fmt.Sprintf("%s ", tab.FileType))
 	statusStr := b.String()
 
 	if len(statusStr) > frame.Width {
@@ -49,26 +49,26 @@ func (t *Tab) RenderStatusLine(frame frame.Frame) {
 
 	startIdx := frame.Width - len(statusStr)
 	for i, r := range statusStr {
-		style := t.Colors.StatusLine
-		if t.InInsertMode && i < 6 {
-			style = t.Colors.InsertMark
+		style := tab.Colors.StatusLine
+		if tab.InInsertMode && i < 6 {
+			style = tab.Colors.InsertMark
 		}
 		frame.SetContent(startIdx+i, 0, r, style)
 	}
 }
 
-func (t *Tab) RenderLineNums(frame frame.Frame) {
-	n := t.View.Line
+func (tab *Tab) RenderLineNums(frame frame.Frame) {
+	n := tab.View.Line
 	y := frame.Y
-	lineCount := t.LineCount()
+	lineCount := tab.LineCount()
 
 	for {
 		str := fmt.Sprintf("%*d", frame.Width, n)
 		for i, r := range str {
-			if t.HasCursorInLine(n) {
-				frame.SetContent(i, y, r, t.Colors.Cursor)
+			if tab.HasCursorInLine(n) {
+				frame.SetContent(i, y, r, tab.Colors.Cursor)
 			} else {
-				frame.SetContent(i, y, r, t.Colors.LineNum)
+				frame.SetContent(i, y, r, tab.Colors.LineNum)
 			}
 		}
 
@@ -83,15 +83,15 @@ func (t *Tab) RenderLineNums(frame frame.Frame) {
 	// Clear remaining line numbers.
 	for ; y < frame.Height; y++ {
 		for i := 0; i < frame.Width; i++ {
-			frame.SetContent(i, y, ' ', t.Colors.Default)
+			frame.SetContent(i, y, ' ', tab.Colors.Default)
 		}
 	}
 }
 
-func (t *Tab) RenderLines(frame frame.Frame) {
-	lineNum := t.View.Line
+func (tab *Tab) RenderLines(frame frame.Frame) {
+	lineNum := tab.View.Line
 	renderedCount := 0
-	line := t.Lines.Get(lineNum)
+	line := tab.Lines.Get(lineNum)
 
 	// TODO: Handle line clearing.
 	for {
@@ -99,7 +99,7 @@ func (t *Tab) RenderLines(frame frame.Frame) {
 			break
 		}
 
-		line.Render(t.Config, t.Colors, frame.Line(0, renderedCount), t.View)
+		line.Render(tab.Config, tab.Colors, frame.Line(0, renderedCount), tab.View)
 
 		line = line.Next
 		lineNum++
@@ -107,52 +107,52 @@ func (t *Tab) RenderLines(frame frame.Frame) {
 	}
 }
 
-func (t *Tab) RenderCursors(frame frame.Frame) {
-	c := t.Cursors
+func (tab *Tab) RenderCursors(frame frame.Frame) {
+	c := tab.Cursors
 
 	for {
 		if c == nil {
 			break
 		}
 
-		if !t.View.IsVisible(c.View()) {
+		if !tab.View.IsVisible(c.View()) {
 			c = c.Next
 			continue
 		}
 
 		primary := false
-		if t.HasFocus && c.Next == nil {
+		if tab.HasFocus && c.Next == nil {
 			primary = true
 		}
-		c.Render(t.Config, t.Colors, frame.Line(0, c.Line.Num()-t.View.Line), t.View, primary)
+		c.Render(tab.Config, tab.Colors, frame.Line(0, c.Line.Num()-tab.View.Line), tab.View, primary)
 
 		c = c.Next
 	}
 }
 
-func (t *Tab) Render(frame frame.Frame) {
+func (tab *Tab) Render(frame frame.Frame) {
 	// Render status line
-	t.RenderStatusLine(frame.LastLine())
+	tab.RenderStatusLine(frame.LastLine())
 
 	if frame.Height > 1 {
 		frame.Height -= 1
 	}
 
-	lineCount := t.LineCount()
+	lineCount := tab.LineCount()
 	lineNumWidth := util.IntWidth(lineCount)
 
 	// TODO: Should view Width and Height be set here?
-	t.View.Width = frame.Width - lineNumWidth - 1
-	t.View.Height = frame.Height
-	t.UpdateView()
+	tab.View.Width = frame.Width - lineNumWidth - 1
+	tab.View.Height = frame.Height
+	tab.UpdateView()
 
 	// Render line numbers
-	t.RenderLineNums(frame.Column(0, lineNumWidth))
+	tab.RenderLineNums(frame.Column(0, lineNumWidth))
 
 	// Render lines
 	linesFrame := frame.Column(lineNumWidth+1, frame.Width-lineNumWidth-1)
-	t.RenderLines(linesFrame)
+	tab.RenderLines(linesFrame)
 
 	// Render cursors
-	t.RenderCursors(linesFrame)
+	tab.RenderCursors(linesFrame)
 }

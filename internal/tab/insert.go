@@ -4,29 +4,29 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
-func (t *Tab) RxEventKey(ev *tcell.EventKey) {
+func (tab *Tab) RxEventKey(ev *tcell.EventKey) {
 	switch ev.Key() {
 	case tcell.KeyRune:
-		t.InsertRune(ev.Rune())
+		tab.InsertRune(ev.Rune())
 	case tcell.KeyTab:
-		t.InsertRune('\t')
+		tab.InsertRune('\t')
 	case tcell.KeyBackspace2:
 		panic("unimplemented backspace2")
 	case tcell.KeyDelete:
 		panic("unimplemented delete")
 	case tcell.KeyEnter:
-		t.InsertNewline()
+		tab.InsertNewline()
 	}
 
-	name, _ := t.Keys.ToCmd(ev)
+	name, _ := tab.Keys.ToCmd(ev)
 	switch name {
 	case "esc":
-		t.InInsertMode = false
+		tab.InInsertMode = false
 	}
 }
 
-func (t *Tab) InsertRune(r rune) {
-	c := t.Cursors
+func (tab *Tab) InsertRune(r rune) {
+	c := tab.Cursors
 	for {
 		if c == nil {
 			break
@@ -35,11 +35,11 @@ func (t *Tab) InsertRune(r rune) {
 		c = c.Next
 	}
 
-	t.HasChanges = true
+	tab.HasChanges = true
 }
 
-func (t *Tab) InsertNewline() {
-	c := t.Cursors
+func (tab *Tab) InsertNewline() {
+	c := tab.Cursors
 	for {
 		if c == nil {
 			break
@@ -48,5 +48,5 @@ func (t *Tab) InsertNewline() {
 		c = c.Next
 	}
 
-	t.HasChanges = true
+	tab.HasChanges = true
 }
