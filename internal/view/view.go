@@ -50,3 +50,11 @@ func (v View) Down(n int) View {
 	v.Line += n
 	return v
 }
+
+func (v View) Up(n int) View {
+	v.Line -= n
+	if v.Line < 1 {
+		v.Line = 1
+	}
+	return v
+}

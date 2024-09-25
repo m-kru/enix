@@ -360,6 +360,9 @@ func (p *Prompt) Exec() TcellEventReceiver {
 	case "view-down":
 		err = cmd.ViewDown(args, tab)
 		updateView = false
+	case "view-up":
+		err = cmd.ViewUp(args, tab)
+		updateView = false
 	case "prev-word-start":
 		err = cmd.PrevWordStart(args, tab)
 	case "word-end":

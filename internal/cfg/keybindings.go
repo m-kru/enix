@@ -79,6 +79,7 @@ func KeybindingsDefault() Keybindings {
 		"Ctrl+L": "sel-line",
 		// View
 		"Down": "view-down",
+		"Up":   "view-up",
 	}
 }
 

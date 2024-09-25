@@ -148,7 +148,7 @@ Forced version of the quit command. It quits the tab even if there are unsaved c
 	"view-down":  "view-down [N=1] # Scrolls view down by N lines.",
 	"view-left":  "view-down # Scrolls view left.",
 	"view-right": "view-down # Scrolls view right.",
-	"view-up":    "view-up # Scrolls view down.",
+	"view-up":    "view-up [N=1] # Scrolls view up by N lines.",
 
 	/*
 	   "match-brace":   struct{}{},
