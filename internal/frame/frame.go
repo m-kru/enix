@@ -14,6 +14,8 @@ type Frame struct {
 	Height int
 }
 
+func (f Frame) HideCursor() { f.Screen.HideCursor() }
+
 func (f Frame) GetContent(x int, y int) rune {
 	if x >= f.Width {
 		panic(fmt.Sprintf("x (%d) >= f.Width (%d)", x, f.Width))

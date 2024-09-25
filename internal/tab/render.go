@@ -108,6 +108,12 @@ func (tab *Tab) RenderLines(frame frame.Frame) {
 }
 
 func (tab *Tab) RenderCursors(frame frame.Frame) {
+	// This is required for view commands, as the primary cursors is rendered
+	// by the tcell all the time.
+	if tab.HasFocus {
+		frame.HideCursor()
+	}
+
 	c := tab.Cursors
 
 	for {
