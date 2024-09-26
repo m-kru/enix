@@ -4,6 +4,7 @@ import (
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/line"
+	"github.com/m-kru/enix/internal/util"
 	"github.com/m-kru/enix/internal/view"
 )
 
@@ -31,6 +32,10 @@ type Tab struct {
 }
 
 func (tab *Tab) LineCount() int { return tab.Lines.Count() }
+
+func (tab *Tab) LineNumWidth() int {
+	return util.IntWidth(tab.LineCount())
+}
 
 func (tab *Tab) Count() int {
 	cnt := 1

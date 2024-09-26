@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/m-kru/enix/internal/frame"
-	"github.com/m-kru/enix/internal/util"
 )
 
 // Currently view updating works in such a way, that the last cursor is always visible.
@@ -144,8 +143,7 @@ func (tab *Tab) Render(frame frame.Frame) {
 		frame.Height -= 1
 	}
 
-	lineCount := tab.LineCount()
-	lineNumWidth := util.IntWidth(lineCount)
+	lineNumWidth := tab.LineNumWidth()
 
 	// TODO: Should view Width and Height be set here?
 	tab.View.Width = frame.Width - lineNumWidth - 1

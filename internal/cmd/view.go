@@ -5,7 +5,6 @@ import (
 	"strconv"
 
 	"github.com/m-kru/enix/internal/tab"
-	"github.com/m-kru/enix/internal/util"
 )
 
 func ViewDown(args []string, tab *tab.Tab) error {
@@ -78,14 +77,14 @@ func ViewRight(args []string, tab *tab.Tab) error {
 		return fmt.Errorf("view-right: expected positive value, provided %d", n)
 	}
 
-	lineNumWidth := util.IntWidth(tab.LineCount())
 	view := tab.View
 	// - 3 because of:
-	//   - space between line number and first line character,
-	//   - end of line character,
-	//   - one extra column, it simply looks better.
-	if n+view.LastColumn()+lineNumWidth-3 > tab.LastColumnIdx() {
-		n = tab.LastColumnIdx() - (view.LastColumn() + lineNumWidth - 3)
+	// 1. Space between line number and first line character.
+	// 2. End of line character,
+	// 3. One extra column, it simply looks better.
+	lastCol := view.LastColumn() + tab.LineNumWidth() - 3
+	if n+lastCol > tab.LastColumnIdx() {
+		n = tab.LastColumnIdx() - lastCol
 	}
 
 	tab.View = view.Right(n)

@@ -2,14 +2,12 @@ package tab
 
 import (
 	"github.com/m-kru/enix/internal/cursor"
-	"github.com/m-kru/enix/internal/util"
 )
 
 // PrimaryClick handles mouse primary button click.
 // x and y are tab frame coordinates.
 func (tab *Tab) PrimaryClick(x, y int) {
-	lineNumWidth := util.IntWidth(tab.LineCount())
-	x -= lineNumWidth + 1
+	x -= tab.LineNumWidth() + 1
 	if x < 0 {
 		x = 0
 	}
@@ -38,8 +36,7 @@ func (tab *Tab) PrimaryClick(x, y int) {
 // PrimaryClickCtrl handles mouse primary button click with Ctrl modifier.
 // x and y are tab frame coordinates.
 func (tab *Tab) PrimaryClickCtrl(x, y int) {
-	lineNumWidth := util.IntWidth(tab.LineCount())
-	x -= lineNumWidth + 1
+	x -= tab.LineNumWidth() + 1
 	if x < 0 {
 		x = 0
 	}
