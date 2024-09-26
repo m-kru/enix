@@ -36,9 +36,19 @@ func (l *Line) LineNum() int {
 	return l.Num()
 }
 
-func (l *Line) Column() int {
-	// TODO: Handle tabs.
-	return len(l.Buf)
+// Columns returns number of columns required by the line.
+// It doesn't include the end of line character, as it is
+// not stored in the line buffer.
+func (l *Line) Columns(tabWidth int) int {
+	c := 0
+	for _, r := range l.Buf {
+		if r == '\t' {
+			c += tabWidth
+		} else {
+			c += runewidth.RuneWidth(r)
+		}
+	}
+	return c
 }
 
 // Get returns nth line.

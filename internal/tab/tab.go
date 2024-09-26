@@ -119,3 +119,23 @@ func (tab *Tab) AddCursor(lineNum int, colIdx int) {
 
 	tab.Cursors.Prune()
 }
+
+func (tab *Tab) LastColumnIdx() int {
+	idx := 1
+
+	l := tab.Lines
+	for {
+		if l == nil {
+			break
+		}
+
+		cols := l.Columns(tab.Config.TabWidth)
+		if cols > idx {
+			idx = cols
+		}
+
+		l = l.Next
+	}
+
+	return idx
+}

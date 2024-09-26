@@ -146,8 +146,8 @@ Forced version of the quit command. It quits the tab even if there are unsaved c
 
 	"view":       "view line-number column # Sets view start at provided line number and column.",
 	"view-down":  "view-down [N=1] # Scrolls view down by N lines.",
-	"view-left":  "view-down # Scrolls view left.",
-	"view-right": "view-down # Scrolls view right.",
+	"view-left":  "view-left [N=1] # Scrolls view left by N columns.",
+	"view-right": "view-right [N=1] # Scrolls view right by N columns.",
 	"view-up":    "view-up [N=1] # Scrolls view up by N lines.",
 
 	/*

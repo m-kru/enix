@@ -58,3 +58,8 @@ func (v View) Up(n int) View {
 	}
 	return v
 }
+
+func (v View) Right(n int) View {
+	v.Column += n
+	return v
+}
