@@ -12,13 +12,8 @@ import (
 	"github.com/m-kru/enix/internal/tab"
 )
 
-type command struct {
-	name string   // Command name
-	args []string // Command arguments
-}
-
-func parseScript() ([]command, error) {
-	var cmds []command
+func parseScript() ([]cmd.Command, error) {
+	var cmds []cmd.Command
 
 	script, err := os.Open(arg.Script)
 	if err != nil {
@@ -35,14 +30,12 @@ func parseScript() ([]command, error) {
 			continue
 		}
 
-		name, args, _ := strings.Cut(line, " ")
-		cmds = append(
-			cmds,
-			command{
-				strings.TrimSpace(name),
-				strings.Fields(args),
-			},
-		)
+		c, err := cmd.Parse(line)
+		if err != nil {
+			return nil, err
+		}
+
+		cmds = append(cmds, c)
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -71,45 +64,51 @@ func Exec(config *cfg.Config) error {
 	return nil
 }
 
-func exec(c command, tab *tab.Tab) error {
+func exec(c cmd.Command, tab *tab.Tab) error {
 	var err error
 
-	switch c.name {
-	case "add-cursor":
-		err = cmd.AddCursor(c.args, tab)
-	case "down":
-		err = cmd.Down(c.args, tab)
-	case "end":
-		err = cmd.End(c.args, tab)
-	case "esc":
-		err = cmd.Esc(c.args, tab)
-	case "goto":
-		err = cmd.Goto(c.args, tab)
-	case "left":
-		err = cmd.Left(c.args, tab)
-	case "newline":
-		err = cmd.Newline(c.args, tab)
-	case "right":
-		err = cmd.Right(c.args, tab)
-	case "rune":
-		err = cmd.Rune(c.args, tab)
-	case "save":
-		err = cmd.Save(c.args, tab, false)
-	case "space":
-		err = cmd.Space(c.args, tab)
-	case "spawn-down":
-		err = cmd.SpawnDown(c.args, tab)
-	case "spawn-up":
-		err = cmd.SpawnUp(c.args, tab)
-	case "tab":
-		err = cmd.Tab(c.args, tab)
-	case "trim":
-		err = cmd.Trim(c.args, tab)
-	case "up":
-		err = cmd.Up(c.args, tab)
-	default:
-		err = fmt.Errorf("invalid or unimplemented command '%s'", c.name)
+	for i := 0; i < c.RepCount; i++ {
+		switch c.Name {
+		case "add-cursor":
+			err = cmd.AddCursor(c.Args, tab)
+		case "down":
+			err = cmd.Down(c.Args, tab)
+		case "end":
+			err = cmd.End(c.Args, tab)
+		case "esc":
+			err = cmd.Esc(c.Args, tab)
+		case "goto":
+			err = cmd.Goto(c.Args, tab)
+		case "left":
+			err = cmd.Left(c.Args, tab)
+		case "newline":
+			err = cmd.Newline(c.Args, tab)
+		case "right":
+			err = cmd.Right(c.Args, tab)
+		case "rune":
+			err = cmd.Rune(c.Args, tab)
+		case "save":
+			err = cmd.Save(c.Args, tab, false)
+		case "space":
+			err = cmd.Space(c.Args, tab)
+		case "spawn-down":
+			err = cmd.SpawnDown(c.Args, tab)
+		case "spawn-up":
+			err = cmd.SpawnUp(c.Args, tab)
+		case "tab":
+			err = cmd.Tab(c.Args, tab)
+		case "trim":
+			err = cmd.Trim(c.Args, tab)
+		case "up":
+			err = cmd.Up(c.Args, tab)
+		default:
+			err = fmt.Errorf("invalid or unimplemented command '%s'", c.Name)
+		}
+
+		if err != nil {
+			return err
+		}
 	}
 
-	return err
+	return nil
 }
