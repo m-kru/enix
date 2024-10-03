@@ -342,6 +342,10 @@ func (p *Prompt) Exec() TcellEventReceiver {
 			err = cmd.Save(c.Args, tab, p.Config.TrimOnSave)
 		case "space":
 			err = cmd.Space(c.Args, tab)
+		case "spawn-down":
+			err = cmd.SpawnDown(c.Args, tab)
+		case "spawn-up":
+			err = cmd.SpawnUp(c.Args, tab)
 		case "tab":
 			err = cmd.Tab(c.Args, tab)
 		case "tab-count":
