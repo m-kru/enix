@@ -2,92 +2,49 @@ package cmd
 
 import (
 	"fmt"
-	"strconv"
 
 	"github.com/m-kru/enix/internal/tab"
 )
 
 func ViewDown(args []string, tab *tab.Tab) error {
-	if len(args) > 1 {
-		return fmt.Errorf("view-down: expected at most 1 arg, provided %d", len(args))
-	}
-
-	n := 1
 	if len(args) > 0 {
-		var err error
-		n, err = strconv.Atoi(args[0])
-		if err != nil {
-			return fmt.Errorf("view-down: %v", err)
-		}
+		return fmt.Errorf("view-down: expected 0 args, provided %d", len(args))
 	}
 
-	if n < 1 {
-		return fmt.Errorf("view-down: expected positive value, provided %d", n)
+	if tab.View.LastLine() >= tab.Lines.Count() {
+		return nil
 	}
 
-	view := tab.View
-
-	if n+view.LastLine() > tab.Lines.Count() {
-		n = tab.Lines.Count() - view.LastLine()
-	}
-
-	tab.View = view.Down(n)
+	tab.View = tab.View.Down(1)
 
 	return nil
 }
 
 func ViewUp(args []string, tab *tab.Tab) error {
-	if len(args) > 1 {
-		return fmt.Errorf("view-up: expected at most 1 arg, provided %d", len(args))
-	}
-
-	n := 1
 	if len(args) > 0 {
-		var err error
-		n, err = strconv.Atoi(args[0])
-		if err != nil {
-			return fmt.Errorf("view-up: %v", err)
-		}
+		return fmt.Errorf("view-up: expected 0 args, provided %d", len(args))
 	}
 
-	if n < 1 {
-		return fmt.Errorf("view-up: expected positive value, provided %d", n)
-	}
-
-	tab.View = tab.View.Up(n)
+	tab.View = tab.View.Up(1)
 
 	return nil
 }
 
 func ViewRight(args []string, tab *tab.Tab) error {
-	if len(args) > 1 {
-		return fmt.Errorf("view-right: expected at most 1 arg, provided %d", len(args))
-	}
-
-	n := 1
 	if len(args) > 0 {
-		var err error
-		n, err = strconv.Atoi(args[0])
-		if err != nil {
-			return fmt.Errorf("view-right: %v", err)
-		}
+		return fmt.Errorf("view-right: expected 0 args, provided %d", len(args))
 	}
 
-	if n < 1 {
-		return fmt.Errorf("view-right: expected positive value, provided %d", n)
-	}
-
-	view := tab.View
 	// - 3 because of:
 	// 1. Space between line number and first line character.
 	// 2. End of line character,
 	// 3. One extra column, it simply looks better.
-	lastCol := view.LastColumn() + tab.LineNumWidth() - 3
-	if n+lastCol > tab.LastColumnIdx() {
-		n = tab.LastColumnIdx() - lastCol
+	lastCol := tab.View.LastColumn() + tab.LineNumWidth() - 3
+	if lastCol >= tab.LastColumnIdx() {
+		return nil
 	}
 
-	tab.View = view.Right(n)
+	tab.View = tab.View.Right(1)
 
 	return nil
 }

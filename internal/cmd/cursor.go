@@ -9,36 +9,25 @@ import (
 )
 
 func Down(args []string, tab *tab.Tab) error {
-	if len(args) > 1 {
+	if len(args) > 0 {
 		return fmt.Errorf(
-			"down: provided %d args, expected at most 1", len(args),
+			"down: provided %d args, expected 0", len(args),
 		)
 	}
 
-	n := 1
-	var err error
-	if len(args) > 0 {
-		n, err = strconv.Atoi(args[0])
-		if err != nil {
-			return fmt.Errorf("down: %v", err)
-		}
-	}
-
-	down(n, tab)
+	down(tab)
 
 	return nil
 }
 
-func down(n int, tab *tab.Tab) {
+func down(tab *tab.Tab) {
 	c := tab.Cursors
 
 	for {
 		if c == nil {
 			break
 		}
-		for i := 0; i < n; i++ {
-			c.Down()
-		}
+		c.Down()
 		c = c.Next
 	}
 
@@ -46,36 +35,25 @@ func down(n int, tab *tab.Tab) {
 }
 
 func Left(args []string, tab *tab.Tab) error {
-	if len(args) > 1 {
+	if len(args) > 0 {
 		return fmt.Errorf(
-			"left: provided %d args, expected at most 1", len(args),
+			"left: provided %d args, expected 0", len(args),
 		)
 	}
 
-	n := 1
-	var err error
-	if len(args) > 0 {
-		n, err = strconv.Atoi(args[0])
-		if err != nil {
-			return fmt.Errorf("left: %v", err)
-		}
-	}
-
-	left(n, tab)
+	left(tab)
 
 	return nil
 }
 
-func left(n int, tab *tab.Tab) {
+func left(tab *tab.Tab) {
 	c := tab.Cursors
 
 	for {
 		if c == nil {
 			break
 		}
-		for i := 0; i < n; i++ {
-			c.Left()
-		}
+		c.Left()
 		c = c.Next
 	}
 
@@ -83,36 +61,25 @@ func left(n int, tab *tab.Tab) {
 }
 
 func Right(args []string, tab *tab.Tab) error {
-	if len(args) > 1 {
+	if len(args) > 0 {
 		return fmt.Errorf(
-			"right: provided %d args, expected at most 1", len(args),
+			"right: provided %d args, expected 0", len(args),
 		)
 	}
 
-	n := 1
-	var err error
-	if len(args) > 0 {
-		n, err = strconv.Atoi(args[0])
-		if err != nil {
-			return fmt.Errorf("right: %v", err)
-		}
-	}
-
-	right(n, tab)
+	right(tab)
 
 	return nil
 }
 
-func right(n int, tab *tab.Tab) {
+func right(tab *tab.Tab) {
 	c := tab.Cursors
 
 	for {
 		if c == nil {
 			break
 		}
-		for i := 0; i < n; i++ {
-			c.Right()
-		}
+		c.Right()
 		c = c.Next
 	}
 
@@ -120,36 +87,25 @@ func right(n int, tab *tab.Tab) {
 }
 
 func Up(args []string, tab *tab.Tab) error {
-	if len(args) > 1 {
+	if len(args) > 0 {
 		return fmt.Errorf(
-			"up: provided %d args, expected at most 1", len(args),
+			"up: provided %d args, expected 0", len(args),
 		)
 	}
 
-	n := 1
-	var err error
-	if len(args) > 0 {
-		n, err = strconv.Atoi(args[0])
-		if err != nil {
-			return fmt.Errorf("up: %v", err)
-		}
-	}
-
-	up(n, tab)
+	up(tab)
 
 	return nil
 }
 
-func up(n int, tab *tab.Tab) {
+func up(tab *tab.Tab) {
 	c := tab.Cursors
 
 	for {
 		if c == nil {
 			break
 		}
-		for i := 0; i < n; i++ {
-			c.Up()
-		}
+		c.Up()
 		c = c.Next
 	}
 

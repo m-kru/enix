@@ -3,7 +3,6 @@ package enix
 import (
 	"fmt"
 	"strings"
-	"unicode"
 
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cmd"
@@ -288,104 +287,101 @@ func (p *Prompt) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 
 // Exec executes command.
 func (p *Prompt) Exec() TcellEventReceiver {
-	name, argStr, _ := strings.Cut(strings.TrimSpace(p.Line.String()), " ")
-	args := strings.Fields(argStr)
-	tab := p.Window.CurrentTab
-
-	var err error
-	updateView := true
-
-	// If the first word is a number, then treat it as a goto command.
-	if unicode.IsDigit([]rune(name)[0]) {
-		err = cmd.Goto(strings.Fields(p.Line.String()), tab)
-		goto errorCheck
-	}
-
-	switch name {
-	case "":
-	case "add-cursor":
-		err = cmd.AddCursor(args, tab)
-		// Do nothing
-	case "cmd":
-		p.Activate("", "")
-		return p
-	case "cmd-error":
-		p.ShowError(argStr)
-		return p.Window
-	case "cmd-info":
-		p.ShowInfo(argStr)
-		return p.Window
-	case "cursor-count":
-		p.ShowInfo(fmt.Sprintf("%d", tab.Cursors.Count()))
-		return p.Window
-	case "down":
-		err = cmd.Down(args, tab)
-	case "end":
-		err = cmd.End(args, tab)
-	case "goto":
-		err = cmd.Goto(args, tab)
-	case "left":
-		err = cmd.Left(args, tab)
-	case "line-end":
-		err = cmd.LineEnd(args, tab)
-	case "line-start":
-		err = cmd.LineStart(args, tab)
-	case "right":
-		err = cmd.Right(args, tab)
-	case "rune":
-		err = cmd.Rune(args, tab)
-	case "quit", "q":
-		err = cmd.Quit(args, tab, false)
-		if err == nil {
-			return nil
-		}
-	case "quit!", "q!":
-		_ = cmd.Quit(args, tab, true)
-		return nil
-	case "save":
-		err = cmd.Save(args, tab, p.Config.TrimOnSave)
-	case "space":
-		err = cmd.Space(args, tab)
-	case "tab":
-		err = cmd.Tab(args, tab)
-	case "tab-count":
-		p.ShowInfo(fmt.Sprintf("%d", p.Window.Tabs.Count()))
-		return p.Window
-	case "tab-width":
-		err = cmd.CfgTabWidth(args, p.Config)
-	case "trim":
-		err = cmd.Trim(args, tab)
-	case "up":
-		err = cmd.Up(args, tab)
-	case "view-down":
-		err = cmd.ViewDown(args, tab)
-		updateView = false
-	case "view-right":
-		err = cmd.ViewRight(args, tab)
-		updateView = false
-	case "view-up":
-		err = cmd.ViewUp(args, tab)
-		updateView = false
-	case "prev-word-start":
-		err = cmd.PrevWordStart(args, tab)
-	case "word-end":
-		err = cmd.WordEnd(args, tab)
-	case "word-start":
-		err = cmd.WordStart(args, tab)
-	default:
-		p.ShowError(
-			fmt.Sprintf(
-				"invalid or unimplemented command '%s', if unimplemented report on https://github.com/m-kru/enix",
-				name,
-			),
-		)
-		return p.Window
-	}
-
-errorCheck:
+	c, err := cmd.Parse(strings.TrimSpace(p.Line.String()))
 	if err != nil {
 		p.ShowError(fmt.Sprintf("%v", err))
 		return p.Window
+	}
+
+	tab := p.Window.CurrentTab
+	updateView := true
+
+	for i := 0; i < c.RepCount; i++ {
+		switch c.Name {
+		case "":
+		case "add-cursor":
+			err = cmd.AddCursor(c.Args, tab)
+			// Do nothing
+		case "cmd":
+			p.Activate("", "")
+			return p
+		case "cmd-error":
+			p.ShowError(strings.Join(c.Args, " "))
+			return p.Window
+		case "cmd-info":
+			p.ShowInfo(strings.Join(c.Args, " "))
+			return p.Window
+		case "cursor-count":
+			p.ShowInfo(fmt.Sprintf("%d", tab.Cursors.Count()))
+			return p.Window
+		case "down":
+			err = cmd.Down(c.Args, tab)
+		case "end":
+			err = cmd.End(c.Args, tab)
+		case "goto":
+			err = cmd.Goto(c.Args, tab)
+		case "left":
+			err = cmd.Left(c.Args, tab)
+		case "line-end":
+			err = cmd.LineEnd(c.Args, tab)
+		case "line-start":
+			err = cmd.LineStart(c.Args, tab)
+		case "right":
+			err = cmd.Right(c.Args, tab)
+		case "rune":
+			err = cmd.Rune(c.Args, tab)
+		case "quit", "q":
+			err = cmd.Quit(c.Args, tab, false)
+			if err == nil {
+				return nil
+			}
+		case "quit!", "q!":
+			_ = cmd.Quit(c.Args, tab, true)
+			return nil
+		case "save":
+			err = cmd.Save(c.Args, tab, p.Config.TrimOnSave)
+		case "space":
+			err = cmd.Space(c.Args, tab)
+		case "tab":
+			err = cmd.Tab(c.Args, tab)
+		case "tab-count":
+			p.ShowInfo(fmt.Sprintf("%d", p.Window.Tabs.Count()))
+			return p.Window
+		case "tab-width":
+			err = cmd.CfgTabWidth(c.Args, p.Config)
+		case "trim":
+			err = cmd.Trim(c.Args, tab)
+		case "up":
+			err = cmd.Up(c.Args, tab)
+		case "view-down":
+			err = cmd.ViewDown(c.Args, tab)
+			updateView = false
+		case "view-right":
+			err = cmd.ViewRight(c.Args, tab)
+			updateView = false
+		case "view-up":
+			err = cmd.ViewUp(c.Args, tab)
+			updateView = false
+		case "prev-word-start":
+			err = cmd.PrevWordStart(c.Args, tab)
+		case "word-end":
+			err = cmd.WordEnd(c.Args, tab)
+		case "word-start":
+			err = cmd.WordStart(c.Args, tab)
+		default:
+			p.ShowError(
+				fmt.Sprintf(
+					"invalid or unimplemented command '%s', if unimplemented report on https://github.com/m-kru/enix",
+					c.Name,
+				),
+			)
+			return p.Window
+		}
+
+		if err != nil {
+			p.ShowError(fmt.Sprintf("%v", err))
+			return p.Window
+		}
 	}
 
 	if updateView {

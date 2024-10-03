@@ -5,8 +5,7 @@ var cmds = map[string]string{
 
 	"cursor-count": `cursor-count # Prints the number of cursors in current tab.`,
 
-	"down": `down [N=1] # Moves cursor down.
-The N parameter specifies how many lines cursor should be moved.
+	"down": `down # Moves cursor down.
 If cursor is in the last line, nothing happens.`,
 
 	"left": `left # Moves cursor left.
@@ -19,8 +18,7 @@ If cursor is in the last column of a line, then it is moved into the first
 column of the next line. Unless this is the lastt line. In such a case,
 nothing happens.`,
 
-	"up": `up [N=1] # Moves cursor up.
-The N parameter specifies how many lines cursor should be moved.
+	"up": `up # Moves cursor up.
 If cursor is in the fisrt line, nothing happens.`,
 
 	"end": `end # Moves cursor to the last line.
@@ -145,10 +143,10 @@ Forced version of the quit command. It quits the tab even if there are unsaved c
 	// View
 
 	"view":       "view line-number column # Sets view start at provided line number and column.",
-	"view-down":  "view-down [N=1] # Scrolls view down by N lines.",
-	"view-left":  "view-left [N=1] # Scrolls view left by N columns.",
-	"view-right": "view-right [N=1] # Scrolls view right by N columns.",
-	"view-up":    "view-up [N=1] # Scrolls view up by N lines.",
+	"view-down":  "view-down # Scrolls view down by N lines.",
+	"view-left":  "view-left # Scrolls view left by N columns.",
+	"view-right": "view-right # Scrolls view right by N columns.",
+	"view-up":    "view-up # Scrolls view up by N lines.",
 
 	/*
 	   "match-brace":   struct{}{},
