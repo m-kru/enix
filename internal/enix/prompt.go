@@ -326,6 +326,8 @@ func (p *Prompt) Exec() TcellEventReceiver {
 			err = cmd.LineEnd(c.Args, tab)
 		case "line-start":
 			err = cmd.LineStart(c.Args, tab)
+		case "newline":
+			err = cmd.Newline(c.Args, tab)
 		case "right":
 			err = cmd.Right(c.Args, tab)
 		case "rune":
