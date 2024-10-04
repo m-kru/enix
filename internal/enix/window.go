@@ -101,6 +101,8 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 			err = cmd.LineEnd(args, tab)
 		case "line-start":
 			err = cmd.LineStart(args, tab)
+		case "m", "mark":
+			err = cmd.Mark(args, tab)
 		case "newline":
 			err = cmd.Newline(args, tab)
 		case "quit", "q":

@@ -4,6 +4,7 @@ import (
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/line"
+	"github.com/m-kru/enix/internal/mark"
 	"github.com/m-kru/enix/internal/util"
 	"github.com/m-kru/enix/internal/view"
 )
@@ -24,6 +25,8 @@ type Tab struct {
 	Cursors *cursor.Cursor // First cursor
 
 	Lines *line.Line // First line
+
+	Marks map[string]mark.Mark
 
 	View view.View
 

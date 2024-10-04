@@ -130,7 +130,7 @@ func Goto(args []string, tab *tab.Tab) error {
 	col := 0
 
 	if len(args) == 0 {
-		return fmt.Errorf("goto: missing at least line number")
+		return fmt.Errorf("goto: missing at least line number or mark name")
 	} else if len(args) == 1 {
 		if strings.Contains(args[0], ":") {
 			lineStr, colStr, _ := strings.Cut(args[0], ":")

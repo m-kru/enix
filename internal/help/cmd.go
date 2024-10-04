@@ -130,6 +130,12 @@ for the help command. The same as 'help help'. Valid topics are:
 	"tab":     `tab # Inserts tab rune.`,
 	"newline": `newline # Inserts a newline.`,
 
+	"mark": `mark name # Creates new named mark.
+Marks allow to record current cursors or selections positions.
+Mark name must not start with a digit. To resotre marks one has to
+use the goto command providing as an argument the name of a mark.`,
+	"m": `m # An alias to the mark command.`,
+
 	"trim": `trim # Trims trailing whitespaces from all lines.`,
 
 	"quit": `quit # Quits tab.

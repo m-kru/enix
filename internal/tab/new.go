@@ -5,6 +5,7 @@ import (
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/line"
+	"github.com/m-kru/enix/internal/mark"
 	"github.com/m-kru/enix/internal/util"
 	"github.com/m-kru/enix/internal/view"
 	"os"
@@ -21,6 +22,7 @@ func Empty(config *cfg.Config, colors *cfg.Colorscheme, keys *cfg.Keybindings) *
 		HasFocus:   true,
 		HasChanges: false,
 		Lines:      line.Empty(),
+		Marks:      make(map[string]mark.Mark),
 		View:       view.View{Line: 1, Column: 1},
 	}
 
@@ -51,6 +53,7 @@ func Open(
 		FileType:   util.FileNameToType(path),
 		HasFocus:   true,
 		HasChanges: false,
+		Marks:      make(map[string]mark.Mark),
 		View:       view.View{Line: 1, Column: 1},
 	}
 
@@ -92,6 +95,7 @@ func FromString(
 		HasFocus:   true,
 		HasChanges: false,
 		Lines:      line.FromString(str),
+		Marks:      make(map[string]mark.Mark),
 		View:       view.View{Line: 1, Column: 1},
 	}
 

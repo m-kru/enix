@@ -68,6 +68,7 @@ func KeybindingsDefault() Keybindings {
 		"Rune[c]": "copy",
 		"Rune[f]": "find",
 		"Rune[i]": "insert",
+		"Rune[m]": "mark tmp",
 		//"Rune[h]": "help",
 		"Rune[q]": "quit",
 		// "Ctrl+U":     "undo", Alt+U
