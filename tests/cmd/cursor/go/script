@@ -1,7 +1,7 @@
-goto 2 8
+go 2 8
 rune X
-goto 5 7
+go 5 7
 rune Y
-goto 1
+go 1
 rune Z
 save got

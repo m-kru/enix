@@ -12,19 +12,19 @@ func TestParse(t *testing.T) {
 	}{
 		{
 			line: "10",
-			want: Command{RepCount: 1, Name: "goto", Args: []string{"10"}},
+			want: Command{RepCount: 1, Name: "go", Args: []string{"10"}},
 		},
 		{
 			line: "10:12",
-			want: Command{RepCount: 1, Name: "goto", Args: []string{"10:12"}},
+			want: Command{RepCount: 1, Name: "go", Args: []string{"10:12"}},
 		},
 		{
-			line: "goto 10:12",
-			want: Command{RepCount: 1, Name: "goto", Args: []string{"10:12"}},
+			line: "go 10:12",
+			want: Command{RepCount: 1, Name: "go", Args: []string{"10:12"}},
 		},
 		{
 			line: "10 12",
-			want: Command{RepCount: 1, Name: "goto", Args: []string{"10", "12"}},
+			want: Command{RepCount: 1, Name: "go", Args: []string{"10", "12"}},
 		},
 		{
 			line: "down",

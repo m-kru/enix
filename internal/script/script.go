@@ -77,8 +77,8 @@ func exec(c cmd.Command, tab *tab.Tab) error {
 			err = cmd.End(c.Args, tab)
 		case "esc":
 			err = cmd.Esc(c.Args, tab)
-		case "goto":
-			err = cmd.Goto(c.Args, tab)
+		case "go":
+			err = cmd.Go(c.Args, tab)
 		case "left":
 			err = cmd.Left(c.Args, tab)
 		case "mark":

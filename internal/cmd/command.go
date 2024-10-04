@@ -17,7 +17,7 @@ type Command struct {
 func Parse(line string) (Command, error) {
 	cmd := Command{RepCount: 1}
 
-	// The command might be a short version of goto command.
+	// The command might be a short version of go command.
 	if unicode.IsDigit([]rune(line)[0]) {
 		cmd, ok := parseShortGoto(line)
 		if ok {
@@ -52,12 +52,12 @@ func Parse(line string) (Command, error) {
 	return cmd, nil
 }
 
-// Valid versions of short goto command are, for example:
+// Valid versions of short go command are, for example:
 //   - 1
 //   - 1:2
 //   - 1 2
 func parseShortGoto(line string) (Command, bool) {
-	cmd := Command{RepCount: 1, Name: "goto"}
+	cmd := Command{RepCount: 1, Name: "go"}
 
 	for _, r := range line {
 		if !unicode.IsDigit(r) && r != ':' && r != ' ' {

@@ -321,8 +321,8 @@ func (p *Prompt) Exec() TcellEventReceiver {
 			err = cmd.Down(c.Args, tab)
 		case "end":
 			err = cmd.End(c.Args, tab)
-		case "goto":
-			err = cmd.Goto(c.Args, tab)
+		case "g", "go":
+			err = cmd.Go(c.Args, tab)
 		case "left":
 			err = cmd.Left(c.Args, tab)
 		case "line-end":

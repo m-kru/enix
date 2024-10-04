@@ -89,8 +89,8 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 			tab.HasFocus = false
 			w.Prompt.Activate("find ", "todo")
 			return w.Prompt
-		case "goto":
-			err = cmd.Goto(args, tab)
+		case "g", "go":
+			err = cmd.Go(args, tab)
 		case "help":
 			tab.HasFocus = false
 			w.Prompt.Activate("help ", "")

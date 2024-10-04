@@ -8,7 +8,7 @@ func (tab *Tab) Mark(name string) {
 	if tab.Cursors != nil {
 		m = mark.NewCursorMark(tab.Cursors)
 	} else {
-
+		panic("unimplemented selection mark")
 	}
 
 	tab.Marks[name] = m

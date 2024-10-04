@@ -38,6 +38,13 @@ If L is greater than the number of lines in the file, then the cursor is placed
 in the last line. If C is greater than the number of columns in a given line,
 then the cursor is placed in the last column.`,
 
+	"go": `go position|mark-name # Goes to the position or restores mark.
+Valid syntaxes for position are:
+  - go 10 # Goes to line 10 column 1,
+  - go 10 5 # Goes to line 10 column 5,
+  - go 10:5 # Goes to line 10 column 5.`,
+	"g": `g # An alias to the go command.`,
+
 	// Command
 
 	"cmd": `cmd # Starts command prompt.`,
@@ -133,7 +140,7 @@ for the help command. The same as 'help help'. Valid topics are:
 	"mark": `mark name # Creates new named mark.
 Marks allow to record current cursors or selections positions.
 Mark name must not start with a digit. To resotre marks one has to
-use the goto command providing as an argument the name of a mark.`,
+use the go command providing as an argument the name of a mark.`,
 	"m": `m # An alias to the mark command.`,
 
 	"trim": `trim # Trims trailing whitespaces from all lines.`,

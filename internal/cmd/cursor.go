@@ -126,17 +126,17 @@ func End(args []string, tab *tab.Tab) error {
 	return nil
 }
 
-func Goto(args []string, tab *tab.Tab) error {
+func Go(args []string, tab *tab.Tab) error {
 	var err error
 	line := 0
 	col := 0
 
 	if len(args) == 0 {
-		return fmt.Errorf("goto: missing at least line number or mark name")
+		return fmt.Errorf("go: missing at least line number or mark name")
 	}
 
 	if len(args) == 1 && !unicode.IsDigit([]rune(args[0])[0]) {
-		return gotoMark(args[0], tab)
+		return goMark(args[0], tab)
 	}
 
 	if len(args) == 1 {
@@ -144,37 +144,37 @@ func Goto(args []string, tab *tab.Tab) error {
 			lineStr, colStr, _ := strings.Cut(args[0], ":")
 			line, err = strconv.Atoi(lineStr)
 			if err != nil {
-				return fmt.Errorf("goto: %v", err)
+				return fmt.Errorf("go: %v", err)
 			}
 			col, err = strconv.Atoi(colStr)
 			if err != nil {
-				return fmt.Errorf("goto: %v", err)
+				return fmt.Errorf("go: %v", err)
 			}
 		} else {
 			line, err = strconv.Atoi(args[0])
 			if err != nil {
-				return fmt.Errorf("goto: %v", err)
+				return fmt.Errorf("go: %v", err)
 			}
 		}
 	} else if len(args) == 2 {
 		line, err = strconv.Atoi(args[0])
 		if err != nil {
-			return fmt.Errorf("goto: %v", err)
+			return fmt.Errorf("go: %v", err)
 		}
 		col, err = strconv.Atoi(args[1])
 		if err != nil {
-			return fmt.Errorf("goto: %v", err)
+			return fmt.Errorf("go: %v", err)
 		}
 	} else {
-		return fmt.Errorf("goto: expected at most 2 args, provided %d", len(args))
+		return fmt.Errorf("go: expected at most 2 args, provided %d", len(args))
 	}
 
-	goTo(line, col, tab)
+	goCmd(line, col, tab)
 
 	return nil
 }
 
-func goTo(line, col int, tab *tab.Tab) {
+func goCmd(line, col int, tab *tab.Tab) {
 	if line < 1 {
 		line = 1
 	}
@@ -193,10 +193,10 @@ func goTo(line, col int, tab *tab.Tab) {
 	tab.Cursors = &cursor.Cursor{Config: tab.Config, Line: l, BufIdx: col - 1, Idx: col - 1}
 }
 
-func gotoMark(name string, tab *tab.Tab) error {
+func goMark(name string, tab *tab.Tab) error {
 	m, ok := tab.Marks[name]
 	if !ok {
-		return fmt.Errorf("no '%s' mark", name)
+		return fmt.Errorf("go: no '%s' mark", name)
 	}
 
 	switch m := m.(type) {
