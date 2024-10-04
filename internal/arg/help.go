@@ -15,9 +15,11 @@ Usage:
 
 Flags:
 
-  -dump-config  Dump config to stdout.
-  -help         Display help.
-  -version      Display version.
+  -dump-config       Dump config to stdout.
+  -dump-keys         Dump normal mode keybindings to stdout.
+  -dump-prompt-keys  Dump prompt keybindings to stdout.
+  -help              Display help.
+  -version           Display version.
 
 Parameters:
 

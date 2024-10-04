@@ -3,6 +3,7 @@ package arg
 var Config string // Path to the config file.
 var DumpConfig bool
 var DumpKeys bool
+var DumpPromptKeys bool
 
 var Script string // Path to the script to be run.
 var Line int = 1
@@ -11,7 +12,11 @@ var Files []string // Paths to text files.
 
 func isValidFlag(f string) bool {
 	flags := map[string]bool{
-		"-dump-config": true, "-dump-keys": true, "-help": true, "-version": true,
+		"-dump-config":      true,
+		"-dump-keys":        true,
+		"-dump-prompt-keys": true,
+		"-help":             true,
+		"-version":          true,
 	}
 	if _, ok := flags[f]; ok {
 		return true
