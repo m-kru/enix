@@ -126,6 +126,9 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 		case "view-down":
 			err = cmd.ViewDown(args, tab)
 			updateView = false
+		case "view-left":
+			err = cmd.ViewLeft(args, tab)
+			updateView = false
 		case "view-right":
 			err = cmd.ViewRight(args, tab)
 			updateView = false

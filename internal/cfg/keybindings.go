@@ -81,6 +81,7 @@ func KeybindingsDefault() Keybindings {
 		"Down":  "view-down",
 		"Right": "view-right",
 		"Up":    "view-up",
+		"Left":  "view-left",
 	}
 }
 

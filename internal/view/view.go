@@ -63,3 +63,11 @@ func (v View) Right(n int) View {
 	v.Column += n
 	return v
 }
+
+func (v View) Left(n int) View {
+	v.Column -= n
+	if v.Column < 1 {
+		v.Column = 1
+	}
+	return v
+}

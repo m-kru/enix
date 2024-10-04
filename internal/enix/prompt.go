@@ -360,6 +360,9 @@ func (p *Prompt) Exec() TcellEventReceiver {
 		case "view-down":
 			err = cmd.ViewDown(c.Args, tab)
 			updateView = false
+		case "view-left":
+			err = cmd.ViewLeft(c.Args, tab)
+			updateView = false
 		case "view-right":
 			err = cmd.ViewRight(c.Args, tab)
 			updateView = false
