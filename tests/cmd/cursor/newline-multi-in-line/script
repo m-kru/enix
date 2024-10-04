@@ -1,0 +1,7 @@
+add-cursor 2 1
+add-cursor 2 4
+add-cursor 3 1
+add-cursor 3 3
+add-cursor 3 5
+newline
+save got
