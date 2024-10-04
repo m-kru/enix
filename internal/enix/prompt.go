@@ -56,6 +56,9 @@ func (p *Prompt) Clear() {
 func (p *Prompt) ShowError(msg string) {
 	x := 0
 	for _, r := range msg {
+		if x == p.Frame.Width {
+			break
+		}
 		p.Frame.SetContent(x, 0, r, p.Colors.Error)
 		x++
 	}
