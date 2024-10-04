@@ -69,6 +69,10 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 		name, argStr := w.Keys.ToCmd(ev)
 		args := strings.Fields(argStr)
 
+		if name == "" {
+			break
+		}
+
 		switch name {
 		case "add-cursor":
 			err = cmd.AddCursor(args, tab)
@@ -142,6 +146,10 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 		case "prev-word-start":
 			err = cmd.PrevWordStart(args, tab)
 		default:
+			err = fmt.Errorf(
+				"invalid or unimplemeneted command '%s', if unimplemented report on https://github.com/m-kru/enix",
+				name,
+			)
 			updateView = false
 		}
 	}
