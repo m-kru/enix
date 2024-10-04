@@ -82,7 +82,7 @@ func exec(c cmd.Command, tab *tab.Tab) error {
 		case "left":
 			err = cmd.Left(c.Args, tab)
 		case "mark":
-			err = cmd.Mark(c.Args, tab)
+			_, err = cmd.Mark(c.Args, tab)
 		case "newline":
 			err = cmd.Newline(c.Args, tab)
 		case "right":
@@ -90,7 +90,7 @@ func exec(c cmd.Command, tab *tab.Tab) error {
 		case "rune":
 			err = cmd.Rune(c.Args, tab)
 		case "save":
-			err = cmd.Save(c.Args, tab, false)
+			_, err = cmd.Save(c.Args, tab, false)
 		case "space":
 			err = cmd.Space(c.Args, tab)
 		case "spawn-down":

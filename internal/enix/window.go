@@ -54,6 +54,7 @@ func (w *Window) RxMouseEvent(ev mouse.Event) {
 
 func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 	var err error
+	var info string
 	updateView := true
 	tab := w.CurrentTab
 
@@ -104,7 +105,7 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 		case "line-start":
 			err = cmd.LineStart(args, tab)
 		case "m", "mark":
-			err = cmd.Mark(args, tab)
+			info, err = cmd.Mark(args, tab)
 		case "newline":
 			err = cmd.Newline(args, tab)
 		case "quit", "q":
@@ -118,7 +119,7 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 		case "right":
 			err = cmd.Right(args, tab)
 		case "save":
-			err = cmd.Save(args, tab, w.Config.TrimOnSave)
+			info, err = cmd.Save(args, tab, w.Config.TrimOnSave)
 		case "space":
 			err = cmd.Space(args, tab)
 		case "spawn-down":
@@ -164,6 +165,8 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 
 	if err != nil {
 		w.Prompt.ShowError(fmt.Sprintf("%v", err))
+	} else if info != "" {
+		w.Prompt.ShowInfo(info)
 	}
 
 	return w

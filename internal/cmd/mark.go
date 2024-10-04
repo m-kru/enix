@@ -6,16 +6,16 @@ import (
 	"unicode"
 )
 
-func Mark(args []string, tab *tab.Tab) error {
+func Mark(args []string, tab *tab.Tab) (string, error) {
 	if len(args) != 1 {
-		return fmt.Errorf(
+		return "", fmt.Errorf(
 			"mark: provided %d args, expected 1", len(args),
 		)
 	}
 
 	name := args[0]
 	if unicode.IsDigit([]rune(name)[0]) {
-		return fmt.Errorf(
+		return "", fmt.Errorf(
 			"mark: invalid name '%s', name must not start with a digit",
 			name,
 		)
@@ -23,5 +23,5 @@ func Mark(args []string, tab *tab.Tab) error {
 
 	tab.Mark(name)
 
-	return nil
+	return fmt.Sprintf("mark '%s' created", name), nil
 }

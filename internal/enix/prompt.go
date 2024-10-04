@@ -296,6 +296,7 @@ func (p *Prompt) Exec() TcellEventReceiver {
 		return p.Window
 	}
 
+	var info string
 	tab := p.Window.CurrentTab
 	updateView := true
 
@@ -332,7 +333,7 @@ func (p *Prompt) Exec() TcellEventReceiver {
 		case "newline":
 			err = cmd.Newline(c.Args, tab)
 		case "m", "mark":
-			err = cmd.Mark(c.Args, tab)
+			info, err = cmd.Mark(c.Args, tab)
 		case "right":
 			err = cmd.Right(c.Args, tab)
 		case "rune":
@@ -346,7 +347,7 @@ func (p *Prompt) Exec() TcellEventReceiver {
 			_ = cmd.Quit(c.Args, tab, true)
 			return nil
 		case "save":
-			err = cmd.Save(c.Args, tab, p.Config.TrimOnSave)
+			info, err = cmd.Save(c.Args, tab, p.Config.TrimOnSave)
 		case "space":
 			err = cmd.Space(c.Args, tab)
 		case "spawn-down":
@@ -393,16 +394,24 @@ func (p *Prompt) Exec() TcellEventReceiver {
 		}
 
 		if err != nil {
-			p.ShowError(fmt.Sprintf("%v", err))
-			return p.Window
+			break
 		}
+	}
+
+	if err != nil {
+		p.ShowError(fmt.Sprintf("%v", err))
+		return p.Window
 	}
 
 	if updateView {
 		tab.UpdateView()
 	}
 
-	p.Clear()
+	if info != "" {
+		p.ShowInfo(info)
+	} else {
+		p.Clear()
+	}
 
 	return p.Window
 }
