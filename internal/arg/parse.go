@@ -120,7 +120,7 @@ func Parse() {
 		} else if arg[0] == '+' {
 			handleLineAndColumn(arg)
 		} else if arg[0] == '-' {
-			log.Fatalf("invalid option '%s'", arg)
+			log.Fatalf("invalid option '%s', check 'enix -help'", arg)
 		} else {
 			handleFile(arg)
 		}
