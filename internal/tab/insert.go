@@ -26,13 +26,33 @@ func (tab *Tab) RxEventKey(ev *tcell.EventKey) {
 }
 
 func (tab *Tab) InsertRune(r rune) {
-	c := tab.Cursors
+	if tab.Cursors != nil {
+		tab.insertRuneCursors(r)
+	}
+}
+
+func (tab *Tab) insertRuneCursors(r rune) {
+	c0 := tab.Cursors // First cursor
+	c := c0
+
 	for {
+		c2 := c0
+		for {
+			if c2 == nil {
+				break
+			}
+			if c2 != c {
+				c2.InformRuneInsert(c.Line, c.BufIdx)
+			}
+			c2 = c2.Next
+		}
+
+		c.InsertRune(r)
+
+		c = c.Next
 		if c == nil {
 			break
 		}
-		c.InsertRune(r)
-		c = c.Next
 	}
 
 	tab.HasChanges = true

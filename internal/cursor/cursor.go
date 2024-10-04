@@ -125,17 +125,6 @@ func (c *Cursor) InformDeletion(l *line.Line, idx int, size int) {
 }
 
 func (c *Cursor) InsertRune(r rune) {
-	c2 := c.Last()
-	for {
-		if c2 == nil {
-			break
-		}
-		if c2 != c {
-			c2.InformRuneInsert(c.Line, c.BufIdx)
-		}
-		c2 = c2.Prev
-	}
-
 	c.Line.InsertRune(r, c.BufIdx)
 	c.BufIdx++
 }
