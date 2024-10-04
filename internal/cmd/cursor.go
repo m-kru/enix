@@ -3,9 +3,11 @@ package cmd
 import (
 	"fmt"
 	"github.com/m-kru/enix/internal/cursor"
+	"github.com/m-kru/enix/internal/mark"
 	"github.com/m-kru/enix/internal/tab"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
 func Down(args []string, tab *tab.Tab) error {
@@ -131,7 +133,13 @@ func Goto(args []string, tab *tab.Tab) error {
 
 	if len(args) == 0 {
 		return fmt.Errorf("goto: missing at least line number or mark name")
-	} else if len(args) == 1 {
+	}
+
+	if len(args) == 1 && !unicode.IsDigit([]rune(args[0])[0]) {
+		return gotoMark(args[0], tab)
+	}
+
+	if len(args) == 1 {
 		if strings.Contains(args[0], ":") {
 			lineStr, colStr, _ := strings.Cut(args[0], ":")
 			line, err = strconv.Atoi(lineStr)
@@ -183,6 +191,22 @@ func goTo(line, col int, tab *tab.Tab) {
 	}
 
 	tab.Cursors = &cursor.Cursor{Config: tab.Config, Line: l, BufIdx: col - 1, Idx: col - 1}
+}
+
+func gotoMark(name string, tab *tab.Tab) error {
+	m, ok := tab.Marks[name]
+	if !ok {
+		return fmt.Errorf("no '%s' mark", name)
+	}
+
+	switch m := m.(type) {
+	case *mark.CursorMark:
+		tab.Cursors = m.Cursors.Clone()
+	default:
+		panic("selection mark unimplemented")
+	}
+
+	return nil
 }
 
 func PrevWordStart(args []string, tab *tab.Tab) error {

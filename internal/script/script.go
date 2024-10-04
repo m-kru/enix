@@ -81,6 +81,8 @@ func exec(c cmd.Command, tab *tab.Tab) error {
 			err = cmd.Goto(c.Args, tab)
 		case "left":
 			err = cmd.Left(c.Args, tab)
+		case "mark":
+			err = cmd.Mark(c.Args, tab)
 		case "newline":
 			err = cmd.Newline(c.Args, tab)
 		case "right":

@@ -49,6 +49,10 @@ func (tab *Tab) insertRuneCursors(r rune) {
 			c2 = c2.Next
 		}
 
+		for _, m := range tab.Marks {
+			m.InformRuneInsert(c.Line, c.BufIdx)
+		}
+
 		c.InsertRune(r)
 
 		c = c.Next

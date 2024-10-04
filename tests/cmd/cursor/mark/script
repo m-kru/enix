@@ -1,0 +1,7 @@
+down
+right
+mark m
+goto 0
+goto m
+rune e
+save got
