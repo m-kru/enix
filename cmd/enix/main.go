@@ -28,6 +28,17 @@ func main() {
 			log.Fatalf("%v", err)
 		}
 		fmt.Printf("%s\n", string(data))
+	}
+
+	if arg.DumpKeys {
+		data, err := json.MarshalIndent(keys, "", "\t")
+		if err != nil {
+			log.Fatalf("%v", err)
+		}
+		fmt.Printf("%s\n", string(data))
+	}
+
+	if arg.DumpConfig || arg.DumpKeys {
 		os.Exit(0)
 	}
 

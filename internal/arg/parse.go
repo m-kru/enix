@@ -83,6 +83,8 @@ func Parse() {
 		switch f {
 		case "-dump-config":
 			DumpConfig = true
+		case "-dump-keys":
+			DumpKeys = true
 		case "-help":
 			printHelp()
 		case "-version":
