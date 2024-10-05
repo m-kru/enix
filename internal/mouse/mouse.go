@@ -1,9 +1,6 @@
 package mouse
 
 import (
-	"sync"
-	"time"
-
 	"github.com/gdamore/tcell/v2"
 )
 
@@ -18,90 +15,75 @@ const (
 )
 
 type Mouse struct {
-	mtx sync.Mutex
-
-	state     State
-	prevEvent *tcell.EventMouse
-
-	EventChan chan Event
+	state  State
+	prevEv *tcell.EventMouse
 }
 
-func (m *Mouse) TimerFunc() {
-	m.mtx.Lock()
-	defer m.mtx.Unlock()
-
-	switch m.state {
-	case primaryClick:
-		m.state = idle
-	case doublePrimaryClick:
-		m.state = idle
-	case primaryClickCtrl:
-		m.state = idle
-	default:
-		panic("unimplemented")
+func (m *Mouse) RxTcellEventMouse(ev *tcell.EventMouse) Event {
+	if m.prevEv != nil {
+		if ev.When().UnixMilli()-m.prevEv.When().UnixMilli() > 500 {
+			m.state = idle
+		}
 	}
-}
-
-func (m *Mouse) RxTcellEventMouse(ev *tcell.EventMouse) {
-	m.mtx.Lock()
-	defer m.mtx.Unlock()
 
 	switch m.state {
 	case idle:
-		m.rxEventIdle(ev)
+		return m.rxEventIdle(ev)
 	case primaryClick:
-		m.rxEventPrimaryClick(ev)
+		return m.rxEventPrimaryClick(ev)
 	case doublePrimaryClick:
-		m.rxEventDoublePrimaryClick(ev)
+		return m.rxEventDoublePrimaryClick(ev)
 	case primaryClickCtrl:
-		m.rxEventPrimaryClickCtrl(ev)
+		return m.rxEventPrimaryClickCtrl(ev)
 	default:
 		panic("unimplemented")
 	}
 }
 
-func (m *Mouse) rxEventIdle(ev *tcell.EventMouse) {
+func (m *Mouse) rxEventIdle(ev *tcell.EventMouse) Event {
 	switch ev.Buttons() {
 	case tcell.ButtonNone:
 		// Do nothing, just mouse movement.
 	case tcell.Button1:
-		m.prevEvent = ev
+		m.prevEv = ev
 		x, y := ev.Position()
 
 		if ev.Modifiers()&tcell.ModCtrl != 0 {
 			m.state = primaryClickCtrl
-			m.EventChan <- PrimaryClickCtrl{x: x, y: y}
+			return PrimaryClickCtrl{x: x, y: y}
 		} else {
 			m.state = primaryClick
-			m.EventChan <- PrimaryClick{x: x, y: y}
+			return PrimaryClick{x: x, y: y}
 		}
-
-		time.AfterFunc(500*time.Millisecond, m.TimerFunc)
 	default:
 		// Do nothing, other mouse event
 	}
+
+	return nil
 }
 
-func (m *Mouse) rxEventPrimaryClick(ev *tcell.EventMouse) {
+func (m *Mouse) rxEventPrimaryClick(ev *tcell.EventMouse) Event {
 	switch ev.Buttons() {
 	case tcell.ButtonNone:
 		// Do nothing, just mouse movement.
 	case tcell.Button1:
-		x, y := m.prevEvent.Position()
+		x, y := m.prevEv.Position()
 		x2, y2 := ev.Position()
-		m.prevEvent = ev
+		m.prevEv = ev
 		if x == x2 && y == y2 {
 			m.state = doublePrimaryClick
-			m.EventChan <- DoublePrimaryClick{x: x, y: y}
+			return DoublePrimaryClick{x: x, y: y}
 		} else {
-			m.EventChan <- PrimaryClick{x: x2, y: y2}
+			return PrimaryClick{x: x2, y: y2}
 		}
 	default:
 		// Do nothing, other mouse event
 	}
+
+	return nil
 }
 
-func (m *Mouse) rxEventDoublePrimaryClick(ev *tcell.EventMouse) {
+func (m *Mouse) rxEventDoublePrimaryClick(ev *tcell.EventMouse) Event {
 	switch ev.Buttons() {
 	case tcell.ButtonNone:
 		// Do nothing, just mouse movement.
@@ -110,26 +92,28 @@ func (m *Mouse) rxEventDoublePrimaryClick(ev *tcell.EventMouse) {
 	default:
 		// Do nothing, other mouse event
 	}
+
+	return nil
 }
 
-func (m *Mouse) rxEventPrimaryClickCtrl(ev *tcell.EventMouse) {
+func (m *Mouse) rxEventPrimaryClickCtrl(ev *tcell.EventMouse) Event {
 	switch ev.Buttons() {
 	case tcell.ButtonNone:
 		// Do nothing, just mouse movement.
 	case tcell.Button1:
-		m.prevEvent = ev
+		m.prevEv = ev
 		x, y := ev.Position()
 
 		if ev.Modifiers()&tcell.ModCtrl != 0 {
 			m.state = primaryClickCtrl
-			m.EventChan <- PrimaryClickCtrl{x: x, y: y}
+			return PrimaryClickCtrl{x: x, y: y}
 		} else {
 			m.state = primaryClick
-			m.EventChan <- PrimaryClick{x: x, y: y}
+			return PrimaryClick{x: x, y: y}
 		}
-
-		time.AfterFunc(500*time.Millisecond, m.TimerFunc)
 	default:
 		// Do nothing, other mouse event
 	}
+
+	return nil
 }

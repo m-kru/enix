@@ -263,9 +263,6 @@ func Start(
 		Height:     height - 1, // One line for prompt
 	}
 
-	// Create buffered channel to prevent deadlocks.
-	w.Mouse.EventChan = make(chan mouse.Event, 8)
-
 	p := Prompt{
 		Config: config,
 		Colors: colors,
@@ -309,7 +306,10 @@ func Start(
 		case ev := <-tcellEventChan:
 			switch ev := ev.(type) {
 			case *tcell.EventMouse:
-				w.Mouse.RxTcellEventMouse(ev)
+				mEv := w.Mouse.RxTcellEventMouse(ev)
+				if mEv != nil {
+					w.RxMouseEvent(mEv)
+				}
 			default:
 				tcellEvRcvr = tcellEvRcvr.RxTcellEvent(ev)
 				if tcellEvRcvr == &w {
@@ -318,8 +318,6 @@ func Start(
 					return
 				}
 			}
-		case ev := <-w.Mouse.EventChan:
-			w.RxMouseEvent(ev)
 		}
 
 		w.Render()
