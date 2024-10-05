@@ -8,6 +8,7 @@ import (
 type Mark interface {
 	InformRuneInsert(line *line.Line, idx int)
 	InformNewlineInsert(line *line.Line, idx int)
+	InformRuneDelete(line *line.Line, idx int)
 }
 
 type CursorMark struct {
@@ -33,4 +34,17 @@ func (cm *CursorMark) InformNewlineInsert(line *line.Line, idx int) {
 
 func NewCursorMark(c *cursor.Cursor) *CursorMark {
 	return &CursorMark{Cursors: c.Clone()}
+}
+
+func (cm *CursorMark) InformRuneDelete(line *line.Line, idx int) {
+	c := cm.Cursors
+	for {
+		if c == nil {
+			break
+		}
+
+		c.InformRuneDelete(line, idx)
+
+		c = c.Next
+	}
 }

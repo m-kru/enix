@@ -27,6 +27,10 @@ func (tab *Tab) deleteCursors() {
 				}
 				c2 = c2.Next
 			}
+
+			for _, m := range tab.Marks {
+				m.InformRuneDelete(c.Line, c.BufIdx)
+			}
 		} else {
 
 		}
