@@ -24,3 +24,27 @@ func (c *Cursor) InformRuneDelete(l *line.Line, idx int) {
 	c.BufIdx--
 	c.Idx--
 }
+
+func (c *Cursor) Backspace() {
+	if c.BufIdx == 0 {
+		if c.Line.Prev == nil {
+			// Do nothing
+			return
+		} else {
+			panic("unimplemented")
+		}
+	}
+
+	// Inform other cursors about deletion.
+	cNext := c.Next
+	for {
+		if cNext == nil {
+			break
+		}
+		cNext.InformRuneDelete(c.Line, c.BufIdx-1)
+		cNext = cNext.Next
+	}
+
+	c.Line.DeleteRune(c.BufIdx - 1)
+	c.BufIdx--
+}
