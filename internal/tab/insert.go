@@ -13,7 +13,7 @@ func (tab *Tab) RxEventKey(ev *tcell.EventKey) {
 	case tcell.KeyBackspace2:
 		panic("unimplemented backspace2")
 	case tcell.KeyDelete:
-		panic("unimplemented delete")
+		tab.Delete()
 	case tcell.KeyEnter:
 		tab.InsertNewline()
 	}
