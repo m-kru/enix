@@ -81,6 +81,8 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 			tab.HasFocus = false
 			w.Prompt.Activate("", "")
 			return w.Prompt
+		case "del":
+			err = cmd.Del(args, tab)
 		case "down":
 			err = cmd.Down(args, tab)
 		case "esc":

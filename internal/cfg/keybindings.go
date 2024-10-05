@@ -53,6 +53,7 @@ func KeybindingsDefault() Keybindings {
 		"Backspace":  "backspace",
 		"Backspace2": "backspace",
 		"Delete":     "del",
+		"Rune[d]":    "del",
 		"Alt+W":      "del-word",
 		"Alt+{":      "del-within-brace",
 		"Alt+[":      "del-within-bracket",

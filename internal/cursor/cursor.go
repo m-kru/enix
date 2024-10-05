@@ -80,7 +80,7 @@ func (c *Cursor) Last() *Cursor {
 }
 
 // Prune function removes duplicates from cursor list.
-// A duplicate is a cursor pointing to the same line with the same index and buffer index.
+// A duplicate is a cursor pointing to the same line with equal buffer index.
 func (c *Cursor) Prune() {
 	for {
 		c2 := c.Next
@@ -116,14 +116,6 @@ func (c *Cursor) InformRuneInsert(l *line.Line, idx int) {
 	c.BufIdx++
 }
 
-// InformDeletion informs the cursor about content deletion from the line.
-func (c *Cursor) InformDeletion(l *line.Line, idx int, size int) {
-	if l != c.Line || idx > c.BufIdx {
-		return
-	}
-	panic("unimplemented")
-}
-
 func (c *Cursor) InsertRune(r rune) {
 	c.Line.InsertRune(r, c.BufIdx)
 	c.BufIdx++
@@ -155,33 +147,10 @@ func (c *Cursor) Backspace() {
 		if cNext == nil {
 			break
 		}
-		cNext.InformDeletion(c.Line, c.BufIdx-1, 1)
+		cNext.InformRuneDelete(c.Line, c.BufIdx-1)
 		cNext = cNext.Next
 	}
 
-	c.Line.Delete(c.BufIdx-1, 1)
+	c.Line.DeleteRune(c.BufIdx - 1)
 	c.BufIdx--
-}
-
-func (c *Cursor) Delete() {
-	if c.BufIdx == c.Line.Len() {
-		if c.Line.Next == nil {
-			// Do nothing
-			return
-		} else {
-			panic("unimplemented")
-		}
-	}
-
-	// Inform other cursors about deletion.
-	cNext := c.Next
-	for {
-		if cNext == nil {
-			break
-		}
-		cNext.InformDeletion(c.Line, c.BufIdx, 1)
-		cNext = cNext.Next
-	}
-
-	c.Line.Delete(c.BufIdx, 1)
 }

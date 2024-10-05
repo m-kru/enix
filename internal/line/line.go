@@ -173,10 +173,6 @@ func (l *Line) Append(s string) {
 	l.Buf = append(l.Buf, []rune(s)...)
 }
 
-func (l *Line) Delete(idx int, size int) {
-	l.Buf = append(l.Buf[0:idx], l.Buf[idx+1:len(l.Buf)]...)
-}
-
 // Trim trims trailing whitespaces and returns number of removed runes.
 func (l *Line) Trim() int {
 	trimCount := 0
