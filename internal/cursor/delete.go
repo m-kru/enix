@@ -6,7 +6,6 @@ import (
 
 func (c *Cursor) Delete() *line.Line {
 	return c.Line.DeleteRune(c.BufIdx)
-
 }
 
 // InformRuneDelete informs the cursor about single rune deletion from the line.
