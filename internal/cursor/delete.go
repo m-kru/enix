@@ -57,4 +57,5 @@ func (c *Cursor) InformNewlineDelete(l *line.Line, prevL *line.Line) {
 
 	c.Line = prevL
 	c.BufIdx = c.BufIdx + prevL.Len() - l.Len()
+	c.Idx = c.BufIdx
 }
