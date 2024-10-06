@@ -33,6 +33,27 @@ func (c *Cursor) Count() int {
 	return cnt
 }
 
+// Get returns nth cursor.
+// If there is less than n cursots, it returns nil.
+func (c *Cursor) Get(n int) *Cursor {
+	i := n
+
+	for {
+		if i == 1 {
+			return c
+		}
+
+		if c.Next == nil {
+			break
+		}
+
+		c = c.Next
+		i--
+	}
+
+	return nil
+}
+
 // Col returns column number of the cursor within the string in the buffer.
 func (c *Cursor) Column() int {
 	return c.Line.ColumnIdx(c.BufIdx, c.Config.TabWidth)

@@ -32,6 +32,9 @@ then the cursor is placed in the last column.`,
 	"down": `down # Moves cursor down.
 If cursor is in the last line, nothing happens.`,
 
+	"dump-cursor": `dump-cursor N # Dumps Nth cursor data.
+This command is useful for enix debugging and development.`,
+
 	"end": `end # Moves cursor to the last line.
 If there are multiple cursors, they are first reduced to a single cursor.`,
 

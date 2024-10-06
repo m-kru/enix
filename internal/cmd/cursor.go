@@ -473,3 +473,32 @@ func AddCursor(args []string, tab *tab.Tab) error {
 
 	return nil
 }
+
+func DumpCursor(args []string, tab *tab.Tab) (string, error) {
+	if len(args) != 1 {
+		return "", fmt.Errorf(
+			"dump-cursor: provided %d args, expected 1", len(args),
+		)
+	}
+
+	n, err := strconv.Atoi(args[0])
+	if err != nil {
+		return "", fmt.Errorf("dump-cursor: %v", err)
+	}
+
+	if n < 1 {
+		return "", fmt.Errorf(
+			"dump-cursor: cursor index must be positive, current value %d", n,
+		)
+	}
+
+	c := tab.Cursors.Get(n)
+	if c == nil {
+		return "", fmt.Errorf(
+			"dump-cursor: can't get %d cursor, there are %d cursors",
+			n, tab.Cursors.Count(),
+		)
+	}
+
+	return fmt.Sprintf("%v", *c), nil
+}
