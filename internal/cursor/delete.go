@@ -5,18 +5,11 @@ import (
 )
 
 func (c *Cursor) Delete() *line.Line {
-	delLine := c.Line.DeleteRune(c.BufIdx)
+	return c.Line.DeleteRune(c.BufIdx)
 
-	if delLine == nil {
-
-	} else {
-		panic("unimplemented")
-	}
-
-	return nil
 }
 
-// InformDeletion informs the cursor about content deletion from the line.
+// InformRuneDelete informs the cursor about single rune deletion from the line.
 func (c *Cursor) InformRuneDelete(l *line.Line, idx int) {
 	if l != c.Line || idx >= c.BufIdx {
 		return
@@ -49,4 +42,15 @@ func (c *Cursor) Backspace() (*line.Line, bool) {
 	c.BufIdx--
 
 	return nil, true
+}
+
+// InformLineDelete informs cursor about line deletion.
+// If cursor was pointing the the deleted line, then the
+// cursor Line pointer is set to nil.
+func (c *Cursor) InformLineDelete(l *line.Line) {
+	if c.Line != l {
+		return
+	}
+
+	c.Line = nil
 }

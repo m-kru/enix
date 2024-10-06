@@ -97,7 +97,7 @@ func (tab *Tab) Trim() {
 		c = c.Next
 	}
 
-	tab.Cursors.Prune()
+	tab.Cursors = tab.Cursors.Prune()
 }
 
 // AddCursor spawns a new cursor in given line and column.
@@ -125,7 +125,7 @@ func (tab *Tab) AddCursor(lineNum int, colIdx int) {
 
 	lastCur.Next = &c
 
-	tab.Cursors.Prune()
+	tab.Cursors = tab.Cursors.Prune()
 }
 
 func (tab *Tab) LastColumnIdx() int {

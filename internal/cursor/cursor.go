@@ -81,11 +81,51 @@ func (c *Cursor) Last() *Cursor {
 
 // Prune function removes duplicates from cursor list.
 // A duplicate is a cursor pointing to the same line with equal buffer index.
-func (c *Cursor) Prune() {
+// It also removes dead cursors  pointing to the nil Line.
+// Cursors may become dead, for example, when line is removed.
+func (c *Cursor) Prune() *Cursor {
+	// First remove dead cursors
+	c0 := c
+	for {
+		if c.Line != nil {
+			c = c.Next
+			if c == nil {
+				break
+			}
+			continue
+		}
+
+		deadC := c
+
+		if deadC == c0 && c.Next == nil {
+			return nil
+		}
+
+		if deadC == c0 {
+			c = c.Next
+			c0 = c
+		} else {
+			deadC.Prev.Next = deadC.Next
+			if deadC.Next != nil {
+				deadC.Next.Prev = deadC.Prev
+			}
+			c = deadC.Next
+		}
+
+		deadC.Prev = nil
+		deadC.Next = nil
+
+		if c == nil {
+			break
+		}
+	}
+
+	// Remove cursor duplicates
+	c = c0
 	for {
 		c2 := c.Next
 		if c2 == nil {
-			return
+			break
 		}
 
 		for {
@@ -103,7 +143,9 @@ func (c *Cursor) Prune() {
 
 		c = c.Next
 		if c == nil {
-			return
+			break
 		}
 	}
+
+	return c0
 }

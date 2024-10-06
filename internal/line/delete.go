@@ -5,8 +5,9 @@ func (l *Line) DeleteRune(idx int) *Line {
 		if l.Prev == nil {
 			return nil
 		}
+
 		// Newline deletion
-		panic("unimplemented")
+		return l.Join(false)
 	}
 
 	l.Buf = append(l.Buf[:idx], l.Buf[idx+1:]...)

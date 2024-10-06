@@ -46,10 +46,19 @@ func (tab *Tab) deleteCursors(backspace bool) {
 				m.InformRuneDelete(c.Line, c.BufIdx)
 			}
 		} else {
-			panic("unimplemented")
+			c2 := c0
+			for {
+				if c2 == nil {
+					break
+				}
+				if c2 != c {
+					c2.InformLineDelete(delLine)
+				}
+				c2 = c2.Next
+			}
 		}
 
-		c0.Prune()
+		tab.Cursors = c0.Prune()
 
 	nextCursor:
 		c = c.Next

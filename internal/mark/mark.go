@@ -47,5 +47,5 @@ func (cm *CursorMark) InformRuneDelete(line *line.Line, idx int) {
 
 		c = c.Next
 	}
-	cm.Cursors.Prune()
+	cm.Cursors = cm.Cursors.Prune()
 }

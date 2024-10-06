@@ -33,7 +33,7 @@ func down(tab *tab.Tab) {
 		c = c.Next
 	}
 
-	tab.Cursors.Prune()
+	tab.Cursors = tab.Cursors.Prune()
 }
 
 func Left(args []string, tab *tab.Tab) error {
@@ -59,7 +59,7 @@ func left(tab *tab.Tab) {
 		c = c.Next
 	}
 
-	tab.Cursors.Prune()
+	tab.Cursors = tab.Cursors.Prune()
 }
 
 func Right(args []string, tab *tab.Tab) error {
@@ -85,7 +85,7 @@ func right(tab *tab.Tab) {
 		c = c.Next
 	}
 
-	tab.Cursors.Prune()
+	tab.Cursors = tab.Cursors.Prune()
 }
 
 func Up(args []string, tab *tab.Tab) error {
@@ -111,7 +111,7 @@ func up(tab *tab.Tab) {
 		c = c.Next
 	}
 
-	tab.Cursors.Prune()
+	tab.Cursors = tab.Cursors.Prune()
 }
 
 func End(args []string, tab *tab.Tab) error {
@@ -232,7 +232,7 @@ func prevWordStart(tab *tab.Tab) error {
 		c = c.Next
 	}
 
-	tab.Cursors.Prune()
+	tab.Cursors = tab.Cursors.Prune()
 
 	return nil
 }
@@ -260,7 +260,7 @@ func wordEnd(tab *tab.Tab) error {
 		c = c.Next
 	}
 
-	tab.Cursors.Prune()
+	tab.Cursors = tab.Cursors.Prune()
 
 	return nil
 }
@@ -288,7 +288,7 @@ func wordStart(tab *tab.Tab) error {
 		c = c.Next
 	}
 
-	tab.Cursors.Prune()
+	tab.Cursors = tab.Cursors.Prune()
 
 	return nil
 }
@@ -333,7 +333,7 @@ func spawnDown(tab *tab.Tab) error {
 		newCursors.Prev = c
 	}
 
-	tab.Cursors.Prune()
+	tab.Cursors = tab.Cursors.Prune()
 
 	return nil
 }
@@ -378,7 +378,7 @@ func spawnUp(tab *tab.Tab) error {
 		newCursors.Prev = c
 	}
 
-	tab.Cursors.Prune()
+	tab.Cursors = tab.Cursors.Prune()
 
 	return nil
 }
@@ -406,7 +406,7 @@ func lineStart(tab *tab.Tab) error {
 		c = c.Next
 	}
 
-	tab.Cursors.Prune()
+	tab.Cursors = tab.Cursors.Prune()
 
 	return nil
 }
@@ -434,7 +434,7 @@ func lineEnd(tab *tab.Tab) error {
 		c = c.Next
 	}
 
-	tab.Cursors.Prune()
+	tab.Cursors = tab.Cursors.Prune()
 
 	return nil
 }
