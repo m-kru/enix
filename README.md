@@ -8,6 +8,7 @@
   No need to access the Internet to get to know how things work.
 - No runtime dependencies except configuration and syntax highlighting files.
 - Multi-cursor support.
+- Marks.
 - Tabs.
 - Built-in help.
 - Mouse support.
