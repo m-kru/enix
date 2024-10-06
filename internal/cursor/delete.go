@@ -44,13 +44,14 @@ func (c *Cursor) Backspace() (*line.Line, bool) {
 	return nil, true
 }
 
-// InformLineDelete informs cursor about line deletion.
-// If cursor was pointing the the deleted line, then the
-// cursor Line pointer is set to nil.
-func (c *Cursor) InformLineDelete(l *line.Line) {
+// InformNewlineDelete informs cursor about newline deletion.
+// If cursor was pointing the the joined line, then the
+// cursor Line pointer is set to point to the previous line.
+func (c *Cursor) InformNewlineDelete(l *line.Line, prevL *line.Line) {
 	if c.Line != l {
 		return
 	}
 
-	c.Line = nil
+	c.Line = prevL
+	c.BufIdx = c.BufIdx + prevL.Len() - l.Len()
 }

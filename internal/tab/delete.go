@@ -52,7 +52,7 @@ func (tab *Tab) deleteCursors(backspace bool) {
 					break
 				}
 				if c2 != c {
-					c2.InformLineDelete(delLine)
+					c2.InformNewlineDelete(delLine, c.Line)
 				}
 				c2 = c2.Next
 			}
