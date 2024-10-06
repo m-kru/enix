@@ -328,6 +328,10 @@ func (p *Prompt) Exec() TcellEventReceiver {
 			err = cmd.End(c.Args, tab)
 		case "g", "go":
 			err = cmd.Go(c.Args, tab)
+		case "insert-rune":
+			err = cmd.InsertRune(c.Args, tab)
+		case "join":
+			err = cmd.Join(c.Args, tab)
 		case "left":
 			err = cmd.Left(c.Args, tab)
 		case "line-end":

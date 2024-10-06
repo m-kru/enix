@@ -102,6 +102,8 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 			return w.Prompt
 		case "insert":
 			tab.InInsertMode = true
+		case "join":
+			err = cmd.Join(args, tab)
 		case "left":
 			err = cmd.Left(args, tab)
 		case "line-end":

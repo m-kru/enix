@@ -1,6 +1,7 @@
 package tab
 
 import (
+	"fmt"
 	"github.com/gdamore/tcell/v2"
 )
 
@@ -104,4 +105,39 @@ func (tab *Tab) insertNewlineCursors() {
 	}
 
 	tab.HasChanges = true
+}
+
+func (tab *Tab) InsertRuneAtPosition(lineNum int, col int, r rune) error {
+	lineCount := tab.Lines.Count()
+	if lineNum > lineCount {
+		return fmt.Errorf(
+			"can't insert rune at line %d, tab has %d lines", lineNum, lineCount,
+		)
+	}
+
+	line := tab.Lines.Get(lineNum)
+	if col-1 > line.Len() {
+		return fmt.Errorf(
+			"can't insert rune at index %d, line %d has %d runes",
+			col, lineNum, line.Len(),
+		)
+	}
+	col--
+
+	line.InsertRune(r, col)
+
+	c := tab.Cursors
+	for {
+		if c == nil {
+			break
+		}
+		c.InformRuneInsert(line, col)
+		c = c.Next
+	}
+
+	for _, m := range tab.Marks {
+		m.InformRuneInsert(line, col)
+	}
+
+	return nil
 }

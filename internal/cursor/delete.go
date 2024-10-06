@@ -8,6 +8,10 @@ func (c *Cursor) Delete() *line.Line {
 	return c.Line.DeleteRune(c.BufIdx)
 }
 
+func (c *Cursor) Join() *line.Line {
+	return c.Line.Join(true)
+}
+
 // InformRuneDelete informs the cursor about single rune deletion from the line.
 func (c *Cursor) InformRuneDelete(l *line.Line, idx int) {
 	if l != c.Line || idx >= c.BufIdx {

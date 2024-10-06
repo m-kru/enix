@@ -118,6 +118,10 @@ to be the current tab.`,
 	"dump-colors": `dump-colors # Dumps colorscheme configuration to JSON format.`,
 
 	"insert": `insert # Enters tab insert mode.`,
+	"insert-rune": `insert l c r # Inserts rune r at line l column c.
+The difference between the rune and insert-rune command is that rune inserts a rune
+under the cursor or selection position. The insert-rune command allows inserting
+a rune in an arbitrary place.`,
 
 	"esc": `esc # Escapes the current context.
 The actual action depends on the context. For example, if the focues is on the
@@ -133,10 +137,12 @@ for the help command. The same as 'help help'. Valid topics are:
   - keybindings - how to set, and what to watch out for,
   - selections - what ther are and how they work.`,
 
-	"rune":    `rune r # Inserts rune r under the cursor position.`,
+	"rune":    `rune r # Inserts rune r under the cursor or selection position.`,
 	"space":   `space # Inserts space rune.`,
 	"tab":     `tab # Inserts tab rune.`,
 	"newline": `newline # Inserts a newline.`,
+
+	"join": `join # Joins line with cursor with below line.`,
 
 	"mark": `mark name # Creates new named mark.
 Marks allow to record current cursors or selections positions.

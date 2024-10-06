@@ -35,3 +35,15 @@ func Trim(args []string, tab *tab.Tab) error {
 
 	return nil
 }
+
+func Join(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf(
+			"join: expected 0 args, provided %d", len(args),
+		)
+	}
+
+	tab.Join()
+
+	return nil
+}

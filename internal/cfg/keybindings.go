@@ -64,13 +64,14 @@ func KeybindingsDefault() Keybindings {
 		// Tab
 		"Ctrl+T": "tab-open",
 		// Miscellaneous
-		"Enter":   "newline",
-		"Esc":     "esc",
-		"Rune[c]": "copy",
-		"Rune[f]": "find",
-		"Rune[i]": "insert",
-		"Rune[m]": "mark tmp",
-		"Rune[M]": "go tmp",
+		"Enter":       "newline",
+		"Esc":         "esc",
+		"Rune[c]":     "copy",
+		"Rune[f]":     "find",
+		"Rune[i]":     "insert",
+		"Rune[m]":     "mark tmp",
+		"Rune[M]":     "go tmp",
+		"Alt+Rune[j]": "join",
 		//"Rune[h]": "help",
 		"Rune[q]": "quit",
 		// "Ctrl+U":     "undo", Alt+U

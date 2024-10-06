@@ -83,6 +83,8 @@ func exec(c cmd.Command, tab *tab.Tab) error {
 			err = cmd.Esc(c.Args, tab)
 		case "go":
 			err = cmd.Go(c.Args, tab)
+		case "insert-rune":
+			err = cmd.InsertRune(c.Args, tab)
 		case "left":
 			err = cmd.Left(c.Args, tab)
 		case "mark":
