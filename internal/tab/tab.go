@@ -74,7 +74,7 @@ func (tab *Tab) Trim() {
 		if l == nil {
 			break
 		}
-		if l.Trim() > 0 {
+		if l.TrimEnd() > 0 {
 			trimmedLines = append(trimmedLines, l)
 		}
 		l = l.Next

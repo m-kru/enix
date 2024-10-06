@@ -3,8 +3,6 @@ package line
 import (
 	"fmt"
 
-	"github.com/m-kru/enix/internal/util"
-
 	"github.com/mattn/go-runewidth"
 )
 
@@ -162,19 +160,8 @@ func (l *Line) Count() int {
 	return cnt
 }
 
-func (l *Line) Append(s string) {
-	newLen := len(l.Buf) + len(s)
-	if newLen > cap(l.Buf) {
-		newBuf := make([]rune, 0, util.NextPowerOfTwo(newLen))
-		newBuf = append(newBuf, l.Buf...)
-		l.Buf = newBuf
-	}
-
-	l.Buf = append(l.Buf, []rune(s)...)
-}
-
-// Trim trims trailing whitespaces and returns number of removed runes.
-func (l *Line) Trim() int {
+// TrimEnd trims trailing whitespaces and returns number of removed runes.
+func (l *Line) TrimEnd() int {
 	trimCount := 0
 
 	for i := len(l.Buf) - 1; i >= 0; i-- {

@@ -1,6 +1,8 @@
 package line
 
-import "github.com/m-kru/enix/internal/util"
+import (
+	"github.com/m-kru/enix/internal/util"
+)
 
 func (l *Line) InsertRune(r rune, idx int) {
 	newLen := len(l.Buf) + 1
@@ -46,4 +48,15 @@ func (l *Line) Insert(s string, idx int) {
 	l.Buf = l.Buf[0:idx]
 	l.Buf = append(l.Buf, []rune(s)...)
 	l.Buf = append(l.Buf, right...)
+}
+
+func (l *Line) Append(s string) {
+	newLen := len(l.Buf) + len(s)
+	if newLen > cap(l.Buf) {
+		newBuf := make([]rune, 0, util.NextPowerOfTwo(newLen))
+		newBuf = append(newBuf, l.Buf...)
+		l.Buf = newBuf
+	}
+
+	l.Buf = append(l.Buf, []rune(s)...)
 }
