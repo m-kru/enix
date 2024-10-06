@@ -1,0 +1,8 @@
+go 1 4
+mark m
+go 1 1
+backspace
+backspace
+go m
+rune d
+save got

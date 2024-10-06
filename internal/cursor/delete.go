@@ -25,11 +25,11 @@ func (c *Cursor) InformRuneDelete(l *line.Line, idx int) {
 	c.Idx--
 }
 
-func (c *Cursor) Backspace() {
+func (c *Cursor) Backspace() (*line.Line, bool) {
 	if c.BufIdx == 0 {
 		if c.Line.Prev == nil {
 			// Do nothing
-			return
+			return nil, false
 		} else {
 			panic("unimplemented")
 		}
@@ -47,4 +47,6 @@ func (c *Cursor) Backspace() {
 
 	c.Line.DeleteRune(c.BufIdx - 1)
 	c.BufIdx--
+
+	return nil, true
 }

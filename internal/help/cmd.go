@@ -61,9 +61,10 @@ This command is useful for enix debugging and development.`,
 
 	// Deletion
 
-	"del":      `del # Deletes text under cursor/selection.`,
-	"del-word": `del-word # Deletes words under cursor/selection.`,
-	"del-line": `del-line # Deletes lines with cursor/selection.`,
+	"backspace": `del # Deletes text before cursor.`,
+	"del":       `del # Deletes text under cursor/selection.`,
+	"del-word":  `del-word # Deletes words under cursor/selection.`,
+	"del-line":  `del-line # Deletes lines with cursor/selection.`,
 
 	// File
 

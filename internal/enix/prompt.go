@@ -306,6 +306,8 @@ func (p *Prompt) Exec() TcellEventReceiver {
 		case "add-cursor":
 			err = cmd.AddCursor(c.Args, tab)
 			// Do nothing
+		case "backspace":
+			err = cmd.Backspace(c.Args, tab)
 		case "cmd":
 			p.Activate("", "")
 			return p

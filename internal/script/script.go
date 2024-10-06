@@ -71,6 +71,8 @@ func exec(c cmd.Command, tab *tab.Tab) error {
 		switch c.Name {
 		case "add-cursor":
 			err = cmd.AddCursor(c.Args, tab)
+		case "backspace":
+			err = cmd.Backspace(c.Args, tab)
 		case "del":
 			err = cmd.Del(c.Args, tab)
 		case "down":

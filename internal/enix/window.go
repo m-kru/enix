@@ -77,6 +77,8 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 		switch name {
 		case "add-cursor":
 			err = cmd.AddCursor(args, tab)
+		case "backspace":
+			err = cmd.Backspace(args, tab)
 		case "cmd":
 			tab.HasFocus = false
 			w.Prompt.Activate("", "")
