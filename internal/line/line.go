@@ -160,8 +160,8 @@ func (l *Line) Count() int {
 	return cnt
 }
 
-// TrimEnd trims trailing whitespaces and returns number of removed runes.
-func (l *Line) TrimEnd() int {
+// TrimRight trims trailing whitespaces and returns number of removed runes.
+func (l *Line) TrimRight() int {
 	trimCount := 0
 
 	for i := len(l.Buf) - 1; i >= 0; i-- {
