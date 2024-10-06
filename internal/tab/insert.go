@@ -11,7 +11,7 @@ func (tab *Tab) RxEventKey(ev *tcell.EventKey) {
 	case tcell.KeyTab:
 		tab.InsertRune('\t')
 	case tcell.KeyBackspace2:
-		panic("unimplemented backspace2")
+		tab.Backspace()
 	case tcell.KeyDelete:
 		tab.Delete()
 	case tcell.KeyEnter:
