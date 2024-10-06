@@ -72,6 +72,7 @@ func KeybindingsDefault() Keybindings {
 		"Rune[m]":     "mark tmp",
 		"Rune[M]":     "go tmp",
 		"Alt+Rune[j]": "join",
+		"Ctrl+Z":      "suspend",
 		//"Rune[h]": "help",
 		"Rune[q]": "quit",
 		// "Ctrl+U":     "undo", Alt+U

@@ -177,6 +177,9 @@ If cursors is not placed on a whitespace character, nothing is selected.`,
 
 	"sel-word": `sel-word # Selects word under cursor.`,
 
+	"suspend": `suspend # Stops process and gives control to shell.
+This command has been so far tested only on Linux.`,
+
 	// Tab
 
 	"tab-count": `tab-count # Prints the number of opened tabs.`,

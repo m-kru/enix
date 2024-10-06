@@ -132,6 +132,8 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 			err = cmd.SpawnDown(args, tab)
 		case "spawn-up":
 			err = cmd.SpawnUp(args, tab)
+		case "suspend":
+			err = cmd.Suspend(args, w.Screen)
 		case "tab":
 			err = cmd.Tab(args, tab)
 		case "trim":

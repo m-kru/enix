@@ -364,6 +364,8 @@ func (p *Prompt) Exec() TcellEventReceiver {
 			err = cmd.SpawnDown(c.Args, tab)
 		case "spawn-up":
 			err = cmd.SpawnUp(c.Args, tab)
+		case "suspend":
+			err = cmd.Suspend(c.Args, p.Window.Screen)
 		case "tab":
 			err = cmd.Tab(c.Args, tab)
 		case "tab-count":
