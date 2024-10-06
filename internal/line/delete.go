@@ -2,7 +2,7 @@ package line
 
 func (l *Line) DeleteRune(idx int) *Line {
 	if idx == l.Len() {
-		if l.Prev == nil {
+		if l.Next == nil {
 			return nil
 		}
 
