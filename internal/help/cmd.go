@@ -1,70 +1,89 @@
 package help
 
 var cmds = map[string]string{
+
+	// Config
+
+	"tab-width": `tab-width N # Sets tab width to N.`,
+
+	// Command
+
+	"cmd": `cmd # Starts command prompt.`,
+
+	"cmd-error": `cmd-error # Displays error message in the command prompt.
+This command is useful for enix debugging and development.`,
+
+	"cmd-info": `cmd-info # Displays message in the command prompt.
+This command is useful for enix debugging and development.`,
+
+	"cmd-list": `cmd-list # Lists all available commands in alphabetical order with one sentence summary.`,
+
+	"cmd-prev": `cmd-prev # Executes previous command.`,
+
 	// Cursor
 
-	"cursor-count": `cursor-count # Prints the number of cursors in current tab.`,
+	"add-cursor": `add-cursor L [C=1] # Creates new cursor at line L and column C.
+If L is greater than the number of lines in the file, then the cursor is placed
+in the last line. If C is greater than the number of columns in a given line,
+then the cursor is placed in the last column.`,
+
+	"cursor-count": `cursor-count # Prints the number of cursors in the current tab.`,
 
 	"down": `down # Moves cursor down.
 If cursor is in the last line, nothing happens.`,
+
+	"end": `end # Moves cursor to the last line.
+If there are multiple cursors, they are first reduced to a single cursor.`,
+
+	"g": `g # An alias to the go command.`,
+
+	"go": `go position|mark-name # Goes to the position or restores a mark.
+Valid syntaxes for position are:
+  - go 10 # Goes to line 10 column 1,
+  - go 10 5 # Goes to line 10 column 5,
+  - go 10:5 # Goes to line 10 column 5.`,
 
 	"left": `left # Moves cursor left.
 If cursor is in the first column of a line, then it is moved into the last
 column of the previous line. Unless this is the first line. In such a case,
 nothing happens.`,
 
+	"line-end": `line-end # Moves cursor to the line end.`,
+
+	"line-start": `line-start # Moves cursor to the line start.
+The first non whitespace rune is considered the start of the line.
+However, if a cursor already is at the first non whitespace rune in the line,
+then line-start moves cursor to the first line rune, even if it is a whitespace.`,
+
+	"prev-word-start": `word-start # Moves cursor to the previous word start.`,
+
 	"right": `right # Moves cursor right.
 If cursor is in the last column of a line, then it is moved into the first
 column of the next line. Unless this is the lastt line. In such a case,
 nothing happens.`,
 
+	"spawn-down": `spawn-down # Spawns a new cursor in the below line.`,
+
+	"spawn-up": `spawn-up # Spawns a new cursor in the above line.`,
+
 	"up": `up # Moves cursor up.
 If cursor is in the fisrt line, nothing happens.`,
 
-	"end": `end # Moves cursor to the last line.
-If there are multiple cursors, they are first reduced to a single cursor.`,
+	"word-end": `word-end # Moves cursor to the word end.`,
 
-	"word-start":      `word-start # Moves cursor to the next word start.`,
-	"prev-word-start": `word-start # Moves cursor to the previous word start.`,
-	"word-end":        `word-end # Moves cursor to the word end.`,
-	"line-start":      `line-start # Moves cursor to the line start.`,
-	"line-end":        `line-end # Moves cursor to the line end.`,
-
-	"spawn-down": `spawn-down # Spawns a new cursor in the below line.`,
-	"spawn-up":   `spawn-up # Spawns a new cursor in the above line.`,
-
-	"add-cursor": `add-cursor L [C=1] # Creates new cursor at line L and columnc C.
-If L is greater than the number of lines in the file, then the cursor is placed
-in the last line. If C is greater than the number of columns in a given line,
-then the cursor is placed in the last column.`,
-
-	"go": `go position|mark-name # Goes to the position or restores mark.
-Valid syntaxes for position are:
-  - go 10 # Goes to line 10 column 1,
-  - go 10 5 # Goes to line 10 column 5,
-  - go 10:5 # Goes to line 10 column 5.`,
-	"g": `g # An alias to the go command.`,
-
-	// Command
-
-	"cmd": `cmd # Starts command prompt.`,
-	"cmd-error": `cmd-error # Displays error message in the command prompt.
-This command is useful for enix debugging and development.`,
-	"cmd-info": `cmd-info # Displays message in the command prompt.
-This command is useful for enix debugging and development.`,
-	"cmd-list": `cmd-list # Lists all available commands in alphabetical order with one sentence summary.`,
-	"cmd-prev": `cmd-prev # Executes previous command.`,
-
-	// Config
-
-	"tab-width": `tab-width N # Sets tab width to N.`,
+	"word-start": `word-start # Moves cursor to the next word start.`,
 
 	// Deletion
 
-	"backspace": `del # Deletes text before cursor.`,
-	"del":       `del # Deletes text under cursor/selection.`,
-	"del-word":  `del-word # Deletes words under cursor/selection.`,
-	"del-line":  `del-line # Deletes lines with cursor/selection.`,
+	"backspace": `del # Deletes text before cursor or selected text.`,
+
+	"del": `del # Deletes text under cursor/selection.`,
+
+	"del-line": `del-line # Deletes lines with cursor/selection.`,
+
+	"del-word": `del-word # Deletes words under cursor/selection.`,
+
+	"trim": `trim # Trims trailing whitespaces from all lines.`,
 
 	// File
 
@@ -78,50 +97,42 @@ If path to file is not provided, then it uses the current file path.`,
 
 	// Indent
 
-	"indent": `indent # Increases indent of lines with cursor.
-In the case of selections, it increases all selected lines. Even if the
-selection starts/ends in the middle of a line.`,
-
 	"deindent": `deindent # Decreases indent of lines with cursor.
 In the case of selections, it deindents all selected lines. Even if the
 selection starts/ends in the middle of a line.`,
 
-	// Selection
+	"indent": `indent # Increases indent of lines with cursor.
+In the case of selections, it increases all selected lines. Even if the
+selection starts/ends in the middle of a line.`,
 
-	"sel-white": `sel-white # Selects sequence of whitespaces.
-If cursors is not placed on a whitespace character, nothing is selected.`,
-
-	"sel-word": `sel-word # Selects word under cursor.`,
-
-	// Tab
-
-	"tab-count": `tab-count # Prints the number of opened tabs.`,
-
-	"tab-open": `tab-open # Opens a new empty tab.`,
-
-	"tab-next": `tab-next # Cycles to the next tab.
-If the current tab is the last tab, then it wraps to the first tab.`,
-
-	"tab-prev": `tab-prev # Cycles to the previous tab.
-If the current tab is the first tab, then it wraps to the last tab.`,
-
-	"tab-move": `tab-move N [pattern] # Moves tab which name matches pattern to position N.
-If pattern is not provided, then current tab is moved. The pattern must be
-unambiguous. If N is not provided, then it is assumed to be equal 1.`,
-
-	"tab-switch": `tab-switch pattern1 [pattern2] # Switch tabs which names match patterns.
-The patterns must be unambiguous. If the second is absent, then it is assumed
-to be the current tab.`,
-
-	// Miscellaneous
-
-	"dump-colors": `dump-colors # Dumps colorscheme configuration to JSON format.`,
+	// Insert
 
 	"insert": `insert # Enters tab insert mode.`,
+
 	"insert-rune": `insert l c r # Inserts rune r at line l column c.
 The difference between the rune and insert-rune command is that rune inserts a rune
 under the cursor or selection position. The insert-rune command allows inserting
 a rune in an arbitrary place.`,
+
+	"newline": `newline # Inserts a newline.`,
+
+	"rune": `rune r # Inserts rune r under the cursor or selection position.`,
+
+	"space": `space # Inserts space rune.`,
+
+	"tab": `tab # Inserts tab rune.`,
+
+	// Match
+
+	/*
+	   "match-brace":   struct{}{},
+	   "match-bracket": struct{}{},
+	   "match-paren":   struct{}{},
+	*/
+
+	// Miscellaneous
+
+	"dump-colors": `dump-colors # Dumps colorscheme configuration to JSON format.`,
 
 	"esc": `esc # Escapes the current context.
 The actual action depends on the context. For example, if the focues is on the
@@ -137,11 +148,6 @@ for the help command. The same as 'help help'. Valid topics are:
   - keybindings - how to set, and what to watch out for,
   - selections - what ther are and how they work.`,
 
-	"rune":    `rune r # Inserts rune r under the cursor or selection position.`,
-	"space":   `space # Inserts space rune.`,
-	"tab":     `tab # Inserts tab rune.`,
-	"newline": `newline # Inserts a newline.`,
-
 	"join": `join # Joins line with cursor with below line.`,
 
 	"mark": `mark name # Creates new named mark.
@@ -150,27 +156,53 @@ Mark name must not start with a digit. To resotre marks one has to
 use the go command providing as an argument the name of a mark.`,
 	"m": `m # An alias to the mark command.`,
 
-	"trim": `trim # Trims trailing whitespaces from all lines.`,
+	"q": `q # An alias to the quit command.`,
 
 	"quit": `quit # Quits tab.
 If the tab is the last tab opened tab, then quit also quits the enix editor.
 Quit returns an error if current tab has unsaved changes.`,
-	"q": `q # An alias to the quit command.`,
+
+	"q!": `q! # An alias to the quit! command.`,
+
 	"quit!": `quit! # Force quit.,
 Forced version of the quit command. It quits the tab even if there are unsaved changes.`,
-	"q!": `q! # An alias to the quit! command.`,
+
+	// Selection
+
+	"sel-white": `sel-white # Selects sequence of whitespaces.
+If cursors is not placed on a whitespace character, nothing is selected.`,
+
+	"sel-word": `sel-word # Selects word under cursor.`,
+
+	// Tab
+
+	"tab-count": `tab-count # Prints the number of opened tabs.`,
+
+	"tab-next": `tab-next # Cycles to the next tab.
+If the current tab is the last tab, then it wraps to the first tab.`,
+
+	"tab-move": `tab-move N [pattern] # Moves tab which name matches pattern to position N.
+If pattern is not provided, then current tab is moved. The pattern must be
+unambiguous. If N is not provided, then it is assumed to be equal 1.`,
+
+	"tab-open": `tab-open # Opens a new empty tab.`,
+
+	"tab-prev": `tab-prev # Cycles to the previous tab.
+If the current tab is the first tab, then it wraps to the last tab.`,
+
+	"tab-switch": `tab-switch pattern1 [pattern2] # Switch tabs which names match patterns.
+The patterns must be unambiguous. If the second is absent, then it is assumed
+to be the current tab.`,
 
 	// View
 
-	"view":       "view line-number column # Sets view start at provided line number and column.",
-	"view-down":  "view-down # Scrolls view down by N lines.",
-	"view-left":  "view-left # Scrolls view left by N columns.",
-	"view-right": "view-right # Scrolls view right by N columns.",
-	"view-up":    "view-up # Scrolls view up by N lines.",
+	"view": "view line-number column # Sets view start at provided line number and column.",
 
-	/*
-	   "match-brace":   struct{}{},
-	   "match-bracket": struct{}{},
-	   "match-paren":   struct{}{},
-	*/
+	"view-down": "view-down # Scrolls view down by N lines.",
+
+	"view-left": "view-left # Scrolls view left by N columns.",
+
+	"view-right": "view-right # Scrolls view right by N columns.",
+
+	"view-up": "view-up # Scrolls view up by N lines.",
 }
