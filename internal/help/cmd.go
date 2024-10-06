@@ -198,11 +198,11 @@ to be the current tab.`,
 
 	"view": "view line-number column # Sets view start at provided line number and column.",
 
-	"view-down": "view-down # Scrolls view down by N lines.",
+	"view-down": "view-down # Scrolls view down by one line.",
 
-	"view-left": "view-left # Scrolls view left by N columns.",
+	"view-left": "view-left # Scrolls view left by one column.",
 
-	"view-right": "view-right # Scrolls view right by N columns.",
+	"view-right": "view-right # Scrolls view right by one column.",
 
-	"view-up": "view-up # Scrolls view up by N lines.",
+	"view-up": "view-up # Scrolls view up by one line.",
 }
