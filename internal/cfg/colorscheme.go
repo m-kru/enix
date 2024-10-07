@@ -29,10 +29,29 @@ type Colorscheme struct {
 	PromptShadow tcell.Style
 
 	// Syntax highlighting
-	Comment tcell.Style
-	Keyword tcell.Style
-	Type    tcell.Style
-	Value   tcell.Style
+	Attribute     tcell.Style
+	Builtin       tcell.Style
+	Bold          tcell.Style
+	Code          tcell.Style
+	Comment       tcell.Style
+	Documentation tcell.Style
+	Function      tcell.Style
+	Heading       tcell.Style
+	Italic        tcell.Style
+	Keyword       tcell.Style
+	Link          tcell.Style
+	Meta          tcell.Style
+	Mono          tcell.Style
+	Number        tcell.Style
+	Operator      tcell.Style
+	String        tcell.Style
+	Type          tcell.Style
+	Title         tcell.Style
+	Value         tcell.Style
+	Variable      tcell.Style
+	Other1        tcell.Style
+	Other2        tcell.Style
+	Other3        tcell.Style
 }
 
 // ColorschemeDefault return the default color scheme.
