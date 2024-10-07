@@ -1,6 +1,6 @@
 [![Tests](https://github.com/m-kru/enix/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/m-kru/enix/actions?query=master)
 
-**enix** is a terminal-based text editor trying to follow the \*nix philosophy.
+**enix** is a terminal-based modal text editor trying to follow the \*nix philosophy.
 
 # Features
 
@@ -36,7 +36,7 @@
 # Glossary
 
 - rune length - number of bytes required to store a rune.
-- rune width - number of screen cells required to display a rune..
+- rune width - number of screen cells required to display a rune.
 
 # Commands
 
@@ -55,53 +55,7 @@ An example of selection-oriented command is `sh`, which forwards selection as a 
 
 # Default keybindings
 
-## Cursor
-
-- `Down` - cursor-down
-- `Left` - cursor-left
-- `Right` - cursor-right
-- `Up` - cursor-up
-- `Ctrl-Left` - cursor-
-- `Ctrl-Right` - cursor-
-- `Ctrl-Down` - cursor-down-spawn
-- `Ctrl-Up` - cursor-up-spawn
-- `Ctrl-{` - cursor-match-brace
-- `Ctrl-[` - cursor-match-bracket
-- `Ctrl-(` - cursor-match-paren
-
-## Tab
-
-- `Ctrl-t` - tab-open
-- `Ctrl-w` - tab-close
-- `Ctrl-Tab` - tab-next
-
-## Find
-
-- `Ctrl-f` - find
-- ` ` - find-next
-- ` ` - find-prev
-
-## Selection
-
-- `Ctrl-a` - select-all
-- `Ctrl-l` - select-line
-- `Shift-Right` - select-next-char
-- `Shift-Right` - select-prev-char
-- `Ctrl-}` - select-in-brace
-- `Ctrl-]` - select-in-bracket
-- `Ctrl-)` - select-in-paren
-
-## File
-
-- `Ctrl-o` - file-open
-- `Ctrl-s` - file-save
--
-## Miscellaneous
-
-- `Ctrl-c` - copy
-- `Ctrl-k` - cut-line
-- `Ctrl-p` - paste
-- `Ctrl-q` - quit
+To get the default keybindings simply run `enix -dump-keys` in the shell.
 
 # Help
 
