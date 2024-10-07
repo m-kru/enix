@@ -2,7 +2,6 @@ package cfg
 
 import "github.com/gdamore/tcell/v2"
 
-// Bg stands for background, Fg stands for foreground.
 type Colorscheme struct {
 	Default tcell.Style
 
