@@ -1,5 +1,8 @@
 package cfg
 
+// Path to the enix config home directory.
+var ConfigDir string
+
 type Config struct {
 	// Trim trailing whitespaces on save.
 	// It affects only saves explicitly called by the user.
