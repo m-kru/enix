@@ -112,6 +112,8 @@ func Parse() {
 			switch param {
 			case "-config":
 				Config = arg
+			case "-colors-dir":
+				ColorsDir = arg
 			case "-script":
 				Script = arg
 			default:
