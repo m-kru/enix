@@ -87,7 +87,7 @@ func getColorFromJSON(colors map[string]any, name string) uint64 {
 	var val uint64
 	var err error
 
-	if value, ok := colors["Background"]; ok {
+	if value, ok := colors[name]; ok {
 		if hex, ok := value.(string); ok {
 			val, err = strconv.ParseUint(hex, 16, 64)
 			if err != nil {
