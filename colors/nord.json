@@ -1,0 +1,20 @@
+{
+	"Background": "0x2E3440",
+	"Foreground": "0xD8DEE9",
+	"Black": "0x3B4252",
+	"Red": "0xBF616A",
+	"Green": "0xA3BE8C",
+	"Yellow": "0xEBCB8B",
+	"Blue": "0x81A1C1",
+	"Magenta": "0xB48EAD",
+	"Cyan": "0x88C0D0",
+	"White": "0xE5E9F0",
+	"BrightBlack": "0x4C566A",
+	"BrightRed": "0xBF616A",
+	"BrightGreen": "0xA3BE8C",
+	"BrightYellow": "0xEBCB8B",
+	"BrightBlue": "0x81A1C1",
+	"BrightMagenta": "0xB48EAD",
+	"BrightCyan": "0x8FBCBB",
+	"BrightWhite": "0xECEFF4"
+}
