@@ -184,7 +184,7 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 
 // Resize handles all the required logic when screen is resized.
 func (w *Window) Resize() {
-	w.Screen.Clear()
+	w.Screen.Fill(' ', w.Colors.Default)
 	w.Screen.Sync()
 
 	width, height := w.Screen.Size()
