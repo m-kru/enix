@@ -107,7 +107,7 @@ func colorschemeFromJSON(name string) (Colorscheme, error) {
 
 	file, err := os.Open(path)
 	if err != nil {
-		return cs, fmt.Errorf("opening colors file: %v", err)
+		return cs, fmt.Errorf("opening colorscheme file: %v", err)
 	}
 	defer file.Close()
 
