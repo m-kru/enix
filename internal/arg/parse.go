@@ -114,6 +114,8 @@ func Parse() {
 				Config = arg
 			case "-colors-dir":
 				ColorsDir = arg
+			case "-langs-dir":
+				LangsDir = arg
 			case "-script":
 				Script = arg
 			default:
