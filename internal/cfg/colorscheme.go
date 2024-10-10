@@ -1,6 +1,17 @@
 package cfg
 
-import "github.com/gdamore/tcell/v2"
+import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"os"
+	"path/filepath"
+	"strconv"
+
+	"github.com/m-kru/enix/internal/arg"
+
+	"github.com/gdamore/tcell/v2"
+)
 
 type Colorscheme struct {
 	Default tcell.Style
@@ -81,4 +92,159 @@ func ColorschemeDefault() Colorscheme {
 		Prompt:       tcell.StyleDefault.Foreground(tcell.ColorWhite),
 		PromptShadow: tcell.StyleDefault.Foreground(tcell.ColorGray),
 	}
+}
+
+// readFromJSON reads colorscheme from file named "name.json".
+func colorschemeFromJSON(name string) (Colorscheme, error) {
+	cs := Colorscheme{}
+
+	colorsDir := filepath.Join(ConfigDir, "colors")
+	if arg.ColorsDir != "" {
+		colorsDir = arg.ColorsDir
+	}
+
+	path := filepath.Join(colorsDir, name+".json")
+
+	file, err := os.Open(path)
+	if err != nil {
+		return cs, fmt.Errorf("opening colors file: %v", err)
+	}
+	defer file.Close()
+
+	data, err := io.ReadAll(file)
+	if err != nil {
+		return cs, fmt.Errorf("reading colors file: %v", err)
+	}
+
+	var colorschemeMap map[string]any
+
+	err = json.Unmarshal([]byte(data), &colorschemeMap)
+	if err != nil {
+		return cs, fmt.Errorf("unmarshalling json colorscheme file: %v", err)
+	}
+
+	cs, err = colorschemeFromMap(colorschemeMap)
+	if err != nil {
+		return cs, fmt.Errorf("%s: %v", path, err)
+	}
+
+	return cs, nil
+}
+
+// colorschemeFromMap creates Colorscheme from colorscheme map read from JSON file.
+func colorschemeFromMap(csm map[string]any) (Colorscheme, error) {
+	var err error
+	cs := Colorscheme{}
+
+	if cs.Default, err = readStyleFromMap("Default", csm, &tcell.StyleDefault); err != nil {
+		return cs, fmt.Errorf("%v", err)
+	}
+
+	if cs.Error, err = readStyleFromMap("Error", csm, &cs.Default); err != nil {
+		return cs, fmt.Errorf("%v", err)
+	}
+
+	if cs.LineNum, err = readStyleFromMap("LineNum", csm, &cs.Default); err != nil {
+		return cs, fmt.Errorf("%v", err)
+	}
+
+	if cs.Whitespace, err = readStyleFromMap("Whitespace", csm, &cs.Default); err != nil {
+		return cs, fmt.Errorf("%v", err)
+	}
+
+	if cs.Cursor, err = readStyleFromMap("Cursor", csm, &cs.Default); err != nil {
+		return cs, fmt.Errorf("%v", err)
+	}
+	if cs.CursorWord, err = readStyleFromMap("CursorWord", csm, &cs.Default); err != nil {
+		return cs, fmt.Errorf("%v", err)
+	}
+
+	if cs.StatusLine, err = readStyleFromMap("StatusLine", csm, &cs.Default); err != nil {
+		return cs, fmt.Errorf("%v", err)
+	}
+
+	if cs.InsertMark, err = readStyleFromMap("InsertMark", csm, &cs.Default); err != nil {
+		return cs, fmt.Errorf("%v", err)
+	}
+
+	if cs.Prompt, err = readStyleFromMap("Prompt", csm, &cs.Default); err != nil {
+		return cs, fmt.Errorf("%v", err)
+	}
+
+	if cs.PromptShadow, err = readStyleFromMap("PromptShadow", csm, &cs.Default); err != nil {
+		return cs, fmt.Errorf("%v", err)
+	}
+
+	return cs, nil
+}
+
+func readStyleFromMap(name string, csm map[string]any, dfltStyle *tcell.Style) (tcell.Style, error) {
+	style := tcell.StyleDefault
+	if dfltStyle != nil {
+		style = *dfltStyle
+	}
+
+	styleDefAny, ok := csm[name]
+	if !ok {
+		return style, nil
+	}
+	styleDef, ok := styleDefAny.(map[string]any)
+	if !ok {
+		return style, fmt.Errorf("invalid type for style \"%s\" in json file", name)
+	}
+
+	colorsAny, ok := csm["Colors"]
+	if !ok {
+		return style, fmt.Errorf("colorscheme file misses colors definitions")
+	}
+	colors, ok := colorsAny.(map[string]any)
+	if !ok {
+		return style, fmt.Errorf("invalid type for \"Colors\" definition")
+	}
+
+	if col, ok := styleDef["Fg"]; ok {
+		colStr, ok := col.(string)
+		if !ok {
+			return style, fmt.Errorf("invalid type for \"Fg\" in json file, expected string")
+		}
+		val, err := getColor(colors, colStr)
+		if err != nil {
+			return style, fmt.Errorf("%v", err)
+		}
+		style = style.Foreground(tcell.NewHexColor(val))
+	}
+
+	if col, ok := styleDef["Bg"]; ok {
+		colStr, ok := col.(string)
+		if !ok {
+			return style, fmt.Errorf("invalid type for \"Bg\" in json file, expected string")
+		}
+		val, err := getColor(colors, colStr)
+		if err != nil {
+			return style, fmt.Errorf("%v", err)
+		}
+		style = style.Background(tcell.NewHexColor(val))
+	}
+
+	return style, nil
+}
+
+func getColor(cm map[string]any, name string) (int32, error) {
+	var val int64
+	var err error
+
+	if value, ok := cm[name]; ok {
+		if hex, ok := value.(string); ok {
+			val, err = strconv.ParseInt(hex, 16, 32)
+			if err != nil {
+				return 0, fmt.Errorf("can't convert value for %s color: %v", name, err)
+			}
+		} else {
+			return 0, fmt.Errorf("invalid value type for %s color, expected string", name)
+		}
+	} else {
+		return 0, fmt.Errorf("missing definition of %s color", name)
+	}
+
+	return int32(val), nil
 }

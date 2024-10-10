@@ -48,6 +48,13 @@ func Init() (Config, Colorscheme, Keybindings, Keybindings, Keybindings, error) 
 		}
 	}
 
+	if config.Colorscheme != "default" {
+		colorscheme, err = colorschemeFromJSON(config.Colorscheme)
+		if err != nil {
+			goto exit
+		}
+	}
+
 exit:
 	return config, colorscheme, keys, promptKeys, insertKeys, err
 }
