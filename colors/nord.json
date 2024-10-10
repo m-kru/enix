@@ -35,6 +35,11 @@
 	},
 	"InsertMark": {
 		"Fg": "Yellow"
+	},
+	"StatusLine": {
+		"Bg": "Black"
+	},
+	"Whitespace": {
+		"Fg": "BrightBlack"
 	}
-
 }
