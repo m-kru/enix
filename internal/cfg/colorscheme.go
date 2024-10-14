@@ -64,6 +64,61 @@ type Colorscheme struct {
 	Other           tcell.Style
 }
 
+func (cs *Colorscheme) Style(name string) tcell.Style {
+	switch name {
+	case "CursorWord":
+		return cs.CursorWord
+	case "Attribute":
+		return cs.Attribute
+	case "Bold":
+		return cs.Bold
+	case "Builtin":
+		return cs.Builtin
+	case "Code":
+		return cs.Code
+	case "Comment":
+		return cs.Comment
+	case "Documentation":
+		return cs.Documentation
+	case "FormatSpecifier":
+		return cs.FormatSpecifier
+	case "Function":
+		return cs.Function
+	case "Heading":
+		return cs.Heading
+	case "Italic":
+		return cs.Italic
+	case "Keyword":
+		return cs.Keyword
+	case "Link":
+		return cs.Link
+	case "Meta":
+		return cs.Meta
+	case "Mono":
+		return cs.Mono
+	case "Number":
+		return cs.Number
+	case "Operator":
+		return cs.Operator
+	case "String":
+		return cs.String
+	case "ToDo":
+		return cs.ToDo
+	case "Title":
+		return cs.Title
+	case "Type":
+		return cs.Type
+	case "Value":
+		return cs.Value
+	case "Variable":
+		return cs.Variable
+	case "Other":
+		return cs.Other
+	default:
+		return cs.Default
+	}
+}
+
 // ColorschemeDefault return the default color scheme.
 //
 // The default color scheme doesn't require any color scheme files to be installed
