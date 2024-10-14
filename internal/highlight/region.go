@@ -5,7 +5,8 @@ import (
 )
 
 type Region struct {
-	Name string
+	Name  string
+	Style string // Region default style
 
 	StartRegexp *regexp.Regexp
 	EndRegexp   *regexp.Regexp
