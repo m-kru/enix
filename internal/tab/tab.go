@@ -3,6 +3,7 @@ package tab
 import (
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
+	"github.com/m-kru/enix/internal/highlight"
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/mark"
 	"github.com/m-kru/enix/internal/util"
@@ -29,6 +30,8 @@ type Tab struct {
 	Marks map[string]mark.Mark
 
 	View view.View
+
+	Highlighter *highlight.Highlighter
 
 	Prev *Tab
 	Next *Tab

@@ -1,0 +1,13 @@
+[
+	{
+		"Name": "Default",
+		"Keyword": "break|case|continue|default|do|else|for|goto|if|return|switch|while",
+		"Type": "bool|char|double|float|int|uint8_t|uint16_t|uint32_t|uint64_t"
+	},
+	{
+		"Name": "Line Comment",
+		"StartRegex": "//",
+		"EndRegex": "$",
+		"Style": "Comment"
+	}
+]

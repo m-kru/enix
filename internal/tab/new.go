@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
+	"github.com/m-kru/enix/internal/highlight"
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/mark"
 	"github.com/m-kru/enix/internal/util"
@@ -44,23 +45,27 @@ func Open(
 		return Empty(config, colors, keys)
 	}
 
-	t := &Tab{
-		Config:     config,
-		Colors:     colors,
-		Keys:       keys,
-		Path:       path,
-		Newline:    "\n",
-		FileType:   util.FileNameToType(path),
-		HasFocus:   true,
-		HasChanges: false,
-		Marks:      make(map[string]mark.Mark),
-		View:       view.View{Line: 1, Column: 1},
+	fileType := util.FileNameToType(path)
+	hl, _ := highlight.NewHighlighter(fileType)
+
+	tab := &Tab{
+		Config:      config,
+		Colors:      colors,
+		Keys:        keys,
+		Path:        path,
+		Newline:     "\n",
+		FileType:    fileType,
+		HasFocus:    true,
+		HasChanges:  false,
+		Marks:       make(map[string]mark.Mark),
+		View:        view.View{Line: 1, Column: 1},
+		Highlighter: &hl,
 	}
 
 	// Lines initialization
 	_, err := os.Stat(path)
 	if errors.Is(err, os.ErrNotExist) {
-		t.Lines = line.FromString("")
+		tab.Lines = line.FromString("")
 	} else if err != nil {
 		panic("unimplemented")
 	} else {
@@ -68,14 +73,14 @@ func Open(
 		if err != nil {
 			panic("unimplemented")
 		}
-		t.Lines = line.FromString(string(bytes))
+		tab.Lines = line.FromString(string(bytes))
 	}
 
 	// Cursor initialization
-	c := &cursor.Cursor{Config: config, Line: t.Lines}
-	t.Cursors = c
+	c := &cursor.Cursor{Config: config, Line: tab.Lines}
+	tab.Cursors = c
 
-	return t
+	return tab
 }
 
 func FromString(
@@ -85,7 +90,7 @@ func FromString(
 	str string,
 	path string,
 ) *Tab {
-	t := &Tab{
+	tab := &Tab{
 		Config:     config,
 		Colors:     colors,
 		Keys:       keys,
@@ -99,8 +104,8 @@ func FromString(
 		View:       view.View{Line: 1, Column: 1},
 	}
 
-	c := &cursor.Cursor{Config: config, Line: t.Lines}
-	t.Cursors = c
+	c := &cursor.Cursor{Config: config, Line: tab.Lines}
+	tab.Cursors = c
 
-	return t
+	return tab
 }

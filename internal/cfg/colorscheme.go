@@ -39,29 +39,29 @@ type Colorscheme struct {
 	PromptShadow tcell.Style
 
 	// Syntax highlighting
-	Attribute     tcell.Style
-	Builtin       tcell.Style
-	Bold          tcell.Style
-	Code          tcell.Style
-	Comment       tcell.Style
-	Documentation tcell.Style
-	Function      tcell.Style
-	Heading       tcell.Style
-	Italic        tcell.Style
-	Keyword       tcell.Style
-	Link          tcell.Style
-	Meta          tcell.Style
-	Mono          tcell.Style
-	Number        tcell.Style
-	Operator      tcell.Style
-	String        tcell.Style
-	Type          tcell.Style
-	Title         tcell.Style
-	Value         tcell.Style
-	Variable      tcell.Style
-	Other1        tcell.Style
-	Other2        tcell.Style
-	Other3        tcell.Style
+	Attribute       tcell.Style
+	Bold            tcell.Style
+	Builtin         tcell.Style
+	Code            tcell.Style
+	Comment         tcell.Style
+	Documentation   tcell.Style
+	FormatSpecifier tcell.Style
+	Function        tcell.Style
+	Heading         tcell.Style
+	Italic          tcell.Style
+	Keyword         tcell.Style
+	Link            tcell.Style
+	Meta            tcell.Style
+	Mono            tcell.Style
+	Number          tcell.Style
+	Operator        tcell.Style
+	String          tcell.Style
+	ToDo            tcell.Style
+	Title           tcell.Style
+	Type            tcell.Style
+	Value           tcell.Style
+	Variable        tcell.Style
+	Other           tcell.Style
 }
 
 // ColorschemeDefault return the default color scheme.
@@ -117,7 +117,6 @@ func colorschemeFromJSON(name string) (Colorscheme, error) {
 	}
 
 	var colorschemeMap map[string]any
-
 	err = json.Unmarshal([]byte(data), &colorschemeMap)
 	if err != nil {
 		return cs, fmt.Errorf("unmarshalling json colorscheme file: %v", err)
