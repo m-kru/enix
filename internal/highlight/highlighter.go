@@ -164,6 +164,21 @@ func langDefIntoHighlighter(langDef []any) (Highlighter, error) {
 			return hl, fmt.Errorf("name of the first region must be \"Default\"")
 		}
 
+		// Style
+		style := "Default"
+		styleAny, ok := regDef["Style"]
+		if i == 0 && ok {
+			return hl, fmt.Errorf("default region doesn't accept \"Style\"")
+		} else if i != 0 {
+			style, ok = styleAny.(string)
+			if !ok {
+				return hl, fmt.Errorf(
+					"invalid type for %q region \"Style\", expected string", name,
+				)
+			}
+		}
+		reg.Style = style
+
 		// StartRegex
 		startRegexAny, ok := regDef["StartRegex"]
 		if i == 0 && ok {
