@@ -54,3 +54,10 @@ func FileNameToType(name string) string {
 
 	return ""
 }
+
+func IsBracket(r rune) bool {
+	return r == '(' || r == ')' ||
+		r == '[' || r == ']' ||
+		r == '{' || r == '}' ||
+		r == '<' || r == '>'
+}
