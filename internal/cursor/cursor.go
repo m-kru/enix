@@ -3,6 +3,7 @@ package cursor
 import (
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/line"
+	"github.com/m-kru/enix/internal/util"
 	"github.com/m-kru/enix/internal/view"
 
 	"github.com/mattn/go-runewidth"
@@ -76,9 +77,9 @@ func (c *Cursor) Width() int {
 	return runewidth.RuneWidth(r)
 }
 
-// Word returns word under cursor.
-func (c *Cursor) Word() string {
-	return ""
+// GetWord returns word under cursor.
+func (c *Cursor) GetWord() string {
+	return util.GetWord(c.Line.Buf, c.BufIdx)
 }
 
 func (c *Cursor) View() view.View {

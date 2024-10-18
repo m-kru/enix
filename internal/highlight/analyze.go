@@ -4,7 +4,10 @@ import (
 	"regexp"
 	"sort"
 
+	"github.com/m-kru/enix/internal/cfg"
+	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/line"
+	"github.com/m-kru/enix/internal/util"
 )
 
 // The line argument  must be the first line of file.
@@ -14,7 +17,8 @@ func (hl Highlighter) Analyze(
 	line *line.Line,
 	startLineIdx int,
 	endLineIdx int,
-	cursorWord string,
+	cursor *cursor.Cursor,
+	colors *cfg.Colorscheme,
 ) []Highlight {
 	highlights := []Highlight{}
 
@@ -22,7 +26,10 @@ func (hl Highlighter) Analyze(
 		return nil
 	}
 
-	if cursorWord != "" {
+	cursorWord := cursor.GetWord()
+	if len(cursorWord) == 1 && util.IsBracket(rune(cursorWord[0])) {
+		// Unimplemented
+	} else if cursorWord != "" {
 		re, err := regexp.Compile("\b" + cursorWord + "\b")
 		if err != nil {
 			for _, r := range hl.Regions {
@@ -128,7 +135,7 @@ func (hl Highlighter) splitIntoSections(
 	}
 
 	if reg.Name == "Default" {
-		sec.EndLine = lineIdx
+		sec.EndLine = lineIdx + 1
 		sec.EndIdx = line.Len() - 1
 		secs = append(secs, sec)
 	}
