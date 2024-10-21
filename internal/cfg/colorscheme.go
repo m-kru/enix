@@ -139,13 +139,17 @@ func ColorschemeDefault() Colorscheme {
 		Whitespace: tcell.StyleDefault.Foreground(tcell.ColorBlack),
 
 		Cursor:     tcell.StyleDefault.Reverse(true),
-		CursorWord: tcell.StyleDefault.Foreground(tcell.ColorMaroon),
+		CursorWord: tcell.StyleDefault.Foreground(tcell.ColorWhite),
 
 		StatusLine: tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorGray),
 		InsertMark: tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorOlive),
 
 		Prompt:       tcell.StyleDefault.Foreground(tcell.ColorWhite),
 		PromptShadow: tcell.StyleDefault.Foreground(tcell.ColorGray),
+
+		Comment: tcell.StyleDefault.Foreground(tcell.ColorGray),
+		Keyword: tcell.StyleDefault.Foreground(tcell.ColorNavy),
+		Type:    tcell.StyleDefault.Foreground(tcell.ColorOlive),
 	}
 }
 

@@ -95,6 +95,19 @@ func (reg Region) Match(line *line.Line, startIdx int, endIdx int) Matches {
 		}
 	}
 
+	if reg.Keyword != nil {
+		keywords := reg.Keyword.FindAllStringIndex(str, -1)
+		if len(keywords) > 0 {
+			matches.Keywords = make([][2]int, 0, len(keywords))
+			for _, t := range keywords {
+				var m [2]int
+				m[0] = util.ByteIdxToRuneIdx(str, t[0]) + startIdx
+				m[1] = util.ByteIdxToRuneIdx(str, t[1]-1) + startIdx
+				matches.Keywords = append(matches.Keywords, m)
+			}
+		}
+	}
+
 	if reg.Type != nil {
 		types := reg.Type.FindAllStringIndex(str, -1)
 		if len(types) > 0 {

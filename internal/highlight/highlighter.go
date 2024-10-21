@@ -163,6 +163,7 @@ func langDefIntoHighlighter(langDef []any) (Highlighter, error) {
 		if i == 0 && name != "Default" {
 			return hl, fmt.Errorf("name of the first region must be \"Default\"")
 		}
+		reg.Name = name
 
 		// Style
 		style := "Default"

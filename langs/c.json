@@ -6,8 +6,8 @@
 	},
 	{
 		"Name": "Line Comment",
-		"Style": "Comment"
+		"Style": "Comment",
 		"StartRegex": "//",
-		"EndRegex": "$",
+		"EndRegex": "$"
 	}
 ]

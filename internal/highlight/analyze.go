@@ -137,7 +137,7 @@ func (hl Highlighter) splitIntoSections(
 
 				// Start new default section
 				sec.Region = hl.Regions[0]
-				if tok.Idx == line.Len()-1 {
+				if tok.Idx >= line.Len() {
 					if line.Next != nil {
 						sec.StartLine = lineIdx + 1
 						sec.StartIdx = 0

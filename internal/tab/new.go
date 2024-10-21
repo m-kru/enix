@@ -80,7 +80,10 @@ func Open(
 	tab.Cursors = c
 
 	// Highlighter initialization
-	hl, _ := highlight.NewHighlighter(tab.FileType)
+	hl, err := highlight.NewHighlighter(tab.FileType)
+	if err != nil {
+		panic(err)
+	}
 	tab.Highlighter = &hl
 
 	return tab
