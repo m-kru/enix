@@ -4,11 +4,19 @@ import (
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/view"
+	"github.com/m-kru/enix/internal/xxx"
 
 	"github.com/mattn/go-runewidth"
 )
 
-func (l *Line) Render(cfg *cfg.Config, colors *cfg.Colorscheme, frame frame.Frame, view view.View) {
+func (l *Line) Render(
+	cfg *cfg.Config,
+	colors *cfg.Colorscheme,
+	frame frame.Frame,
+	view view.View,
+	hls []xxx.Highlight,
+) []xxx.Highlight {
+	consumedHls := 0
 	frameIdx := 0
 	runeIdx, runeSubcol, ok := l.RuneIdx(view.Column, cfg.TabWidth)
 	var r rune
@@ -51,7 +59,18 @@ func (l *Line) Render(cfg *cfg.Config, colors *cfg.Colorscheme, frame frame.Fram
 		frame.SetContent(frameIdx, 0, r, colors.Default)
 		frameIdx += runewidth.RuneWidth(r)
 	} else {
-		frame.SetContent(frameIdx, 0, r, colors.Default)
+		color := colors.Default
+		if len(hls) > 0 {
+			for {
+				if hls[consumedHls].CoversCell(l.LineNum(), runeIdx) {
+					color = hls[consumedHls].Style
+					break
+				}
+				consumedHls++
+			}
+		}
+
+		frame.SetContent(frameIdx, 0, r, color)
 		frameIdx += runewidth.RuneWidth(r)
 	}
 	runeIdx++
@@ -70,7 +89,23 @@ func (l *Line) Render(cfg *cfg.Config, colors *cfg.Colorscheme, frame frame.Fram
 		if r == '\t' {
 			setTab(0)
 		} else {
-			frame.SetContent(frameIdx, 0, r, colors.Default)
+			color := colors.Default
+			if hls != nil {
+				for {
+					// TODO: We shouldn't need this check, there is more bug.
+					if consumedHls >= len(hls) {
+						break
+					}
+
+					if hls[consumedHls].CoversCell(l.LineNum(), runeIdx) {
+						color = hls[consumedHls].Style
+						break
+					}
+					consumedHls++
+				}
+			}
+
+			frame.SetContent(frameIdx, 0, r, color)
 			frameIdx += runewidth.RuneWidth(r)
 		}
 		runeIdx++
@@ -86,4 +121,6 @@ clear:
 		frame.SetContent(frameIdx, 0, ' ', colors.Default)
 		frameIdx++
 	}
+
+	return hls[consumedHls:]
 }

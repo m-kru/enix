@@ -1,4 +1,4 @@
-package highlight
+package xxx
 
 import "github.com/gdamore/tcell/v2"
 
@@ -33,7 +33,7 @@ func (hl Highlight) Split(hl2 Highlight) []Highlight {
 
 	if hl.StartIdx < hl2.StartIdx {
 		hl1 := hl
-		hl1.EndIdx = hl2.StartIdx-1
+		hl1.EndIdx = hl2.StartIdx - 1
 		hls = append(hls, hl1)
 	}
 
@@ -41,7 +41,7 @@ func (hl Highlight) Split(hl2 Highlight) []Highlight {
 
 	if hl.EndIdx > hl2.EndIdx {
 		hl3 := hl
-		hl3.StartIdx = hl2.EndIdx+1
+		hl3.StartIdx = hl2.EndIdx + 1
 		hls = append(hls, hl3)
 	}
 

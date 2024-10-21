@@ -2,6 +2,9 @@ package highlight
 
 import (
 	"regexp"
+
+	"github.com/m-kru/enix/internal/line"
+	"github.com/m-kru/enix/internal/util"
 )
 
 type Region struct {
@@ -44,4 +47,66 @@ type RegionToken struct {
 	// Token start index for start token or token end index
 	// for end token.
 	Idx int
+}
+
+type Matches struct {
+	CursorWords [][2]int
+
+	Attributes       [][2]int
+	Builtins         [][2]int
+	Bolds            [][2]int
+	Codes            [][2]int
+	Comments         [][2]int
+	Documentations   [][2]int
+	FormatSpecifiers [][2]int
+	Functions        [][2]int
+	Headings         [][2]int
+	Italics          [][2]int
+	Keywords         [][2]int
+	Links            [][2]int
+	Metas            [][2]int
+	Monos            [][2]int
+	Numbers          [][2]int
+	Operators        [][2]int
+	Strings          [][2]int
+	ToDos            [][2]int
+	Titles           [][2]int
+	Types            [][2]int
+	Values           [][2]int
+	Variables        [][2]int
+	Others           [][2]int
+}
+
+func (reg Region) Match(line *line.Line, startIdx int, endIdx int) Matches {
+	matches := Matches{}
+
+	str := string(line.Buf[startIdx : endIdx+1])
+
+	if reg.CursorWord != nil {
+		words := reg.CursorWord.FindAllStringIndex(str, -1)
+		if len(words) > 0 {
+			matches.CursorWords = make([][2]int, 0, len(words))
+			for _, w := range words {
+				var m [2]int
+				m[0] = util.ByteIdxToRuneIdx(str, w[0]) + startIdx
+				m[1] = util.ByteIdxToRuneIdx(str, w[1]-1) + startIdx
+				matches.CursorWords = append(matches.CursorWords, m)
+			}
+		}
+	}
+
+	if reg.Type != nil {
+		types := reg.Type.FindAllStringIndex(str, -1)
+		if len(types) > 0 {
+			matches.Types = make([][2]int, 0, len(types))
+			for _, t := range types {
+				var m [2]int
+				m[0] = util.ByteIdxToRuneIdx(str, t[0]) + startIdx
+				m[1] = util.ByteIdxToRuneIdx(str, t[1]-1) + startIdx
+				matches.Types = append(matches.Types, m)
+			}
+		}
+	}
+
+	return matches
 }

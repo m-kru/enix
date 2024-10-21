@@ -86,6 +86,10 @@ func WordStart(line []rune, idx int) (int, bool) {
 // GetWord returns word containing index idx.
 // In case of whitespaces an empty string is returned.
 func GetWord(line []rune, idx int) string {
+	if len(line) == 0 || idx >= len(line) {
+		return ""
+	}
+
 	if unicode.IsSpace(line[idx]) {
 		return ""
 	}

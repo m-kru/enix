@@ -92,13 +92,22 @@ func (tab *Tab) RenderLines(frame frame.Frame) {
 	renderedCount := 0
 	line := tab.Lines.Get(lineNum)
 
+	endLineIdx := tab.View.LastLine()
+	if endLineIdx > tab.Lines.Last().LineNum() {
+		endLineIdx = tab.Lines.Last().LineNum()
+	}
+	hls := tab.Highlighter.Analyze(
+		tab.Lines, lineNum, endLineIdx, tab.Cursors.Last(), tab.Colors,
+	)
+	//panic(fmt.Sprintf("%+v", hls))
+
 	// TODO: Handle line clearing.
 	for {
 		if line == nil || renderedCount == frame.Height {
 			break
 		}
 
-		line.Render(tab.Config, tab.Colors, frame.Line(0, renderedCount), tab.View)
+		hls = line.Render(tab.Config, tab.Colors, frame.Line(0, renderedCount), tab.View, hls)
 
 		line = line.Next
 		lineNum++

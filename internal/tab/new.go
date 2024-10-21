@@ -13,7 +13,7 @@ import (
 )
 
 func Empty(config *cfg.Config, colors *cfg.Colorscheme, keys *cfg.Keybindings) *Tab {
-	t := &Tab{
+	tab := &Tab{
 		Config:     config,
 		Colors:     colors,
 		Keys:       keys,
@@ -27,10 +27,13 @@ func Empty(config *cfg.Config, colors *cfg.Colorscheme, keys *cfg.Keybindings) *
 		View:       view.View{Line: 1, Column: 1},
 	}
 
-	c := &cursor.Cursor{Config: config, Line: t.Lines}
-	t.Cursors = c
+	c := &cursor.Cursor{Config: config, Line: tab.Lines}
+	tab.Cursors = c
 
-	return t
+	hl := highlight.DefaultHighlighter()
+	tab.Highlighter = &hl
+
+	return tab
 }
 
 // Open opens a new tab.
@@ -45,21 +48,17 @@ func Open(
 		return Empty(config, colors, keys)
 	}
 
-	fileType := util.FileNameToType(path)
-	hl, _ := highlight.NewHighlighter(fileType)
-
 	tab := &Tab{
-		Config:      config,
-		Colors:      colors,
-		Keys:        keys,
-		Path:        path,
-		Newline:     "\n",
-		FileType:    fileType,
-		HasFocus:    true,
-		HasChanges:  false,
-		Marks:       make(map[string]mark.Mark),
-		View:        view.View{Line: 1, Column: 1},
-		Highlighter: &hl,
+		Config:     config,
+		Colors:     colors,
+		Keys:       keys,
+		Path:       path,
+		Newline:    "\n",
+		FileType:   util.FileNameToType(path),
+		HasFocus:   true,
+		HasChanges: false,
+		Marks:      make(map[string]mark.Mark),
+		View:       view.View{Line: 1, Column: 1},
 	}
 
 	// Lines initialization
@@ -79,6 +78,10 @@ func Open(
 	// Cursor initialization
 	c := &cursor.Cursor{Config: config, Line: tab.Lines}
 	tab.Cursors = c
+
+	// Highlighter initialization
+	hl, _ := highlight.NewHighlighter(tab.FileType)
+	tab.Highlighter = &hl
 
 	return tab
 }
@@ -106,6 +109,9 @@ func FromString(
 
 	c := &cursor.Cursor{Config: config, Line: tab.Lines}
 	tab.Cursors = c
+
+	hl := highlight.DefaultHighlighter()
+	tab.Highlighter = &hl
 
 	return tab
 }

@@ -2,6 +2,7 @@ package util
 
 import (
 	"strings"
+	"unicode/utf8"
 )
 
 var fileExtToType = map[string]string{
@@ -60,4 +61,25 @@ func IsBracket(r rune) bool {
 		r == '[' || r == ']' ||
 		r == '{' || r == '}' ||
 		r == '<' || r == '>'
+}
+
+// ByteIdxToRuneIdx returns rune index in string based on byte index.
+// The function assumes provided string has only valid runes.
+// In case of invalid runes value 0 is returned.
+func ByteIdxToRuneIdx(str string, bidx int) int {
+	idx := 0
+	for rIdx, r := range str {
+		rl := utf8.RuneLen(r)
+		if rl < 0 {
+			return 0
+		}
+
+		if idx >= bidx {
+			return rIdx
+		}
+
+		idx += rl
+	}
+
+	return 0
 }

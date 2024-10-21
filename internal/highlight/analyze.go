@@ -8,6 +8,7 @@ import (
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/util"
+	"github.com/m-kru/enix/internal/xxx"
 )
 
 // The line argument  must be the first line of file.
@@ -19,8 +20,8 @@ func (hl Highlighter) Analyze(
 	endLineIdx int,
 	cursor *cursor.Cursor,
 	colors *cfg.Colorscheme,
-) []Highlight {
-	highlights := []Highlight{}
+) []xxx.Highlight {
+	highlights := []xxx.Highlight{}
 
 	if len(hl.Regions) == 0 {
 		return nil
@@ -30,18 +31,34 @@ func (hl Highlighter) Analyze(
 	if len(cursorWord) == 1 && util.IsBracket(rune(cursorWord[0])) {
 		// Unimplemented
 	} else if cursorWord != "" {
-		re, err := regexp.Compile("\b" + cursorWord + "\b")
-		if err != nil {
+		re, err := regexp.Compile(`\b` + cursorWord + `\b`)
+		if err == nil {
 			for _, r := range hl.Regions {
 				r.CursorWord = re
 			}
 		}
+	} else {
+		for _, r := range hl.Regions {
+			r.CursorWord = nil
+		}
 	}
 
-	sections := hl.splitIntoSections(line, startLineIdx, endLineIdx)
+	var hls []xxx.Highlight
+	lineIdx := startLineIdx
+	sections, line := hl.splitIntoSections(line, startLineIdx, endLineIdx)
 	for _, sec := range sections {
-		hls := sec.Analyze()
+		// Progress to the start line of the current section or view.
+		for {
+			if lineIdx == sec.StartLine || lineIdx == startLineIdx {
+				break
+			}
+			line = line.Next
+			lineIdx++
+		}
+
+		hls, line = sec.Analyze(line, lineIdx, colors)
 		highlights = append(highlights, hls...)
+		lineIdx = sec.EndLine
 	}
 
 	return highlights
@@ -52,7 +69,7 @@ func (hl Highlighter) splitIntoSections(
 	line *line.Line,
 	startLineIdx int,
 	endLineIdx int,
-) []Section {
+) ([]Section, *line.Line) {
 	secs := []Section{}
 	reg := hl.Regions[0] // Current region
 	sec := Section{
@@ -63,20 +80,25 @@ func (hl Highlighter) splitIntoSections(
 		Region:    reg,
 	}
 
+	startLine := line
 	lineIdx := 1
 
 	for {
-		// Drop all irrelevant sections before first visible line.
-		if lineIdx == startLineIdx && len(secs) > 1 {
-			firstSecIdx := len(secs) - 1
-			for i := len(secs) - 2; i >= 0; i-- {
-				if secs[i].EndLine == startLineIdx {
-					firstSecIdx = i
-				} else {
-					break
+		if lineIdx == startLineIdx {
+			startLine = line
+
+			// Drop all irrelevant sections before first visible line.
+			if len(secs) > 1 {
+				firstSecIdx := len(secs) - 1
+				for i := len(secs) - 2; i >= 0; i-- {
+					if secs[i].EndLine == startLineIdx {
+						firstSecIdx = i
+					} else {
+						break
+					}
 				}
+				secs = secs[firstSecIdx:]
 			}
-			secs = secs[firstSecIdx:]
 		}
 
 		lineToks := hl.tokenizeLine(line.String())
@@ -135,12 +157,15 @@ func (hl Highlighter) splitIntoSections(
 	}
 
 	if reg.Name == "Default" {
-		sec.EndLine = lineIdx + 1
-		sec.EndIdx = line.Len() - 1
+		sec.EndLine = lineIdx
+		sec.EndIdx = 0
+		if line.Len() > 0 {
+			sec.EndIdx = line.Len() - 1
+		}
 		secs = append(secs, sec)
 	}
 
-	return secs
+	return secs, startLine
 }
 
 func (hl Highlighter) tokenizeLine(line string) []RegionToken {

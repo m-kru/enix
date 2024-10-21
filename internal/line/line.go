@@ -14,8 +14,11 @@ type Line struct {
 }
 
 func (l *Line) Len() int          { return len(l.Buf) }
-func (l *Line) String() string    { return string(l.Buf) }
 func (l *Line) Rune(idx int) rune { return l.Buf[idx] }
+
+func (l *Line) String() string {
+	return string(l.Buf)
+}
 
 // Num returns line number in the line list.
 func (l *Line) Num() int {
