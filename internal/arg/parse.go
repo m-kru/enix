@@ -89,6 +89,8 @@ func Parse() {
 			DumpPromptKeys = true
 		case "-help":
 			printHelp()
+		case "-profile":
+			Profile = true
 		case "-version":
 			printVersion()
 		default:

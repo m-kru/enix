@@ -46,7 +46,8 @@ type RegionToken struct {
 	Start  bool // Start (true) or end (false) token
 	// Token start index for start token or token end index
 	// for end token.
-	Idx int
+	StartIdx int
+	EndIdx   int
 }
 
 type Matches struct {

@@ -149,6 +149,7 @@ func ColorschemeDefault() Colorscheme {
 
 		Comment: tcell.StyleDefault.Foreground(tcell.ColorGray),
 		Keyword: tcell.StyleDefault.Foreground(tcell.ColorNavy),
+		String:  tcell.StyleDefault.Foreground(tcell.ColorGreen),
 		Type:    tcell.StyleDefault.Foreground(tcell.ColorOlive),
 	}
 }

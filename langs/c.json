@@ -9,5 +9,11 @@
 		"Style": "Comment",
 		"StartRegex": "//",
 		"EndRegex": "$"
+	},
+	{
+		"Name": "String",
+		"Style": "String",
+		"StartRegex": "\"",
+		"EndRegex": "\""
 	}
 ]

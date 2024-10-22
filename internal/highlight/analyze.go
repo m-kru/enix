@@ -110,14 +110,14 @@ func (hl Highlighter) splitIntoSections(
 				}
 
 				// Append previous default section
-				if tok.Idx == 0 {
+				if tok.StartIdx == 0 {
 					if line.Prev != nil {
 						sec.EndLine = lineIdx - 1
 						sec.EndIdx = line.Prev.Len() - 1
 					}
 				} else {
 					sec.EndLine = lineIdx
-					sec.EndIdx = tok.Idx - 1
+					sec.EndIdx = tok.StartIdx - 1
 				}
 				if sec.StartLine != sec.EndLine || sec.StartIdx != sec.EndIdx {
 					secs = append(secs, sec)
@@ -126,26 +126,26 @@ func (hl Highlighter) splitIntoSections(
 				reg = tok.Region
 				sec.Region = reg
 				sec.StartLine = lineIdx
-				sec.StartIdx = tok.Idx
+				sec.StartIdx = tok.StartIdx
 			} else {
-				if tok.Start || tok.Region != reg || tok.Idx == sec.StartIdx {
+				if tok.Start || tok.Region != reg || tok.StartIdx == sec.StartIdx {
 					continue
 				}
 				sec.EndLine = lineIdx
-				sec.EndIdx = tok.Idx
+				sec.EndIdx = tok.EndIdx
 				secs = append(secs, sec)
 
 				// Start new default section
 				reg = hl.Regions[0]
 				sec.Region = hl.Regions[0]
-				if tok.Idx >= line.Len() {
+				if tok.EndIdx >= line.Len() {
 					if line.Next != nil {
 						sec.StartLine = lineIdx + 1
 						sec.StartIdx = 0
 					}
 				} else {
 					sec.StartLine = lineIdx
-					sec.StartIdx = tok.Idx + 1
+					sec.StartIdx = tok.EndIdx + 1
 				}
 			}
 		}
@@ -180,20 +180,22 @@ func (hl Highlighter) tokenizeLine(line string) []RegionToken {
 		tok.Start = true
 		locs := r.StartRegexp.FindAllStringIndex(line, -1)
 		for _, l := range locs {
-			tok.Idx = l[0]
+			tok.StartIdx = l[0]
+			tok.EndIdx = l[1] - 1
 			toks = append(toks, tok)
 		}
 
 		tok.Start = false
 		locs = r.EndRegexp.FindAllStringIndex(line, -1)
 		for _, l := range locs {
-			tok.Idx = l[1]
+			tok.StartIdx = l[0]
+			tok.EndIdx = l[1] - 1
 			toks = append(toks, tok)
 		}
 	}
 
 	sortFunc := func(i, j int) bool {
-		return toks[i].Idx < toks[j].Idx
+		return toks[i].StartIdx < toks[j].StartIdx
 	}
 
 	sort.Slice(toks, sortFunc)

@@ -6,6 +6,7 @@ var ColorsDir string // Path to the colors directory.
 var LangsDir string  // Path to the languages syntaxes directory.
 var DumpKeys bool
 var DumpPromptKeys bool
+var Profile bool
 
 var Script string // Path to the script to be run.
 var Line int = 1
@@ -18,6 +19,7 @@ func isValidFlag(f string) bool {
 		"-dump-keys":        true,
 		"-dump-prompt-keys": true,
 		"-help":             true,
+		"-profile":          true,
 		"-version":          true,
 	}
 	if _, ok := flags[f]; ok {

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"runtime/pprof"
 
 	"github.com/m-kru/enix/internal/arg"
 	"github.com/m-kru/enix/internal/cfg"
@@ -48,6 +49,17 @@ func main() {
 
 	if arg.DumpConfig || arg.DumpKeys || arg.DumpPromptKeys {
 		os.Exit(0)
+	}
+
+	if arg.Profile {
+		f, err := os.Create("enix.prof")
+		if err != nil {
+			log.Fatal("can't create cpu profile file: ", err)
+		}
+		if err := pprof.StartCPUProfile(f); err != nil {
+			log.Fatal("can't start cpu profile: ", err)
+		}
+		defer pprof.StopCPUProfile()
 	}
 
 	if arg.Script != "" {
