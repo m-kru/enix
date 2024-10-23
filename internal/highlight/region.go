@@ -122,5 +122,18 @@ func (reg Region) Match(line *line.Line, startIdx int, endIdx int) Matches {
 		}
 	}
 
+	if reg.Value != nil {
+		values := reg.Value.FindAllStringIndex(str, -1)
+		if len(values) > 0 {
+			matches.Values = make([][2]int, 0, len(values))
+			for _, t := range values {
+				var m [2]int
+				m[0] = util.ByteIdxToRuneIdx(str, t[0]) + startIdx
+				m[1] = util.ByteIdxToRuneIdx(str, t[1]-1) + startIdx
+				matches.Values = append(matches.Values, m)
+			}
+		}
+	}
+
 	return matches
 }

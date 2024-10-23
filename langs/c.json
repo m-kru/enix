@@ -2,7 +2,8 @@
 	{
 		"Name": "Default",
 		"Keyword": "break|case|continue|default|do|else|for|goto|if|return|switch|while",
-		"Type": "\\b(bool|char|double|float|int|uint8_t|uint16_t|uint32_t|uint64_t)\\b"
+		"Type": "\\b(bool|char|double|float|int|uint8_t|uint16_t|uint32_t|uint64_t)\\b",
+		"Value": "\\b(false|true|NULL)\\b"
 	},
 	{
 		"Name": "Line Comment",
