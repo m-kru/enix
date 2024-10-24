@@ -66,10 +66,12 @@ func (sec Section) Analyze(line *line.Line, startLineIdx int, colors *cfg.Colors
 			insertHighlight(&hls, hlsStartIdx, hl)
 		}
 
-		line = line.Next
+		if lineIdx < sec.EndLine {
+			line = line.Next
+		}
 	}
 
-	return hls, line.Prev
+	return hls, line
 }
 
 func insertHighlight(hls *[]highlight.Highlight, startIdx int, hl highlight.Highlight) {

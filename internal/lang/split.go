@@ -33,7 +33,7 @@ func splitIntoSections(
 			// Drop all irrelevant sections before first visible line.
 			// TODO: Iterate in downward direction to improve performance.
 			startIdx := 0
-			for i, _ := range secs {
+			for i := range secs {
 				if secs[i].EndLine < startLineIdx {
 					startIdx = i + 1
 				} else {
