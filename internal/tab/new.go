@@ -4,7 +4,7 @@ import (
 	"errors"
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
-	"github.com/m-kru/enix/internal/highlight"
+	"github.com/m-kru/enix/internal/lang"
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/mark"
 	"github.com/m-kru/enix/internal/util"
@@ -30,7 +30,7 @@ func Empty(config *cfg.Config, colors *cfg.Colorscheme, keys *cfg.Keybindings) *
 	c := &cursor.Cursor{Config: config, Line: tab.Lines}
 	tab.Cursors = c
 
-	hl := highlight.DefaultHighlighter()
+	hl := lang.DefaultHighlighter()
 	tab.Highlighter = &hl
 
 	return tab
@@ -80,7 +80,7 @@ func Open(
 	tab.Cursors = c
 
 	// Highlighter initialization
-	hl, err := highlight.NewHighlighter(tab.FileType)
+	hl, err := lang.NewHighlighter(tab.FileType)
 	if err != nil {
 		panic(err)
 	}
@@ -113,7 +113,7 @@ func FromString(
 	c := &cursor.Cursor{Config: config, Line: tab.Lines}
 	tab.Cursors = c
 
-	hl := highlight.DefaultHighlighter()
+	hl := lang.DefaultHighlighter()
 	tab.Highlighter = &hl
 
 	return tab

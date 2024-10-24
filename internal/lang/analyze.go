@@ -1,4 +1,4 @@
-package highlight
+package lang
 
 import (
 	"regexp"
@@ -6,9 +6,9 @@ import (
 
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
+	"github.com/m-kru/enix/internal/highlight"
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/util"
-	"github.com/m-kru/enix/internal/xxx"
 )
 
 // The line argument  must be the first line of file.
@@ -20,8 +20,8 @@ func (hl Highlighter) Analyze(
 	endLineIdx int,
 	cursor *cursor.Cursor,
 	colors *cfg.Colorscheme,
-) []xxx.Highlight {
-	highlights := []xxx.Highlight{}
+) []highlight.Highlight {
+	highlights := []highlight.Highlight{}
 
 	if len(hl.Regions) == 0 {
 		return nil
@@ -43,7 +43,7 @@ func (hl Highlighter) Analyze(
 		}
 	}
 
-	var hls []xxx.Highlight
+	var hls []highlight.Highlight
 	lineIdx := startLineIdx
 	sections, line := hl.splitIntoSections(line, startLineIdx, endLineIdx)
 	for _, sec := range sections {

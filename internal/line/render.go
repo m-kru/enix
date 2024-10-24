@@ -3,8 +3,8 @@ package line
 import (
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/frame"
+	"github.com/m-kru/enix/internal/highlight"
 	"github.com/m-kru/enix/internal/view"
-	"github.com/m-kru/enix/internal/xxx"
 
 	"github.com/mattn/go-runewidth"
 )
@@ -14,8 +14,8 @@ func (l *Line) Render(
 	colors *cfg.Colorscheme,
 	frame frame.Frame,
 	view view.View,
-	hls []xxx.Highlight,
-) []xxx.Highlight {
+	hls []highlight.Highlight,
+) []highlight.Highlight {
 	consumedHls := 0
 	frameIdx := 0
 	runeIdx, runeSubcol, ok := l.RuneIdx(view.Column, cfg.TabWidth)

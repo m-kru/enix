@@ -1,4 +1,4 @@
-package highlight
+package lang
 
 import (
 	"regexp"

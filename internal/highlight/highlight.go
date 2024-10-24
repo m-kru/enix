@@ -1,4 +1,4 @@
-package xxx
+package highlight
 
 import "github.com/gdamore/tcell/v2"
 

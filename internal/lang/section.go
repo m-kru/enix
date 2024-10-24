@@ -1,9 +1,9 @@
-package highlight
+package lang
 
 import (
 	"github.com/m-kru/enix/internal/cfg"
+	"github.com/m-kru/enix/internal/highlight"
 	"github.com/m-kru/enix/internal/line"
-	"github.com/m-kru/enix/internal/xxx"
 )
 
 type Section struct {
@@ -15,8 +15,8 @@ type Section struct {
 	Region *Region
 }
 
-func (sec Section) Analyze(line *line.Line, startLineIdx int, colors *cfg.Colorscheme) ([]xxx.Highlight, *line.Line) {
-	hls := make([]xxx.Highlight, 0, 16*(sec.EndLine-sec.StartLine+1))
+func (sec Section) Analyze(line *line.Line, startLineIdx int, colors *cfg.Colorscheme) ([]highlight.Highlight, *line.Line) {
+	hls := make([]highlight.Highlight, 0, 16*(sec.EndLine-sec.StartLine+1))
 
 	for lineIdx := startLineIdx; lineIdx <= sec.EndLine; lineIdx++ {
 		if line.Len() == 0 {
@@ -37,7 +37,7 @@ func (sec Section) Analyze(line *line.Line, startLineIdx int, colors *cfg.Colors
 		matches := sec.Region.Match(line, startIdx, endIdx)
 
 		// First create region default highlight
-		hl := xxx.Highlight{
+		hl := highlight.Highlight{
 			Line:     lineIdx,
 			StartIdx: startIdx,
 			EndIdx:   endIdx,
@@ -47,22 +47,22 @@ func (sec Section) Analyze(line *line.Line, startLineIdx int, colors *cfg.Colors
 		hlsStartIdx := len(hls) - 1
 
 		for _, m := range matches.CursorWords {
-			hl := xxx.Highlight{Line: lineIdx, StartIdx: m[0], EndIdx: m[1], Style: colors.CursorWord}
+			hl := highlight.Highlight{Line: lineIdx, StartIdx: m[0], EndIdx: m[1], Style: colors.CursorWord}
 			insertHighlight(&hls, hlsStartIdx, hl)
 		}
 
 		for _, m := range matches.Keywords {
-			hl := xxx.Highlight{Line: lineIdx, StartIdx: m[0], EndIdx: m[1], Style: colors.Keyword}
+			hl := highlight.Highlight{Line: lineIdx, StartIdx: m[0], EndIdx: m[1], Style: colors.Keyword}
 			insertHighlight(&hls, hlsStartIdx, hl)
 		}
 
 		for _, m := range matches.Types {
-			hl := xxx.Highlight{Line: lineIdx, StartIdx: m[0], EndIdx: m[1], Style: colors.Type}
+			hl := highlight.Highlight{Line: lineIdx, StartIdx: m[0], EndIdx: m[1], Style: colors.Type}
 			insertHighlight(&hls, hlsStartIdx, hl)
 		}
 
 		for _, m := range matches.Values {
-			hl := xxx.Highlight{Line: lineIdx, StartIdx: m[0], EndIdx: m[1], Style: colors.Value}
+			hl := highlight.Highlight{Line: lineIdx, StartIdx: m[0], EndIdx: m[1], Style: colors.Value}
 			insertHighlight(&hls, hlsStartIdx, hl)
 		}
 
@@ -72,7 +72,7 @@ func (sec Section) Analyze(line *line.Line, startLineIdx int, colors *cfg.Colors
 	return hls, line.Prev
 }
 
-func insertHighlight(hls *[]xxx.Highlight, startIdx int, hl xxx.Highlight) {
+func insertHighlight(hls *[]highlight.Highlight, startIdx int, hl highlight.Highlight) {
 	for i := startIdx; i < len(*hls); i++ {
 		if !(*hls)[i].Contains(hl) {
 			continue
@@ -80,7 +80,7 @@ func insertHighlight(hls *[]xxx.Highlight, startIdx int, hl xxx.Highlight) {
 
 		newHls := (*hls)[i].Split(hl)
 		for range len(newHls) - 1 {
-			*hls = append(*hls, xxx.Highlight{})
+			*hls = append(*hls, highlight.Highlight{})
 		}
 
 		if len(newHls) > 1 {
