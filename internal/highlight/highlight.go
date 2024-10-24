@@ -10,13 +10,13 @@ type Highlight struct {
 }
 
 func (hl Highlight) CoversCell(lineNum int, idx int) bool {
-	return lineNum == hl.Line && hl.StartIdx <= idx && idx <= hl.EndIdx
+	return lineNum == hl.Line && hl.StartIdx <= idx && idx < hl.EndIdx
 }
 
 func (hl Highlight) Contains(hl2 Highlight) bool {
 	return hl.Line == hl2.Line &&
-		hl.StartIdx <= hl2.StartIdx && hl2.StartIdx <= hl.EndIdx &&
-		hl.StartIdx <= hl2.EndIdx && hl2.EndIdx <= hl.EndIdx
+		hl.StartIdx <= hl2.StartIdx && hl2.StartIdx < hl.EndIdx &&
+		hl.StartIdx < hl2.EndIdx && hl2.EndIdx <= hl.EndIdx
 }
 
 // Split divides hl into 1,2 or 3 new highlights.

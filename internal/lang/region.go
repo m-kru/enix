@@ -41,15 +41,6 @@ type Region struct {
 	Other           *regexp.Regexp
 }
 
-type RegionToken struct {
-	Region *Region
-	Start  bool // Start (true) or end (false) token
-	// Token start index for start token or token end index
-	// for end token.
-	StartIdx int
-	EndIdx   int
-}
-
 type Matches struct {
 	CursorWords [][2]int
 
