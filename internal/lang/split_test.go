@@ -156,6 +156,21 @@ comment */`,
 				},
 			},
 		},
+		{
+			idx: 9,
+			text: `char *a = "String"; /* Some
+multi
+line
+block
+comment */`,
+			startLine: 2,
+			endLine:   4,
+			want: []Section{
+				Section{
+					StartLine: 1, StartIdx: 20, EndLine: 4, EndIdx: 5, Region: regions[2],
+				},
+			},
+		},
 	}
 
 	for i, test := range tests {
