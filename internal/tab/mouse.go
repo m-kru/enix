@@ -52,6 +52,6 @@ func (tab *Tab) PrimaryClickCtrl(x, y int) {
 	}
 
 	tab.AddCursor(
-		line.LineNum(), line.ColumnIdx(idx, tab.Config.TabWidth),
+		line.Num(), line.ColumnIdx(idx, tab.Config.TabWidth),
 	)
 }

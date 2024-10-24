@@ -93,8 +93,8 @@ func (tab *Tab) RenderLines(frame frame.Frame) {
 	line := tab.Lines.Get(lineNum)
 
 	endLineIdx := tab.View.LastLine()
-	if endLineIdx > tab.Lines.Last().LineNum() {
-		endLineIdx = tab.Lines.Last().LineNum()
+	if endLineIdx > tab.Lines.Last().Num() {
+		endLineIdx = tab.Lines.Last().Num()
 	}
 	hls := tab.Highlighter.Analyze(
 		tab.Lines, lineNum, endLineIdx, tab.Cursors.Last(), tab.Colors,

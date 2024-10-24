@@ -62,7 +62,7 @@ func (l *Line) Render(
 		color := colors.Default
 		if len(hls) > 0 {
 			for {
-				if hls[consumedHls].CoversCell(l.LineNum(), runeIdx) {
+				if hls[consumedHls].CoversCell(l.Num(), runeIdx) {
 					color = hls[consumedHls].Style
 					break
 				}
@@ -97,7 +97,7 @@ func (l *Line) Render(
 						break
 					}
 
-					if hls[consumedHls].CoversCell(l.LineNum(), runeIdx) {
+					if hls[consumedHls].CoversCell(l.Num(), runeIdx) {
 						color = hls[consumedHls].Style
 						break
 					}

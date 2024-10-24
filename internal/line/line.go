@@ -32,11 +32,6 @@ func (l *Line) Num() int {
 	}
 }
 
-// LineNum is an alias to Num() to satisfy Visible interface.
-func (l *Line) LineNum() int {
-	return l.Num()
-}
-
 // Columns returns number of columns required by the line.
 // It doesn't include the end of line character, as it is
 // not stored in the line buffer.
