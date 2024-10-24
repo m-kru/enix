@@ -72,7 +72,7 @@ type Matches struct {
 func (reg Region) Match(line *line.Line, startIdx int, endIdx int) Matches {
 	matches := Matches{}
 
-	str := string(line.Buf[startIdx : endIdx+1])
+	str := string(line.Buf[startIdx:endIdx])
 
 	if reg.CursorWord != nil {
 		words := reg.CursorWord.FindAllStringIndex(str, -1)

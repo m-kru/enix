@@ -13,7 +13,7 @@ func splitIntoSections(
 	startLineIdx int,
 	endLineIdx int,
 ) ([]Section, *line.Line) {
-	secs := []Section{}
+	secs := make([]Section, 0, 128)
 	reg := regions[0] // Current region
 	sec := Section{
 		StartLine: 1,
@@ -31,6 +31,7 @@ func splitIntoSections(
 			startLine = line
 
 			// Drop all irrelevant sections before first visible line.
+			// TODO: Iterate in downward direction to improve performance.
 			startIdx := 0
 			for i, _ := range secs {
 				if secs[i].EndLine < startLineIdx {

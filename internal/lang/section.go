@@ -29,7 +29,7 @@ func (sec Section) Analyze(line *line.Line, startLineIdx int, colors *cfg.Colors
 			startIdx = sec.StartIdx
 		}
 
-		endIdx := line.Len() - 1
+		endIdx := line.Len()
 		if lineIdx == sec.EndLine {
 			endIdx = sec.EndIdx
 		}
