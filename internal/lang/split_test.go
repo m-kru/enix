@@ -108,14 +108,38 @@ func TestSplit(t *testing.T) {
 			},
 		},
 		{
-			idx:       5,
-			text:      `/* Some multi
+			idx: 5,
+			text: `/* Some multi
 line comment.*/`,
 			startLine: 1,
 			endLine:   2,
 			want: []Section{
 				Section{
 					StartLine: 1, StartIdx: 0, EndLine: 2, EndIdx: 15, Region: regions[2],
+				},
+			},
+		},
+		{
+			idx: 6,
+			text: `int a;
+int b;
+int c;`,
+			startLine: 2,
+			endLine:   2,
+			want: []Section{
+				Section{
+					StartLine: 1, StartIdx: 0, EndLine: 2, EndIdx: 6, Region: regions[0],
+				},
+			},
+		},
+		{
+			idx:       7,
+			text:      `/* Some unterminated comment`,
+			startLine: 1,
+			endLine:   1,
+			want: []Section{
+				Section{
+					StartLine: 1, StartIdx: 0, EndLine: 1, EndIdx: 28, Region: regions[2],
 				},
 			},
 		},
