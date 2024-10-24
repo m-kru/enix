@@ -107,6 +107,18 @@ func TestSplit(t *testing.T) {
 				},
 			},
 		},
+		{
+			idx:       5,
+			text:      `/* Some multi
+line comment.*/`,
+			startLine: 1,
+			endLine:   2,
+			want: []Section{
+				Section{
+					StartLine: 1, StartIdx: 0, EndLine: 2, EndIdx: 15, Region: regions[2],
+				},
+			},
+		},
 	}
 
 	for i, test := range tests {
