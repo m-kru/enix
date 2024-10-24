@@ -31,17 +31,15 @@ func splitIntoSections(
 			startLine = line
 
 			// Drop all irrelevant sections before first visible line.
-			if len(secs) > 1 {
-				firstSecIdx := len(secs) - 1
-				for i := len(secs) - 2; i >= 0; i-- {
-					if secs[i].EndLine == startLineIdx {
-						firstSecIdx = i
-					} else {
-						break
-					}
+			startIdx := 0
+			for i, _ := range secs {
+				if secs[i].EndLine < startLineIdx {
+					startIdx = i + 1
+				} else {
+					break
 				}
-				secs = secs[firstSecIdx:]
 			}
+			secs = secs[startIdx:]
 		}
 
 		lineToks := tokenizeLine(regions, line.String())

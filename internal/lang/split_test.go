@@ -143,6 +143,19 @@ int c;`,
 				},
 			},
 		},
+		{
+			idx: 8,
+			text: `char *a = "String"; /* Some
+block
+comment */`,
+			startLine: 2,
+			endLine:   3,
+			want: []Section{
+				Section{
+					StartLine: 1, StartIdx: 20, EndLine: 3, EndIdx: 10, Region: regions[2],
+				},
+			},
+		},
 	}
 
 	for i, test := range tests {
