@@ -1,7 +1,7 @@
 [
 	{
 		"Name": "Default",
-		"Keyword": "break|case|continue|default|do|else|for|goto|if|return|switch|while",
+		"Keyword": "\\bbreak|case|continue|default|do|else|for|goto|if|return|switch|while\\b",
 		"Type": "\\b(bool|char|double|float|int|uint8_t|uint16_t|uint32_t|uint64_t)\\b",
 		"Value": "\\b(false|true|NULL)\\b"
 	},
@@ -10,6 +10,12 @@
 		"Style": "Comment",
 		"StartRegex": "//",
 		"EndRegex": "$"
+	},
+	{
+		"Name": "Meta",
+		"Style": "Meta",
+		"StartRegex": "#",
+		"EndRegex": "\\s|$"
 	},
 	{
 		"Name": "String",

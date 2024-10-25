@@ -100,6 +100,19 @@ func (reg Region) Match(line *line.Line, startIdx int, endIdx int) Matches {
 		}
 	}
 
+	if reg.Meta != nil {
+		metas := reg.Meta.FindAllStringIndex(str, -1)
+		if len(metas) > 0 {
+			matches.Metas = make([][2]int, 0, len(metas))
+			for _, x := range metas {
+				var m [2]int
+				m[0] = util.ByteIdxToRuneIdx(str, x[0]) + startIdx
+				m[1] = util.ByteIdxToRuneIdx(str, x[1]) + startIdx
+				matches.Metas = append(matches.Metas, m)
+			}
+		}
+	}
+
 	if reg.Type != nil {
 		types := reg.Type.FindAllStringIndex(str, -1)
 		if len(types) > 0 {

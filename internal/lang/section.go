@@ -44,26 +44,30 @@ func (sec Section) Analyze(line *line.Line, startLineIdx int, colors *cfg.Colors
 			Style:    colors.Style(sec.Region.Style),
 		}
 		hls = append(hls, hl)
-		hlsStartIdx := len(hls) - 1
 
 		for _, m := range matches.CursorWords {
 			hl := highlight.Highlight{Line: lineIdx, StartIdx: m[0], EndIdx: m[1], Style: colors.CursorWord}
-			insertHighlight(&hls, hlsStartIdx, hl)
+			insertHighlight(&hls, hl)
 		}
 
 		for _, m := range matches.Keywords {
 			hl := highlight.Highlight{Line: lineIdx, StartIdx: m[0], EndIdx: m[1], Style: colors.Keyword}
-			insertHighlight(&hls, hlsStartIdx, hl)
+			insertHighlight(&hls, hl)
+		}
+
+		for _, m := range matches.Metas {
+			hl := highlight.Highlight{Line: lineIdx, StartIdx: m[0], EndIdx: m[1], Style: colors.Meta}
+			insertHighlight(&hls, hl)
 		}
 
 		for _, m := range matches.Types {
 			hl := highlight.Highlight{Line: lineIdx, StartIdx: m[0], EndIdx: m[1], Style: colors.Type}
-			insertHighlight(&hls, hlsStartIdx, hl)
+			insertHighlight(&hls, hl)
 		}
 
 		for _, m := range matches.Values {
 			hl := highlight.Highlight{Line: lineIdx, StartIdx: m[0], EndIdx: m[1], Style: colors.Value}
-			insertHighlight(&hls, hlsStartIdx, hl)
+			insertHighlight(&hls, hl)
 		}
 
 		if lineIdx < sec.EndLine {
@@ -74,8 +78,8 @@ func (sec Section) Analyze(line *line.Line, startLineIdx int, colors *cfg.Colors
 	return hls, line
 }
 
-func insertHighlight(hls *[]highlight.Highlight, startIdx int, hl highlight.Highlight) {
-	for i := startIdx; i < len(*hls); i++ {
+func insertHighlight(hls *[]highlight.Highlight, hl highlight.Highlight) {
+	for i := 0; i < len(*hls); i++ {
 		if !(*hls)[i].Contains(hl) {
 			continue
 		}
@@ -87,7 +91,7 @@ func insertHighlight(hls *[]highlight.Highlight, startIdx int, hl highlight.High
 
 		if len(newHls) > 1 {
 			for j := 0; j < len(*hls)-i-len(newHls); j++ {
-				(*hls)[len(*hls)-1-j] = (*hls)[(len(*hls)-1-j)-len(newHls)]
+				(*hls)[len(*hls)-1-j] = (*hls)[(len(*hls)-1-j)-len(newHls)+1]
 			}
 		}
 
