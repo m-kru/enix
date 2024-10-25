@@ -113,6 +113,19 @@ func (reg Region) Match(line *line.Line, startIdx int, endIdx int) Matches {
 		}
 	}
 
+	if reg.Operator != nil {
+		ops := reg.Operator.FindAllStringIndex(str, -1)
+		if len(ops) > 0 {
+			matches.Operators = make([][2]int, 0, len(ops))
+			for _, o := range ops {
+				var m [2]int
+				m[0] = util.ByteIdxToRuneIdx(str, o[0]) + startIdx
+				m[1] = util.ByteIdxToRuneIdx(str, o[1]) + startIdx
+				matches.Operators = append(matches.Operators, m)
+			}
+		}
+	}
+
 	if reg.Type != nil {
 		types := reg.Type.FindAllStringIndex(str, -1)
 		if len(types) > 0 {
