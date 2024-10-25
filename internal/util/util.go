@@ -67,8 +67,9 @@ func IsBracket(r rune) bool {
 // The function assumes provided string has only valid runes.
 // In case of invalid runes value 0 is returned.
 func ByteIdxToRuneIdx(str string, bidx int) int {
+	rIdx := 0
 	idx := 0
-	for rIdx, r := range str {
+	for _, r := range str {
 		rl := utf8.RuneLen(r)
 		if rl < 0 {
 			return 0
@@ -79,7 +80,8 @@ func ByteIdxToRuneIdx(str string, bidx int) int {
 		}
 
 		idx += rl
+		rIdx++
 	}
 
-	return 0
+	return rIdx
 }
