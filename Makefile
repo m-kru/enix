@@ -9,6 +9,9 @@ help:
 	@echo "  build    Build binary."
 	@echo "  debug    Build binary for debugging."
 	@echo "  default  Run build."
+	@echo "Installation targets:"
+	@echo "  install-bin    Install only enix binary to /usr/local/bin/ directory."
+	@echo "  uninstall-bin  Uninstall enix binary from /usr/local/bin/ directory."
 	@echo "Quality targets:"
 	@echo "  fmt   Format files with go fmt."
 	@echo "  lint  Lint files with golangci-lint."
@@ -31,6 +34,14 @@ build:
 
 debug:
 	go build -v -gcflags=all="-N -l" -o $(NAME) ./cmd/$(NAME)
+
+# Installation targets
+.PHONY: install-bin
+install-bin:
+	cp enix /usr/local/bin
+
+uninstall-bin:
+	rm /usr/local/bin/enix
 
 # Quality targets
 fmt:
