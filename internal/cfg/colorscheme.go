@@ -147,6 +147,7 @@ func ColorschemeDefault() Colorscheme {
 		Prompt:       tcell.StyleDefault.Foreground(tcell.ColorWhite),
 		PromptShadow: tcell.StyleDefault.Foreground(tcell.ColorGray),
 
+		Builtin:         tcell.StyleDefault.Bold(true),
 		Comment:         tcell.StyleDefault.Foreground(tcell.ColorGray),
 		FormatSpecifier: tcell.StyleDefault.Foreground(tcell.ColorMaroon),
 		Keyword:         tcell.StyleDefault.Foreground(tcell.ColorNavy),

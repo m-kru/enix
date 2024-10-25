@@ -1,6 +1,7 @@
 [
 	{
 		"Name": "Default",
+		"Builtin": "\\b(__DATE__|__FILE__|__LINE__|__TIME__|__VA_ARGS__|)\\b",
 		"Keyword": "\\b(break|case|continue|default|do|else|for|goto|if|return|switch|while)\\b",
 		"Number": "\\b-?(0[xX][0-9a-fA-F]+|\\d+)([uU][lL]{0,2}|[lL]{1,2}[uU]?|[fFdDiI]|([eE][-+]?\\d+))?|'((\\\\.)?|[^'\\\\])'",
 		"Operator": "=|\\+|-|>|<|\\*|/|&|%|!|~|\\.",
