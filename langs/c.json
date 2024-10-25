@@ -2,8 +2,9 @@
 	{
 		"Name": "Default",
 		"Keyword": "\\bbreak|case|continue|default|do|else|for|goto|if|return|switch|while\\b",
+		"Number": "\\b-?(0[xX][0-9a-fA-F]+|\\d+)([uU][lL]{0,2}|[lL]{1,2}[uU]?|[fFdDiI]|([eE][-+]?\\d+))?|'((\\\\.)?|[^'\\\\])'",
 		"Operator": "=|\\+|-|>|<|\\*|/|&|%|!|~|\\.",
-		"Type": "\\b(bool|char|double|float|int|uint8_t|uint16_t|uint32_t|uint64_t)\\b",
+		"Type": "\\b(bool|char|double|float|int|uint8_t|uint16_t|uint32_t|uint64_t|void)\\b",
 		"Value": "\\b(false|true|NULL)\\b"
 	},
 	{
