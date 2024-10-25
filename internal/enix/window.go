@@ -319,6 +319,10 @@ func Start(
 				mEv := w.Mouse.RxTcellEventMouse(ev)
 				if mEv != nil {
 					w.RxMouseEvent(mEv)
+				} else {
+					// Don't render the whole window, as nothing happened.
+					// Don't waste CPU.
+					continue
 				}
 			default:
 				tcellEvRcvr = tcellEvRcvr.RxTcellEvent(ev)
