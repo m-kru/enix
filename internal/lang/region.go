@@ -87,10 +87,23 @@ func (reg Region) Match(line *line.Line, startIdx int, endIdx int) Matches {
 		}
 	}
 
+	if reg.Attribute != nil {
+		attrs := reg.Attribute.FindAllStringIndex(str, -1)
+		if len(attrs) > 0 {
+			matches.Attributes = make([][2]int, 0, len(attrs))
+			for _, a := range attrs {
+				var m [2]int
+				m[0] = util.ByteIdxToRuneIdx(str, a[0]) + startIdx
+				m[1] = util.ByteIdxToRuneIdx(str, a[1]) + startIdx
+				matches.Attributes = append(matches.Attributes, m)
+			}
+		}
+	}
+
 	if reg.Builtin != nil {
 		builtins := reg.Builtin.FindAllStringIndex(str, -1)
 		if len(builtins) > 0 {
-			matches.FormatSpecifiers = make([][2]int, 0, len(builtins))
+			matches.Builtins = make([][2]int, 0, len(builtins))
 			for _, b := range builtins {
 				var m [2]int
 				m[0] = util.ByteIdxToRuneIdx(str, b[0]) + startIdx
