@@ -147,14 +147,15 @@ func ColorschemeDefault() Colorscheme {
 		Prompt:       tcell.StyleDefault.Foreground(tcell.ColorWhite),
 		PromptShadow: tcell.StyleDefault.Foreground(tcell.ColorGray),
 
-		Comment:  tcell.StyleDefault.Foreground(tcell.ColorGray),
-		Keyword:  tcell.StyleDefault.Foreground(tcell.ColorNavy),
-		Meta:     tcell.StyleDefault.Foreground(tcell.ColorPurple),
-		Number:   tcell.StyleDefault.Foreground(tcell.ColorMaroon),
-		Operator: tcell.StyleDefault.Foreground(tcell.ColorOlive),
-		String:   tcell.StyleDefault.Foreground(tcell.ColorGreen),
-		Type:     tcell.StyleDefault.Foreground(tcell.ColorOlive),
-		Value:    tcell.StyleDefault.Foreground(tcell.ColorMaroon),
+		Comment:         tcell.StyleDefault.Foreground(tcell.ColorGray),
+		FormatSpecifier: tcell.StyleDefault.Foreground(tcell.ColorMaroon),
+		Keyword:         tcell.StyleDefault.Foreground(tcell.ColorNavy),
+		Meta:            tcell.StyleDefault.Foreground(tcell.ColorPurple),
+		Number:          tcell.StyleDefault.Foreground(tcell.ColorMaroon),
+		Operator:        tcell.StyleDefault.Foreground(tcell.ColorOlive),
+		String:          tcell.StyleDefault.Foreground(tcell.ColorGreen),
+		Type:            tcell.StyleDefault.Foreground(tcell.ColorOlive),
+		Value:           tcell.StyleDefault.Foreground(tcell.ColorMaroon),
 	}
 }
 

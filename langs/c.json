@@ -23,6 +23,7 @@
 		"Name": "String",
 		"Style": "String",
 		"StartRegex": "\"",
-		"EndRegex": "\""
+		"EndRegex": "\"",
+		"FormatSpecifier": "\\\\(t|n)|%(c|d|f|p|s|u|x)"
 	}
 ]

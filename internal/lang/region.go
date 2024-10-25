@@ -87,6 +87,19 @@ func (reg Region) Match(line *line.Line, startIdx int, endIdx int) Matches {
 		}
 	}
 
+	if reg.FormatSpecifier != nil {
+		fmts := reg.FormatSpecifier.FindAllStringIndex(str, -1)
+		if len(fmts) > 0 {
+			matches.FormatSpecifiers = make([][2]int, 0, len(fmts))
+			for _, f := range fmts {
+				var m [2]int
+				m[0] = util.ByteIdxToRuneIdx(str, f[0]) + startIdx
+				m[1] = util.ByteIdxToRuneIdx(str, f[1]) + startIdx
+				matches.FormatSpecifiers = append(matches.FormatSpecifiers, m)
+			}
+		}
+	}
+
 	if reg.Keyword != nil {
 		keywords := reg.Keyword.FindAllStringIndex(str, -1)
 		if len(keywords) > 0 {
