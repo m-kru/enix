@@ -171,6 +171,10 @@ Quit returns an error if current tab has unsaved changes.`,
 	"quit!": `quit! # Force quit.,
 Forced version of the quit command. It quits the tab even if there are unsaved changes.`,
 
+	"replace": `replace # Replaces rune under cursor or runes under selection.
+The command first deletes rune under the cursor, or runes under selection, and then
+enters the insert moode for a single insertion.`,
+
 	// Selection
 
 	"sel-white": `sel-white # Selects sequence of whitespaces.
