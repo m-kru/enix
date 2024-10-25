@@ -137,6 +137,10 @@ func tokenizeLine(regions []*Region, line string) []RegionToken {
 	}
 
 	sortFunc := func(i, j int) bool {
+		if toks[i].StartIdx == toks[j].StartIdx {
+			return toks[i].Start
+		}
+
 		return toks[i].StartIdx < toks[j].StartIdx
 	}
 

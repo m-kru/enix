@@ -204,6 +204,23 @@ comment */`,
 				},
 			},
 		},
+		{
+			idx:       11,
+			text:      `" "   " "`,
+			startLine: 1,
+			endLine:   1,
+			want: []Section{
+				Section{
+					StartLine: 1, StartIdx: 0, EndLine: 1, EndIdx: 3, Region: regions[3],
+				},
+				Section{
+					StartLine: 1, StartIdx: 3, EndLine: 1, EndIdx: 6, Region: regions[0],
+				},
+				Section{
+					StartLine: 1, StartIdx: 6, EndLine: 1, EndIdx: 9, Region: regions[3],
+				},
+			},
+		},
 	}
 
 	for i, test := range tests {

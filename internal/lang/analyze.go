@@ -26,6 +26,10 @@ func (hl Highlighter) Analyze(
 		return nil
 	}
 
+	for _, r := range hl.Regions {
+		r.CursorWord = nil
+	}
+
 	cursorWord := cursor.GetWord()
 	if len(cursorWord) == 1 && util.IsBracket(rune(cursorWord[0])) {
 		// Unimplemented
@@ -35,10 +39,6 @@ func (hl Highlighter) Analyze(
 			for _, r := range hl.Regions {
 				r.CursorWord = re
 			}
-		}
-	} else {
-		for _, r := range hl.Regions {
-			r.CursorWord = nil
 		}
 	}
 
