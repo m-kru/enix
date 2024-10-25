@@ -95,7 +95,7 @@ func GetWord(line []rune, idx int) string {
 	}
 
 	if !IsWordRune(line[idx]) {
-		return string(line[idx : idx+1])
+		return ""
 	}
 
 	left := idx
