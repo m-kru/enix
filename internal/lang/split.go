@@ -52,16 +52,9 @@ func splitIntoSections(
 				}
 
 				// Append previous default section
-				if tok.StartIdx == 0 {
-					if line.Prev != nil {
-						sec.EndLine = lineIdx - 1
-						sec.EndIdx = line.Prev.Len()
-					}
-				} else {
-					sec.EndLine = lineIdx
-					sec.EndIdx = tok.StartIdx
-				}
-				if sec.StartLine != sec.EndLine || sec.StartIdx != sec.EndIdx {
+				sec.EndLine = lineIdx
+				sec.EndIdx = tok.StartIdx
+				if sec.StartLine < sec.EndLine || sec.StartIdx != sec.EndIdx {
 					secs = append(secs, sec)
 				}
 

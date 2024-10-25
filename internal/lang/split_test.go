@@ -27,6 +27,11 @@ var regions = []*Region{
 		StartRegexp: regexp.MustCompile(`"`),
 		EndRegexp:   regexp.MustCompile(`"`),
 	},
+	&Region{
+		Name:        "Meta",
+		StartRegexp: regexp.MustCompile(`#`),
+		EndRegexp:   regexp.MustCompile(`\s|$`),
+	},
 }
 
 func TestSplit(t *testing.T) {
@@ -168,6 +173,34 @@ comment */`,
 			want: []Section{
 				Section{
 					StartLine: 1, StartIdx: 20, EndLine: 4, EndIdx: 5, Region: regions[2],
+				},
+			},
+		},
+		{
+			idx: 10,
+			text: `#include "a.h"
+#include "b.h"
+#include "c.h"`,
+			startLine: 1,
+			endLine:   3,
+			want: []Section{
+				Section{
+					StartLine: 1, StartIdx: 0, EndLine: 1, EndIdx: 9, Region: regions[4],
+				},
+				Section{
+					StartLine: 1, StartIdx: 9, EndLine: 1, EndIdx: 14, Region: regions[3],
+				},
+				Section{
+					StartLine: 2, StartIdx: 0, EndLine: 2, EndIdx: 9, Region: regions[4],
+				},
+				Section{
+					StartLine: 2, StartIdx: 9, EndLine: 2, EndIdx: 14, Region: regions[3],
+				},
+				Section{
+					StartLine: 3, StartIdx: 0, EndLine: 3, EndIdx: 9, Region: regions[4],
+				},
+				Section{
+					StartLine: 3, StartIdx: 9, EndLine: 3, EndIdx: 14, Region: regions[3],
 				},
 			},
 		},
