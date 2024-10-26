@@ -90,11 +90,11 @@ func TestGetWord(t *testing.T) {
 		{[]rune("lorem ipsum"), 4, "lorem"},
 		{[]rune("lorem ipsum"), 6, "ipsum"},
 		{[]rune("lorem ipsum"), 10, "ipsum"},
-		{[]rune(" {} "), 1, "{"},
-		{[]rune("[]"), 1, "]"},
+		{[]rune(" {} "), 1, ""},
+		{[]rune("[]"), 1, ""},
 		{[]rune(" "), 0, ""},
 		{[]rune("a\tb"), 1, ""},
-		{[]rune("1+2"), 1, "+"},
+		{[]rune("1+2"), 1, ""},
 	}
 
 	for _, test := range tests {

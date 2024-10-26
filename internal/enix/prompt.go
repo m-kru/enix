@@ -7,6 +7,7 @@ import (
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cmd"
 	"github.com/m-kru/enix/internal/cursor"
+	"github.com/m-kru/enix/internal/exec"
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/view"
@@ -304,99 +305,99 @@ func (p *Prompt) Exec() TcellEventReceiver {
 		switch c.Name {
 		case "":
 		case "add-cursor":
-			err = cmd.AddCursor(c.Args, tab)
+			err = exec.AddCursor(c.Args, tab)
 			// Do nothing
 		case "backspace":
-			err = cmd.Backspace(c.Args, tab)
-		case "cmd":
+			err = exec.Backspace(c.Args, tab)
+		case "exec":
 			p.Activate("", "")
 			return p
-		case "cmd-error":
+		case "exec-error":
 			p.ShowError(strings.Join(c.Args, " "))
 			return p.Window
-		case "cmd-info":
+		case "exec-info":
 			p.ShowInfo(strings.Join(c.Args, " "))
 			return p.Window
 		case "config-dir":
-			info, err = cmd.ConfigDir(c.Args)
+			info, err = exec.ConfigDir(c.Args)
 		case "cursor-count":
 			p.ShowInfo(fmt.Sprintf("%d", tab.Cursors.Count()))
 			return p.Window
 		case "del":
-			err = cmd.Del(c.Args, tab)
+			err = exec.Del(c.Args, tab)
 		case "down":
-			err = cmd.Down(c.Args, tab)
+			err = exec.Down(c.Args, tab)
 		case "dump-cursor":
-			info, err = cmd.DumpCursor(c.Args, tab)
+			info, err = exec.DumpCursor(c.Args, tab)
 		case "end":
-			err = cmd.End(c.Args, tab)
+			err = exec.End(c.Args, tab)
 		case "g", "go":
-			err = cmd.Go(c.Args, tab)
+			err = exec.Go(c.Args, tab)
 		case "insert-rune":
-			err = cmd.InsertRune(c.Args, tab)
+			err = exec.InsertRune(c.Args, tab)
 		case "join":
-			err = cmd.Join(c.Args, tab)
+			err = exec.Join(c.Args, tab)
 		case "left":
-			err = cmd.Left(c.Args, tab)
+			err = exec.Left(c.Args, tab)
 		case "line-end":
-			err = cmd.LineEnd(c.Args, tab)
+			err = exec.LineEnd(c.Args, tab)
 		case "line-start":
-			err = cmd.LineStart(c.Args, tab)
+			err = exec.LineStart(c.Args, tab)
 		case "newline":
-			err = cmd.Newline(c.Args, tab)
+			err = exec.Newline(c.Args, tab)
 		case "m", "mark":
-			info, err = cmd.Mark(c.Args, tab)
+			info, err = exec.Mark(c.Args, tab)
 		case "right":
-			err = cmd.Right(c.Args, tab)
+			err = exec.Right(c.Args, tab)
 		case "rune":
-			err = cmd.Rune(c.Args, tab)
+			err = exec.Rune(c.Args, tab)
 		case "quit", "q":
-			err = cmd.Quit(c.Args, tab, false)
+			err = exec.Quit(c.Args, tab, false)
 			if err == nil {
 				return nil
 			}
 		case "quit!", "q!":
-			_ = cmd.Quit(c.Args, tab, true)
+			_ = exec.Quit(c.Args, tab, true)
 			return nil
 		case "save":
-			info, err = cmd.Save(c.Args, tab, p.Config.TrimOnSave)
+			info, err = exec.Save(c.Args, tab, p.Config.TrimOnSave)
 		case "space":
-			err = cmd.Space(c.Args, tab)
+			err = exec.Space(c.Args, tab)
 		case "spawn-down":
-			err = cmd.SpawnDown(c.Args, tab)
+			err = exec.SpawnDown(c.Args, tab)
 		case "spawn-up":
-			err = cmd.SpawnUp(c.Args, tab)
+			err = exec.SpawnUp(c.Args, tab)
 		case "suspend":
-			err = cmd.Suspend(c.Args, p.Window.Screen)
+			err = exec.Suspend(c.Args, p.Window.Screen)
 		case "tab":
-			err = cmd.Tab(c.Args, tab)
+			err = exec.Tab(c.Args, tab)
 		case "tab-count":
 			p.ShowInfo(fmt.Sprintf("%d", p.Window.Tabs.Count()))
 			return p.Window
 		case "tab-width":
-			err = cmd.CfgTabWidth(c.Args, p.Config)
+			err = exec.CfgTabWidth(c.Args, p.Config)
 		case "trim":
-			err = cmd.Trim(c.Args, tab)
+			err = exec.Trim(c.Args, tab)
 		case "up":
-			err = cmd.Up(c.Args, tab)
+			err = exec.Up(c.Args, tab)
 		case "view-down":
-			err = cmd.ViewDown(c.Args, tab)
+			err = exec.ViewDown(c.Args, tab)
 			updateView = false
 		case "view-left":
-			err = cmd.ViewLeft(c.Args, tab)
+			err = exec.ViewLeft(c.Args, tab)
 			updateView = false
 		case "view-right":
-			err = cmd.ViewRight(c.Args, tab)
+			err = exec.ViewRight(c.Args, tab)
 			updateView = false
 		case "view-up":
-			err = cmd.ViewUp(c.Args, tab)
+			err = exec.ViewUp(c.Args, tab)
 			updateView = false
 		case "prev-word-start":
-			err = cmd.PrevWordStart(c.Args, tab)
+			err = exec.PrevWordStart(c.Args, tab)
 		case "word-end":
-			err = cmd.WordEnd(c.Args, tab)
+			err = exec.WordEnd(c.Args, tab)
 		case "word-start":
-			err = cmd.WordStart(c.Args, tab)
+			err = exec.WordStart(c.Args, tab)
 		default:
 			p.ShowError(
 				fmt.Sprintf(

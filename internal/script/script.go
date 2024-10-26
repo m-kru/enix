@@ -9,6 +9,7 @@ import (
 	"github.com/m-kru/enix/internal/arg"
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cmd"
+	"github.com/m-kru/enix/internal/exec"
 	"github.com/m-kru/enix/internal/tab"
 )
 
@@ -54,7 +55,7 @@ func Exec(config *cfg.Config) error {
 	for _, file := range arg.Files {
 		tab := tab.Open(config, nil, nil, file)
 		for _, cmd := range cmds {
-			err := exec(cmd, tab)
+			err := execCmd(cmd, tab)
 			if err != nil {
 				return err
 			}
@@ -64,51 +65,51 @@ func Exec(config *cfg.Config) error {
 	return nil
 }
 
-func exec(c cmd.Command, tab *tab.Tab) error {
+func execCmd(c cmd.Command, tab *tab.Tab) error {
 	var err error
 
 	for i := 0; i < c.RepCount; i++ {
 		switch c.Name {
 		case "add-cursor":
-			err = cmd.AddCursor(c.Args, tab)
+			err = exec.AddCursor(c.Args, tab)
 		case "backspace":
-			err = cmd.Backspace(c.Args, tab)
+			err = exec.Backspace(c.Args, tab)
 		case "del":
-			err = cmd.Del(c.Args, tab)
+			err = exec.Del(c.Args, tab)
 		case "down":
-			err = cmd.Down(c.Args, tab)
+			err = exec.Down(c.Args, tab)
 		case "end":
-			err = cmd.End(c.Args, tab)
+			err = exec.End(c.Args, tab)
 		case "esc":
-			err = cmd.Esc(c.Args, tab)
+			err = exec.Esc(c.Args, tab)
 		case "go":
-			err = cmd.Go(c.Args, tab)
+			err = exec.Go(c.Args, tab)
 		case "insert-rune":
-			err = cmd.InsertRune(c.Args, tab)
+			err = exec.InsertRune(c.Args, tab)
 		case "left":
-			err = cmd.Left(c.Args, tab)
+			err = exec.Left(c.Args, tab)
 		case "mark":
-			_, err = cmd.Mark(c.Args, tab)
+			_, err = exec.Mark(c.Args, tab)
 		case "newline":
-			err = cmd.Newline(c.Args, tab)
+			err = exec.Newline(c.Args, tab)
 		case "right":
-			err = cmd.Right(c.Args, tab)
+			err = exec.Right(c.Args, tab)
 		case "rune":
-			err = cmd.Rune(c.Args, tab)
+			err = exec.Rune(c.Args, tab)
 		case "save":
-			_, err = cmd.Save(c.Args, tab, false)
+			_, err = exec.Save(c.Args, tab, false)
 		case "space":
-			err = cmd.Space(c.Args, tab)
+			err = exec.Space(c.Args, tab)
 		case "spawn-down":
-			err = cmd.SpawnDown(c.Args, tab)
+			err = exec.SpawnDown(c.Args, tab)
 		case "spawn-up":
-			err = cmd.SpawnUp(c.Args, tab)
+			err = exec.SpawnUp(c.Args, tab)
 		case "tab":
-			err = cmd.Tab(c.Args, tab)
+			err = exec.Tab(c.Args, tab)
 		case "trim":
-			err = cmd.Trim(c.Args, tab)
+			err = exec.Trim(c.Args, tab)
 		case "up":
-			err = cmd.Up(c.Args, tab)
+			err = exec.Up(c.Args, tab)
 		default:
 			err = fmt.Errorf("invalid or unimplemented command '%s'", c.Name)
 		}

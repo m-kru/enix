@@ -83,10 +83,11 @@ func KeybindingsDefault() Keybindings {
 		// Selection
 		"Ctrl+L": "sel-line",
 		// View
-		"Down":  "view-down",
-		"Right": "view-right",
-		"Up":    "view-up",
-		"Left":  "view-left",
+		"Down":      "view-down",
+		"Ctrl+Down": "5 view-down",
+		"Right":     "view-right",
+		"Up":        "view-up",
+		"Left":      "view-left",
 	}
 }
 

@@ -7,7 +7,7 @@ import (
 
 	"github.com/m-kru/enix/internal/arg"
 	"github.com/m-kru/enix/internal/cfg"
-	"github.com/m-kru/enix/internal/cmd"
+	"github.com/m-kru/enix/internal/exec"
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/mouse"
 	"github.com/m-kru/enix/internal/tab"
@@ -76,28 +76,28 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 
 		switch name {
 		case "add-cursor":
-			err = cmd.AddCursor(args, tab)
+			err = exec.AddCursor(args, tab)
 		case "backspace":
-			err = cmd.Backspace(args, tab)
-		case "cmd":
+			err = exec.Backspace(args, tab)
+		case "exec":
 			tab.HasFocus = false
 			w.Prompt.Activate("", "")
 			return w.Prompt
 		case "config-dir":
-			info, err = cmd.ConfigDir(args)
+			info, err = exec.ConfigDir(args)
 		case "del":
-			err = cmd.Del(args, tab)
+			err = exec.Del(args, tab)
 		case "down":
-			err = cmd.Down(args, tab)
+			err = exec.Down(args, tab)
 		case "esc":
-			err = cmd.Esc(args, tab)
+			err = exec.Esc(args, tab)
 			w.Prompt.Clear()
 		case "find":
 			tab.HasFocus = false
 			w.Prompt.Activate("find ", "todo")
 			return w.Prompt
 		case "g", "go":
-			err = cmd.Go(args, tab)
+			err = exec.Go(args, tab)
 		case "help":
 			tab.HasFocus = false
 			w.Prompt.Activate("help ", "")
@@ -105,61 +105,61 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 		case "insert":
 			tab.InInsertMode = true
 		case "join":
-			err = cmd.Join(args, tab)
+			err = exec.Join(args, tab)
 		case "left":
-			err = cmd.Left(args, tab)
+			err = exec.Left(args, tab)
 		case "line-end":
-			err = cmd.LineEnd(args, tab)
+			err = exec.LineEnd(args, tab)
 		case "line-start":
-			err = cmd.LineStart(args, tab)
+			err = exec.LineStart(args, tab)
 		case "m", "mark":
-			info, err = cmd.Mark(args, tab)
+			info, err = exec.Mark(args, tab)
 		case "newline":
-			err = cmd.Newline(args, tab)
+			err = exec.Newline(args, tab)
 		case "quit", "q":
-			err = cmd.Quit(args, tab, false)
+			err = exec.Quit(args, tab, false)
 			if err == nil {
 				return nil
 			}
 		case "quit!", "q!":
-			_ = cmd.Quit(args, tab, true)
+			_ = exec.Quit(args, tab, true)
 			return nil
 		case "right":
-			err = cmd.Right(args, tab)
+			err = exec.Right(args, tab)
 		case "save":
-			info, err = cmd.Save(args, tab, w.Config.TrimOnSave)
+			info, err = exec.Save(args, tab, w.Config.TrimOnSave)
 		case "space":
-			err = cmd.Space(args, tab)
+			err = exec.Space(args, tab)
 		case "spawn-down":
-			err = cmd.SpawnDown(args, tab)
+			err = exec.SpawnDown(args, tab)
 		case "spawn-up":
-			err = cmd.SpawnUp(args, tab)
+			err = exec.SpawnUp(args, tab)
 		case "suspend":
-			err = cmd.Suspend(args, w.Screen)
+			err = exec.Suspend(args, w.Screen)
 		case "tab":
-			err = cmd.Tab(args, tab)
+			err = exec.Tab(args, tab)
 		case "trim":
-			err = cmd.Trim(args, tab)
+			err = exec.Trim(args, tab)
 		case "up":
-			err = cmd.Up(args, tab)
+			err = exec.Up(args, tab)
 		case "view-down":
-			err = cmd.ViewDown(args, tab)
+			err = exec.ViewDown(args, tab)
 			updateView = false
 		case "view-left":
-			err = cmd.ViewLeft(args, tab)
+			err = exec.ViewLeft(args, tab)
 			updateView = false
 		case "view-right":
-			err = cmd.ViewRight(args, tab)
+			err = exec.ViewRight(args, tab)
 			updateView = false
 		case "view-up":
-			err = cmd.ViewUp(args, tab)
+			err = exec.ViewUp(args, tab)
 			updateView = false
 		case "word-end":
-			err = cmd.WordEnd(args, tab)
+			err = exec.WordEnd(args, tab)
 		case "word-start":
-			err = cmd.WordStart(args, tab)
+			err = exec.WordStart(args, tab)
 		case "prev-word-start":
-			err = cmd.PrevWordStart(args, tab)
+			err = exec.PrevWordStart(args, tab)
 		default:
 			err = fmt.Errorf(
 				"invalid or unimplemeneted command '%s', if unimplemented report on https://github.com/m-kru/enix",
