@@ -252,9 +252,13 @@ func (p *Prompt) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 		p.Window.Resize()
 		p.Window.Render()
 	case *tcell.EventKey:
-		cmd, _ := p.Keys.ToCmd(ev)
+		cmd, err := p.Keys.ToCmd(ev)
+		if err != nil {
+			p.ShowError(fmt.Sprintf("%v", err))
+			return p.Window
+		}
 
-		switch cmd {
+		switch cmd.Name {
 		case "backspace":
 			p.Backspace()
 		case "del":

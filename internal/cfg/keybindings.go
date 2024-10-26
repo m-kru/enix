@@ -1,26 +1,24 @@
 package cfg
 
 import (
-	"strings"
+	"github.com/m-kru/enix/internal/cmd"
+	enixTcell "github.com/m-kru/enix/internal/tcell"
 
 	"github.com/gdamore/tcell/v2"
-	enix_tcell "github.com/m-kru/enix/internal/tcell"
 )
 
 // Keybindings struct represents configured keybindings.
 type Keybindings map[string]string
 
-func (keys Keybindings) ToCmd(ev *tcell.EventKey) (string, string) {
-	name := enix_tcell.EventKeyName(ev)
+func (keys Keybindings) ToCmd(ev *tcell.EventKey) (cmd.Command, error) {
+	name := enixTcell.EventKeyName(ev)
 
 	str, ok := keys[name]
 	if !ok {
-		return "", ""
+		return cmd.Command{}, nil
 	}
 
-	cmd, args, _ := strings.Cut(strings.TrimSpace(str), " ")
-
-	return cmd, args
+	return cmd.Parse(str)
 }
 
 // KeybindingsDefault returns default keybindings.
@@ -83,11 +81,14 @@ func KeybindingsDefault() Keybindings {
 		// Selection
 		"Ctrl+L": "sel-line",
 		// View
-		"Down":      "view-down",
-		"Ctrl+Down": "5 view-down",
-		"Right":     "view-right",
-		"Up":        "view-up",
-		"Left":      "view-left",
+		"Down":       "view-down",
+		"Ctrl+Down":  "5 view-down",
+		"Right":      "view-right",
+		"Ctrl+Right": "5 view-right",
+		"Up":         "view-up",
+		"Ctrl+Up":    "5 view-up",
+		"Left":       "view-left",
+		"Ctrl+Left":  "5 view-left",
 	}
 }
 

@@ -19,9 +19,8 @@ func (tab *Tab) RxEventKey(ev *tcell.EventKey) {
 		tab.InsertNewline()
 	}
 
-	name, _ := tab.Keys.ToCmd(ev)
-	switch name {
-	case "esc":
+	switch ev.Name() {
+	case "Esc":
 		tab.InInsertMode = false
 	}
 }

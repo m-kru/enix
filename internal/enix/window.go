@@ -3,7 +3,6 @@ package enix
 import (
 	"fmt"
 	"log"
-	"strings"
 
 	"github.com/m-kru/enix/internal/arg"
 	"github.com/m-kru/enix/internal/cfg"
@@ -53,51 +52,62 @@ func (w *Window) RxMouseEvent(ev mouse.Event) {
 }
 
 func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
+	switch ev := ev.(type) {
+	case *tcell.EventResize:
+		w.Resize()
+	case *tcell.EventKey:
+		return w.RxTcellEventKey(ev)
+	}
+
+	return w
+}
+
+func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 	var err error
 	var info string
 	updateView := true
 	tab := w.CurrentTab
 
-	switch ev := ev.(type) {
-	case *tcell.EventResize:
-		w.Resize()
-	case *tcell.EventKey:
-		if tab.InInsertMode {
-			tab.RxEventKey(ev)
-			return w
-		}
+	if tab.InInsertMode {
+		tab.RxEventKey(ev)
+		return w
+	}
 
-		name, argStr := w.Keys.ToCmd(ev)
-		args := strings.Fields(argStr)
+	c, err := w.Keys.ToCmd(ev)
+	if err != nil {
+		w.Prompt.ShowError(fmt.Sprintf("%v", err))
+		return w
+	}
 
-		if name == "" {
-			break
-		}
+	if c.Name == "" {
+		return w
+	}
 
-		switch name {
+	for i := 0; i < c.RepCount; i++ {
+		switch c.Name {
 		case "add-cursor":
-			err = exec.AddCursor(args, tab)
+			err = exec.AddCursor(c.Args, tab)
 		case "backspace":
-			err = exec.Backspace(args, tab)
-		case "exec":
+			err = exec.Backspace(c.Args, tab)
+		case "cmd":
 			tab.HasFocus = false
 			w.Prompt.Activate("", "")
 			return w.Prompt
 		case "config-dir":
-			info, err = exec.ConfigDir(args)
+			info, err = exec.ConfigDir(c.Args)
 		case "del":
-			err = exec.Del(args, tab)
+			err = exec.Del(c.Args, tab)
 		case "down":
-			err = exec.Down(args, tab)
+			err = exec.Down(c.Args, tab)
 		case "esc":
-			err = exec.Esc(args, tab)
+			err = exec.Esc(c.Args, tab)
 			w.Prompt.Clear()
 		case "find":
 			tab.HasFocus = false
 			w.Prompt.Activate("find ", "todo")
 			return w.Prompt
 		case "g", "go":
-			err = exec.Go(args, tab)
+			err = exec.Go(c.Args, tab)
 		case "help":
 			tab.HasFocus = false
 			w.Prompt.Activate("help ", "")
@@ -105,67 +115,71 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 		case "insert":
 			tab.InInsertMode = true
 		case "join":
-			err = exec.Join(args, tab)
+			err = exec.Join(c.Args, tab)
 		case "left":
-			err = exec.Left(args, tab)
+			err = exec.Left(c.Args, tab)
 		case "line-end":
-			err = exec.LineEnd(args, tab)
+			err = exec.LineEnd(c.Args, tab)
 		case "line-start":
-			err = exec.LineStart(args, tab)
+			err = exec.LineStart(c.Args, tab)
 		case "m", "mark":
-			info, err = exec.Mark(args, tab)
+			info, err = exec.Mark(c.Args, tab)
 		case "newline":
-			err = exec.Newline(args, tab)
+			err = exec.Newline(c.Args, tab)
 		case "quit", "q":
-			err = exec.Quit(args, tab, false)
+			err = exec.Quit(c.Args, tab, false)
 			if err == nil {
 				return nil
 			}
 		case "quit!", "q!":
-			_ = exec.Quit(args, tab, true)
+			_ = exec.Quit(c.Args, tab, true)
 			return nil
 		case "right":
-			err = exec.Right(args, tab)
+			err = exec.Right(c.Args, tab)
 		case "save":
-			info, err = exec.Save(args, tab, w.Config.TrimOnSave)
+			info, err = exec.Save(c.Args, tab, w.Config.TrimOnSave)
 		case "space":
-			err = exec.Space(args, tab)
+			err = exec.Space(c.Args, tab)
 		case "spawn-down":
-			err = exec.SpawnDown(args, tab)
+			err = exec.SpawnDown(c.Args, tab)
 		case "spawn-up":
-			err = exec.SpawnUp(args, tab)
+			err = exec.SpawnUp(c.Args, tab)
 		case "suspend":
-			err = exec.Suspend(args, w.Screen)
+			err = exec.Suspend(c.Args, w.Screen)
 		case "tab":
-			err = exec.Tab(args, tab)
+			err = exec.Tab(c.Args, tab)
 		case "trim":
-			err = exec.Trim(args, tab)
+			err = exec.Trim(c.Args, tab)
 		case "up":
-			err = exec.Up(args, tab)
+			err = exec.Up(c.Args, tab)
 		case "view-down":
-			err = exec.ViewDown(args, tab)
+			err = exec.ViewDown(c.Args, tab)
 			updateView = false
 		case "view-left":
-			err = exec.ViewLeft(args, tab)
+			err = exec.ViewLeft(c.Args, tab)
 			updateView = false
 		case "view-right":
-			err = exec.ViewRight(args, tab)
+			err = exec.ViewRight(c.Args, tab)
 			updateView = false
 		case "view-up":
-			err = exec.ViewUp(args, tab)
+			err = exec.ViewUp(c.Args, tab)
 			updateView = false
 		case "word-end":
-			err = exec.WordEnd(args, tab)
+			err = exec.WordEnd(c.Args, tab)
 		case "word-start":
-			err = exec.WordStart(args, tab)
+			err = exec.WordStart(c.Args, tab)
 		case "prev-word-start":
-			err = exec.PrevWordStart(args, tab)
+			err = exec.PrevWordStart(c.Args, tab)
 		default:
 			err = fmt.Errorf(
 				"invalid or unimplemeneted command '%s', if unimplemented report on https://github.com/m-kru/enix",
-				name,
+				c.Name,
 			)
 			updateView = false
+		}
+
+		if err != nil {
+			break
 		}
 	}
 
