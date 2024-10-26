@@ -22,6 +22,7 @@ type Tab struct {
 	HasFocus     bool
 	HasChanges   bool
 	InInsertMode bool
+	RepCount     int // Command repetition count in normal mode
 
 	Cursors *cursor.Cursor // First cursor
 

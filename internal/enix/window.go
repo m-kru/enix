@@ -3,6 +3,7 @@ package enix
 import (
 	"fmt"
 	"log"
+	"unicode"
 
 	"github.com/m-kru/enix/internal/arg"
 	"github.com/m-kru/enix/internal/cfg"
@@ -73,6 +74,13 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		return w
 	}
 
+	if ev.Key() == tcell.KeyRune {
+		r := ev.Rune()
+		if unicode.IsDigit(r) {
+			return w.RxDigit(r)
+		}
+	}
+
 	c, err := w.Keys.ToCmd(ev)
 	if err != nil {
 		w.Prompt.ShowError(fmt.Sprintf("%v", err))
@@ -81,6 +89,11 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 
 	if c.Name == "" {
 		return w
+	}
+
+	if tab.RepCount != 0 {
+		c.RepCount = tab.RepCount
+		tab.RepCount = 0
 	}
 
 	for i := 0; i < c.RepCount; i++ {
@@ -191,6 +204,18 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		w.Prompt.ShowError(fmt.Sprintf("%v", err))
 	} else if info != "" {
 		w.Prompt.ShowInfo(info)
+	}
+
+	return w
+}
+
+func (w *Window) RxDigit(digit rune) TcellEventReceiver {
+	d := int(digit - '0')
+
+	t := w.CurrentTab
+	t.RepCount = t.RepCount*10 + d
+	if t.RepCount < 0 {
+		t.RepCount = 0
 	}
 
 	return w

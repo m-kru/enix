@@ -16,6 +16,11 @@ func Esc(args []string, tab *tab.Tab) error {
 }
 
 func esc(tab *tab.Tab) error {
+	if tab.RepCount != 0 {
+		tab.RepCount = 0
+		return nil
+	}
+
 	if tab.Cursors != nil && tab.Cursors.Count() > 1 {
 		tab.Cursors = tab.Cursors.Last()
 		tab.Cursors.Prev = nil

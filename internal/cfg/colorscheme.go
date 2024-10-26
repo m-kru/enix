@@ -33,6 +33,7 @@ type Colorscheme struct {
 	Selection tcell.Style
 
 	StatusLine tcell.Style
+	RepCount   tcell.Style
 	InsertMark tcell.Style
 
 	Prompt       tcell.Style
@@ -142,6 +143,7 @@ func ColorschemeDefault() Colorscheme {
 		CursorWord: tcell.StyleDefault.Foreground(tcell.ColorWhite),
 
 		StatusLine: tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorGray),
+		RepCount:   tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorTeal),
 		InsertMark: tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorOlive),
 
 		Prompt:       tcell.StyleDefault.Foreground(tcell.ColorWhite),

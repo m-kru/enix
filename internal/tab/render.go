@@ -30,9 +30,17 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 	// Render extra status information
 	b := strings.Builder{}
 
+	repCountStartIdx := 0
+	if tab.RepCount != 0 {
+		b.WriteString(fmt.Sprintf("%d ", tab.RepCount))
+	}
+	repCountEndIdx := b.Len()
+
+	insertStartIdx := b.Len()
 	if tab.InInsertMode {
 		b.WriteString("insert ")
 	}
+	insertEndIdx := b.Len()
 
 	if tab.Cursors != nil {
 		b.WriteString(
@@ -49,9 +57,12 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 	startIdx := frame.Width - len(statusStr)
 	for i, r := range statusStr {
 		style := tab.Colors.StatusLine
-		if tab.InInsertMode && i < 6 {
+		if tab.RepCount > 0 && repCountStartIdx <= i && i < repCountEndIdx {
+			style = tab.Colors.RepCount
+		} else if tab.InInsertMode && insertStartIdx <= i && i < insertEndIdx {
 			style = tab.Colors.InsertMark
 		}
+
 		frame.SetContent(startIdx+i, 0, r, style)
 	}
 }
