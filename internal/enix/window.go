@@ -11,6 +11,7 @@ import (
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/mouse"
 	"github.com/m-kru/enix/internal/tab"
+	"github.com/m-kru/enix/internal/tabbar"
 
 	"github.com/gdamore/tcell/v2"
 )
@@ -22,7 +23,7 @@ type Window struct {
 	InsertKeys *cfg.Keybindings // Insert mode keybindings
 
 	Mouse  mouse.Mouse
-	TabBar TabBar
+	TabBar tabbar.TabBar
 
 	Screen tcell.Screen
 	Width  int

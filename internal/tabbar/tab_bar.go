@@ -1,4 +1,4 @@
-package enix
+package tabbar
 
 import (
 	"strings"
