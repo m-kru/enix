@@ -168,7 +168,9 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		case "tab":
 			err = exec.Tab(c.Args, tab)
 		case "tn", "tab-next":
-			tab, err = exec.TabNext(c.Args, tab)
+			w.CurrentTab, err = exec.TabNext(c.Args, tab)
+		case "tp", "tab-prev":
+			w.CurrentTab, err = exec.TabPrev(c.Args, tab)
 		case "trim":
 			err = exec.Trim(c.Args, tab)
 		case "up":

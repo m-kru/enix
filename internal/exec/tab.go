@@ -18,3 +18,17 @@ func TabNext(args []string, t *tab.Tab) (*tab.Tab, error) {
 
 	return t, nil
 }
+
+func TabPrev(args []string, t *tab.Tab) (*tab.Tab, error) {
+	if len(args) != 0 {
+		return t, fmt.Errorf("tab-prev: expected 0 args, provided %d", len(args))
+	}
+
+	if t.Prev != nil {
+		t = t.Prev
+	} else {
+		t = t.Last()
+	}
+
+	return t, nil
+}

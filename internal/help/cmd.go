@@ -205,6 +205,8 @@ unambiguous. If N is not provided, then it is assumed to be equal 1.`,
 	"tab-prev": `tab-prev # Cycles to the previous tab.
 If the current tab is the first tab, then it wraps to the last tab.`,
 
+	"tp": `tp # An alias to the tab-prev command.`,
+
 	"tab-switch": `tab-switch pattern1 [pattern2] # Switch tabs which names match patterns.
 The patterns must be unambiguous. If the second is absent, then it is assumed
 to be the current tab.`,
