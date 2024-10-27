@@ -132,8 +132,8 @@ func ColorschemeDefault() Colorscheme {
 
 		Error: tcell.StyleDefault.Foreground(tcell.ColorMaroon),
 
-		TabBar:     tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorGray),
-		CurrentTab: tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorWhite),
+		TabBar:     tcell.StyleDefault.Background(tcell.ColorBlack),
+		CurrentTab: tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorGray),
 
 		LineNum: tcell.StyleDefault.Foreground(tcell.ColorGray),
 

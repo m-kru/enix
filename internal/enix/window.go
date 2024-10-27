@@ -21,13 +21,16 @@ type Window struct {
 	Keys       *cfg.Keybindings
 	InsertKeys *cfg.Keybindings // Insert mode keybindings
 
-	Mouse mouse.Mouse
+	Mouse  mouse.Mouse
+	TabBar TabBar
 
 	Screen tcell.Screen
 	Width  int
 	Height int
 
-	TabFrame   frame.Frame
+	TabBarFrame *frame.Frame
+	TabFrame    frame.Frame
+
 	Tabs       *tab.Tab // First tab
 	CurrentTab *tab.Tab
 
@@ -241,14 +244,6 @@ func (w *Window) Resize() {
 	w.Width = width
 	w.Height = height - 1
 
-	w.TabFrame = frame.Frame{
-		Screen: w.Screen,
-		X:      0,
-		Y:      0,
-		Width:  w.Width,
-		Height: w.Height,
-	}
-
 	w.Prompt.Frame = frame.Frame{
 		Screen: w.Screen,
 		X:      0,
@@ -259,6 +254,32 @@ func (w *Window) Resize() {
 }
 
 func (w *Window) Render() {
+	w.TabBarFrame = nil
+	w.TabFrame = frame.Frame{
+		Screen: w.Screen,
+		X:      0,
+		Y:      0,
+		Width:  w.Width,
+		Height: w.Height,
+	}
+
+	if w.Tabs.Count() > 1 {
+		w.TabFrame.Y++
+		w.TabFrame.Height--
+
+		w.TabBarFrame = &frame.Frame{
+			Screen: w.Screen,
+			X:      0,
+			Y:      0,
+			Width:  w.Width,
+			Height: 1,
+		}
+	}
+
+	if w.TabBarFrame != nil {
+		w.TabBar.Render(w.Tabs, w.CurrentTab, w.Colors, *w.TabBarFrame)
+	}
+
 	w.CurrentTab.Render(w.TabFrame)
 
 	w.Screen.Show()
@@ -334,14 +355,6 @@ func Start(
 			Width:  width,
 			Height: 1,
 		},
-	}
-
-	w.TabFrame = frame.Frame{
-		Screen: w.Screen,
-		X:      0,
-		Y:      0,
-		Width:  w.Width,
-		Height: w.Height,
 	}
 
 	w.Prompt = &p

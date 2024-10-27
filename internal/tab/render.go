@@ -69,7 +69,7 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 
 func (tab *Tab) RenderLineNums(frame frame.Frame) {
 	n := tab.View.Line
-	y := frame.Y
+	y := 0
 	lineCount := tab.LineCount()
 
 	for {
