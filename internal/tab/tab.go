@@ -58,6 +58,22 @@ func (tab *Tab) Count() int {
 	return cnt
 }
 
+func (tab *Tab) Last() *Tab {
+	for {
+		if tab.Next == nil {
+			break
+		}
+		tab = tab.Next
+	}
+	return tab
+}
+
+func (tab *Tab) Append(newTab *Tab) {
+	last := tab.Last()
+	last.Next = newTab
+	newTab.Prev = last
+}
+
 func (tab *Tab) HasCursorInLine(n int) bool {
 	c := tab.Cursors
 	for {

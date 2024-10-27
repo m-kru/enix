@@ -351,6 +351,12 @@ func (p *Prompt) Exec() TcellEventReceiver {
 			err = exec.Newline(c.Args, tab)
 		case "m", "mark":
 			info, err = exec.Mark(c.Args, tab)
+		case "o", "open":
+			tab, err = exec.Open(c.Args, tab)
+			if err == nil {
+				p.Window.CurrentTab = tab
+			}
+			updateView = false
 		case "right":
 			err = exec.Right(c.Args, tab)
 		case "rune":

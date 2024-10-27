@@ -91,8 +91,10 @@ If cursor is in the fisrt line, nothing happens.`,
 
 	// File
 
-	"open": `open [path/to/file] # Opens file in a new tab.
+	"open": `open path/to/file ... # Opens file in a new tab.
 If path to file is not provided, then it opens a new empty tab.`,
+
+	"o": `o # An alias to the open command.`,
 
 	"save": `save [path/to/file] # Saves file using the provided path to file.
 If path to file is not provided, then it uses the current file path.`,

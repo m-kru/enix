@@ -73,9 +73,9 @@ func (tab *Tab) RenderLineNums(frame frame.Frame) {
 	lineCount := tab.LineCount()
 
 	for {
-		str := fmt.Sprintf("%*d", frame.Width, n)
+		str := fmt.Sprintf("%*d ", frame.Width-1, n)
 		for i, r := range str {
-			if tab.HasCursorInLine(n) {
+			if tab.HasCursorInLine(n) && i < len(str)-1 {
 				frame.SetContent(i, y, r, tab.Colors.Cursor)
 			} else {
 				frame.SetContent(i, y, r, tab.Colors.LineNum)
@@ -110,9 +110,7 @@ func (tab *Tab) RenderLines(frame frame.Frame) {
 	hls := tab.Highlighter.Analyze(
 		tab.Lines, lineNum, endLineIdx, tab.Cursors.Last(), tab.Colors,
 	)
-	//panic(fmt.Sprintf("%+v", hls))
 
-	// TODO: Handle line clearing.
 	for {
 		if line == nil || renderedCount == frame.Height {
 			break
@@ -122,6 +120,19 @@ func (tab *Tab) RenderLines(frame frame.Frame) {
 
 		line = line.Next
 		lineNum++
+		renderedCount++
+	}
+
+	// Line clearing
+	for {
+		if renderedCount == frame.Height {
+			break
+		}
+
+		for w := range frame.Width {
+			frame.SetContent(w, renderedCount, ' ', tab.Colors.Default)
+		}
+
 		renderedCount++
 	}
 }
@@ -170,7 +181,7 @@ func (tab *Tab) Render(frame frame.Frame) {
 	tab.View.Height = frame.Height
 
 	// Render line numbers
-	tab.RenderLineNums(frame.Column(0, lineNumWidth))
+	tab.RenderLineNums(frame.Column(0, lineNumWidth+1))
 
 	// Render lines
 	linesFrame := frame.Column(lineNumWidth+1, frame.Width-lineNumWidth-1)

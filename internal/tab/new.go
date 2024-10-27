@@ -81,9 +81,6 @@ func Open(
 
 	// Highlighter initialization
 	hl, err := lang.NewHighlighter(tab.FileType)
-	if err != nil {
-		panic(err)
-	}
 	tab.Highlighter = &hl
 
 	return tab

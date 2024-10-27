@@ -139,6 +139,10 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			info, err = exec.Mark(c.Args, tab)
 		case "newline":
 			err = exec.Newline(c.Args, tab)
+		case "o", "open":
+			tab.HasFocus = false
+			w.Prompt.Activate("open ", "")
+			return w.Prompt
 		case "quit", "q":
 			err = exec.Quit(c.Args, tab, false)
 			if err == nil {
