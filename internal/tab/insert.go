@@ -5,7 +5,7 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
-func (tab *Tab) RxEventKey(ev *tcell.EventKey) {
+func (tab *Tab) RxEventKeyInsert(ev *tcell.EventKey) {
 	switch ev.Key() {
 	case tcell.KeyRune:
 		tab.InsertRune(ev.Rune())
@@ -19,9 +19,10 @@ func (tab *Tab) RxEventKey(ev *tcell.EventKey) {
 		tab.InsertNewline()
 	}
 
-	switch ev.Name() {
-	case "Esc":
-		tab.InInsertMode = false
+	c, _ := tab.Keys.ToCmd(ev)
+	switch c.Name {
+	case "esc":
+		tab.State = "" // Go back to normal mode
 	}
 }
 

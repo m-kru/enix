@@ -69,7 +69,7 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 	updateView := true
 	tab := w.CurrentTab
 
-	if tab.InInsertMode {
+	if tab.State != "" {
 		tab.RxEventKey(ev)
 		return w
 	}
@@ -126,7 +126,7 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			w.Prompt.Activate("help ", "")
 			return w.Prompt
 		case "insert":
-			tab.InInsertMode = true
+			tab.State = "insert"
 		case "join":
 			err = exec.Join(c.Args, tab)
 		case "left":
@@ -147,6 +147,8 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		case "quit!", "q!":
 			_ = exec.Quit(c.Args, tab, true)
 			return nil
+		case "replace":
+			tab.State = "replace"
 		case "right":
 			err = exec.Right(c.Args, tab)
 		case "save":

@@ -34,7 +34,7 @@ type Colorscheme struct {
 
 	StatusLine tcell.Style
 	RepCount   tcell.Style
-	InsertMark tcell.Style
+	StateMark  tcell.Style
 
 	Prompt       tcell.Style
 	PromptShadow tcell.Style
@@ -144,7 +144,7 @@ func ColorschemeDefault() Colorscheme {
 
 		StatusLine: tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorGray),
 		RepCount:   tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorTeal),
-		InsertMark: tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorOlive),
+		StateMark:  tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorOlive),
 
 		Prompt:       tcell.StyleDefault.Foreground(tcell.ColorWhite),
 		PromptShadow: tcell.StyleDefault.Foreground(tcell.ColorGray),
@@ -231,7 +231,7 @@ func colorschemeFromMap(csm map[string]any) (Colorscheme, error) {
 		return cs, fmt.Errorf("%v", err)
 	}
 
-	if cs.InsertMark, err = readStyleFromMap("InsertMark", csm, &cs.Default); err != nil {
+	if cs.StateMark, err = readStyleFromMap("StateMark", csm, &cs.Default); err != nil {
 		return cs, fmt.Errorf("%v", err)
 	}
 

@@ -8,6 +8,8 @@ import (
 	"github.com/m-kru/enix/internal/mark"
 	"github.com/m-kru/enix/internal/util"
 	"github.com/m-kru/enix/internal/view"
+
+	"github.com/gdamore/tcell/v2"
 )
 
 type Tab struct {
@@ -19,10 +21,10 @@ type Tab struct {
 	Newline  string // Newline encoding
 	FileType string
 
-	HasFocus     bool
-	HasChanges   bool
-	InInsertMode bool
-	RepCount     int // Command repetition count in normal mode
+	HasFocus   bool
+	HasChanges bool
+	State      string // Valid states: "" - normal mode, "insert", "replace".
+	RepCount   int    // Command repetition count in normal mode
 
 	Cursors *cursor.Cursor // First cursor
 
@@ -150,4 +152,13 @@ func (tab *Tab) LastColumnIdx() int {
 	}
 
 	return idx
+}
+
+func (tab *Tab) RxEventKey(ev *tcell.EventKey) {
+	switch tab.State {
+	case "insert":
+		tab.RxEventKeyInsert(ev)
+	case "replace":
+		tab.RxEventKeyReplace(ev)
+	}
 }

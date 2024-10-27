@@ -36,11 +36,11 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 	}
 	repCountEndIdx := b.Len()
 
-	insertStartIdx := b.Len()
-	if tab.InInsertMode {
-		b.WriteString("insert ")
+	stateStartIdx := b.Len()
+	if tab.State != "" {
+		b.WriteString(fmt.Sprintf("%s ", tab.State))
 	}
-	insertEndIdx := b.Len()
+	stateEndIdx := b.Len()
 
 	if tab.Cursors != nil {
 		b.WriteString(
@@ -59,8 +59,8 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 		style := tab.Colors.StatusLine
 		if tab.RepCount > 0 && repCountStartIdx <= i && i < repCountEndIdx {
 			style = tab.Colors.RepCount
-		} else if tab.InInsertMode && insertStartIdx <= i && i < insertEndIdx {
-			style = tab.Colors.InsertMark
+		} else if tab.State != "" && stateStartIdx <= i && i < stateEndIdx {
+			style = tab.Colors.StateMark
 		}
 
 		frame.SetContent(startIdx+i, 0, r, style)
