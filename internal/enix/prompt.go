@@ -384,6 +384,9 @@ func (p *Prompt) Exec() TcellEventReceiver {
 		case "tab-count":
 			p.ShowInfo(fmt.Sprintf("%d", p.Window.Tabs.Count()))
 			return p.Window
+		case "tn", "tab-next":
+			tab, err = exec.TabNext(c.Args, tab)
+			p.Window.CurrentTab = tab
 		case "tab-width":
 			err = exec.CfgTabWidth(c.Args, p.Config)
 		case "trim":

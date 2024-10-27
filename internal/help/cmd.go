@@ -194,6 +194,8 @@ This command has been so far tested only on Linux.`,
 	"tab-next": `tab-next # Cycles to the next tab.
 If the current tab is the last tab, then it wraps to the first tab.`,
 
+	"tn": `tn # An alias to the tab-next command.`,
+
 	"tab-move": `tab-move N [pattern] # Moves tab which name matches pattern to position N.
 If pattern is not provided, then current tab is moved. The pattern must be
 unambiguous. If N is not provided, then it is assumed to be equal 1.`,

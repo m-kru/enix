@@ -58,6 +58,16 @@ func (tab *Tab) Count() int {
 	return cnt
 }
 
+func (tab *Tab) First() *Tab {
+	for {
+		if tab.Prev == nil {
+			break
+		}
+		tab = tab.Prev
+	}
+	return tab
+}
+
 func (tab *Tab) Last() *Tab {
 	for {
 		if tab.Next == nil {
