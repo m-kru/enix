@@ -41,3 +41,39 @@ type PrimaryClickCtrl struct {
 func (pcc PrimaryClickCtrl) isEvent() {}
 func (pcc PrimaryClickCtrl) X() int   { return pcc.x }
 func (pcc PrimaryClickCtrl) Y() int   { return pcc.y }
+
+type WheelDown struct {
+	x int
+	y int
+}
+
+func (wd WheelDown) isEvent() {}
+func (wd WheelDown) X() int   { return wd.x }
+func (wd WheelDown) Y() int   { return wd.y }
+
+type WheelUp struct {
+	x int
+	y int
+}
+
+func (wu WheelUp) isEvent() {}
+func (wu WheelUp) X() int   { return wu.x }
+func (wu WheelUp) Y() int   { return wu.y }
+
+type WheelLeft struct {
+	x int
+	y int
+}
+
+func (wl WheelLeft) isEvent() {}
+func (wl WheelLeft) X() int   { return wl.x }
+func (wl WheelLeft) Y() int   { return wl.y }
+
+type WheelRight struct {
+	x int
+	y int
+}
+
+func (wr WheelRight) isEvent() {}
+func (wr WheelRight) X() int   { return wr.x }
+func (wr WheelRight) Y() int   { return wr.y }

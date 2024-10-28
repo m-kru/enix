@@ -53,6 +53,14 @@ func (w *Window) RxMouseEvent(ev mouse.Event) {
 		// Implement word selection here.
 	case mouse.PrimaryClickCtrl:
 		w.CurrentTab.PrimaryClickCtrl(x, y)
+	case mouse.WheelDown:
+		w.CurrentTab.View = w.CurrentTab.View.Down(1)
+	case mouse.WheelUp:
+		w.CurrentTab.View = w.CurrentTab.View.Up(1)
+	case mouse.WheelLeft:
+		w.CurrentTab.View = w.CurrentTab.View.Left(1)
+	case mouse.WheelRight:
+		w.CurrentTab.View = w.CurrentTab.View.Right(1)
 	}
 }
 
