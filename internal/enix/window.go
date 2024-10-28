@@ -297,13 +297,9 @@ func (w *Window) Render() {
 func (w *Window) OpenArgFiles() {
 	w.Tabs = tab.Open(w.Config, w.Colors, w.InsertKeys, arg.Files[0])
 
-	prevT := w.Tabs
-
 	for i := 1; i < len(arg.Files); i++ {
-		t := tab.Open(w.Config, w.Colors, w.InsertKeys, arg.Files[0])
-		prevT.Next = t
-		t.Prev = prevT
-		prevT = t
+		t := tab.Open(w.Config, w.Colors, w.InsertKeys, arg.Files[i])
+		w.Tabs.Append(t)
 	}
 
 	w.CurrentTab = w.Tabs
@@ -370,7 +366,7 @@ func Start(
 	p.Window = &w
 
 	if len(arg.Files) == 0 {
-		w.Tabs = tab.FromString(config, colors, insertKeys, "", "No Name")
+		w.Tabs = tab.FromString(config, colors, insertKeys, "", "no-name")
 		w.CurrentTab = w.Tabs
 	} else {
 		w.OpenArgFiles()
