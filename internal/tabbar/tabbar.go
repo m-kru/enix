@@ -10,7 +10,8 @@ import (
 )
 
 type TabBar struct {
-	View view.View
+	View  view.View
+	items []item
 }
 
 func (tb TabBar) Render(
@@ -19,18 +20,17 @@ func (tb TabBar) Render(
 	colors *cfg.Colorscheme,
 	frame frame.Frame,
 ) {
+	tb.items = createItems(tabs)
+
 	b := strings.Builder{}
 
 	cTabStartIdx := 0
 	cTabEndIdx := 0
 
-	t := tabs
+	for x := range tb.items {
+		t := tb.items[x].Tab
 
-	for {
-		if t == nil {
-			break
-		}
-
+		tb.items[x].StartIdx = b.Len()
 		if t == currentTab {
 			cTabStartIdx = b.Len()
 		}
@@ -39,14 +39,13 @@ func (tb TabBar) Render(
 		if t.HasChanges {
 			b.WriteRune('*')
 		}
-		b.WriteString(t.Path)
+		b.WriteString(tb.items[x].Name)
 		b.WriteRune(' ')
 
+		tb.items[x].EndIdx = b.Len()
 		if t == currentTab {
 			cTabEndIdx = b.Len()
 		}
-
-		t = t.Next
 	}
 
 	for i, r := range b.String() {
