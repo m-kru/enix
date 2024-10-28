@@ -181,12 +181,15 @@ func (tab *Tab) Render(frame frame.Frame) {
 	tab.View.Height = frame.Height
 
 	// Render line numbers
-	tab.RenderLineNums(frame.Column(0, lineNumWidth+1))
+	lineNumFrame := frame.Column(0, lineNumWidth+1)
+	if lineNumFrame.Screen != nil {
+		tab.RenderLineNums(lineNumFrame)
+	}
 
-	// Render lines
+	// Render lines and cursors
 	linesFrame := frame.Column(lineNumWidth+1, frame.Width-lineNumWidth-1)
-	tab.RenderLines(linesFrame)
-
-	// Render cursors
-	tab.RenderCursors(linesFrame)
+	if linesFrame.Screen != nil {
+		tab.RenderLines(linesFrame)
+		tab.RenderCursors(linesFrame)
+	}
 }

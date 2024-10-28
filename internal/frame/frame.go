@@ -1,8 +1,6 @@
 package frame
 
 import (
-	"fmt"
-
 	"github.com/gdamore/tcell/v2"
 )
 
@@ -18,10 +16,10 @@ func (f Frame) HideCursor() { f.Screen.HideCursor() }
 
 func (f Frame) GetContent(x int, y int) rune {
 	if x >= f.Width {
-		panic(fmt.Sprintf("x (%d) >= f.Width (%d)", x, f.Width))
+		return ' '
 	}
 	if y >= f.Height {
-		panic(fmt.Sprintf("y (%d) >= f.Height (%d)", y, f.Height))
+		return ' '
 	}
 
 	r, _, _, _ := f.Screen.GetContent(x+f.X, y+f.Y)
@@ -31,10 +29,10 @@ func (f Frame) GetContent(x int, y int) rune {
 
 func (f Frame) SetContent(x int, y int, r rune, style tcell.Style) {
 	if x >= f.Width {
-		panic(fmt.Sprintf("x (%d) >= f.Width (%d)", x, f.Width))
+		return
 	}
 	if y >= f.Height {
-		panic(fmt.Sprintf("y (%d) >= f.Height (%d)", y, f.Height))
+		return
 	}
 
 	f.Screen.SetContent(x+f.X, y+f.Y, r, nil, style)
@@ -42,10 +40,10 @@ func (f Frame) SetContent(x int, y int, r rune, style tcell.Style) {
 
 func (f Frame) ShowCursor(x, y int) {
 	if x >= f.Width {
-		panic(fmt.Sprintf("x (%d) >= f.Width (%d)", x, f.Width))
+		return
 	}
 	if y >= f.Height {
-		panic(fmt.Sprintf("y (%d) >= f.Height (%d)", y, f.Height))
+		return
 	}
 
 	f.Screen.ShowCursor(x+f.X, y+f.Y)
@@ -54,10 +52,10 @@ func (f Frame) ShowCursor(x, y int) {
 // Line returns frame f subframe for line rendering.
 func (f Frame) Line(x int, y int) Frame {
 	if x >= f.Width {
-		panic(fmt.Sprintf("x (%d) >= f.Width (%d)", x, f.Width))
+		return Frame{}
 	}
 	if y >= f.Height {
-		panic(fmt.Sprintf("y (%d) >= f.Height (%d)", y, f.Height))
+		return Frame{}
 	}
 
 	return Frame{
@@ -80,10 +78,10 @@ func (f Frame) LastLine() Frame {
 
 func (f Frame) Column(x int, width int) Frame {
 	if x >= f.Width {
-		panic(fmt.Sprintf("x (%d) >= frame.Width (%d)", x, f.Width))
+		return Frame{}
 	}
 	if x+width > f.Width {
-		panic(fmt.Sprintf("x (%d) + width (%d) > f.Width %d", x, width, f.Width))
+		return Frame{}
 	}
 
 	return Frame{
