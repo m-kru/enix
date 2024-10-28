@@ -30,12 +30,14 @@ func NewHighlighter(lang string) (Highlighter, error) {
 
 	langDef, err := readLangDefFromJSON(lang)
 	if err != nil {
-		return hl, fmt.Errorf("creating highlighter for %s language: %v", lang, err)
+		return DefaultHighlighter(),
+			fmt.Errorf("creating highlighter for %s language: %v", lang, err)
 	}
 
 	hl, err = langDefIntoHighlighter(langDef)
 	if err != nil {
-		return hl, fmt.Errorf("%s highlighter: %v", lang, err)
+		return DefaultHighlighter(),
+			fmt.Errorf("%s highlighter: %v", lang, err)
 	}
 
 	return hl, nil
