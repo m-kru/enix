@@ -46,26 +46,26 @@ func (v View) MinAdjust(iv View) View {
 	return v
 }
 
-func (v View) Down(n int) View {
-	v.Line += n
+func (v View) Down() View {
+	v.Line += 1
 	return v
 }
 
-func (v View) Up(n int) View {
-	v.Line -= n
+func (v View) Up() View {
+	v.Line -= 1
 	if v.Line < 1 {
 		v.Line = 1
 	}
 	return v
 }
 
-func (v View) Right(n int) View {
-	v.Column += n
+func (v View) Right() View {
+	v.Column += 1
 	return v
 }
 
-func (v View) Left(n int) View {
-	v.Column -= n
+func (v View) Left() View {
+	v.Column -= 1
 	if v.Column < 1 {
 		v.Column = 1
 	}
