@@ -22,8 +22,6 @@ func DefaultHighlighter() Highlighter {
 }
 
 func NewHighlighter(lang string) (Highlighter, error) {
-	hl := Highlighter{}
-
 	if lang == "" {
 		return DefaultHighlighter(), nil
 	}
@@ -34,7 +32,7 @@ func NewHighlighter(lang string) (Highlighter, error) {
 			fmt.Errorf("creating highlighter for %s language: %v", lang, err)
 	}
 
-	hl, err = langDefIntoHighlighter(langDef)
+	hl, err := langDefIntoHighlighter(langDef)
 	if err != nil {
 		return DefaultHighlighter(),
 			fmt.Errorf("%s highlighter: %v", lang, err)

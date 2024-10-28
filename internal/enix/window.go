@@ -156,13 +156,23 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			w.Prompt.Activate("open ", "")
 			return w.Prompt
 		case "quit", "q":
-			err = exec.Quit(c.Args, tab, false)
-			if err == nil {
+			tab, err = exec.Quit(c.Args, tab, false)
+			if err == nil && tab == nil {
 				return nil
+			} else if tab != nil {
+				w.Tabs = tab.First()
+				w.CurrentTab = tab
 			}
+			updateView = false
 		case "quit!", "q!":
-			_ = exec.Quit(c.Args, tab, true)
-			return nil
+			tab, _ = exec.Quit(c.Args, tab, true)
+			if tab == nil {
+				return nil
+			} else {
+				w.Tabs = tab.First()
+				w.Tabs = w.CurrentTab.First()
+			}
+			updateView = false
 		case "replace":
 			tab.State = "replace"
 		case "right":

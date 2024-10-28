@@ -362,13 +362,23 @@ func (p *Prompt) Exec() TcellEventReceiver {
 		case "rune":
 			err = exec.Rune(c.Args, tab)
 		case "quit", "q":
-			err = exec.Quit(c.Args, tab, false)
-			if err == nil {
+			tab, err = exec.Quit(c.Args, tab, false)
+			if err == nil && tab == nil {
 				return nil
+			} else if tab != nil {
+				p.Window.Tabs = tab.First()
+				p.Window.CurrentTab = tab
 			}
+			updateView = false
 		case "quit!", "q!":
-			_ = exec.Quit(c.Args, tab, true)
-			return nil
+			tab, _ = exec.Quit(c.Args, tab, true)
+			if tab == nil {
+				return nil
+			} else {
+				p.Window.Tabs = tab.First()
+				p.Window.CurrentTab = tab
+			}
+			updateView = false
 		case "save":
 			info, err = exec.Save(c.Args, tab, p.Config.TrimOnSave)
 		case "space":
