@@ -12,13 +12,24 @@ func Open(args []string, t *tab.Tab) (*tab.Tab, error) {
 
 	var newCurrentTab *tab.Tab
 
+	errMsg := ""
 	for i, path := range args {
-		newT := tab.Open(t.Config, t.Colors, t.Keys, path)
-		t.Append(newT)
-
-		if i == 0 {
-			newCurrentTab = newT
+		newT, err := tab.Open(t.Config, t.Colors, t.Keys, path)
+		if newT != nil {
+			t.Append(newT)
+			if i == 0 {
+				newCurrentTab = newT
+			}
 		}
+		if err != nil {
+			errMsg += err.Error() + "\n"
+		}
+	}
+
+	if len(errMsg) > 0 {
+		errTab := tab.FromString(t.Config, t.Colors, t.Keys, errMsg, "enix-error")
+		t.Append(errTab)
+		newCurrentTab = errTab
 	}
 
 	return newCurrentTab, nil

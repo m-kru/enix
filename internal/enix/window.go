@@ -305,14 +305,30 @@ func (w *Window) Render() {
 }
 
 func (w *Window) OpenArgFiles() {
-	w.Tabs = tab.Open(w.Config, w.Colors, w.InsertKeys, arg.Files[0])
+	errMsg := ""
 
-	for i := 1; i < len(arg.Files); i++ {
-		t := tab.Open(w.Config, w.Colors, w.InsertKeys, arg.Files[i])
-		w.Tabs.Append(t)
+	for i := 0; i < len(arg.Files); i++ {
+		t, err := tab.Open(w.Config, w.Colors, w.InsertKeys, arg.Files[i])
+		if t != nil {
+			if w.Tabs == nil {
+				w.Tabs = t
+			} else {
+				w.Tabs.Append(t)
+			}
+			if w.CurrentTab == nil {
+				w.CurrentTab = t
+			}
+		}
+		if err != nil {
+			errMsg += err.Error() + "\n"
+		}
 	}
 
-	w.CurrentTab = w.Tabs
+	if len(errMsg) > 0 {
+		errTab := tab.FromString(w.Config, w.Colors, w.InsertKeys, errMsg, "enix-error")
+		w.Tabs.Append(errTab)
+		w.CurrentTab = errTab
+	}
 }
 
 func Start(

@@ -38,14 +38,16 @@ func Empty(config *cfg.Config, colors *cfg.Colorscheme, keys *cfg.Keybindings) *
 
 // Open opens a new tab.
 // It panics if "", then new empty tab is opened.
+//
+// TODO: Allow opening without highlighter, useful for script mode.
 func Open(
 	config *cfg.Config,
 	colors *cfg.Colorscheme,
 	keys *cfg.Keybindings,
 	path string,
-) *Tab {
+) (*Tab, error) {
 	if path == "" {
-		return Empty(config, colors, keys)
+		return Empty(config, colors, keys), nil
 	}
 
 	tab := &Tab{
@@ -66,11 +68,11 @@ func Open(
 	if errors.Is(err, os.ErrNotExist) {
 		tab.Lines = line.FromString("")
 	} else if err != nil {
-		panic("unimplemented")
+		return nil, err
 	} else {
 		bytes, err := os.ReadFile(path)
 		if err != nil {
-			panic("unimplemented")
+			return nil, err
 		}
 		tab.Lines = line.FromString(string(bytes))
 	}
@@ -83,7 +85,7 @@ func Open(
 	hl, err := lang.NewHighlighter(tab.FileType)
 	tab.Highlighter = &hl
 
-	return tab
+	return tab, err
 }
 
 func FromString(

@@ -53,7 +53,10 @@ func Exec(config *cfg.Config) error {
 	}
 
 	for _, file := range arg.Files {
-		tab := tab.Open(config, nil, nil, file)
+		tab, err := tab.Open(config, nil, nil, file)
+		if err != nil {
+			return err
+		}
 		for _, cmd := range cmds {
 			err := execCmd(cmd, tab)
 			if err != nil {
