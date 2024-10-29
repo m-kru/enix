@@ -1,8 +1,7 @@
 package help
 
-var topicKeybindings = `Keybindings
-
-enix tries to offer sane default keybindings so that the user doesn't have to
+var Topics = map[string]string{
+	"keybindings": `enix tries to offer sane default keybindings so that the user doesn't have to
 configure much out of the box and can use the editor straight after installation
 on various machines.
 
@@ -50,5 +49,5 @@ The following Ctrl keybindings are considered risky and are advised to be avoide
 
 Please note, that all window manager or custom terminal emulator keybindings
 also won't reach enix, as they are simply consumed by your window manager or
-terminal emulator.
-`
+terminal emulator.`,
+}

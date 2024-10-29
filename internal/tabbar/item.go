@@ -77,11 +77,7 @@ func itemsNameConflicts(items []item) map[string][]int {
 	names := make(map[string][]int)
 
 	for x, i := range items {
-		if _, ok := names[i.Name]; ok {
-			names[i.Name] = append(names[i.Name], x)
-		} else {
-			names[i.Name] = []int{x}
-		}
+		names[i.Name] = append(names[i.Name], x)
 	}
 
 	for key, val := range names {

@@ -10,16 +10,16 @@ func Open(args []string, t *tab.Tab) (*tab.Tab, error) {
 		return nil, fmt.Errorf("open: expected at least 1 arg, provided 0")
 	}
 
-	var firstTab *tab.Tab
+	var newCurrentTab *tab.Tab
 
 	for i, path := range args {
 		newT := tab.Open(t.Config, t.Colors, t.Keys, path)
 		t.Append(newT)
 
 		if i == 0 {
-			firstTab = newT
+			newCurrentTab = newT
 		}
 	}
 
-	return firstTab, nil
+	return newCurrentTab, nil
 }

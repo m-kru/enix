@@ -337,6 +337,12 @@ func (p *Prompt) Exec() TcellEventReceiver {
 			err = exec.End(c.Args, tab)
 		case "g", "go":
 			err = exec.Go(c.Args, tab)
+		case "help":
+			tab, err = exec.Help(c.Args, tab)
+			if err == nil {
+				p.Window.CurrentTab = tab
+			}
+			updateView = false
 		case "insert-rune":
 			err = exec.InsertRune(c.Args, tab)
 		case "join":

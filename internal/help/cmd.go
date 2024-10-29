@@ -1,6 +1,6 @@
 package help
 
-var cmds = map[string]string{
+var Commands = map[string]string{
 
 	// Config
 
@@ -42,10 +42,11 @@ If there are multiple cursors, they are first reduced to a single cursor.`,
 	"g": `g # An alias to the go command.`,
 
 	"go": `go position|mark-name # Goes to the position or restores a mark.
-Valid syntaxes for position are:
-  - go 10 # Goes to line 10 column 1,
+Valid syntaxes for the position are:
+  - go 10   # Goes to line 10 column 1,
   - go 10 5 # Goes to line 10 column 5,
-  - go 10:5 # Goes to line 10 column 5.`,
+  - go 10:5 # Goes to line 10 column 5,
+  - go tmp  # Goes to mark named tmp.`,
 
 	"left": `left # Moves cursor left.
 If cursor is in the first column of a line, then it is moved into the last
@@ -146,7 +147,7 @@ command prompt, then escape command escapes the command prompt and allows user
 to continue file editing. If the focus in on a file editing and there is any
 selection, then escape command clears all selections.`,
 
-	"help": `help [topic|command-name] # Displays help message for a given topic or command in a newly open tab.
+	"help": `help [topic|command-name] # Displays help message for a given topic or command in a new tab.
 If neither topic nor command name is provided displays help message
 for the help command. The same as 'help help'. Valid topics are:
   - commands - explanation of commands concept,
