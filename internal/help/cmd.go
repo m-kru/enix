@@ -150,8 +150,9 @@ selection, then escape command clears all selections.`,
 	"help": `help topic|command-name # Displays help message for a given topic or command in a new tab.
 If neither topic nor command name is provided displays help message
 for the help command. The same as 'help help'. Valid topics are:
-  - commands - explanation of commands concept,
+  - commands - list of available commands with their synopsys,
   - cursors - what they are and how they work,
+  - enix - general overview of the enix editor,
   - keybindings - how to set, and what to watch out for,
   - selections - what they are and how they work.`,
 
