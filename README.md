@@ -6,15 +6,14 @@
 
 - Whole documentation embedded into the binary.
   No need to access the Internet to get to know how things work.
-- No runtime dependencies except configuration and syntax highlighting files.
+- No runtime dependencies except optional configuration and syntax highlighting files.
 - Multi-cursor support.
 - Marks.
-- Tabs.
+- Tabs with visible, clickable tab bar.
 - Built-in help.
 - Mouse support.
-- Improved whitespace management.
-  - Automatic removal of trailing whitespaces.
-  - Highlighting invalid indent whitespace (tab or space).
+- Optional automatic removal of trailing whitespaces.
+- Configurable character and style of tab and newline.
 - Configuration and syntax highlighting loaded dynamically.
   No need to rebuilt or wait for weeks/months to get syntax highlighting fix or improvement.
   Easy to use custom syntax highlighting.
@@ -45,7 +44,7 @@ Commands are executed by stroking keybindings or by using the command prompt.
 Commands are *line-oriented* or *selection-oriented*.
 
 Line-oriented commands operate on whole lines.
-Line-oriented commands be default operate on the line where the cursor is located.
+Line-oriented commands by default operate on the line where the cursor is located.
 However, if a selection is present, then line oriented commands operate on all lines spanned by the selection.
 Even if the selection starts or ends in the middle of a line.
 An example of line-oriented command is `duplicate-line`.
@@ -59,5 +58,5 @@ To get the default keybindings simply run `enix -dump-keys` in the shell.
 
 # Help
 
-To get help message open the command prompt (` ` - by default) and type the `help` command.
+To get help message open the command prompt (`:` - by default) and type the `help` command.
 To get help message for a particular command type `help <command-name>`.
