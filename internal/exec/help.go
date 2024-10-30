@@ -12,15 +12,17 @@ func Help(args []string, t *tab.Tab) (*tab.Tab, error) {
 		return nil, fmt.Errorf("help: expected 1 arg, provided %d", len(args))
 	}
 
-	if len(args) == 0 {
-		args = append(args, "help")
+	arg := "help"
+
+	if len(args) > 0 {
+		arg = args[0]
 	}
 
-	msg, ok := help.Topics[args[0]]
+	msg, ok := help.Topics[arg]
 	if !ok {
-		msg, ok = help.Commands[args[0]]
+		msg, ok = help.Commands[arg]
 		if !ok {
-			return nil, fmt.Errorf("help: entry for '%s' not found", args[0])
+			return nil, fmt.Errorf("help: entry for '%s' not found", arg)
 		}
 		before, after, found := strings.Cut(msg, "\n")
 		if found {
@@ -30,7 +32,7 @@ func Help(args []string, t *tab.Tab) (*tab.Tab, error) {
 		}
 	}
 
-	helpTab := tab.FromString(t.Config, t.Colors, t.Keys, msg, "help-"+args[0])
+	helpTab := tab.FromString(t.Config, t.Colors, t.Keys, msg, "help-"+arg)
 	t.Append(helpTab)
 
 	return helpTab, nil

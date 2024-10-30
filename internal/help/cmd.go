@@ -153,7 +153,7 @@ for the help command. The same as 'help help'. Valid topics are:
   - commands - explanation of commands concept,
   - cursors - what they are and how they work,
   - keybindings - how to set, and what to watch out for,
-  - selections - what ther are and how they work.`,
+  - selections - what they are and how they work.`,
 
 	"join": `join # Joins line with cursor with below line.`,
 
