@@ -8,8 +8,12 @@ import (
 )
 
 func Help(args []string, t *tab.Tab) (*tab.Tab, error) {
-	if len(args) != 1 {
+	if len(args) > 1 {
 		return nil, fmt.Errorf("help: expected 1 arg, provided %d", len(args))
+	}
+
+	if len(args) == 0 {
+		args = append(args, "help")
 	}
 
 	msg, ok := help.Topics[args[0]]
