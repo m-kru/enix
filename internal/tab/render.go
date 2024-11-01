@@ -9,7 +9,7 @@ import (
 
 // Currently view updating works in such a way, that the last cursor is always visible.
 func (tab *Tab) UpdateView() {
-	c := tab.Cursors.Last()
+	c := tab.Cursors[len(tab.Cursors)-1]
 	tab.View = tab.View.MinAdjust(c.View())
 }
 
@@ -42,9 +42,9 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 	}
 	stateEndIdx := b.Len()
 
-	if tab.Cursors != nil {
+	if len(tab.Cursors) > 0 {
 		b.WriteString(
-			fmt.Sprintf("%d:%d | ", tab.Cursors.Line.Num(), tab.Cursors.BufIdx+1),
+			fmt.Sprintf("%d:%d | ", tab.Cursors[0].Line.Num(), tab.Cursors[0].BufIdx+1),
 		)
 	}
 	b.WriteString(fmt.Sprintf("%s ", tab.FileType))
@@ -108,7 +108,7 @@ func (tab *Tab) RenderLines(frame frame.Frame) {
 		endLineIdx = tab.Lines.Last().Num()
 	}
 	hls := tab.Highlighter.Analyze(
-		tab.Lines, lineNum, endLineIdx, tab.Cursors.Last(), tab.Colors,
+		tab.Lines, lineNum, endLineIdx, tab.Cursors[len(tab.Cursors)-1], tab.Colors,
 	)
 
 	for {
@@ -144,25 +144,16 @@ func (tab *Tab) RenderCursors(frame frame.Frame) {
 		frame.HideCursor()
 	}
 
-	c := tab.Cursors
-
-	for {
-		if c == nil {
-			break
-		}
-
+	for i, c := range tab.Cursors {
 		if !tab.View.IsVisible(c.View()) {
-			c = c.Next
 			continue
 		}
 
 		primary := false
-		if tab.HasFocus && c.Next == nil {
+		if tab.HasFocus && i == len(tab.Cursors)-1 {
 			primary = true
 		}
 		c.Render(tab.Config, tab.Colors, frame.Line(0, c.Line.Num()-tab.View.Line), tab.View, primary)
-
-		c = c.Next
 	}
 }
 

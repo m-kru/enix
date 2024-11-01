@@ -17,9 +17,9 @@ func (tab *Tab) RxEventKeyReplace(ev *tcell.EventKey) {
 	tab.Delete()
 
 	// Preserve cursors position
-	var curs *cursor.Cursor
+	var curs []*cursor.Cursor
 	if tab.Cursors != nil {
-		curs = tab.Cursors.Clone()
+		curs = cursor.Clone(tab.Cursors)
 	}
 
 	switch ev.Key() {

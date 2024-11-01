@@ -26,7 +26,7 @@ type Tab struct {
 	State      string // Valid states: "" - normal mode, "insert", "replace".
 	RepCount   int    // Command repetition count in normal mode
 
-	Cursors *cursor.Cursor // First cursor
+	Cursors []*cursor.Cursor
 
 	Lines *line.Line // First line
 
@@ -85,16 +85,12 @@ func (tab *Tab) Append(newTab *Tab) {
 }
 
 func (tab *Tab) HasCursorInLine(n int) bool {
-	c := tab.Cursors
-	for {
-		if c == nil {
-			break
-		}
+	for _, c := range tab.Cursors {
 		if c.Line.Num() == n {
 			return true
 		}
-		c = c.Next
 	}
+
 	return false
 }
 
@@ -112,12 +108,7 @@ func (tab *Tab) Trim() {
 		l = l.Next
 	}
 
-	c := tab.Cursors
-	for {
-		if c == nil {
-			break
-		}
-
+	for _, c := range tab.Cursors {
 		for _, tl := range trimmedLines {
 			if c.Line == tl {
 				if c.BufIdx > tl.Len() {
@@ -125,11 +116,9 @@ func (tab *Tab) Trim() {
 				}
 			}
 		}
-
-		c = c.Next
 	}
 
-	tab.Cursors = tab.Cursors.Prune()
+	tab.Cursors = cursor.Prune(tab.Cursors)
 }
 
 // AddCursor spawns a new cursor in given line and column.
@@ -144,20 +133,15 @@ func (tab *Tab) AddCursor(lineNum int, colIdx int) {
 		runeIdx = line.Len()
 	}
 
-	lastCur := tab.Cursors.Last()
-
-	c := cursor.Cursor{
-		Config: lastCur.Config,
+	c := &cursor.Cursor{
+		Config: tab.Cursors[0].Config,
 		Line:   line,
 		Idx:    runeIdx,
 		BufIdx: runeIdx,
-		Prev:   lastCur,
-		Next:   nil,
 	}
 
-	lastCur.Next = &c
-
-	tab.Cursors = tab.Cursors.Prune()
+	tab.Cursors = append(tab.Cursors, c)
+	tab.Cursors = cursor.Prune(tab.Cursors)
 }
 
 func (tab *Tab) LastColumnIdx() int {

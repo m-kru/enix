@@ -325,7 +325,7 @@ func (p *Prompt) Exec() TcellEventReceiver {
 		case "config-dir":
 			info, err = exec.ConfigDir(c.Args)
 		case "cursor-count":
-			p.ShowInfo(fmt.Sprintf("%d", tab.Cursors.Count()))
+			p.ShowInfo(fmt.Sprintf("%d", len(tab.Cursors)))
 			return p.Window
 		case "del":
 			err = exec.Del(c.Args, tab)

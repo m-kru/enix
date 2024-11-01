@@ -1,6 +1,7 @@
 package cursor
 
 import (
+	"github.com/m-kru/enix/internal/action"
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/util"
@@ -16,46 +17,9 @@ type Cursor struct {
 	Line   *line.Line
 	Idx    int
 	BufIdx int // Index into line buffer.
-
-	Prev *Cursor
-	Next *Cursor
 }
 
-// Count returns the number of cursors in the list starting from the conter c.
-func (c *Cursor) Count() int {
-	cnt := 1
-	for {
-		if c.Next == nil {
-			break
-		}
-		c = c.Next
-		cnt++
-	}
-	return cnt
-}
-
-// Get returns nth cursor.
-// If there is less than n cursots, it returns nil.
-func (c *Cursor) Get(n int) *Cursor {
-	i := n
-
-	for {
-		if i == 1 {
-			return c
-		}
-
-		if c.Next == nil {
-			break
-		}
-
-		c = c.Next
-		i--
-	}
-
-	return nil
-}
-
-// Col returns column number of the cursor within the string in the buffer.
+// Column returns column number of the cursor within the string in the buffer.
 func (c *Cursor) Column() int {
 	return c.Line.ColumnIdx(c.BufIdx, c.Config.TabWidth)
 }
@@ -91,83 +55,46 @@ func (c *Cursor) View() view.View {
 	}
 }
 
-// Last returns last cursor in the cursor list.
-func (c *Cursor) Last() *Cursor {
-	for {
-		if c.Next == nil {
-			return c
-		}
-		c = c.Next
+func (c *Cursor) Inform(act action.Action) {
+	switch a := act.(type) {
+	case *action.NewlineDelete:
+		c.informNewlineDelete(a)
+	case *action.NewlineInsert:
+		c.informNewlineInsert(a)
+	case *action.RuneDelete:
+		c.informRuneDelete(a)
+	case *action.RuneInsert:
+		c.informRuneInsert(a)
 	}
 }
 
 // Prune function removes duplicates from cursor list.
 // A duplicate is a cursor pointing to the same line with equal buffer index.
-// It also removes dead cursors  pointing to the nil Line.
+// It also removes dead cursors pointing to the nil Line.
 // Cursors may become dead, for example, when line is removed.
-func (c *Cursor) Prune() *Cursor {
-	// First remove dead cursors
-	c0 := c
-	for {
-		if c.Line != nil {
-			c = c.Next
-			if c == nil {
-				break
-			}
+func Prune(cursors []*Cursor) []*Cursor {
+	cs := make([]*Cursor, 0, len(cursors))
+
+	for _, c := range cursors {
+		// Check if this is dead cursor
+		if c.Line == nil {
 			continue
 		}
 
-		deadC := c
-
-		if deadC == c0 && c.Next == nil {
-			return nil
-		}
-
-		if deadC == c0 {
-			c = c.Next
-			c0 = c
-		} else {
-			deadC.Prev.Next = deadC.Next
-			if deadC.Next != nil {
-				deadC.Next.Prev = deadC.Prev
-			}
-			c = deadC.Next
-		}
-
-		deadC.Prev = nil
-		deadC.Next = nil
-
-		if c == nil {
-			break
-		}
-	}
-
-	// Remove cursor duplicates
-	c = c0
-	for {
-		c2 := c.Next
-		if c2 == nil {
-			break
-		}
-
-		for {
+		duplicate := false
+		for _, c2 := range cs {
 			if Equal(c, c2) {
-				c2.Prev.Next = c2.Next
-				if c2.Next != nil {
-					c2.Next.Prev = c2.Prev
-				}
-			}
-			c2 = c2.Next
-			if c2 == nil {
+				duplicate = true
 				break
 			}
 		}
 
-		c = c.Next
-		if c == nil {
-			break
+		if duplicate {
+			continue
 		}
+
+		cs = append(cs, c)
 	}
 
-	return c0
+	return cs
 }

@@ -1,61 +1,48 @@
 package cursor
 
 import (
-	"github.com/m-kru/enix/internal/line"
+	"github.com/m-kru/enix/internal/action"
 )
 
-func (c *Cursor) Delete() *line.Line {
-	return c.Line.DeleteRune(c.BufIdx)
-}
+func (c *Cursor) Delete() action.Action {
+	if c.BufIdx == c.Line.Len() {
+		prevLine := c.Line.Prev
 
-func (c *Cursor) Join() *line.Line {
-	return c.Line.Join(true)
-}
+		delLine := c.Line.Join(false)
+		if delLine == nil {
+			return nil
+		}
 
-// InformRuneDelete informs the cursor about single rune deletion from the line.
-func (c *Cursor) InformRuneDelete(l *line.Line, idx int) {
-	if l != c.Line || idx >= c.BufIdx {
-		return
+		return &action.NewlineDelete{Line: delLine, PrevLine: prevLine}
 	}
-	c.BufIdx--
-	c.Idx--
+
+	c.Line.DeleteRune(c.BufIdx)
+	return &action.RuneDelete{Line: c.Line, Idx: c.BufIdx}
 }
 
-func (c *Cursor) Backspace() (*line.Line, bool) {
+func (c *Cursor) Join() action.Action {
+	prevLine := c.Line.Prev
+
+	delLine := c.Line.Join(false)
+	if delLine == nil {
+		return nil
+	}
+
+	return &action.NewlineDelete{Line: delLine, PrevLine: prevLine}
+}
+
+func (c *Cursor) Backspace() action.Action {
 	if c.BufIdx == 0 {
 		if c.Line.Prev == nil {
 			// Do nothing
-			return nil, false
+			return nil
 		} else {
 			panic("unimplemented")
 		}
 	}
 
-	// Inform other cursors about deletion.
-	cNext := c.Next
-	for {
-		if cNext == nil {
-			break
-		}
-		cNext.InformRuneDelete(c.Line, c.BufIdx-1)
-		cNext = cNext.Next
-	}
-
 	c.Line.DeleteRune(c.BufIdx - 1)
 	c.BufIdx--
 
-	return nil, true
-}
-
-// InformNewlineDelete informs cursor about newline deletion.
-// If cursor was pointing the the joined line, then the
-// cursor Line pointer is set to point to the previous line.
-func (c *Cursor) InformNewlineDelete(l *line.Line, prevL *line.Line) {
-	if c.Line != l {
-		return
-	}
-
-	c.Line = prevL
-	c.BufIdx = c.BufIdx + prevL.Len() - l.Len()
-	c.Idx = c.BufIdx
+	return &action.RuneDelete{Line: c.Line, Idx: c.BufIdx - 1}
 }

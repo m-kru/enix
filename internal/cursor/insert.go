@@ -1,28 +1,23 @@
 package cursor
 
 import (
-	"github.com/m-kru/enix/internal/line"
+	"github.com/m-kru/enix/internal/action"
 )
 
-// InformRuneInsert informs the cursor about content insertion into the line.
-func (c *Cursor) InformRuneInsert(l *line.Line, idx int) {
-	if l != c.Line || idx > c.BufIdx {
-		return
-	}
-	c.BufIdx++
-}
-
-func (c *Cursor) InsertRune(r rune) {
+func (c *Cursor) InsertRune(r rune) *action.RuneInsert {
 	c.Line.InsertRune(r, c.BufIdx)
 	c.BufIdx++
+	return &action.RuneInsert{Line: c.Line, Idx: c.BufIdx}
 }
 
-func (c *Cursor) InsertNewline() *line.Line {
+func (c *Cursor) InsertNewline() *action.NewlineInsert {
+	line := c.Line
+	bufIdx := c.BufIdx
 	newLine := c.Line.InsertNewline(c.BufIdx)
 
 	c.Line = newLine
 	c.BufIdx = 0
 	c.Idx = 0
 
-	return newLine
+	return &action.NewlineInsert{Line: line, Idx: bufIdx, NewLine: newLine}
 }

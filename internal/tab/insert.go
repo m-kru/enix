@@ -3,6 +3,8 @@ package tab
 import (
 	"fmt"
 	"github.com/gdamore/tcell/v2"
+
+	"github.com/m-kru/enix/internal/action"
 )
 
 func (tab *Tab) RxEventKeyInsert(ev *tcell.EventKey) {
@@ -35,30 +37,17 @@ func (tab *Tab) InsertRune(r rune) {
 }
 
 func (tab *Tab) insertRuneCursors(r rune) {
-	c0 := tab.Cursors // First cursor
+	for _, c := range tab.Cursors {
+		act := c.InsertRune(r)
 
-	c := c0
-	for {
-		c2 := c0
-		for {
-			if c2 == nil {
-				break
-			}
+		for _, c2 := range tab.Cursors {
 			if c2 != c {
-				c2.InformRuneInsert(c.Line, c.BufIdx)
+				c2.Inform(act)
 			}
-			c2 = c2.Next
 		}
 
 		for _, m := range tab.Marks {
-			m.InformRuneInsert(c.Line, c.BufIdx)
-		}
-
-		c.InsertRune(r)
-
-		c = c.Next
-		if c == nil {
-			break
+			m.Inform(act)
 		}
 	}
 
@@ -74,37 +63,16 @@ func (tab *Tab) InsertNewline() {
 }
 
 func (tab *Tab) insertNewlineCursors() {
-	c0 := tab.Cursors // First cursor
+	for _, c := range tab.Cursors {
+		act := c.InsertNewline()
 
-	c := c0
-	for {
-		line := c.Line
-		bufIdx := c.BufIdx
-		newLine := c.InsertNewline()
-
-		// Update line pointer for all cursors in the same line as c, but after c.
-		c2 := c0
-		for {
-			if c2 == nil {
-				break
+		for _, c2 := range tab.Cursors {
+			if c2 != c {
+				c2.Inform(act)
 			}
 
-			if c2.Line == line && c2.BufIdx > bufIdx {
-				c2.Line = newLine
-				c2.BufIdx -= bufIdx
-				c2.Idx = c2.BufIdx
-			}
-
-			c2 = c2.Next
-		}
-
-		c = c.Next
-		if c == nil {
-			break
 		}
 	}
-
-	tab.HasChanges = true
 }
 
 func (tab *Tab) InsertRuneAtPosition(lineNum int, col int, r rune) error {
@@ -126,17 +94,13 @@ func (tab *Tab) InsertRuneAtPosition(lineNum int, col int, r rune) error {
 
 	line.InsertRune(r, col)
 
-	c := tab.Cursors
-	for {
-		if c == nil {
-			break
-		}
-		c.InformRuneInsert(line, col)
-		c = c.Next
+	act := &action.RuneInsert{Line: line, Idx: col}
+	for _, c := range tab.Cursors {
+		c.Inform(act)
 	}
 
 	for _, m := range tab.Marks {
-		m.InformRuneInsert(line, col)
+		m.Inform(act)
 	}
 
 	return nil

@@ -1,7 +1,8 @@
 package tab
 
 import (
-	"github.com/m-kru/enix/internal/line"
+	"github.com/m-kru/enix/internal/action"
+	"github.com/m-kru/enix/internal/cursor"
 )
 
 // Delete deletes text under cursors or selections.
@@ -14,57 +15,31 @@ func (tab *Tab) Delete() {
 }
 
 func (tab *Tab) deleteCursors(backspace bool) {
-	c0 := tab.Cursors // First cursor
+	for i := 0; i < len(tab.Cursors); i++ {
+		c := tab.Cursors[i]
 
-	c := c0
-	for {
-		var delLine *line.Line
-		ok := true
+		var act action.Action
 		if backspace {
-			delLine, ok = c.Backspace()
+			act = c.Backspace()
 		} else {
-			delLine = c.Delete()
+			act = c.Delete()
 		}
 
-		if !ok {
-			goto nextCursor
+		if act == nil {
+			continue
 		}
 
-		if delLine == nil {
-			c2 := c0
-			for {
-				if c2 == nil {
-					break
-				}
-				if c2 != c {
-					c2.InformRuneDelete(c.Line, c.BufIdx)
-				}
-				c2 = c2.Next
-			}
-
-			for _, m := range tab.Marks {
-				m.InformRuneDelete(c.Line, c.BufIdx)
-			}
-		} else {
-			c2 := c0
-			for {
-				if c2 == nil {
-					break
-				}
-				if c2 != c {
-					c2.InformNewlineDelete(delLine, c.Line)
-				}
-				c2 = c2.Next
+		for _, c2 := range tab.Cursors {
+			if c2 != c {
+				c2.Inform(act)
 			}
 		}
 
-		tab.Cursors = c0.Prune()
-
-	nextCursor:
-		c = c.Next
-		if c == nil {
-			break
+		for _, m := range tab.Marks {
+			m.Inform(act)
 		}
+
+		tab.Cursors = cursor.Prune(tab.Cursors)
 	}
 
 	tab.HasChanges = true

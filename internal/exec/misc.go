@@ -21,9 +21,8 @@ func esc(tab *tab.Tab) error {
 		return nil
 	}
 
-	if tab.Cursors != nil && tab.Cursors.Count() > 1 {
-		tab.Cursors = tab.Cursors.Last()
-		tab.Cursors.Prev = nil
+	if len(tab.Cursors) > 1 {
+		tab.Cursors = tab.Cursors[len(tab.Cursors)-1:]
 	}
 
 	return nil

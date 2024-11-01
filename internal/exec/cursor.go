@@ -23,17 +23,11 @@ func Down(args []string, tab *tab.Tab) error {
 }
 
 func down(tab *tab.Tab) {
-	c := tab.Cursors
-
-	for {
-		if c == nil {
-			break
-		}
+	for _, c := range tab.Cursors {
 		c.Down()
-		c = c.Next
 	}
 
-	tab.Cursors = tab.Cursors.Prune()
+	tab.Cursors = cursor.Prune(tab.Cursors)
 }
 
 func Left(args []string, tab *tab.Tab) error {
@@ -49,17 +43,11 @@ func Left(args []string, tab *tab.Tab) error {
 }
 
 func left(tab *tab.Tab) {
-	c := tab.Cursors
-
-	for {
-		if c == nil {
-			break
-		}
+	for _, c := range tab.Cursors {
 		c.Left()
-		c = c.Next
 	}
 
-	tab.Cursors = tab.Cursors.Prune()
+	tab.Cursors = cursor.Prune(tab.Cursors)
 }
 
 func Right(args []string, tab *tab.Tab) error {
@@ -75,17 +63,11 @@ func Right(args []string, tab *tab.Tab) error {
 }
 
 func right(tab *tab.Tab) {
-	c := tab.Cursors
-
-	for {
-		if c == nil {
-			break
-		}
+	for _, c := range tab.Cursors {
 		c.Right()
-		c = c.Next
 	}
 
-	tab.Cursors = tab.Cursors.Prune()
+	tab.Cursors = cursor.Prune(tab.Cursors)
 }
 
 func Up(args []string, tab *tab.Tab) error {
@@ -101,17 +83,11 @@ func Up(args []string, tab *tab.Tab) error {
 }
 
 func up(tab *tab.Tab) {
-	c := tab.Cursors
-
-	for {
-		if c == nil {
-			break
-		}
+	for _, c := range tab.Cursors {
 		c.Up()
-		c = c.Next
 	}
 
-	tab.Cursors = tab.Cursors.Prune()
+	tab.Cursors = cursor.Prune(tab.Cursors)
 }
 
 func End(args []string, tab *tab.Tab) error {
@@ -121,7 +97,9 @@ func End(args []string, tab *tab.Tab) error {
 		)
 	}
 
-	tab.Cursors = &cursor.Cursor{Config: tab.Config, Line: tab.Lines.Last()}
+	tab.Cursors = []*cursor.Cursor{
+		&cursor.Cursor{Config: tab.Config, Line: tab.Lines.Last()},
+	}
 
 	return nil
 }
@@ -190,7 +168,9 @@ func goCmd(line, col int, tab *tab.Tab) {
 		col = l.Len() + 1
 	}
 
-	tab.Cursors = &cursor.Cursor{Config: tab.Config, Line: l, BufIdx: col - 1, Idx: col - 1}
+	tab.Cursors = []*cursor.Cursor{
+		&cursor.Cursor{Config: tab.Config, Line: l, BufIdx: col - 1, Idx: col - 1},
+	}
 }
 
 func goMark(name string, tab *tab.Tab) error {
@@ -201,7 +181,7 @@ func goMark(name string, tab *tab.Tab) error {
 
 	switch m := m.(type) {
 	case *mark.CursorMark:
-		tab.Cursors = m.Cursors.Clone()
+		tab.Cursors = cursor.Clone(m.Cursors)
 	default:
 		panic("selection mark unimplemented")
 	}
@@ -220,19 +200,11 @@ func PrevWordStart(args []string, tab *tab.Tab) error {
 }
 
 func prevWordStart(tab *tab.Tab) error {
-	c := tab.Cursors
-
-	for {
-		if c == nil {
-			break
-		}
-
+	for _, c := range tab.Cursors {
 		c.PrevWordStart()
-
-		c = c.Next
 	}
 
-	tab.Cursors = tab.Cursors.Prune()
+	tab.Cursors = cursor.Prune(tab.Cursors)
 
 	return nil
 }
@@ -248,19 +220,11 @@ func WordEnd(args []string, tab *tab.Tab) error {
 }
 
 func wordEnd(tab *tab.Tab) error {
-	c := tab.Cursors
-
-	for {
-		if c == nil {
-			break
-		}
-
+	for _, c := range tab.Cursors {
 		c.WordEnd()
-
-		c = c.Next
 	}
 
-	tab.Cursors = tab.Cursors.Prune()
+	tab.Cursors = cursor.Prune(tab.Cursors)
 
 	return nil
 }
@@ -276,19 +240,11 @@ func WordStart(args []string, tab *tab.Tab) error {
 }
 
 func wordStart(tab *tab.Tab) error {
-	c := tab.Cursors
-
-	for {
-		if c == nil {
-			break
-		}
-
+	for _, c := range tab.Cursors {
 		c.WordStart()
-
-		c = c.Next
 	}
 
-	tab.Cursors = tab.Cursors.Prune()
+	tab.Cursors = cursor.Prune(tab.Cursors)
 
 	return nil
 }
@@ -304,36 +260,23 @@ func SpawnDown(args []string, tab *tab.Tab) error {
 }
 
 func spawnDown(tab *tab.Tab) error {
-	var newCursors *cursor.Cursor
-	var lastNewCursor *cursor.Cursor
+	newCurs := make([]*cursor.Cursor, 0, len(tab.Cursors))
 
-	c := tab.Cursors
-	for {
+	for _, c := range tab.Cursors {
 		nc := c.SpawnDown()
 
-		if nc != nil {
-			if newCursors == nil {
-				newCursors = nc
-				lastNewCursor = nc
-			} else {
-				lastNewCursor.Next = nc
-				nc.Prev = lastNewCursor
-				lastNewCursor = nc
-			}
+		if nc == nil {
+			continue
 		}
 
-		if c.Next == nil {
-			break
-		}
-		c = c.Next
+		newCurs = append(newCurs, nc)
 	}
 
-	c.Next = newCursors
-	if newCursors != nil {
-		newCursors.Prev = c
+	if len(newCurs) > 0 {
+		tab.Cursors = append(tab.Cursors, newCurs...)
 	}
 
-	tab.Cursors = tab.Cursors.Prune()
+	tab.Cursors = cursor.Prune(tab.Cursors)
 
 	return nil
 }
@@ -349,36 +292,23 @@ func SpawnUp(args []string, tab *tab.Tab) error {
 }
 
 func spawnUp(tab *tab.Tab) error {
-	var newCursors *cursor.Cursor
-	var lastNewCursor *cursor.Cursor
+	newCurs := make([]*cursor.Cursor, 0, len(tab.Cursors))
 
-	c := tab.Cursors
-	for {
+	for _, c := range tab.Cursors {
 		nc := c.SpawnUp()
 
-		if nc != nil {
-			if newCursors == nil {
-				newCursors = nc
-				lastNewCursor = nc
-			} else {
-				lastNewCursor.Next = nc
-				nc.Prev = lastNewCursor
-				lastNewCursor = nc
-			}
+		if nc == nil {
+			continue
 		}
 
-		if c.Next == nil {
-			break
-		}
-		c = c.Next
+		newCurs = append(newCurs, nc)
 	}
 
-	c.Next = newCursors
-	if newCursors != nil {
-		newCursors.Prev = c
+	if len(newCurs) > 0 {
+		tab.Cursors = append(tab.Cursors, newCurs...)
 	}
 
-	tab.Cursors = tab.Cursors.Prune()
+	tab.Cursors = cursor.Prune(tab.Cursors)
 
 	return nil
 }
@@ -394,19 +324,11 @@ func LineStart(args []string, tab *tab.Tab) error {
 }
 
 func lineStart(tab *tab.Tab) error {
-	c := tab.Cursors
-
-	for {
-		if c == nil {
-			break
-		}
-
+	for _, c := range tab.Cursors {
 		c.LineStart()
-
-		c = c.Next
 	}
 
-	tab.Cursors = tab.Cursors.Prune()
+	tab.Cursors = cursor.Prune(tab.Cursors)
 
 	return nil
 }
@@ -422,19 +344,11 @@ func LineEnd(args []string, tab *tab.Tab) error {
 }
 
 func lineEnd(tab *tab.Tab) error {
-	c := tab.Cursors
-
-	for {
-		if c == nil {
-			break
-		}
-
+	for _, c := range tab.Cursors {
 		c.LineEnd()
-
-		c = c.Next
 	}
 
-	tab.Cursors = tab.Cursors.Prune()
+	tab.Cursors = cursor.Prune(tab.Cursors)
 
 	return nil
 }
@@ -492,13 +406,14 @@ func DumpCursor(args []string, tab *tab.Tab) (string, error) {
 		)
 	}
 
-	c := tab.Cursors.Get(n)
-	if c == nil {
+	if n > len(tab.Cursors) {
 		return "", fmt.Errorf(
 			"dump-cursor: can't get %d cursor, there are %d cursors",
-			n, tab.Cursors.Count(),
+			n, len(tab.Cursors),
 		)
 	}
+
+	c := tab.Cursors[n-1]
 
 	return fmt.Sprintf("%v", *c), nil
 }

@@ -30,7 +30,8 @@ func (tab *Tab) PrimaryClick(x, y int) {
 		BufIdx: idx,
 	}
 
-	tab.Cursors = &c
+	tab.Cursors = make([]*cursor.Cursor, 1, 16)
+	tab.Cursors[0] = &c
 }
 
 // PrimaryClickCtrl handles mouse primary button click with Ctrl modifier.

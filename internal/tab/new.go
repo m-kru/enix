@@ -28,7 +28,8 @@ func Empty(config *cfg.Config, colors *cfg.Colorscheme, keys *cfg.Keybindings) *
 	}
 
 	c := &cursor.Cursor{Config: config, Line: tab.Lines}
-	tab.Cursors = c
+	tab.Cursors = make([]*cursor.Cursor, 1, 16)
+	tab.Cursors[0] = c
 
 	hl := lang.DefaultHighlighter()
 	tab.Highlighter = &hl
@@ -79,7 +80,8 @@ func Open(
 
 	// Cursor initialization
 	c := &cursor.Cursor{Config: config, Line: tab.Lines}
-	tab.Cursors = c
+	tab.Cursors = make([]*cursor.Cursor, 1, 16)
+	tab.Cursors[0] = c
 
 	// Highlighter initialization
 	hl, err := lang.NewHighlighter(tab.FileType)
@@ -110,7 +112,8 @@ func FromString(
 	}
 
 	c := &cursor.Cursor{Config: config, Line: tab.Lines}
-	tab.Cursors = c
+	tab.Cursors = make([]*cursor.Cursor, 1, 16)
+	tab.Cursors[0] = c
 
 	hl := lang.DefaultHighlighter()
 	tab.Highlighter = &hl
