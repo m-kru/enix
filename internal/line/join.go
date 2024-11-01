@@ -24,8 +24,6 @@ func (l *Line) Join(trim bool) *Line {
 	if delLine.Next != nil {
 		delLine.Next.Prev = l
 	}
-	delLine.Next = nil
-	delLine.Prev = nil
 
 	return delLine
 }

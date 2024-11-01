@@ -4,8 +4,7 @@ import "github.com/m-kru/enix/internal/line"
 
 type (
 	NewlineDelete struct {
-		Line     *line.Line
-		PrevLine *line.Line
+		Line *line.Line // Pointer to the deleted line
 	}
 
 	NewlineInsert struct {

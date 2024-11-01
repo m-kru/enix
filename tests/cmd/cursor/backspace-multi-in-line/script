@@ -1,0 +1,5 @@
+down
+add-cursor 2 4
+add-cursor 2 6
+backspace
+save got
