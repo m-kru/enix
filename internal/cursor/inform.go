@@ -18,11 +18,11 @@ func (c *Cursor) informNewlineDelete(nd *action.NewlineDelete) {
 }
 
 func (c *Cursor) informNewlineInsert(ni *action.NewlineInsert) {
-	if c.Line != ni.Line || c.BufIdx <= ni.Idx {
+	if c.Line != ni.Line.Prev || c.BufIdx <= ni.Idx {
 		return
 	}
 
-	c.Line = ni.NewLine
+	c.Line = ni.Line
 	c.BufIdx -= ni.Idx
 	c.Idx = c.BufIdx
 }

@@ -8,9 +8,8 @@ type (
 	}
 
 	NewlineInsert struct {
-		Line    *line.Line
-		Idx     int
-		NewLine *line.Line
+		Line *line.Line // Newly inserted line
+		Idx  int
 	}
 
 	RuneDelete struct {

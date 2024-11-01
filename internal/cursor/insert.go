@@ -11,7 +11,6 @@ func (c *Cursor) InsertRune(r rune) *action.RuneInsert {
 }
 
 func (c *Cursor) InsertNewline() *action.NewlineInsert {
-	line := c.Line
 	bufIdx := c.BufIdx
 	newLine := c.Line.InsertNewline(c.BufIdx)
 
@@ -19,5 +18,5 @@ func (c *Cursor) InsertNewline() *action.NewlineInsert {
 	c.BufIdx = 0
 	c.Idx = 0
 
-	return &action.NewlineInsert{Line: line, Idx: bufIdx, NewLine: newLine}
+	return &action.NewlineInsert{Line: newLine, Idx: bufIdx}
 }
