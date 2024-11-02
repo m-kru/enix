@@ -20,7 +20,7 @@ func (tab *Tab) PrimaryClick(x, y int) {
 	cfg := tab.Config
 	idx, _, ok := line.RuneIdx(tab.View.Column+x, cfg.TabWidth)
 	if !ok {
-		idx = line.Len()
+		idx = line.RuneCount()
 	}
 
 	c := cursor.Cursor{
@@ -49,7 +49,7 @@ func (tab *Tab) PrimaryClickCtrl(x, y int) {
 
 	idx, _, ok := line.RuneIdx(tab.View.Column+x, tab.Config.TabWidth)
 	if !ok {
-		idx = line.Len()
+		idx = line.RuneCount()
 	}
 
 	tab.AddCursor(

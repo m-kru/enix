@@ -68,7 +68,7 @@ func splitIntoSections(
 				}
 
 				// Check if this is the end of text
-				if tok.EndIdx == line.Len() && line.Next == nil {
+				if tok.EndIdx == line.RuneCount() && line.Next == nil {
 					continue
 				}
 
@@ -79,7 +79,7 @@ func splitIntoSections(
 				// Start new default section
 				reg = regions[0]
 				sec.Region = regions[0]
-				if tok.EndIdx >= line.Len() {
+				if tok.EndIdx >= line.RuneCount() {
 					if line.Next != nil {
 						sec.StartLine = lineIdx + 1
 						sec.StartIdx = 0
@@ -102,8 +102,8 @@ func splitIntoSections(
 	if sec.EndLine < sec.StartLine || sec.StartIdx >= sec.EndIdx {
 		sec.EndLine = lineIdx
 		sec.EndIdx = 0
-		if line.Len() > 0 {
-			sec.EndIdx = line.Len()
+		if line.RuneCount() > 0 {
+			sec.EndIdx = line.RuneCount()
 		}
 		secs = append(secs, sec)
 	}

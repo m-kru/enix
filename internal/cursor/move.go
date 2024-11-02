@@ -11,7 +11,7 @@ func (c *Cursor) Down() {
 	}
 
 	bufIdx := c.BufIdx
-	nextLen := c.Line.Next.Len()
+	nextLen := c.Line.Next.RuneCount()
 	if c.Idx != bufIdx {
 		if c.Idx <= nextLen {
 			bufIdx = c.Idx
@@ -30,7 +30,7 @@ func (c *Cursor) Left() {
 	if c.BufIdx == 0 {
 		if c.Line.Prev != nil {
 			c.Line = c.Line.Prev
-			c.BufIdx = c.Line.Len()
+			c.BufIdx = c.Line.RuneCount()
 		}
 	} else {
 		c.BufIdx--
@@ -39,7 +39,7 @@ func (c *Cursor) Left() {
 }
 
 func (c *Cursor) Right() {
-	if c.BufIdx == c.Line.Len() {
+	if c.BufIdx == c.Line.RuneCount() {
 		if c.Line.Next != nil {
 			c.Line = c.Line.Next
 			c.BufIdx = 0
@@ -56,7 +56,7 @@ func (c *Cursor) Up() {
 	}
 
 	bufIdx := c.BufIdx
-	prevLen := c.Line.Prev.Len()
+	prevLen := c.Line.Prev.RuneCount()
 	if c.Idx != bufIdx {
 		if c.Idx <= prevLen {
 			bufIdx = c.Idx
@@ -83,7 +83,7 @@ func (c *Cursor) PrevWordStart() {
 			return
 		}
 
-		if idx, ok := util.PrevWordStart(line.Buf, line.Len()); ok {
+		if idx, ok := util.PrevWordStart(line.Buf, line.RuneCount()); ok {
 			c.Line = line
 			c.BufIdx = idx + 1
 			c.Idx = c.BufIdx
@@ -159,11 +159,11 @@ func (c *Cursor) LineStart() {
 }
 
 func (c *Cursor) LineEnd() {
-	for i := c.Line.Len() - 1; i > 0; i-- {
+	for i := c.Line.RuneCount() - 1; i > 0; i-- {
 		r := c.Line.Buf[i]
 		if !unicode.IsSpace(r) {
 			if c.BufIdx == i {
-				c.BufIdx = c.Line.Len() - 1
+				c.BufIdx = c.Line.RuneCount() - 1
 			} else {
 				c.BufIdx = i
 			}
@@ -171,6 +171,6 @@ func (c *Cursor) LineEnd() {
 			return
 		}
 	}
-	c.BufIdx = c.Line.Len()
+	c.BufIdx = c.Line.RuneCount()
 	c.Idx = c.BufIdx
 }

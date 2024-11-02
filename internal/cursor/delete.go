@@ -5,7 +5,7 @@ import (
 )
 
 func (c *Cursor) Delete() action.Action {
-	if c.BufIdx == c.Line.Len() {
+	if c.BufIdx == c.Line.RuneCount() {
 		delLine := c.Line.Join(false)
 		if delLine == nil {
 			return nil
@@ -34,7 +34,7 @@ func (c *Cursor) Backspace() action.Action {
 			return nil
 		} else {
 			c.Line = c.Line.Prev
-			prevLineLen := c.Line.Len()
+			prevLineLen := c.Line.RuneCount()
 			delLine := c.Line.Join(false)
 			// delLine is for sure not nil here so do not check for nil.
 

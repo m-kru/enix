@@ -26,7 +26,7 @@ func (c *Cursor) Column() int {
 
 // Width returns width of the rune under the cursor.
 func (c *Cursor) Width() int {
-	if c.BufIdx == c.Line.Len() {
+	if c.BufIdx == c.Line.RuneCount() {
 		rw := runewidth.RuneWidth(c.Config.NewlineRune)
 		if rw == 0 {
 			return 1

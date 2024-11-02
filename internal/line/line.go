@@ -13,7 +13,7 @@ type Line struct {
 	Next *Line
 }
 
-func (l *Line) Len() int          { return len(l.Buf) }
+func (l *Line) RuneCount() int    { return len(l.Buf) }
 func (l *Line) Rune(idx int) rune { return l.Buf[idx] }
 
 func (l *Line) String() string {

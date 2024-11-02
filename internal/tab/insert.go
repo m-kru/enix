@@ -84,10 +84,10 @@ func (tab *Tab) InsertRuneAtPosition(lineNum int, col int, r rune) error {
 	}
 
 	line := tab.Lines.Get(lineNum)
-	if col-1 > line.Len() {
+	if col-1 > line.RuneCount() {
 		return fmt.Errorf(
 			"can't insert rune at index %d, line %d has %d runes",
-			col, lineNum, line.Len(),
+			col, lineNum, line.RuneCount(),
 		)
 	}
 	col--

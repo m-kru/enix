@@ -164,8 +164,8 @@ func goCmd(line, col int, tab *tab.Tab) {
 	}
 
 	l := tab.Lines.Get(line)
-	if col > l.Len()+1 {
-		col = l.Len() + 1
+	if col > l.RuneCount()+1 {
+		col = l.RuneCount() + 1
 	}
 
 	tab.Cursors = []*cursor.Cursor{

@@ -14,7 +14,7 @@ func (l *Line) InsertRune(r rune, idx int) {
 
 	// Append one rune at the end to increase the rune slice length.
 	l.Buf = append(l.Buf, ' ')
-	for i := l.Len() - 1; i > idx; i-- {
+	for i := l.RuneCount() - 1; i > idx; i-- {
 		l.Buf[i] = l.Buf[i-1]
 	}
 	l.Buf[idx] = r
@@ -22,7 +22,7 @@ func (l *Line) InsertRune(r rune, idx int) {
 
 // InsertNewline inserts a newline at index idx and returns the new line.
 func (l *Line) InsertNewline(idx int) *Line {
-	newLine := FromString(string(l.Buf[idx:l.Len()]))
+	newLine := FromString(string(l.Buf[idx:l.RuneCount()]))
 	l.Buf = l.Buf[0:idx]
 
 	newLine.Prev = l

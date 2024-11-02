@@ -78,7 +78,7 @@ func (l *Line) Render(
 	for {
 		if frameIdx >= frame.Width {
 			break
-		} else if runeIdx == l.Len() {
+		} else if runeIdx == l.RuneCount() {
 			frame.SetContent(frameIdx, 0, cfg.NewlineRune, colors.Whitespace)
 			frameIdx++
 			break
@@ -112,7 +112,7 @@ func (l *Line) Render(
 	}
 
 clear:
-	if l.Len() == 0 && l.Next != nil {
+	if l.RuneCount() == 0 && l.Next != nil {
 		frame.SetContent(0, 0, cfg.NewlineRune, colors.Whitespace)
 		frameIdx = 1
 	}

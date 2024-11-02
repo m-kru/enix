@@ -1,7 +1,7 @@
 package line
 
 func (l *Line) DeleteRune(idx int) *Line {
-	if idx == l.Len() {
+	if idx == l.RuneCount() {
 		if l.Next == nil {
 			return nil
 		}

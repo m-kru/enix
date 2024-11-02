@@ -13,7 +13,7 @@ func (c *Cursor) informNewlineDelete(nd *action.NewlineDelete) {
 	}
 
 	c.Line = nd.Line.Prev
-	c.BufIdx = c.BufIdx + c.Line.Len() - nd.Line.Len()
+	c.BufIdx = c.BufIdx + c.Line.RuneCount() - nd.Line.RuneCount()
 	c.Idx = c.BufIdx
 }
 

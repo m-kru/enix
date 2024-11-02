@@ -12,8 +12,8 @@ func (c *Cursor) SpawnDown() *Cursor {
 		BufIdx: c.BufIdx,
 	}
 
-	if nc.BufIdx > nc.Line.Len() {
-		nc.BufIdx = nc.Line.Len()
+	if nc.BufIdx > nc.Line.RuneCount() {
+		nc.BufIdx = nc.Line.RuneCount()
 	}
 
 	return nc
@@ -31,8 +31,8 @@ func (c *Cursor) SpawnUp() *Cursor {
 		BufIdx: c.BufIdx,
 	}
 
-	if nc.BufIdx > nc.Line.Len() {
-		nc.BufIdx = nc.Line.Len()
+	if nc.BufIdx > nc.Line.RuneCount() {
+		nc.BufIdx = nc.Line.RuneCount()
 	}
 
 	return nc

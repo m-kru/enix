@@ -19,7 +19,7 @@ func (sec Section) Analyze(line *line.Line, startLineIdx int, colors *cfg.Colors
 	hls := make([]highlight.Highlight, 0, 16*(sec.EndLine-sec.StartLine+1))
 
 	for lineIdx := startLineIdx; lineIdx <= sec.EndLine; lineIdx++ {
-		if line.Len() == 0 {
+		if line.RuneCount() == 0 {
 			line = line.Next
 			continue
 		}
@@ -29,7 +29,7 @@ func (sec Section) Analyze(line *line.Line, startLineIdx int, colors *cfg.Colors
 			startIdx = sec.StartIdx
 		}
 
-		endIdx := line.Len()
+		endIdx := line.RuneCount()
 		if lineIdx == sec.EndLine {
 			endIdx = sec.EndIdx
 		}

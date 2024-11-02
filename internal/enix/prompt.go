@@ -128,7 +128,7 @@ func (p *Prompt) Render() {
 
 	if len(p.ShadowText) > 0 {
 		for i, r := range p.ShadowText {
-			p.Frame.SetContent(i+1+p.Line.Len(), 0, r, p.Colors.PromptShadow)
+			p.Frame.SetContent(i+1+p.Line.RuneCount(), 0, r, p.Colors.PromptShadow)
 		}
 	}
 
