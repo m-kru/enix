@@ -37,6 +37,10 @@
 - rune length - number of bytes required to store a rune.
 - rune width - number of screen cells required to display a rune.
 
+- buffer index - index of the byte in the line byte buffer.
+- column index - index of the column in the tab.
+- rune index - index of the rune in the line byte buffer.
+
 # Commands
 
 enix is build on the concept of built-in commands.
