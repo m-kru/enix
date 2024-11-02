@@ -133,7 +133,7 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			return w.Prompt
 		case "g", "go":
 			err = exec.Go(c.Args, tab)
-		case "help":
+		case "h", "help":
 			tab.HasFocus = false
 			w.Prompt.Activate("help ", "")
 			return w.Prompt

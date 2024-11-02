@@ -147,6 +147,8 @@ command prompt, then escape command escapes the command prompt and allows user
 to continue file editing. If the focus in on a file editing and there is any
 selection, then escape command clears all selections.`,
 
+	"h": `h # An alias to the help command.`,
+
 	"help": `help topic|command-name # Displays help message for a given topic or command in a new tab.
 If neither topic nor command name is provided displays help message
 for the help command. The same as 'help help'. Valid topics are:
