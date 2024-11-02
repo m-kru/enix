@@ -51,3 +51,13 @@ func Join(args []string, tab *tab.Tab) error {
 
 	return nil
 }
+
+func KeyName(args []string, tab *tab.Tab) (string, error) {
+	if len(args) > 0 {
+		return "", fmt.Errorf(
+			"key-name: expected 0 args, provided %d", len(args),
+		)
+	}
+
+	return "insert a single key or key combo", esc(tab)
+}

@@ -158,6 +158,12 @@ for the help command. The same as 'help help'. Valid topics are:
 
 	"join": `join # Joins line with cursor with below line.`,
 
+	"key-name": `key-name # Returns name of the pressed key combo.
+The command opens a new tab named "key-name". On each keystroke a new line
+is added to the tab with the key combo name. Once user leaves the tab key-name
+state by hitting the escape key, it can only be reentered by executing the
+key-name command again.`,
+
 	"mark": `mark name # Creates new named mark.
 Marks allow to record current cursors or selections positions.
 Mark name must not start with a digit. To resotre marks one has to

@@ -347,6 +347,8 @@ func (p *Prompt) Exec() TcellEventReceiver {
 			err = exec.InsertRune(c.Args, tab)
 		case "join":
 			err = exec.Join(c.Args, tab)
+		case "key-name":
+			info, err = exec.KeyName(c.Args, tab)
 		case "left":
 			err = exec.Left(c.Args, tab)
 		case "line-end":
