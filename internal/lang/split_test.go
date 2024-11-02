@@ -228,7 +228,7 @@ comment */`,
 			t.Fatalf("invalid test index, got %d, want %d", test.idx, i)
 		}
 
-		lines := line.FromString(test.text)
+		lines, _ := line.FromString(test.text)
 		secs, line := splitIntoSections(regions, lines, test.startLine, test.endLine)
 
 		if !reflect.DeepEqual(secs, test.want) {

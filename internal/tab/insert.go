@@ -66,6 +66,8 @@ func (tab *Tab) insertNewlineCursors() {
 	for _, c := range tab.Cursors {
 		act := c.InsertNewline()
 
+		tab.LineCount++
+
 		for _, c2 := range tab.Cursors {
 			if c2 != c {
 				c2.Inform(act)

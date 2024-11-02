@@ -28,7 +28,8 @@ type Tab struct {
 
 	Cursors []*cursor.Cursor
 
-	Lines *line.Line // First line
+	Lines     *line.Line // First line
+	LineCount int
 
 	Marks map[string]mark.Mark
 
@@ -40,10 +41,8 @@ type Tab struct {
 	Next *Tab
 }
 
-func (tab *Tab) LineCount() int { return tab.Lines.Count() }
-
 func (tab *Tab) LineNumWidth() int {
-	return util.IntWidth(tab.LineCount())
+	return util.IntWidth(tab.LineCount)
 }
 
 func (tab *Tab) Count() int {

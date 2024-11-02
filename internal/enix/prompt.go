@@ -93,7 +93,7 @@ func (p *Prompt) ShowInfo(msg string) {
 
 // Currently assume text + shadow text always fits screen width.
 func (p *Prompt) Activate(text, shadowText string) {
-	p.Line = line.FromString(text)
+	p.Line, _ = line.FromString(text)
 
 	p.Cursor = &cursor.Cursor{
 		Config: p.Config,

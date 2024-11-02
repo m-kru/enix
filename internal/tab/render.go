@@ -70,7 +70,6 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 func (tab *Tab) RenderLineNums(frame frame.Frame) {
 	n := tab.View.Line
 	y := 0
-	lineCount := tab.LineCount()
 
 	for {
 		str := fmt.Sprintf("%*d ", frame.Width-1, n)
@@ -85,7 +84,7 @@ func (tab *Tab) RenderLineNums(frame frame.Frame) {
 		n++
 		y++
 
-		if y >= frame.Height || n > lineCount {
+		if y >= frame.Height || n > tab.LineCount {
 			break
 		}
 	}

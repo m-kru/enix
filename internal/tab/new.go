@@ -22,6 +22,7 @@ func Empty(config *cfg.Config, colors *cfg.Colorscheme, keys *cfg.Keybindings) *
 		FileType:   "",
 		HasFocus:   true,
 		HasChanges: false,
+		LineCount:  1,
 		Lines:      line.Empty(),
 		Marks:      make(map[string]mark.Mark),
 		View:       view.View{Line: 1, Column: 1},
@@ -67,7 +68,7 @@ func Open(
 	// Lines initialization
 	_, err := os.Stat(path)
 	if errors.Is(err, os.ErrNotExist) {
-		tab.Lines = line.FromString("")
+		tab.Lines, tab.LineCount = line.FromString("")
 	} else if err != nil {
 		return nil, err
 	} else {
@@ -75,7 +76,7 @@ func Open(
 		if err != nil {
 			return nil, err
 		}
-		tab.Lines = line.FromString(string(bytes))
+		tab.Lines, tab.LineCount = line.FromString(string(bytes))
 	}
 
 	// Cursor initialization
@@ -106,10 +107,11 @@ func FromString(
 		FileType:   "None",
 		HasFocus:   true,
 		HasChanges: false,
-		Lines:      line.FromString(str),
 		Marks:      make(map[string]mark.Mark),
 		View:       view.View{Line: 1, Column: 1},
 	}
+
+	tab.Lines, tab.LineCount = line.FromString(str)
 
 	c := &cursor.Cursor{Config: config, Line: tab.Lines}
 	tab.Cursors = make([]*cursor.Cursor, 1, 16)

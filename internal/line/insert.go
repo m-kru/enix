@@ -22,7 +22,7 @@ func (l *Line) InsertRune(r rune, idx int) {
 
 // InsertNewline inserts a newline at index idx and returns the new line.
 func (l *Line) InsertNewline(idx int) *Line {
-	newLine := FromString(string(l.Buf[idx:l.RuneCount()]))
+	newLine, _ := FromString(string(l.Buf[idx:l.RuneCount()]))
 	l.Buf = l.Buf[0:idx]
 
 	newLine.Prev = l

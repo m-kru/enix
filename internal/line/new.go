@@ -19,11 +19,12 @@ func Empty() *Line {
 	return &Line{Buf: make([]rune, 0, 64), Prev: nil, Next: nil}
 }
 
-func FromString(str string) *Line {
+func FromString(str string) (*Line, int) {
 	if len(str) == 0 {
-		return Empty()
+		return Empty(), 1
 	}
 
+	lineCount := 0
 	startIdx := 0
 	var first *Line = nil
 	var prev *Line
@@ -42,6 +43,7 @@ func FromString(str string) *Line {
 				prev = next
 			}
 			startIdx = i + 1
+			lineCount++
 		} else if i == len(str)-utf8.RuneLen(r) {
 			runeLen := utf8.RuneLen(r)
 			if first == nil {
@@ -60,7 +62,8 @@ func FromString(str string) *Line {
 	if str[len(str)-1] == '\n' {
 		next = &Line{Buf: make([]rune, 0, bufCap("")), Prev: prev}
 		prev.Next = next
+		lineCount++
 	}
 
-	return first
+	return first, lineCount
 }

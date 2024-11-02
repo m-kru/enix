@@ -29,6 +29,10 @@ func (tab *Tab) deleteCursors(backspace bool) {
 			continue
 		}
 
+		if _, ok := act.(*action.NewlineDelete); ok {
+			tab.LineCount--
+		}
+
 		for _, c2 := range tab.Cursors {
 			if c2 != c {
 				c2.Inform(act)
