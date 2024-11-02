@@ -23,7 +23,7 @@ type Tab struct {
 
 	HasFocus   bool
 	HasChanges bool
-	State      string // Valid states: "" - normal mode, "insert", "replace".
+	State      string // Valid states: "" - normal mode, "insert", "replace", "key-name".
 	RepCount   int    // Command repetition count in normal mode
 
 	Cursors []*cursor.Cursor
