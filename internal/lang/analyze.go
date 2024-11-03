@@ -14,7 +14,8 @@ import (
 // StartLineIdx is the index of the first visible line.
 // EndLineIdx is the index of the last visible line.
 func (hl Highlighter) Analyze(
-	line *line.Line,
+	line *line.Line, // First tab line
+	startLine *line.Line,
 	startLineIdx int,
 	endLineIdx int,
 	cursor *cursor.Cursor,
@@ -44,7 +45,8 @@ func (hl Highlighter) Analyze(
 
 	var hls []highlight.Highlight
 	lineIdx := startLineIdx
-	sections, line := splitIntoSections(hl.Regions, line, startLineIdx, endLineIdx)
+	sections := splitIntoSections(hl.Regions, line, startLine, startLineIdx, endLineIdx)
+	line = startLine
 	for _, sec := range sections {
 		// Progress to the start line of the current section or view.
 		for {

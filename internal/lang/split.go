@@ -9,10 +9,11 @@ import (
 // SplitIntoSections splits file into sections based on defined regions.
 func splitIntoSections(
 	regions []*Region,
-	line *line.Line,
+	line *line.Line, // First tab line
+	startLine *line.Line,
 	startLineIdx int,
 	endLineIdx int,
-) ([]Section, *line.Line) {
+) []Section {
 	secs := make([]Section, 0, 128)
 	reg := regions[0] // Current region
 	sec := Section{
@@ -23,13 +24,23 @@ func splitIntoSections(
 		Region:    reg,
 	}
 
-	startLine := line
 	lineIdx := 1
+	if len(regions) == 1 {
+		sec.StartLine = startLineIdx
+		sec.EndLine = endLineIdx
+
+		line = startLine
+		for i := 0; i < endLineIdx-startLineIdx; i++ {
+			line = line.Next
+		}
+		sec.EndIdx = line.RuneCount()
+
+		secs = append(secs, sec)
+		return secs
+	}
 
 	for {
 		if lineIdx == startLineIdx {
-			startLine = line
-
 			// Drop all irrelevant sections before first visible line.
 			// TODO: Iterate in downward direction to improve performance.
 			startIdx := 0
@@ -108,7 +119,7 @@ func splitIntoSections(
 		secs = append(secs, sec)
 	}
 
-	return secs, startLine
+	return secs
 }
 
 func tokenizeLine(regions []*Region, line string) []RegionToken {

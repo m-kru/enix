@@ -7,18 +7,13 @@ import (
 )
 
 func (c *Cursor) Render(
-	config *cfg.Config,
 	colors *cfg.Colorscheme,
 	frame frame.Frame,
 	view view.View,
 	primary bool,
 ) {
 	x := c.Line.ColumnIdx(c.RuneIdx) - view.Column
-	/*
-		if x >= frame.Width {
-			return
-		}
-	*/
+
 	if primary {
 		frame.ShowCursor(x, 0)
 	} else {

@@ -229,17 +229,14 @@ comment */`,
 		}
 
 		lines, _ := line.FromString(test.text)
-		secs, line := splitIntoSections(regions, lines, test.startLine, test.endLine)
+		startLine := lines.Get(test.startLine)
+		secs := splitIntoSections(regions, lines, startLine, test.startLine, test.endLine)
 
 		if !reflect.DeepEqual(secs, test.want) {
 			t.Fatalf(
 				"test %d:\ntext:\n%s\ngot:\n%+v\nwant:\n%+v\n",
 				i, test.text, secs, test.want,
 			)
-		}
-
-		if line != lines.Get(test.startLine) {
-			t.Fatalf("invalid start line returned, got %d, want %d", line.Num(), test.startLine)
 		}
 	}
 }
