@@ -6,6 +6,7 @@ import (
 	"github.com/m-kru/enix/internal/lang"
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/mark"
+	"github.com/m-kru/enix/internal/sel"
 	"github.com/m-kru/enix/internal/util"
 	"github.com/m-kru/enix/internal/view"
 
@@ -26,7 +27,8 @@ type Tab struct {
 	State      string // Valid states: "" - normal mode, "insert", "replace", "key-name".
 	RepCount   int    // Command repetition count in normal mode
 
-	Cursors []*cursor.Cursor
+	Cursors    []*cursor.Cursor
+	Selections []*sel.Selection
 
 	Lines     *line.Line // First line
 	LineCount int

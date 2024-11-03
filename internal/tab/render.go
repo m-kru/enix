@@ -4,20 +4,44 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/line"
+	"github.com/m-kru/enix/internal/view"
 )
 
 // Currently view updating works in such a way, that the last cursor is always visible.
 func (tab *Tab) UpdateView() {
-	c := tab.Cursors[len(tab.Cursors)-1]
-	tab.View = tab.View.MinAdjust(c.View())
+	var v view.View
+
+	if len(tab.Cursors) > 0 {
+		v = tab.Cursors[len(tab.Cursors)-1].View()
+	} else {
+		v = tab.Selections[len(tab.Selections)-1].FullView()
+	}
+
+	tab.View = tab.View.MinAdjust(v)
 }
 
 func (tab *Tab) HasCursorInLine(line *line.Line) bool {
-	for _, c := range tab.Cursors {
-		if c.Line == line {
-			return true
+	if len(tab.Cursors) > 0 {
+		for _, c := range tab.Cursors {
+			if c.Line == line {
+				return true
+			}
+		}
+	} else {
+		for _, sel := range tab.Selections {
+			s := sel
+			for {
+				if s == nil {
+					break
+				}
+				if s.Line == line && s.HasCursor() {
+					return true
+				}
+				s = s.Next
+			}
 		}
 	}
 
@@ -117,8 +141,12 @@ func (tab *Tab) RenderLines(line *line.Line, lineNum int, frame frame.Frame) {
 	if endLineIdx > tab.LineCount {
 		endLineIdx = tab.LineCount
 	}
+	var cur *cursor.Cursor = nil
+	if len(tab.Cursors) > 0 {
+		cur = tab.Cursors[len(tab.Cursors)-1]
+	}
 	hls := tab.Highlighter.Analyze(
-		tab.Lines, line, lineNum, endLineIdx, tab.Cursors[len(tab.Cursors)-1], tab.Colors,
+		tab.Lines, line, lineNum, endLineIdx, cur, tab.Colors,
 	)
 
 	for {
@@ -148,12 +176,6 @@ func (tab *Tab) RenderLines(line *line.Line, lineNum int, frame frame.Frame) {
 }
 
 func (tab *Tab) RenderCursors(frame frame.Frame) {
-	// This is required for view commands, as the primary cursors is rendered
-	// by the tcell all the time.
-	if tab.HasFocus {
-		frame.HideCursor()
-	}
-
 	for i, c := range tab.Cursors {
 		if !tab.View.IsVisible(c.View()) {
 			continue
@@ -164,6 +186,20 @@ func (tab *Tab) RenderCursors(frame frame.Frame) {
 			primary = true
 		}
 		c.Render(tab.Colors, frame.Line(0, c.LineNum-tab.View.Line), tab.View, primary)
+	}
+}
+
+func (tab *Tab) RenderSelections(frame frame.Frame) {
+	for i, s := range tab.Selections {
+		if !tab.View.IsVisible(s.View()) {
+			continue
+		}
+
+		primary := false
+		if tab.HasFocus && i == len(tab.Selections)-1 {
+			primary = true
+		}
+		s.Render(tab.Colors, frame, tab.View, primary)
 	}
 }
 
@@ -194,6 +230,17 @@ func (tab *Tab) Render(frame frame.Frame) {
 	linesFrame := frame.Column(lineNumWidth+1, frame.Width-lineNumWidth-1)
 	if linesFrame.Screen != nil {
 		tab.RenderLines(line, lineNum, linesFrame)
-		tab.RenderCursors(linesFrame)
+
+		// This is required for view commands, as the primary cursors is
+		// rendered by the tcell all the time.
+		if tab.HasFocus {
+			frame.HideCursor()
+		}
+
+		if len(tab.Cursors) > 0 {
+			tab.RenderCursors(linesFrame)
+		} else {
+			tab.RenderSelections(linesFrame)
+		}
 	}
 }

@@ -142,6 +142,8 @@ func ColorschemeDefault() Colorscheme {
 		Cursor:     tcell.StyleDefault.Reverse(true),
 		CursorWord: tcell.StyleDefault.Foreground(tcell.ColorWhite),
 
+		Selection: tcell.StyleDefault.Background(tcell.ColorMaroon).Foreground(tcell.ColorWhite),
+
 		StatusLine: tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorGray),
 		RepCount:   tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorTeal),
 		StateMark:  tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorOlive),

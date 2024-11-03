@@ -188,6 +188,8 @@ enters the insert moode for a single insertion.`,
 
 	// Selection
 
+	"sel-right": `sel-right # Extends selection one rune right.`,
+
 	"sel-white": `sel-white # Selects sequence of whitespaces.
 If cursors is not placed on a whitespace character, nothing is selected.`,
 

@@ -11,7 +11,7 @@ func TestIntersection(t *testing.T) {
 		v    View
 		v2   View
 		want View
-	} {
+	}{
 		{idx: 0, v: View{1, 1, 5, 5}, v2: View{1, 1, 5, 5}, want: View{1, 1, 5, 5}},
 		{idx: 1, v: View{1, 1, 5, 5}, v2: View{1, 1, 3, 4}, want: View{1, 1, 3, 4}},
 		{idx: 2, v: View{1, 1, 5, 5}, v2: View{2, 2, 1, 1}, want: View{2, 2, 1, 1}},

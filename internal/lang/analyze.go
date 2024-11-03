@@ -31,7 +31,10 @@ func (hl Highlighter) Analyze(
 		r.CursorWord = nil
 	}
 
-	cursorWord := cursor.GetWord()
+	cursorWord := ""
+	if cursor != nil {
+		cursorWord = cursor.GetWord()
+	}
 	if len(cursorWord) == 1 && util.IsBracket(rune(cursorWord[0])) {
 		// Unimplemented
 	} else if cursorWord != "" {
