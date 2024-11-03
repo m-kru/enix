@@ -156,24 +156,30 @@ func Go(args []string, tab *tab.Tab) error {
 	return nil
 }
 
-func goCmd(line, col int, tab *tab.Tab) {
-	if line < 1 {
-		line = 1
+func goCmd(lineNum, col int, tab *tab.Tab) {
+	if lineNum < 1 {
+		lineNum = 1
 	}
 	if col < 1 {
 		col = 1
 	}
-	if line > tab.Lines.Count() {
-		line = tab.Lines.Count()
+	if lineNum > tab.LineCount {
+		lineNum = tab.LineCount
 	}
 
-	l := tab.Lines.Get(line)
-	if col > l.RuneCount()+1 {
-		col = l.RuneCount() + 1
+	line := tab.Lines.Get(lineNum)
+	if col > line.RuneCount()+1 {
+		col = line.RuneCount() + 1
 	}
 
 	tab.Cursors = []*cursor.Cursor{
-		&cursor.Cursor{Config: tab.Config, Line: l, RuneIdx: col - 1, Idx: col - 1},
+		&cursor.Cursor{
+			Config:  tab.Config,
+			Line:    line,
+			LineNum: lineNum,
+			RuneIdx: col - 1,
+			Idx:     col - 1,
+		},
 	}
 }
 
