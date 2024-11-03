@@ -427,6 +427,10 @@ func Start(
 			}
 		}
 
-		w.Render()
+		// Do not rerender if focus is on the prompt.
+		// This reduces responsiveness in the case of large files.
+		if tcellEvRcvr == &w {
+			w.Render()
+		}
 	}
 }
