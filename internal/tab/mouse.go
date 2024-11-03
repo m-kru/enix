@@ -24,10 +24,10 @@ func (tab *Tab) PrimaryClick(x, y int) {
 	}
 
 	c := cursor.Cursor{
-		Config: cfg,
-		Line:   line,
-		Idx:    idx,
-		BufIdx: idx,
+		Config:  cfg,
+		Line:    line,
+		Idx:     idx,
+		RuneIdx: idx,
 	}
 
 	tab.Cursors = make([]*cursor.Cursor, 1, 16)

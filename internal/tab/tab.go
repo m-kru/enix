@@ -110,8 +110,8 @@ func (tab *Tab) Trim() {
 	for _, c := range tab.Cursors {
 		for _, tl := range trimmedLines {
 			if c.Line == tl {
-				if c.BufIdx > tl.RuneCount() {
-					c.BufIdx = tl.RuneCount()
+				if c.RuneIdx > tl.RuneCount() {
+					c.RuneIdx = tl.RuneCount()
 				}
 			}
 		}
@@ -133,10 +133,10 @@ func (tab *Tab) AddCursor(lineNum int, colIdx int) {
 	}
 
 	c := &cursor.Cursor{
-		Config: tab.Cursors[0].Config,
-		Line:   line,
-		Idx:    runeIdx,
-		BufIdx: runeIdx,
+		Config:  tab.Cursors[0].Config,
+		Line:    line,
+		Idx:     runeIdx,
+		RuneIdx: runeIdx,
 	}
 
 	tab.Cursors = append(tab.Cursors, c)

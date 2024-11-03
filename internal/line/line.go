@@ -1,23 +1,46 @@
 package line
 
 import (
-	"fmt"
+	"unicode/utf8"
 
 	"github.com/mattn/go-runewidth"
 )
 
 type Line struct {
-	Buf []rune
+	Buf []byte
 
 	Prev *Line
 	Next *Line
 }
 
-func (l *Line) RuneCount() int    { return len(l.Buf) }
-func (l *Line) Rune(idx int) rune { return l.Buf[idx] }
+func (l *Line) RuneCount() int { return utf8.RuneCount(l.Buf) }
 
-func (l *Line) String() string {
-	return string(l.Buf)
+func (l *Line) String() string { return string(l.Buf) }
+
+func (l *Line) BufIdx(runeIdx int) int {
+	rIdx := 0
+	bIdx := 0
+	for {
+		_, rLen := utf8.DecodeRune(l.Buf[bIdx:])
+		if rIdx == runeIdx {
+			return bIdx
+		}
+		bIdx += rLen
+		rIdx++
+	}
+}
+
+func (l *Line) Rune(runeIdx int) rune {
+	rIdx := 0
+	bIdx := 0
+	for {
+		r, rLen := utf8.DecodeRune(l.Buf[bIdx:])
+		if rIdx == runeIdx {
+			return r
+		}
+		bIdx += rLen
+		rIdx++
+	}
 }
 
 // Num returns line number in the line list.
@@ -36,15 +59,26 @@ func (l *Line) Num() int {
 // It doesn't include the end of line character, as it is
 // not stored in the line buffer.
 func (l *Line) Columns(tabWidth int) int {
-	c := 0
-	for _, r := range l.Buf {
-		if r == '\t' {
-			c += tabWidth
-		} else {
-			c += runewidth.RuneWidth(r)
+	cols := 0
+	bIdx := 0
+
+	for {
+		if bIdx >= len(l.Buf) {
+			break
 		}
+
+		r, rLen := utf8.DecodeRune(l.Buf[bIdx:])
+
+		if r == '\t' {
+			cols += tabWidth
+		} else {
+			cols += runewidth.RuneWidth(r)
+		}
+
+		bIdx += rLen
 	}
-	return c
+
+	return cols
 }
 
 // Get returns nth line.
@@ -80,65 +114,76 @@ func (l *Line) Last() *Line {
 
 // ColumnIdx returns first column index for provided rune index.
 func (l *Line) ColumnIdx(runeIdx int, tabWidth int) int {
-	if runeIdx > len(l.Buf) {
-		panic(fmt.Sprintf("rune idx (%d) > len(l.Buf) (%d)", runeIdx, len(l.Buf)))
+	if len(l.Buf) == 0 {
+		return 1
 	}
 
-	col := 0
-	for i, r := range l.Buf {
-		if i == runeIdx {
-			col += 1
+	cIdx := 0
+	bIdx := 0
+	rIdx := 0
+
+	for {
+		if rIdx == runeIdx {
+			cIdx += 1
 			break
-		} else {
-			if r == '\t' {
-				col += tabWidth - (col % tabWidth)
-			} else {
-				col += runewidth.RuneWidth(r)
-			}
 		}
+
+		r, rLen := utf8.DecodeRune(l.Buf[bIdx:])
+
+		if r == '\t' {
+			cIdx += tabWidth - (cIdx % tabWidth)
+		} else {
+			cIdx += runewidth.RuneWidth(r)
+		}
+
+		bIdx += rLen
+		rIdx++
 	}
 
-	if runeIdx == len(l.Buf) {
-		col++
-	}
-
-	return col
+	return cIdx
 }
 
 // RuneIdx returns rune index for provided column index.
 // The second return is a rune subcolumn index.
 // The third return is false if column c does not exists in line.
-func (l *Line) RuneIdx(col int, tabWidth int) (int, int, bool) {
-	if col == 0 {
-		panic("internal logic error")
-	}
+func (l *Line) RuneIdx(colIdx int, tabWidth int) (int, int, bool) {
+	bIdx := 0
+	cIdx := 1
+	rIdx := 0
 
-	c := 1
-	for i, r := range l.Buf {
-		rw := runewidth.RuneWidth(r)
-		if r == '\t' {
-			if c == col {
-				return i, 0, true
-			}
-
-			width := tabWidth - ((c - 1) % tabWidth)
-			if c+width > col {
-				return i, col - c, true
-			}
-			c += width
-		} else if rw == 1 {
-			if c == col {
-				return i, 0, true
-			}
-			c++
-		} else {
-			if c == col {
-				return i, 0, true
-			} else if c+rw > col {
-				return i, 1, true
-			}
-			c += rw
+	for {
+		if bIdx >= len(l.Buf) {
+			break
 		}
+
+		r, rLen := utf8.DecodeRune(l.Buf[bIdx:])
+		rWidth := runewidth.RuneWidth(r)
+		if r == '\t' {
+			if cIdx == colIdx {
+				return rIdx, 0, true
+			}
+
+			width := tabWidth - ((cIdx - 1) % tabWidth)
+			if cIdx+width > colIdx {
+				return rIdx, colIdx - cIdx, true
+			}
+			cIdx += width
+		} else if rWidth == 1 {
+			if cIdx == colIdx {
+				return rIdx, 0, true
+			}
+			cIdx++
+		} else {
+			if cIdx == colIdx {
+				return rIdx, 0, true
+			} else if cIdx+rWidth > colIdx {
+				return rIdx, 1, true
+			}
+			cIdx += rWidth
+		}
+
+		bIdx += rLen
+		rIdx++
 	}
 
 	return 0, 0, false

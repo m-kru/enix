@@ -5,18 +5,18 @@ import (
 )
 
 func (c *Cursor) InsertRune(r rune) *action.RuneInsert {
-	c.Line.InsertRune(r, c.BufIdx)
-	c.BufIdx++
-	return &action.RuneInsert{Line: c.Line, Idx: c.BufIdx}
+	c.Line.InsertRune(r, c.RuneIdx)
+	c.RuneIdx++
+	return &action.RuneInsert{Line: c.Line, Idx: c.RuneIdx}
 }
 
 func (c *Cursor) InsertNewline() *action.NewlineInsert {
-	bufIdx := c.BufIdx
-	newLine := c.Line.InsertNewline(c.BufIdx)
+	rIdx := c.RuneIdx
+	newLine := c.Line.InsertNewline(c.RuneIdx)
 
 	c.Line = newLine
-	c.BufIdx = 0
+	c.RuneIdx = 0
 	c.Idx = 0
 
-	return &action.NewlineInsert{Line: newLine, Idx: bufIdx}
+	return &action.NewlineInsert{Line: newLine, Idx: rIdx}
 }

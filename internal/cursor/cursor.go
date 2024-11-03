@@ -13,20 +13,20 @@ import (
 // Cursors must be stored in order. Thanks to this, only next cursors must be
 // informed about line changes.
 type Cursor struct {
-	Config *cfg.Config
-	Line   *line.Line
-	Idx    int
-	BufIdx int // Index into line buffer.
+	Config  *cfg.Config
+	Line    *line.Line
+	Idx     int
+	RuneIdx int // Line rune index
 }
 
 // Column returns column number of the cursor within the string in the buffer.
 func (c *Cursor) Column() int {
-	return c.Line.ColumnIdx(c.BufIdx, c.Config.TabWidth)
+	return c.Line.ColumnIdx(c.RuneIdx, c.Config.TabWidth)
 }
 
 // Width returns width of the rune under the cursor.
 func (c *Cursor) Width() int {
-	if c.BufIdx == c.Line.RuneCount() {
+	if c.RuneIdx == c.Line.RuneCount() {
 		rw := runewidth.RuneWidth(c.Config.NewlineRune)
 		if rw == 0 {
 			return 1
@@ -34,7 +34,7 @@ func (c *Cursor) Width() int {
 		return rw
 	}
 
-	r := c.Line.Rune(c.BufIdx)
+	r := c.Line.Rune(c.RuneIdx)
 	if r == '\t' {
 		return 1
 	}
@@ -43,7 +43,7 @@ func (c *Cursor) Width() int {
 
 // GetWord returns word under cursor.
 func (c *Cursor) GetWord() string {
-	return util.GetWord(c.Line.Buf, c.BufIdx)
+	return util.GetWord([]rune(c.Line.String()), c.RuneIdx)
 }
 
 func (c *Cursor) View() view.View {

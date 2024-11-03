@@ -6,14 +6,14 @@ func (c *Cursor) SpawnDown() *Cursor {
 	}
 
 	nc := &Cursor{
-		Config: c.Config,
-		Line:   c.Line.Next,
-		Idx:    c.Idx,
-		BufIdx: c.BufIdx,
+		Config:  c.Config,
+		Line:    c.Line.Next,
+		Idx:     c.Idx,
+		RuneIdx: c.RuneIdx,
 	}
 
-	if nc.BufIdx > nc.Line.RuneCount() {
-		nc.BufIdx = nc.Line.RuneCount()
+	if nc.RuneIdx > nc.Line.RuneCount() {
+		nc.RuneIdx = nc.Line.RuneCount()
 	}
 
 	return nc
@@ -25,14 +25,14 @@ func (c *Cursor) SpawnUp() *Cursor {
 	}
 
 	nc := &Cursor{
-		Config: c.Config,
-		Line:   c.Line.Prev,
-		Idx:    c.Idx,
-		BufIdx: c.BufIdx,
+		Config:  c.Config,
+		Line:    c.Line.Prev,
+		Idx:     c.Idx,
+		RuneIdx: c.RuneIdx,
 	}
 
-	if nc.BufIdx > nc.Line.RuneCount() {
-		nc.BufIdx = nc.Line.RuneCount()
+	if nc.RuneIdx > nc.Line.RuneCount() {
+		nc.RuneIdx = nc.Line.RuneCount()
 	}
 
 	return nc

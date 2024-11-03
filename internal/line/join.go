@@ -18,7 +18,7 @@ func (l *Line) Join(trim bool) *Line {
 		str = strings.TrimLeft(str, " \t")
 	}
 
-	l.Append(str)
+	l.Append([]byte(str))
 
 	l.Next = delLine.Next
 	if delLine.Next != nil {

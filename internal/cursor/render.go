@@ -13,7 +13,7 @@ func (c *Cursor) Render(
 	view view.View,
 	primary bool,
 ) {
-	x := c.Line.ColumnIdx(c.BufIdx, config.TabWidth) - view.Column
+	x := c.Line.ColumnIdx(c.RuneIdx, config.TabWidth) - view.Column
 	/*
 		if x >= frame.Width {
 			return

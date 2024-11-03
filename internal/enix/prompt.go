@@ -96,10 +96,10 @@ func (p *Prompt) Activate(text, shadowText string) {
 	p.Line, _ = line.FromString(text)
 
 	p.Cursor = &cursor.Cursor{
-		Config: p.Config,
-		Line:   p.Line,
-		Idx:    len(text),
-		BufIdx: len(text),
+		Config:  p.Config,
+		Line:    p.Line,
+		Idx:     len(text),
+		RuneIdx: len(text),
 	}
 
 	p.ShadowText = shadowText
@@ -160,7 +160,7 @@ func (p *Prompt) Delete() {
 func (p *Prompt) Down() {
 	switch p.State {
 	case InShadow:
-		p.Line.Append(p.ShadowText)
+		p.Line.Append([]byte(p.ShadowText))
 		p.ShadowText = ""
 		p.State = InText
 	case InText:
@@ -182,8 +182,8 @@ func (p *Prompt) Left() {
 func (p *Prompt) Right() {
 	switch p.State {
 	case InShadow:
-		p.Line.Append(p.ShadowText)
-		p.Cursor.BufIdx += len(p.ShadowText)
+		p.Line.Append([]byte(p.ShadowText))
+		p.Cursor.RuneIdx += len(p.ShadowText)
 		p.ShadowText = ""
 		p.State = InText
 	case InText:
@@ -205,7 +205,7 @@ func (p *Prompt) PrevWordStart() {
 func (p *Prompt) WordEnd() {
 	switch p.State {
 	case InShadow:
-		p.Line.Append(p.ShadowText)
+		p.Line.Append([]byte(p.ShadowText))
 		p.ShadowText = ""
 		p.State = InText
 		p.Cursor.WordEnd()
@@ -227,7 +227,7 @@ func (p *Prompt) LineStart() {
 
 func (p *Prompt) Enter() TcellEventReceiver {
 	if p.State == InShadow {
-		p.Line.Append(p.ShadowText)
+		p.Line.Append([]byte(p.ShadowText))
 		p.ShadowText = ""
 		p.State = InText
 	}

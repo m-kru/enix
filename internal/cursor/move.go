@@ -10,44 +10,44 @@ func (c *Cursor) Down() {
 		return
 	}
 
-	bufIdx := c.BufIdx
+	rIdx := c.RuneIdx
 	nextLen := c.Line.Next.RuneCount()
-	if c.Idx != bufIdx {
+	if c.Idx != rIdx {
 		if c.Idx <= nextLen {
-			bufIdx = c.Idx
+			rIdx = c.Idx
 		} else {
-			bufIdx = nextLen
+			rIdx = nextLen
 		}
-	} else if bufIdx > nextLen {
-		bufIdx = nextLen
+	} else if rIdx > nextLen {
+		rIdx = nextLen
 	}
 
-	c.BufIdx = bufIdx
+	c.RuneIdx = rIdx
 	c.Line = c.Line.Next
 }
 
 func (c *Cursor) Left() {
-	if c.BufIdx == 0 {
+	if c.RuneIdx == 0 {
 		if c.Line.Prev != nil {
 			c.Line = c.Line.Prev
-			c.BufIdx = c.Line.RuneCount()
+			c.RuneIdx = c.Line.RuneCount()
 		}
 	} else {
-		c.BufIdx--
+		c.RuneIdx--
 	}
-	c.Idx = c.BufIdx
+	c.Idx = c.RuneIdx
 }
 
 func (c *Cursor) Right() {
-	if c.BufIdx == c.Line.RuneCount() {
+	if c.RuneIdx == c.Line.RuneCount() {
 		if c.Line.Next != nil {
 			c.Line = c.Line.Next
-			c.BufIdx = 0
+			c.RuneIdx = 0
 		}
 	} else {
-		c.BufIdx++
+		c.RuneIdx++
 	}
-	c.Idx = c.BufIdx
+	c.Idx = c.RuneIdx
 }
 
 func (c *Cursor) Up() {
@@ -55,25 +55,25 @@ func (c *Cursor) Up() {
 		return
 	}
 
-	bufIdx := c.BufIdx
+	rIdx := c.RuneIdx
 	prevLen := c.Line.Prev.RuneCount()
-	if c.Idx != bufIdx {
+	if c.Idx != rIdx {
 		if c.Idx <= prevLen {
-			bufIdx = c.Idx
+			rIdx = c.Idx
 		} else {
-			bufIdx = prevLen
+			rIdx = prevLen
 		}
-	} else if bufIdx > prevLen {
-		bufIdx = prevLen
+	} else if rIdx > prevLen {
+		rIdx = prevLen
 	}
 
-	c.BufIdx = bufIdx
+	c.RuneIdx = rIdx
 	c.Line = c.Line.Prev
 }
 
 func (c *Cursor) PrevWordStart() {
-	if idx, ok := util.PrevWordStart(c.Line.Buf, c.BufIdx); ok {
-		c.BufIdx = idx
+	if idx, ok := util.PrevWordStart([]rune(c.Line.String()), c.RuneIdx); ok {
+		c.RuneIdx = idx
 		return
 	}
 
@@ -83,10 +83,10 @@ func (c *Cursor) PrevWordStart() {
 			return
 		}
 
-		if idx, ok := util.PrevWordStart(line.Buf, line.RuneCount()); ok {
+		if idx, ok := util.PrevWordStart([]rune(line.String()), line.RuneCount()); ok {
 			c.Line = line
-			c.BufIdx = idx + 1
-			c.Idx = c.BufIdx
+			c.RuneIdx = idx + 1
+			c.Idx = c.RuneIdx
 			return
 		}
 
@@ -95,9 +95,9 @@ func (c *Cursor) PrevWordStart() {
 }
 
 func (c *Cursor) WordEnd() {
-	if idx, ok := util.WordEnd(c.Line.Buf, c.BufIdx); ok {
-		c.BufIdx = idx + 1 // + 1 as we have found word end index.
-		c.Idx = c.BufIdx
+	if idx, ok := util.WordEnd([]rune(c.Line.String()), c.RuneIdx); ok {
+		c.RuneIdx = idx + 1 // + 1 as we have found word end index.
+		c.Idx = c.RuneIdx
 		return
 	}
 
@@ -107,10 +107,10 @@ func (c *Cursor) WordEnd() {
 			return
 		}
 
-		if idx, ok := util.WordEnd(line.Buf, 0); ok {
+		if idx, ok := util.WordEnd([]rune(line.String()), 0); ok {
 			c.Line = line
-			c.BufIdx = idx + 1
-			c.Idx = c.BufIdx
+			c.RuneIdx = idx + 1
+			c.Idx = c.RuneIdx
 			return
 		}
 
@@ -119,9 +119,9 @@ func (c *Cursor) WordEnd() {
 }
 
 func (c *Cursor) WordStart() {
-	if idx, ok := util.WordStart(c.Line.Buf, c.BufIdx); ok {
-		c.BufIdx = idx
-		c.Idx = c.BufIdx
+	if idx, ok := util.WordStart([]rune(c.Line.String()), c.RuneIdx); ok {
+		c.RuneIdx = idx
+		c.Idx = c.RuneIdx
 		return
 	}
 
@@ -131,10 +131,10 @@ func (c *Cursor) WordStart() {
 			return
 		}
 
-		if idx, ok := util.WordStart(line.Buf, 0); ok {
+		if idx, ok := util.WordStart([]rune(line.String()), 0); ok {
 			c.Line = line
-			c.BufIdx = idx
-			c.Idx = c.BufIdx
+			c.RuneIdx = idx
+			c.Idx = c.RuneIdx
 			return
 		}
 
@@ -143,34 +143,34 @@ func (c *Cursor) WordStart() {
 }
 
 func (c *Cursor) LineStart() {
-	for i, r := range c.Line.Buf {
+	for i, r := range []rune(c.Line.String()) {
 		if !unicode.IsSpace(r) {
-			if c.BufIdx == i {
-				c.BufIdx = 0
+			if c.RuneIdx == i {
+				c.RuneIdx = 0
 			} else {
-				c.BufIdx = i
+				c.RuneIdx = i
 			}
-			c.Idx = c.BufIdx
+			c.Idx = c.RuneIdx
 			return
 		}
 	}
-	c.BufIdx = 0
-	c.Idx = c.BufIdx
+	c.RuneIdx = 0
+	c.Idx = c.RuneIdx
 }
 
 func (c *Cursor) LineEnd() {
 	for i := c.Line.RuneCount() - 1; i > 0; i-- {
-		r := c.Line.Buf[i]
+		r := c.Line.Rune(i)
 		if !unicode.IsSpace(r) {
-			if c.BufIdx == i {
-				c.BufIdx = c.Line.RuneCount() - 1
+			if c.RuneIdx == i {
+				c.RuneIdx = c.Line.RuneCount() - 1
 			} else {
-				c.BufIdx = i
+				c.RuneIdx = i
 			}
-			c.Idx = c.BufIdx
+			c.Idx = c.RuneIdx
 			return
 		}
 	}
-	c.BufIdx = c.Line.RuneCount()
-	c.Idx = c.BufIdx
+	c.RuneIdx = c.Line.RuneCount()
+	c.Idx = c.RuneIdx
 }

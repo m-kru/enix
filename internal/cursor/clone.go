@@ -6,10 +6,10 @@ func Clone(cursors []*Cursor) []*Cursor {
 	for _, c := range cursors {
 		// Should Idx equal c.Idx or c.BufIdx?
 		c := &Cursor{
-			Config: c.Config,
-			Line:   c.Line,
-			Idx:    c.Idx,
-			BufIdx: c.BufIdx,
+			Config:  c.Config,
+			Line:    c.Line,
+			Idx:     c.Idx,
+			RuneIdx: c.RuneIdx,
 		}
 
 		cs = append(cs, c)

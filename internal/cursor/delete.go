@@ -5,7 +5,7 @@ import (
 )
 
 func (c *Cursor) Delete() action.Action {
-	if c.BufIdx == c.Line.RuneCount() {
+	if c.RuneIdx == c.Line.RuneCount() {
 		delLine := c.Line.Join(false)
 		if delLine == nil {
 			return nil
@@ -14,8 +14,8 @@ func (c *Cursor) Delete() action.Action {
 		return &action.NewlineDelete{Line: delLine}
 	}
 
-	c.Line.DeleteRune(c.BufIdx)
-	return &action.RuneDelete{Line: c.Line, Idx: c.BufIdx}
+	c.Line.DeleteRune(c.RuneIdx)
+	return &action.RuneDelete{Line: c.Line, Idx: c.RuneIdx}
 }
 
 func (c *Cursor) Join() action.Action {
@@ -28,7 +28,7 @@ func (c *Cursor) Join() action.Action {
 }
 
 func (c *Cursor) Backspace() action.Action {
-	if c.BufIdx == 0 {
+	if c.RuneIdx == 0 {
 		if c.Line.Prev == nil {
 			// Do nothing
 			return nil
@@ -38,15 +38,15 @@ func (c *Cursor) Backspace() action.Action {
 			delLine := c.Line.Join(false)
 			// delLine is for sure not nil here so do not check for nil.
 
-			c.BufIdx += prevLineLen
-			c.Idx = c.BufIdx
+			c.RuneIdx += prevLineLen
+			c.Idx = c.RuneIdx
 
 			return &action.NewlineDelete{Line: delLine}
 		}
 	}
 
-	c.Line.DeleteRune(c.BufIdx - 1)
-	c.BufIdx--
+	c.Line.DeleteRune(c.RuneIdx - 1)
+	c.RuneIdx--
 
-	return &action.RuneDelete{Line: c.Line, Idx: c.BufIdx - 1}
+	return &action.RuneDelete{Line: c.Line, Idx: c.RuneIdx - 1}
 }

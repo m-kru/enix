@@ -44,7 +44,7 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 
 	if len(tab.Cursors) > 0 {
 		b.WriteString(
-			fmt.Sprintf("%d:%d | ", tab.Cursors[0].Line.Num(), tab.Cursors[0].BufIdx+1),
+			fmt.Sprintf("%d:%d | ", tab.Cursors[0].Line.Num(), tab.Cursors[0].RuneIdx+1),
 		)
 	}
 	b.WriteString(fmt.Sprintf("%s ", tab.FileType))

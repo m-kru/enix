@@ -169,7 +169,7 @@ func goCmd(line, col int, tab *tab.Tab) {
 	}
 
 	tab.Cursors = []*cursor.Cursor{
-		&cursor.Cursor{Config: tab.Config, Line: l, BufIdx: col - 1, Idx: col - 1},
+		&cursor.Cursor{Config: tab.Config, Line: l, RuneIdx: col - 1, Idx: col - 1},
 	}
 }
 

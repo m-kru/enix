@@ -6,17 +6,17 @@ import (
 	"github.com/m-kru/enix/internal/util"
 )
 
-// bufCap returns buffer capacity recommended for string given string.
-func bufCap(str string) int {
-	runeCount := utf8.RuneCountInString(str)
-	if runeCount < 64 {
+// bufCap returns buffer capacity recommended for string of given byte length.
+func bufCap(startIdx, endIdx int) int {
+	diff := endIdx - startIdx
+	if diff < 64 {
 		return 64
 	}
-	return util.NextPowerOfTwo(runeCount)
+	return util.NextPowerOfTwo(diff)
 }
 
 func Empty() *Line {
-	return &Line{Buf: make([]rune, 0, 64), Prev: nil, Next: nil}
+	return &Line{Buf: make([]byte, 0, 64), Prev: nil, Next: nil}
 }
 
 func FromString(str string) (*Line, int) {
@@ -30,37 +30,37 @@ func FromString(str string) (*Line, int) {
 	var prev *Line
 	var next *Line
 
-	for i, r := range str {
+	for bIdx, r := range str {
 		if r == '\n' {
 			if first == nil {
-				first = &Line{Buf: make([]rune, 0, bufCap(str[startIdx:i]))}
-				first.Insert(str[startIdx:i], 0)
+				first = &Line{Buf: make([]byte, 0, bufCap(startIdx, bIdx))}
+				first.InsertString(str[startIdx:bIdx], 0)
 				prev = first
 			} else {
-				next = &Line{Buf: make([]rune, 0, bufCap(str[startIdx:i])), Prev: prev}
-				next.Insert(str[startIdx:i], 0)
+				next = &Line{Buf: make([]byte, 0, bufCap(startIdx, bIdx)), Prev: prev}
+				next.InsertString(str[startIdx:bIdx], 0)
 				prev.Next = next
 				prev = next
 			}
-			startIdx = i + 1
+			startIdx = bIdx + 1
 			lineCount++
-		} else if i == len(str)-utf8.RuneLen(r) {
+		} else if bIdx == len(str)-utf8.RuneLen(r) {
 			runeLen := utf8.RuneLen(r)
 			if first == nil {
-				first = &Line{Buf: make([]rune, 0, bufCap(str[startIdx:i+runeLen]))}
-				first.Insert(str[startIdx:i+runeLen], 0)
+				first = &Line{Buf: make([]byte, 0, bufCap(startIdx, bIdx+runeLen))}
+				first.InsertString(str[startIdx:bIdx+runeLen], 0)
 			} else {
-				next = &Line{Buf: make([]rune, 0, bufCap(str[startIdx:i+runeLen])), Prev: prev}
-				next.Insert(str[startIdx:i+runeLen], 0)
+				next = &Line{Buf: make([]byte, 0, bufCap(startIdx, bIdx+runeLen)), Prev: prev}
+				next.InsertString(str[startIdx:bIdx+runeLen], 0)
 				prev.Next = next
 			}
-			startIdx = i + runeLen
+			startIdx = bIdx + runeLen
 		}
 	}
 
 	// Add one extra line if string ends with newline
 	if str[len(str)-1] == '\n' {
-		next = &Line{Buf: make([]rune, 0, bufCap("")), Prev: prev}
+		next = &Line{Buf: make([]byte, 0, bufCap(0, 0)), Prev: prev}
 		prev.Next = next
 		lineCount++
 	}

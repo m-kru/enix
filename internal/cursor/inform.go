@@ -13,33 +13,33 @@ func (c *Cursor) informNewlineDelete(nd *action.NewlineDelete) {
 	}
 
 	c.Line = nd.Line.Prev
-	c.BufIdx = c.BufIdx + c.Line.RuneCount() - nd.Line.RuneCount()
-	c.Idx = c.BufIdx
+	c.RuneIdx = c.RuneIdx + c.Line.RuneCount() - nd.Line.RuneCount()
+	c.Idx = c.RuneIdx
 }
 
 func (c *Cursor) informNewlineInsert(ni *action.NewlineInsert) {
-	if c.Line != ni.Line.Prev || c.BufIdx <= ni.Idx {
+	if c.Line != ni.Line.Prev || c.RuneIdx <= ni.Idx {
 		return
 	}
 
 	c.Line = ni.Line
-	c.BufIdx -= ni.Idx
-	c.Idx = c.BufIdx
+	c.RuneIdx -= ni.Idx
+	c.Idx = c.RuneIdx
 }
 
 // informRuneDelete informs the cursor about single rune deletion from the line.
 func (c *Cursor) informRuneDelete(rd *action.RuneDelete) {
-	if rd.Line != c.Line || rd.Idx >= c.BufIdx {
+	if rd.Line != c.Line || rd.Idx >= c.RuneIdx {
 		return
 	}
-	c.BufIdx--
+	c.RuneIdx--
 	c.Idx--
 }
 
 // informRuneInsert informs the cursor about content insertion into the line.
 func (c *Cursor) informRuneInsert(ri *action.RuneInsert) {
-	if ri.Line != c.Line || ri.Idx > c.BufIdx {
+	if ri.Line != c.Line || ri.Idx > c.RuneIdx {
 		return
 	}
-	c.BufIdx++
+	c.RuneIdx++
 }
