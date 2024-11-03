@@ -12,6 +12,7 @@ import (
 func (l *Line) Render(
 	cfg *cfg.Config,
 	colors *cfg.Colorscheme,
+	lineNum int,
 	frame frame.Frame,
 	view view.View,
 	hls []highlight.Highlight,
@@ -59,7 +60,7 @@ func (l *Line) Render(
 		color := colors.Default
 		if len(hls) > 0 {
 			for {
-				if hls[currentHl].CoversCell(l.Num(), runeIdx) {
+				if hls[currentHl].CoversCell(lineNum, runeIdx) {
 					color = hls[currentHl].Style
 					break
 				}
@@ -94,7 +95,7 @@ func (l *Line) Render(
 						break
 					}
 
-					if hls[currentHl].CoversCell(l.Num(), runeIdx) {
+					if hls[currentHl].CoversCell(lineNum, runeIdx) {
 						color = hls[currentHl].Style
 						break
 					}

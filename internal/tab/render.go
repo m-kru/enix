@@ -5,12 +5,23 @@ import (
 	"strings"
 
 	"github.com/m-kru/enix/internal/frame"
+	"github.com/m-kru/enix/internal/line"
 )
 
 // Currently view updating works in such a way, that the last cursor is always visible.
 func (tab *Tab) UpdateView() {
 	c := tab.Cursors[len(tab.Cursors)-1]
 	tab.View = tab.View.MinAdjust(c.View())
+}
+
+func (tab *Tab) HasCursorInLine(line *line.Line) bool {
+	for _, c := range tab.Cursors {
+		if c.Line == line {
+			return true
+		}
+	}
+
+	return false
 }
 
 func (tab *Tab) RenderStatusLine(frame frame.Frame) {
@@ -67,24 +78,24 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 	}
 }
 
-func (tab *Tab) RenderLineNums(frame frame.Frame) {
-	n := tab.View.Line
+func (tab *Tab) RenderLineNums(line *line.Line, lineNum int, frame frame.Frame) {
 	y := 0
 
 	for {
-		str := fmt.Sprintf("%*d ", frame.Width-1, n)
+		str := fmt.Sprintf("%*d ", frame.Width-1, lineNum)
 		for i, r := range str {
-			if tab.HasCursorInLine(n) && i < len(str)-1 {
+			if tab.HasCursorInLine(line) && i < len(str)-1 {
 				frame.SetContent(i, y, r, tab.Colors.Cursor)
 			} else {
 				frame.SetContent(i, y, r, tab.Colors.LineNum)
 			}
 		}
 
-		n++
+		line = line.Next
+		lineNum++
 		y++
 
-		if y >= frame.Height || n > tab.LineCount {
+		if y >= frame.Height || lineNum > tab.LineCount {
 			break
 		}
 	}
@@ -97,10 +108,9 @@ func (tab *Tab) RenderLineNums(frame frame.Frame) {
 	}
 }
 
-func (tab *Tab) RenderLines(frame frame.Frame) {
-	lineNum := tab.View.Line
+// Line is first visible line
+func (tab *Tab) RenderLines(line *line.Line, lineNum int, frame frame.Frame) {
 	renderedCount := 0
-	line := tab.Lines.Get(lineNum)
 
 	endLineIdx := tab.View.LastLine()
 	if endLineIdx > tab.LineCount {
@@ -115,7 +125,7 @@ func (tab *Tab) RenderLines(frame frame.Frame) {
 			break
 		}
 
-		hls = line.Render(tab.Config, tab.Colors, frame.Line(0, renderedCount), tab.View, hls)
+		hls = line.Render(tab.Config, tab.Colors, lineNum, frame.Line(0, renderedCount), tab.View, hls)
 
 		line = line.Next
 		lineNum++
@@ -170,16 +180,19 @@ func (tab *Tab) Render(frame frame.Frame) {
 	tab.View.Width = frame.Width - lineNumWidth - 1
 	tab.View.Height = frame.Height
 
+	lineNum := tab.View.Line
+	line := tab.Lines.Get(lineNum)
+
 	// Render line numbers
 	lineNumFrame := frame.Column(0, lineNumWidth+1)
 	if lineNumFrame.Screen != nil {
-		tab.RenderLineNums(lineNumFrame)
+		tab.RenderLineNums(line, lineNum, lineNumFrame)
 	}
 
 	// Render lines and cursors
 	linesFrame := frame.Column(lineNumWidth+1, frame.Width-lineNumWidth-1)
 	if linesFrame.Screen != nil {
-		tab.RenderLines(linesFrame)
+		tab.RenderLines(line, lineNum, linesFrame)
 		tab.RenderCursors(linesFrame)
 	}
 }

@@ -83,16 +83,6 @@ func (tab *Tab) Append(newTab *Tab) {
 	newTab.Prev = last
 }
 
-func (tab *Tab) HasCursorInLine(n int) bool {
-	for _, c := range tab.Cursors {
-		if c.Line.Num() == n {
-			return true
-		}
-	}
-
-	return false
-}
-
 func (tab *Tab) Trim() {
 	var trimmedLines []*line.Line
 
