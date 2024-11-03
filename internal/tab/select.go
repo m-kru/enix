@@ -18,7 +18,11 @@ func (tab *Tab) selLeftCursors() {
 }
 
 func (tab *Tab) selLeftSelections() {
-	panic("unimplemented")
+	for i, s := range tab.Selections {
+		tab.Selections[i] = s.Left()
+	}
+
+	// TODO: Prune selections here
 }
 
 func (tab *Tab) SelRight() {
