@@ -188,6 +188,8 @@ enters the insert moode for a single insertion.`,
 
 	// Selection
 
+	"sel-count": `sel-count # Prints the number of selections in the current tab.`,
+
 	"sel-left": `sel-left # Extends/shrinks selection one rune left.`,
 
 	"sel-right": `sel-right # Extends/shrinks selection one rune right.`,

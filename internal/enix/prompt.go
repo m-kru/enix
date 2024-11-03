@@ -389,6 +389,9 @@ func (p *Prompt) Exec() TcellEventReceiver {
 			updateView = false
 		case "save":
 			info, err = exec.Save(c.Args, tab, p.Config.TrimOnSave)
+		case "sel-count":
+			p.ShowInfo(fmt.Sprintf("%d", len(tab.Selections)))
+			return p.Window
 		case "sel-left":
 			err = exec.SelLeft(c.Args, tab)
 		case "sel-right":
