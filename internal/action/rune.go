@@ -8,18 +8,18 @@ type (
 	}
 
 	NewlineInsert struct {
-		Line *line.Line // Newly inserted line
-		Idx  int
+		Line    *line.Line // Newly inserted line
+		RuneIdx int
 	}
 
 	RuneDelete struct {
-		Line *line.Line
-		Idx  int
+		Line    *line.Line
+		RuneIdx int
 	}
 
 	RuneInsert struct {
-		Line *line.Line
-		Idx  int
+		Line    *line.Line
+		RuneIdx int
 	}
 )
 

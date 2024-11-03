@@ -96,7 +96,7 @@ func (tab *Tab) InsertRuneAtPosition(lineNum int, col int, r rune) error {
 
 	line.InsertRune(r, col)
 
-	act := &action.RuneInsert{Line: line, Idx: col}
+	act := &action.RuneInsert{Line: line, RuneIdx: col}
 	for _, c := range tab.Cursors {
 		c.Inform(act)
 	}

@@ -18,18 +18,18 @@ func (c *Cursor) informNewlineDelete(nd *action.NewlineDelete) {
 }
 
 func (c *Cursor) informNewlineInsert(ni *action.NewlineInsert) {
-	if c.Line != ni.Line.Prev || c.RuneIdx <= ni.Idx {
+	if c.Line != ni.Line.Prev || c.RuneIdx <= ni.RuneIdx {
 		return
 	}
 
 	c.Line = ni.Line
-	c.RuneIdx -= ni.Idx
+	c.RuneIdx -= ni.RuneIdx
 	c.Idx = c.RuneIdx
 }
 
 // informRuneDelete informs the cursor about single rune deletion from the line.
 func (c *Cursor) informRuneDelete(rd *action.RuneDelete) {
-	if rd.Line != c.Line || rd.Idx >= c.RuneIdx {
+	if rd.Line != c.Line || rd.RuneIdx >= c.RuneIdx {
 		return
 	}
 	c.RuneIdx--
@@ -38,7 +38,7 @@ func (c *Cursor) informRuneDelete(rd *action.RuneDelete) {
 
 // informRuneInsert informs the cursor about content insertion into the line.
 func (c *Cursor) informRuneInsert(ri *action.RuneInsert) {
-	if ri.Line != c.Line || ri.Idx > c.RuneIdx {
+	if ri.Line != c.Line || ri.RuneIdx > c.RuneIdx {
 		return
 	}
 	c.RuneIdx++
