@@ -5,6 +5,18 @@ import (
 	"github.com/m-kru/enix/internal/tab"
 )
 
+func SelLeft(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf(
+			"sel-left: provided %d args, expected 0", len(args),
+		)
+	}
+
+	tab.SelLeft()
+
+	return nil
+}
+
 func SelRight(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf(

@@ -4,6 +4,23 @@ import (
 	"github.com/m-kru/enix/internal/sel"
 )
 
+func (tab *Tab) SelLeft() {
+	if len(tab.Cursors) > 0 {
+		tab.selLeftCursors()
+	} else {
+		tab.selLeftSelections()
+	}
+}
+
+func (tab *Tab) selLeftCursors() {
+	tab.Selections = sel.FromCursorsLeft(tab.Cursors)
+	tab.Cursors = nil
+}
+
+func (tab *Tab) selLeftSelections() {
+	panic("unimplemented")
+}
+
 func (tab *Tab) SelRight() {
 	if len(tab.Cursors) > 0 {
 		tab.selRightCursors()

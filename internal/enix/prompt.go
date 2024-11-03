@@ -389,6 +389,10 @@ func (p *Prompt) Exec() TcellEventReceiver {
 			updateView = false
 		case "save":
 			info, err = exec.Save(c.Args, tab, p.Config.TrimOnSave)
+		case "sel-left":
+			err = exec.SelLeft(c.Args, tab)
+		case "sel-right":
+			err = exec.SelRight(c.Args, tab)
 		case "space":
 			err = exec.Space(c.Args, tab)
 		case "spawn-down":

@@ -179,6 +179,8 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			err = exec.Right(c.Args, tab)
 		case "save":
 			info, err = exec.Save(c.Args, tab, w.Config.TrimOnSave)
+		case "sel-left":
+			err = exec.SelLeft(c.Args, tab)
 		case "sel-right":
 			err = exec.SelRight(c.Args, tab)
 		case "space":
