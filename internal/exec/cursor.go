@@ -98,7 +98,11 @@ func End(args []string, tab *tab.Tab) error {
 	}
 
 	tab.Cursors = []*cursor.Cursor{
-		&cursor.Cursor{Config: tab.Config, Line: tab.Lines.Last()},
+		&cursor.Cursor{
+			Config:  tab.Config,
+			Line:    tab.Lines.Last(),
+			LineNum: tab.LineCount,
+		},
 	}
 
 	return nil

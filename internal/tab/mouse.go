@@ -25,6 +25,7 @@ func (tab *Tab) PrimaryClick(x, y int) {
 	c := cursor.Cursor{
 		Config:  tab.Config,
 		Line:    line,
+		LineNum: line.Num(),
 		Idx:     idx,
 		RuneIdx: idx,
 	}

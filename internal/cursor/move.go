@@ -24,12 +24,14 @@ func (c *Cursor) Down() {
 
 	c.RuneIdx = rIdx
 	c.Line = c.Line.Next
+	c.LineNum++
 }
 
 func (c *Cursor) Left() {
 	if c.RuneIdx == 0 {
 		if c.Line.Prev != nil {
 			c.Line = c.Line.Prev
+			c.LineNum--
 			c.RuneIdx = c.Line.RuneCount()
 		}
 	} else {
@@ -42,6 +44,7 @@ func (c *Cursor) Right() {
 	if c.RuneIdx == c.Line.RuneCount() {
 		if c.Line.Next != nil {
 			c.Line = c.Line.Next
+			c.LineNum++
 			c.RuneIdx = 0
 		}
 	} else {
@@ -69,6 +72,7 @@ func (c *Cursor) Up() {
 
 	c.RuneIdx = rIdx
 	c.Line = c.Line.Prev
+	c.LineNum--
 }
 
 func (c *Cursor) PrevWordStart() {

@@ -15,6 +15,7 @@ import (
 type Cursor struct {
 	Config  *cfg.Config
 	Line    *line.Line
+	LineNum int
 	Idx     int
 	RuneIdx int // Line rune index
 }
@@ -48,7 +49,7 @@ func (c *Cursor) GetWord() string {
 
 func (c *Cursor) View() view.View {
 	return view.View{
-		Line:   c.Line.Num(),
+		Line:   c.LineNum,
 		Column: c.Column(),
 		Width:  c.Width(),
 		Height: 1,

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/line"
 )
@@ -23,20 +22,6 @@ func (tab *Tab) HasCursorInLine(line *line.Line) bool {
 	}
 
 	return false
-}
-
-func (tab *Tab) IsCursorVisible(c *cursor.Cursor, line *line.Line, lineNum int) (bool, int) {
-	for i := 0; i < tab.View.Height; i++ {
-		if line == c.Line {
-			if tab.View.Column <= c.Column() && c.Column() <= tab.View.LastColumn() {
-				return true, lineNum + i
-			}
-			return false, 0
-		}
-		line = line.Next
-	}
-
-	return false, 0
 }
 
 func (tab *Tab) RenderStatusLine(frame frame.Frame) {
@@ -70,7 +55,7 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 
 	if len(tab.Cursors) > 0 {
 		b.WriteString(
-			fmt.Sprintf("%d:%d | ", tab.Cursors[0].Line.Num(), tab.Cursors[0].RuneIdx+1),
+			fmt.Sprintf("%d:%d | ", tab.Cursors[0].LineNum, tab.Cursors[0].RuneIdx+1),
 		)
 	}
 
@@ -162,7 +147,7 @@ func (tab *Tab) RenderLines(line *line.Line, lineNum int, frame frame.Frame) {
 	}
 }
 
-func (tab *Tab) RenderCursors(line *line.Line, lineNum int, frame frame.Frame) {
+func (tab *Tab) RenderCursors(frame frame.Frame) {
 	// This is required for view commands, as the primary cursors is rendered
 	// by the tcell all the time.
 	if tab.HasFocus {
@@ -170,8 +155,7 @@ func (tab *Tab) RenderCursors(line *line.Line, lineNum int, frame frame.Frame) {
 	}
 
 	for i, c := range tab.Cursors {
-		visible, cLineNum := tab.IsCursorVisible(c, line, lineNum)
-		if !visible {
+		if !tab.View.IsVisible(c.View()) {
 			continue
 		}
 
@@ -179,7 +163,7 @@ func (tab *Tab) RenderCursors(line *line.Line, lineNum int, frame frame.Frame) {
 		if tab.HasFocus && i == len(tab.Cursors)-1 {
 			primary = true
 		}
-		c.Render(tab.Colors, frame.Line(0, cLineNum-tab.View.Line), tab.View, primary)
+		c.Render(tab.Colors, frame.Line(0, c.LineNum-tab.View.Line), tab.View, primary)
 	}
 }
 
@@ -210,6 +194,6 @@ func (tab *Tab) Render(frame frame.Frame) {
 	linesFrame := frame.Column(lineNumWidth+1, frame.Width-lineNumWidth-1)
 	if linesFrame.Screen != nil {
 		tab.RenderLines(line, lineNum, linesFrame)
-		tab.RenderCursors(line, lineNum, linesFrame)
+		tab.RenderCursors(linesFrame)
 	}
 }

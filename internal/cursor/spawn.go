@@ -8,6 +8,7 @@ func (c *Cursor) SpawnDown() *Cursor {
 	nc := &Cursor{
 		Config:  c.Config,
 		Line:    c.Line.Next,
+		LineNum: c.LineNum + 1,
 		Idx:     c.Idx,
 		RuneIdx: c.RuneIdx,
 	}
@@ -27,6 +28,7 @@ func (c *Cursor) SpawnUp() *Cursor {
 	nc := &Cursor{
 		Config:  c.Config,
 		Line:    c.Line.Prev,
+		LineNum: c.LineNum - 1,
 		Idx:     c.Idx,
 		RuneIdx: c.RuneIdx,
 	}
