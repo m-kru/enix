@@ -3,8 +3,8 @@ package view
 type View struct {
 	Line   int // Start line number
 	Column int // Start column
-	Width  int
 	Height int
+	Width  int
 }
 
 func (v View) LastColumn() int {
@@ -23,6 +23,37 @@ func (v View) IsVisible(v2 View) bool {
 		return false
 	}
 	return true
+}
+
+// Intersection returns intersection of two views.
+// It is users responsibility to first check if two views
+// intersect using the IsVisible function.
+func (v View) Intersection(v2 View) View {
+	iv := View{}
+
+	if v.Line <= v2.Line {
+		iv.Line = v2.Line
+	} else {
+		iv.Line = v.Line
+	}
+	lastLine := v.LastLine()
+	if v.LastLine() > v2.LastLine() {
+		lastLine = v2.LastLine()
+	}
+	iv.Height = lastLine - iv.Line + 1
+
+	if v.Column <= v2.Column {
+		iv.Column = v2.Column
+	} else {
+		iv.Column = v.Column
+	}
+	lastCol := v.LastColumn()
+	if v.LastColumn() > v2.LastColumn() {
+		lastCol = v2.LastColumn()
+	}
+	iv.Width = lastCol - iv.Column + 1
+
+	return iv
 }
 
 // MinAdjust returns a new View with minimal adjustments so that inner view (iv) is visible.
