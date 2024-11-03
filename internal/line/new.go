@@ -9,14 +9,14 @@ import (
 // bufCap returns buffer capacity recommended for string of given byte length.
 func bufCap(startIdx, endIdx int) int {
 	diff := endIdx - startIdx
-	if diff < 64 {
-		return 64
+	if diff < 32 {
+		return 32
 	}
 	return util.NextPowerOfTwo(diff)
 }
 
 func Empty() *Line {
-	return &Line{Buf: make([]byte, 0, 64), Prev: nil, Next: nil}
+	return &Line{Buf: make([]byte, 0, 32), Prev: nil, Next: nil}
 }
 
 func FromString(str string) (*Line, int) {

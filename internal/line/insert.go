@@ -2,8 +2,6 @@ package line
 
 import (
 	"unicode/utf8"
-
-	"github.com/m-kru/enix/internal/util"
 )
 
 func (l *Line) InsertRune(r rune, runeIdx int) {
@@ -12,7 +10,7 @@ func (l *Line) InsertRune(r rune, runeIdx int) {
 	newLen := len(l.Buf) + runeLen
 
 	if newLen > cap(l.Buf) {
-		newBuf := make([]byte, newLen, util.NextPowerOfTwo(newLen))
+		newBuf := make([]byte, newLen, newLen+(newLen%8))
 		newBuf = append(newBuf, l.Buf...)
 		l.Buf = newBuf
 	}
@@ -50,7 +48,7 @@ func (l *Line) InsertString(s string, runeIdx int) {
 
 	newLen := len(l.Buf) + len(s)
 	if newLen > cap(l.Buf) {
-		newBuf := make([]byte, 0, util.NextPowerOfTwo(newLen))
+		newBuf := make([]byte, 0, newLen+(newLen%8))
 		newBuf = append(newBuf, l.Buf...)
 		l.Buf = newBuf
 	}
@@ -65,7 +63,7 @@ func (l *Line) InsertString(s string, runeIdx int) {
 func (l *Line) Append(b []byte) {
 	newLen := len(l.Buf) + len(b)
 	if newLen > cap(l.Buf) {
-		newBuf := make([]byte, 0, util.NextPowerOfTwo(newLen))
+		newBuf := make([]byte, 0, newLen+(newLen%8))
 		newBuf = append(newBuf, l.Buf...)
 		l.Buf = newBuf
 	}
