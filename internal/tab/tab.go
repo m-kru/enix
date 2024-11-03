@@ -127,7 +127,7 @@ func (tab *Tab) AddCursor(lineNum int, colIdx int) {
 		line = tab.Lines.Last()
 	}
 
-	runeIdx, _, ok := line.RuneIdx(colIdx, tab.Config.TabWidth)
+	runeIdx, _, ok := line.RuneIdx(colIdx)
 	if !ok {
 		runeIdx = line.RuneCount()
 	}
@@ -152,7 +152,7 @@ func (tab *Tab) LastColumnIdx() int {
 			break
 		}
 
-		cols := l.Columns(tab.Config.TabWidth)
+		cols := l.Columns()
 		if cols > idx {
 			idx = cols
 		}

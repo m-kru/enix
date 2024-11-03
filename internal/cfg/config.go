@@ -14,7 +14,6 @@ type Config struct {
 
 	// Whiespace
 	NewlineRune rune
-	TabWidth    int
 	TabRune     rune
 	TabPadRune  rune
 }
@@ -25,7 +24,6 @@ func ConfigDefault() Config {
 		TrimOnSave:   true,
 		SafeFileSave: true,
 		NewlineRune:  '¬',
-		TabWidth:     4,
 		TabRune:      '▸',
 		TabPadRune:   '·',
 	}

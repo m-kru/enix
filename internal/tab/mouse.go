@@ -17,14 +17,13 @@ func (tab *Tab) PrimaryClick(x, y int) {
 		line = tab.Lines.Last()
 	}
 
-	cfg := tab.Config
-	idx, _, ok := line.RuneIdx(tab.View.Column+x, cfg.TabWidth)
+	idx, _, ok := line.RuneIdx(tab.View.Column + x)
 	if !ok {
 		idx = line.RuneCount()
 	}
 
 	c := cursor.Cursor{
-		Config:  cfg,
+		Config:  tab.Config,
 		Line:    line,
 		Idx:     idx,
 		RuneIdx: idx,
@@ -47,12 +46,12 @@ func (tab *Tab) PrimaryClickCtrl(x, y int) {
 		line = tab.Lines.Last()
 	}
 
-	idx, _, ok := line.RuneIdx(tab.View.Column+x, tab.Config.TabWidth)
+	idx, _, ok := line.RuneIdx(tab.View.Column + x)
 	if !ok {
 		idx = line.RuneCount()
 	}
 
 	tab.AddCursor(
-		line.Num(), line.ColumnIdx(idx, tab.Config.TabWidth),
+		line.Num(), line.ColumnIdx(idx),
 	)
 }

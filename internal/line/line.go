@@ -58,7 +58,7 @@ func (l *Line) Num() int {
 // Columns returns number of columns required by the line.
 // It doesn't include the end of line character, as it is
 // not stored in the line buffer.
-func (l *Line) Columns(tabWidth int) int {
+func (l *Line) Columns() int {
 	cols := 0
 	bIdx := 0
 
@@ -70,7 +70,7 @@ func (l *Line) Columns(tabWidth int) int {
 		r, rLen := utf8.DecodeRune(l.Buf[bIdx:])
 
 		if r == '\t' {
-			cols += tabWidth
+			cols += 8
 		} else {
 			cols += runewidth.RuneWidth(r)
 		}
@@ -113,7 +113,7 @@ func (l *Line) Last() *Line {
 }
 
 // ColumnIdx returns first column index for provided rune index.
-func (l *Line) ColumnIdx(runeIdx int, tabWidth int) int {
+func (l *Line) ColumnIdx(runeIdx int) int {
 	if len(l.Buf) == 0 {
 		return 1
 	}
@@ -131,7 +131,7 @@ func (l *Line) ColumnIdx(runeIdx int, tabWidth int) int {
 		r, rLen := utf8.DecodeRune(l.Buf[bIdx:])
 
 		if r == '\t' {
-			cIdx += tabWidth - (cIdx % tabWidth)
+			cIdx += 8 - (cIdx % 8)
 		} else {
 			cIdx += runewidth.RuneWidth(r)
 		}
@@ -146,7 +146,7 @@ func (l *Line) ColumnIdx(runeIdx int, tabWidth int) int {
 // RuneIdx returns rune index for provided column index.
 // The second return is a rune subcolumn index.
 // The third return is false if column c does not exists in line.
-func (l *Line) RuneIdx(colIdx int, tabWidth int) (int, int, bool) {
+func (l *Line) RuneIdx(colIdx int) (int, int, bool) {
 	bIdx := 0
 	cIdx := 1
 	rIdx := 0
@@ -163,7 +163,7 @@ func (l *Line) RuneIdx(colIdx int, tabWidth int) (int, int, bool) {
 				return rIdx, 0, true
 			}
 
-			width := tabWidth - ((cIdx - 1) % tabWidth)
+			width := 8 - ((cIdx - 1) % 8)
 			if cIdx+width > colIdx {
 				return rIdx, colIdx - cIdx, true
 			}

@@ -18,7 +18,7 @@ func (l *Line) Render(
 ) []highlight.Highlight {
 	currentHl := 0
 	frameX := 0
-	runeIdx, runeSubcol, ok := l.RuneIdx(view.Column, cfg.TabWidth)
+	runeIdx, runeSubcol, ok := l.RuneIdx(view.Column)
 
 	var r rune
 
@@ -27,17 +27,13 @@ func (l *Line) Render(
 		if tabSubcol == 0 {
 			frame.SetContent(frameX, 0, cfg.TabRune, colors.Whitespace)
 			frameX++
-			colIdx = l.ColumnIdx(runeIdx, cfg.TabWidth) + 1
+			colIdx = l.ColumnIdx(runeIdx) + 1
 		} else {
-			colIdx = l.ColumnIdx(runeIdx, cfg.TabWidth) + tabSubcol
-		}
-
-		if cfg.TabWidth == 1 {
-			return
+			colIdx = l.ColumnIdx(runeIdx) + tabSubcol
 		}
 
 		for {
-			if colIdx%cfg.TabWidth == 1 || frameX >= frame.Width {
+			if colIdx%8 == 1 || frameX >= frame.Width {
 				break
 			}
 			frame.SetContent(frameX, 0, cfg.TabPadRune, colors.Whitespace)

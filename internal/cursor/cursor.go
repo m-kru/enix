@@ -21,7 +21,7 @@ type Cursor struct {
 
 // Column returns column number of the cursor within the string in the buffer.
 func (c *Cursor) Column() int {
-	return c.Line.ColumnIdx(c.RuneIdx, c.Config.TabWidth)
+	return c.Line.ColumnIdx(c.RuneIdx)
 }
 
 // Width returns width of the rune under the cursor.

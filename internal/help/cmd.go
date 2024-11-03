@@ -5,7 +5,6 @@ var Commands = map[string]string{
 	// Config
 
 	"config-dir": `config-dir  # Shows enix config home directory path.`,
-	"tab-width":  `tab-width N # Sets tab width to N.`,
 
 	// Command
 
