@@ -45,6 +45,32 @@ func (tab *Tab) Left() {
 	tab.Cursors = cursor.Prune(tab.Cursors)
 }
 
+func (tab *Tab) LineEnd() {
+	if len(tab.Cursors) == 0 {
+		tab.Cursors = sel.IntoCursors(tab.Selections)
+		tab.Selections = nil
+	}
+
+	for _, c := range tab.Cursors {
+		c.LineEnd()
+	}
+
+	tab.Cursors = cursor.Prune(tab.Cursors)
+}
+
+func (tab *Tab) LineStart() {
+	if len(tab.Cursors) == 0 {
+		tab.Cursors = sel.IntoCursors(tab.Selections)
+		tab.Selections = nil
+	}
+
+	for _, c := range tab.Cursors {
+		c.LineStart()
+	}
+
+	tab.Cursors = cursor.Prune(tab.Cursors)
+}
+
 func (tab *Tab) PrevWordStart() {
 	if len(tab.Cursors) == 0 {
 		tab.Cursors = sel.IntoCursors(tab.Selections)

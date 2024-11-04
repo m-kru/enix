@@ -267,15 +267,7 @@ func LineStart(args []string, tab *tab.Tab) error {
 		)
 	}
 
-	return lineStart(tab)
-}
-
-func lineStart(tab *tab.Tab) error {
-	for _, c := range tab.Cursors {
-		c.LineStart()
-	}
-
-	tab.Cursors = cursor.Prune(tab.Cursors)
+	tab.LineStart()
 
 	return nil
 }
@@ -287,15 +279,7 @@ func LineEnd(args []string, tab *tab.Tab) error {
 		)
 	}
 
-	return lineEnd(tab)
-}
-
-func lineEnd(tab *tab.Tab) error {
-	for _, c := range tab.Cursors {
-		c.LineEnd()
-	}
-
-	tab.Cursors = cursor.Prune(tab.Cursors)
+	tab.LineEnd()
 
 	return nil
 }
