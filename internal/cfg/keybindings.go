@@ -46,7 +46,7 @@ func KeybindingsDefault() Keybindings {
 		"Ctrl+J":  "spawn-down",
 		"Ctrl+K":  "spawn-up",
 		"Rune[a]": "line-start",
-		"Rune[$]": "line-end",
+		"Rune[;]": "line-end",
 		// Deletion
 		"Backspace":  "backspace",
 		"Backspace2": "backspace",
