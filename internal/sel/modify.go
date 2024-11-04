@@ -57,6 +57,16 @@ func (s *Selection) Right() {
 }
 
 func (s *Selection) rightCursorOnLeft() {
+	if s.StartRuneIdx < s.Line.RuneCount() {
+		if s.StartRuneIdx < s.EndRuneIdx {
+			s.StartRuneIdx++
+			s.CursorIdx++
+		} else {
+			s.EndRuneIdx++
+			s.CursorIdx++
+		}
+		return
+	}
 	panic("unimplemented")
 }
 
