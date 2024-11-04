@@ -36,6 +36,15 @@ func (s *Selection) leftCursorOnLeft() *Selection {
 }
 
 func (s *Selection) leftCursorOnRight() *Selection {
+	first := s
+
+	s.Last()
+	if s.EndRuneIdx > 0 {
+		s.EndRuneIdx--
+		s.CursorIdx--
+		return first
+	}
+
 	panic("unimplemented")
 }
 
