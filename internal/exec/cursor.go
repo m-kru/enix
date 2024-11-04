@@ -65,12 +65,7 @@ func End(args []string, tab *tab.Tab) error {
 		)
 	}
 
-	tab.Cursors = []*cursor.Cursor{
-		&cursor.Cursor{
-			Line:    tab.Lines.Last(),
-			LineNum: tab.LineCount,
-		},
-	}
+	tab.End()
 
 	return nil
 }
@@ -172,15 +167,7 @@ func PrevWordStart(args []string, tab *tab.Tab) error {
 		)
 	}
 
-	return prevWordStart(tab)
-}
-
-func prevWordStart(tab *tab.Tab) error {
-	for _, c := range tab.Cursors {
-		c.PrevWordStart()
-	}
-
-	tab.Cursors = cursor.Prune(tab.Cursors)
+	tab.PrevWordStart()
 
 	return nil
 }
@@ -192,15 +179,7 @@ func WordEnd(args []string, tab *tab.Tab) error {
 		)
 	}
 
-	return wordEnd(tab)
-}
-
-func wordEnd(tab *tab.Tab) error {
-	for _, c := range tab.Cursors {
-		c.WordEnd()
-	}
-
-	tab.Cursors = cursor.Prune(tab.Cursors)
+	tab.WordEnd()
 
 	return nil
 }
@@ -212,15 +191,7 @@ func WordStart(args []string, tab *tab.Tab) error {
 		)
 	}
 
-	return wordStart(tab)
-}
-
-func wordStart(tab *tab.Tab) error {
-	for _, c := range tab.Cursors {
-		c.WordStart()
-	}
-
-	tab.Cursors = cursor.Prune(tab.Cursors)
+	tab.WordStart()
 
 	return nil
 }
