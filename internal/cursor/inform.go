@@ -8,6 +8,10 @@ import (
 // If cursor was pointing the the joined line, then the
 // cursor Line pointer is set to point to the previous line.
 func (c *Cursor) informNewlineDelete(nd *action.NewlineDelete) {
+	if nd.LineNum < c.LineNum {
+		c.LineNum--
+	}
+
 	if c.Line != nd.Line {
 		return
 	}
@@ -18,6 +22,10 @@ func (c *Cursor) informNewlineDelete(nd *action.NewlineDelete) {
 }
 
 func (c *Cursor) informNewlineInsert(ni *action.NewlineInsert) {
+	if (ni.LineNum < c.LineNum) || (ni.LineNum == c.LineNum && ni.RuneIdx < c.RuneIdx) {
+		c.LineNum++
+	}
+
 	if c.Line != ni.Line.Prev || c.RuneIdx <= ni.RuneIdx {
 		return
 	}

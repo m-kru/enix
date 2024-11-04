@@ -11,7 +11,7 @@ func (c *Cursor) Delete() action.Action {
 			return nil
 		}
 
-		return &action.NewlineDelete{Line: delLine}
+		return &action.NewlineDelete{Line: delLine, LineNum: c.LineNum}
 	}
 
 	c.Line.DeleteRune(c.RuneIdx)
@@ -24,7 +24,7 @@ func (c *Cursor) Join() action.Action {
 		return nil
 	}
 
-	return &action.NewlineDelete{Line: delLine}
+	return &action.NewlineDelete{Line: delLine, LineNum: c.LineNum}
 }
 
 func (c *Cursor) Backspace() action.Action {
@@ -41,7 +41,7 @@ func (c *Cursor) Backspace() action.Action {
 			c.RuneIdx += prevLineLen
 			c.Idx = c.RuneIdx
 
-			return &action.NewlineDelete{Line: delLine}
+			return &action.NewlineDelete{Line: delLine, LineNum: c.LineNum}
 		}
 	}
 
