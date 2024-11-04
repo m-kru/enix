@@ -10,6 +10,8 @@ import (
 	"github.com/m-kru/enix/internal/arg"
 
 	homedir "github.com/mitchellh/go-homedir"
+
+	"github.com/mattn/go-runewidth"
 )
 
 func init() {
@@ -73,6 +75,14 @@ func configFromFile(path string) (Config, error) {
 	if err != nil {
 		return config, fmt.Errorf(
 			"reading config from file %s: %v", path, err,
+		)
+	}
+
+	rw := runewidth.RuneWidth(config.NewlineRune)
+	if rw != 1 {
+		return config, fmt.Errorf(
+			"reading config from file %s, width of newline rune must equal 1, width of '%c' equals %d",
+			path, config.NewlineRune, rw,
 		)
 	}
 
