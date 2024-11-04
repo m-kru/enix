@@ -27,7 +27,35 @@ func fromCursorLeft(c *cursor.Cursor) *Selection {
 		}
 	}
 
-	panic("unimplemented")
+	if c.Line.Prev == nil {
+		return &Selection{
+			Line:         c.Line,
+			LineNum:      c.LineNum,
+			StartRuneIdx: 0,
+			EndRuneIdx:   0,
+			CursorIdx:    0,
+		}
+	}
+
+	first := &Selection{
+		Line:         c.Line.Prev,
+		LineNum:      c.LineNum - 1,
+		StartRuneIdx: c.Line.Prev.RuneCount(),
+		EndRuneIdx:   c.Line.Prev.RuneCount(),
+		CursorIdx:    c.Line.Prev.RuneCount(),
+	}
+	second := &Selection{
+		Line:         c.Line,
+		LineNum:      c.LineNum,
+		StartRuneIdx: 0,
+		EndRuneIdx:   0,
+		CursorIdx:    -1,
+	}
+
+	first.Next = second
+	second.Prev = first
+
+	return first
 }
 
 func FromCursorsRight(curs []*cursor.Cursor) []*Selection {

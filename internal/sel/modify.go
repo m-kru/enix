@@ -45,7 +45,14 @@ func (s *Selection) leftCursorOnRight() *Selection {
 		return first
 	}
 
-	panic("unimplemented")
+	if s.Prev != nil {
+		s = s.Prev
+		s.Next = nil
+		s.CursorIdx = s.EndRuneIdx
+		return first
+	}
+
+	return first
 }
 
 func (s *Selection) Right() *Selection {
