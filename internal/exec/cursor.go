@@ -17,17 +17,9 @@ func Down(args []string, tab *tab.Tab) error {
 		)
 	}
 
-	down(tab)
+	tab.Down()
 
 	return nil
-}
-
-func down(tab *tab.Tab) {
-	for _, c := range tab.Cursors {
-		c.Down()
-	}
-
-	tab.Cursors = cursor.Prune(tab.Cursors)
 }
 
 func Left(args []string, tab *tab.Tab) error {
@@ -37,17 +29,9 @@ func Left(args []string, tab *tab.Tab) error {
 		)
 	}
 
-	left(tab)
+	tab.Left()
 
 	return nil
-}
-
-func left(tab *tab.Tab) {
-	for _, c := range tab.Cursors {
-		c.Left()
-	}
-
-	tab.Cursors = cursor.Prune(tab.Cursors)
 }
 
 func Right(args []string, tab *tab.Tab) error {
@@ -57,17 +41,9 @@ func Right(args []string, tab *tab.Tab) error {
 		)
 	}
 
-	right(tab)
+	tab.Right()
 
 	return nil
-}
-
-func right(tab *tab.Tab) {
-	for _, c := range tab.Cursors {
-		c.Right()
-	}
-
-	tab.Cursors = cursor.Prune(tab.Cursors)
 }
 
 func Up(args []string, tab *tab.Tab) error {
@@ -77,17 +53,9 @@ func Up(args []string, tab *tab.Tab) error {
 		)
 	}
 
-	up(tab)
+	tab.Up()
 
 	return nil
-}
-
-func up(tab *tab.Tab) {
-	for _, c := range tab.Cursors {
-		c.Up()
-	}
-
-	tab.Cursors = cursor.Prune(tab.Cursors)
 }
 
 func End(args []string, tab *tab.Tab) error {
