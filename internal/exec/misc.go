@@ -12,18 +12,7 @@ func Esc(args []string, tab *tab.Tab) error {
 		)
 	}
 
-	return esc(tab)
-}
-
-func esc(tab *tab.Tab) error {
-	if tab.RepCount != 0 {
-		tab.RepCount = 0
-		return nil
-	}
-
-	if len(tab.Cursors) > 1 {
-		tab.Cursors = tab.Cursors[len(tab.Cursors)-1:]
-	}
+	tab.Esc()
 
 	return nil
 }
@@ -59,5 +48,5 @@ func KeyName(args []string, tab *tab.Tab) (string, error) {
 		)
 	}
 
-	return "insert a single key or key combo", esc(tab)
+	return "insert a single key or key combo", nil
 }

@@ -99,7 +99,6 @@ func End(args []string, tab *tab.Tab) error {
 
 	tab.Cursors = []*cursor.Cursor{
 		&cursor.Cursor{
-			Config:  tab.Config,
 			Line:    tab.Lines.Last(),
 			LineNum: tab.LineCount,
 		},
@@ -174,7 +173,6 @@ func goCmd(lineNum, col int, tab *tab.Tab) {
 
 	tab.Cursors = []*cursor.Cursor{
 		&cursor.Cursor{
-			Config:  tab.Config,
 			Line:    line,
 			LineNum: lineNum,
 			RuneIdx: col - 1,

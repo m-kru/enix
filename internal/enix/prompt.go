@@ -96,7 +96,6 @@ func (p *Prompt) Activate(text, shadowText string) {
 	p.Line, _ = line.FromString(text)
 
 	p.Cursor = &cursor.Cursor{
-		Config:  p.Config,
 		Line:    p.Line,
 		Idx:     len(text),
 		RuneIdx: len(text),

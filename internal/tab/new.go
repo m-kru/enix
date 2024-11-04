@@ -28,7 +28,7 @@ func Empty(config *cfg.Config, colors *cfg.Colorscheme, keys *cfg.Keybindings) *
 		View:       view.View{Line: 1, Column: 1},
 	}
 
-	c := &cursor.Cursor{Config: config, Line: tab.Lines, LineNum: 1}
+	c := &cursor.Cursor{Line: tab.Lines, LineNum: 1}
 	tab.Cursors = make([]*cursor.Cursor, 1, 16)
 	tab.Cursors[0] = c
 
@@ -80,7 +80,7 @@ func Open(
 	}
 
 	// Cursor initialization
-	c := &cursor.Cursor{Config: config, Line: tab.Lines, LineNum: 1}
+	c := &cursor.Cursor{Line: tab.Lines, LineNum: 1}
 	tab.Cursors = make([]*cursor.Cursor, 1, 16)
 	tab.Cursors[0] = c
 
@@ -113,7 +113,7 @@ func FromString(
 
 	tab.Lines, tab.LineCount = line.FromString(str)
 
-	c := &cursor.Cursor{Config: config, Line: tab.Lines, LineNum: 1}
+	c := &cursor.Cursor{Line: tab.Lines, LineNum: 1}
 	tab.Cursors = make([]*cursor.Cursor, 1, 16)
 	tab.Cursors[0] = c
 

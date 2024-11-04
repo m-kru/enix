@@ -2,7 +2,6 @@ package cursor
 
 import (
 	"github.com/m-kru/enix/internal/action"
-	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/util"
 	"github.com/m-kru/enix/internal/view"
@@ -13,7 +12,6 @@ import (
 // Cursors must be stored in order. Thanks to this, only next cursors must be
 // informed about line changes.
 type Cursor struct {
-	Config  *cfg.Config
 	Line    *line.Line
 	LineNum int
 	Idx     int
@@ -28,11 +26,7 @@ func (c *Cursor) Column() int {
 // Width returns width of the rune under the cursor.
 func (c *Cursor) Width() int {
 	if c.RuneIdx == c.Line.RuneCount() {
-		rw := runewidth.RuneWidth(c.Config.NewlineRune)
-		if rw == 0 {
-			return 1
-		}
-		return rw
+		return 1
 	}
 
 	r := c.Line.Rune(c.RuneIdx)
