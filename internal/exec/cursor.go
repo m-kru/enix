@@ -203,27 +203,7 @@ func SpawnDown(args []string, tab *tab.Tab) error {
 		)
 	}
 
-	return spawnDown(tab)
-}
-
-func spawnDown(tab *tab.Tab) error {
-	newCurs := make([]*cursor.Cursor, 0, len(tab.Cursors))
-
-	for _, c := range tab.Cursors {
-		nc := c.SpawnDown()
-
-		if nc == nil {
-			continue
-		}
-
-		newCurs = append(newCurs, nc)
-	}
-
-	if len(newCurs) > 0 {
-		tab.Cursors = append(tab.Cursors, newCurs...)
-	}
-
-	tab.Cursors = cursor.Prune(tab.Cursors)
+	tab.SpawnDown()
 
 	return nil
 }
@@ -235,27 +215,7 @@ func SpawnUp(args []string, tab *tab.Tab) error {
 		)
 	}
 
-	return spawnUp(tab)
-}
-
-func spawnUp(tab *tab.Tab) error {
-	newCurs := make([]*cursor.Cursor, 0, len(tab.Cursors))
-
-	for _, c := range tab.Cursors {
-		nc := c.SpawnUp()
-
-		if nc == nil {
-			continue
-		}
-
-		newCurs = append(newCurs, nc)
-	}
-
-	if len(newCurs) > 0 {
-		tab.Cursors = append(tab.Cursors, newCurs...)
-	}
-
-	tab.Cursors = cursor.Prune(tab.Cursors)
+	tab.SpawnUp()
 
 	return nil
 }

@@ -97,6 +97,56 @@ func (tab *Tab) Right() {
 	tab.Cursors = cursor.Prune(tab.Cursors)
 }
 
+func (tab *Tab) SpawnDown() {
+	if len(tab.Cursors) == 0 {
+		tab.Cursors = sel.IntoCursors(tab.Selections)
+		tab.Selections = nil
+	}
+
+	newCurs := make([]*cursor.Cursor, 0, len(tab.Cursors))
+
+	for _, c := range tab.Cursors {
+		nc := c.SpawnDown()
+
+		if nc == nil {
+			continue
+		}
+
+		newCurs = append(newCurs, nc)
+	}
+
+	if len(newCurs) > 0 {
+		tab.Cursors = append(tab.Cursors, newCurs...)
+	}
+
+	tab.Cursors = cursor.Prune(tab.Cursors)
+}
+
+func (tab *Tab) SpawnUp() {
+	if len(tab.Cursors) == 0 {
+		tab.Cursors = sel.IntoCursors(tab.Selections)
+		tab.Selections = nil
+	}
+
+	newCurs := make([]*cursor.Cursor, 0, len(tab.Cursors))
+
+	for _, c := range tab.Cursors {
+		nc := c.SpawnUp()
+
+		if nc == nil {
+			continue
+		}
+
+		newCurs = append(newCurs, nc)
+	}
+
+	if len(newCurs) > 0 {
+		tab.Cursors = append(tab.Cursors, newCurs...)
+	}
+
+	tab.Cursors = cursor.Prune(tab.Cursors)
+}
+
 func (tab *Tab) Up() {
 	if len(tab.Cursors) == 0 {
 		tab.Cursors = sel.IntoCursors(tab.Selections)
