@@ -7,6 +7,7 @@ import (
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/line"
+	"github.com/m-kru/enix/internal/sel"
 	"github.com/m-kru/enix/internal/view"
 )
 
@@ -77,11 +78,14 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 	}
 	stateEndIdx := b.Len()
 
+	var c *cursor.Cursor
 	if len(tab.Cursors) > 0 {
-		b.WriteString(
-			fmt.Sprintf("%d:%d | ", tab.Cursors[0].LineNum, tab.Cursors[0].RuneIdx+1),
-		)
+		c = tab.Cursors[len(tab.Cursors)-1]
+	} else {
+		c = sel.IntoCursor(tab.Selections[len(tab.Selections)-1])
+		b.WriteString("sel ")
 	}
+	b.WriteString(fmt.Sprintf("%d:%d | ", c.LineNum, c.RuneIdx+1))
 
 	b.WriteString(fmt.Sprintf("%s ", tab.FileType))
 	statusStr := b.String()
