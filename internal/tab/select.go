@@ -39,8 +39,8 @@ func (tab *Tab) selRightCursors() {
 }
 
 func (tab *Tab) selRightSelections() {
-	for _, s := range tab.Selections {
-		s.Right()
+	for i, s := range tab.Selections {
+		tab.Selections[i] = s.Right()
 	}
 
 	// TODO: Prune selections here

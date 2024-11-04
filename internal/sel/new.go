@@ -51,7 +51,33 @@ func fromCursorRight(c *cursor.Cursor) *Selection {
 		}
 	}
 
-	// TODO: Prune selections
+	if c.Line.Next == nil {
+		return &Selection{
+			Line:         c.Line,
+			LineNum:      c.LineNum,
+			StartRuneIdx: c.RuneIdx,
+			EndRuneIdx:   c.RuneIdx,
+			CursorIdx:    c.RuneIdx,
+		}
+	}
 
-	panic("unimplemented")
+	first := &Selection{
+		Line:         c.Line,
+		LineNum:      c.LineNum,
+		StartRuneIdx: c.RuneIdx,
+		EndRuneIdx:   c.RuneIdx,
+		CursorIdx:    -1,
+	}
+	second := &Selection{
+		Line:         c.Line.Next,
+		LineNum:      c.LineNum + 1,
+		StartRuneIdx: 0,
+		EndRuneIdx:   0,
+		CursorIdx:    0,
+	}
+
+	first.Next = second
+	second.Prev = first
+
+	return first
 }
