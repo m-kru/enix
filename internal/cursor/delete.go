@@ -38,6 +38,7 @@ func (c *Cursor) Backspace() action.Action {
 			delLine := c.Line.Join(false)
 			// delLine is for sure not nil here so do not check for nil.
 
+			c.LineNum--
 			c.RuneIdx += prevLineLen
 			c.Idx = c.RuneIdx
 
