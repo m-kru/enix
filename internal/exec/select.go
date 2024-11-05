@@ -5,6 +5,18 @@ import (
 	"github.com/m-kru/enix/internal/tab"
 )
 
+func SelDown(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf(
+			"sel-down: provided %d args, expected 0", len(args),
+		)
+	}
+
+	tab.SelDown()
+
+	return nil
+}
+
 func SelLeft(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf(

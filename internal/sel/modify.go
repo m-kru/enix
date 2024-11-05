@@ -1,5 +1,50 @@
 package sel
 
+func (s *Selection) Down() *Selection {
+	if s.CursorOnLeft() {
+		return s.downCursorOnLeft()
+	} else {
+		return s.downCursorOnRight()
+	}
+}
+
+func (s *Selection) downCursorOnLeft() *Selection {
+	panic("unimplemented")
+}
+
+func (s *Selection) downCursorOnRight() *Selection {
+	first := s
+	s = s.Last()
+
+	if s.EndRuneIdx < s.Line.RuneCount() {
+		s.EndRuneIdx = s.Line.RuneCount()
+		s.CursorIdx = s.Line.RuneCount()
+	}
+
+	if s.Line.Next == nil {
+		return first
+	}
+
+	cIdx := s.CursorIdx
+	s.CursorIdx = -1
+	if cIdx > s.Line.Next.RuneCount() {
+		cIdx = s.Line.Next.RuneCount()
+	}
+
+	newS := &Selection{
+		Line:         s.Line.Next,
+		LineNum:      s.LineNum + 1,
+		StartRuneIdx: 0,
+		EndRuneIdx:   cIdx,
+		CursorIdx:    cIdx,
+	}
+
+	s.Next = newS
+	newS.Prev = s
+
+	return first
+}
+
 func (s *Selection) Left() *Selection {
 	if s.CursorOnLeft() {
 		return s.leftCursorOnLeft()

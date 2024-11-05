@@ -391,6 +391,8 @@ func (p *Prompt) Exec() TcellEventReceiver {
 		case "sel-count":
 			p.ShowInfo(fmt.Sprintf("%d", len(tab.Selections)))
 			return p.Window
+		case "sel-down":
+			err = exec.SelDown(c.Args, tab)
 		case "sel-left":
 			err = exec.SelLeft(c.Args, tab)
 		case "sel-right":

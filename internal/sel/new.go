@@ -4,6 +4,51 @@ import (
 	"github.com/m-kru/enix/internal/cursor"
 )
 
+func FromCursorsDown(curs []*cursor.Cursor) []*Selection {
+	sels := make([]*Selection, 0, len(curs))
+
+	for _, c := range curs {
+		sels = append(sels, fromCursorDown(c))
+	}
+
+	// TODO: Prune selections
+
+	return sels
+}
+
+func fromCursorDown(c *cursor.Cursor) *Selection {
+	first := &Selection{
+		Line:         c.Line,
+		LineNum:      c.LineNum,
+		StartRuneIdx: c.RuneIdx,
+		EndRuneIdx:   c.Line.RuneCount(),
+		CursorIdx:    -1,
+	}
+
+	if c.Line.Next == nil {
+		first.CursorIdx = c.Line.RuneCount()
+		return first
+	}
+
+	cIdx := c.RuneIdx
+	if c.Line.Next.RuneCount() < cIdx {
+		cIdx = c.Line.Next.RuneCount()
+	}
+
+	second := &Selection{
+		Line:         c.Line.Next,
+		LineNum:      c.LineNum + 1,
+		StartRuneIdx: 0,
+		EndRuneIdx:   cIdx,
+		CursorIdx:    cIdx,
+	}
+
+	first.Next = second
+	second.Prev = first
+
+	return first
+}
+
 func FromCursorsLeft(curs []*cursor.Cursor) []*Selection {
 	sels := make([]*Selection, 0, len(curs))
 

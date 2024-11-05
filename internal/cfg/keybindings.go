@@ -79,6 +79,7 @@ func KeybindingsDefault() Keybindings {
 		"Rune[ ]": "space",
 		"Tab":     "tab",
 		// Selection
+		"Rune[J]": "sel-down",
 		"Rune[H]": "sel-left",
 		"Rune[L]": "sel-right",
 		// View
