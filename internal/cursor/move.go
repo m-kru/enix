@@ -10,21 +10,15 @@ func (c *Cursor) Down() {
 		return
 	}
 
-	rIdx := c.RuneIdx
-	nextLen := c.Line.Next.RuneCount()
-	if c.ColIdx != rIdx {
-		if c.ColIdx <= nextLen {
-			rIdx = c.ColIdx
-		} else {
-			rIdx = nextLen
-		}
-	} else if rIdx > nextLen {
-		rIdx = nextLen
-	}
-
-	c.RuneIdx = rIdx
 	c.Line = c.Line.Next
 	c.LineNum++
+	rIdx, _, ok := c.Line.RuneIdx(c.ColIdx)
+	if ok {
+		c.RuneIdx = rIdx
+		return
+	}
+
+	c.RuneIdx = c.Line.RuneCount()
 }
 
 func (c *Cursor) Left() {
@@ -58,21 +52,15 @@ func (c *Cursor) Up() {
 		return
 	}
 
-	rIdx := c.RuneIdx
-	prevLen := c.Line.Prev.RuneCount()
-	if c.ColIdx != rIdx {
-		if c.ColIdx <= prevLen {
-			rIdx = c.ColIdx
-		} else {
-			rIdx = prevLen
-		}
-	} else if rIdx > prevLen {
-		rIdx = prevLen
-	}
-
-	c.RuneIdx = rIdx
 	c.Line = c.Line.Prev
 	c.LineNum--
+	rIdx, _, ok := c.Line.RuneIdx(c.ColIdx)
+	if ok {
+		c.RuneIdx = rIdx
+		return
+	}
+
+	c.RuneIdx = c.Line.RuneCount()
 }
 
 func (c *Cursor) PrevWordStart() {
@@ -93,7 +81,7 @@ func (c *Cursor) PrevWordStart() {
 			c.Line = line
 			c.LineNum = lineNum
 			c.RuneIdx = idx
-			c.ColIdx = c.RuneIdx
+			c.ColIdx = c.Line.ColumnIdx(c.RuneIdx)
 			return
 		}
 
@@ -104,7 +92,7 @@ func (c *Cursor) PrevWordStart() {
 func (c *Cursor) WordEnd() {
 	if idx, ok := util.WordEnd([]rune(c.Line.String()), c.RuneIdx); ok {
 		c.RuneIdx = idx + 1 // + 1 as we have found word end index.
-		c.ColIdx = c.RuneIdx
+		c.ColIdx = c.Line.ColumnIdx(c.RuneIdx)
 		return
 	}
 
@@ -120,7 +108,7 @@ func (c *Cursor) WordEnd() {
 			c.Line = line
 			c.LineNum = lineNum
 			c.RuneIdx = idx + 1
-			c.ColIdx = c.RuneIdx
+			c.ColIdx = c.Line.ColumnIdx(c.RuneIdx)
 			return
 		}
 
@@ -131,7 +119,7 @@ func (c *Cursor) WordEnd() {
 func (c *Cursor) WordStart() {
 	if idx, ok := util.WordStart([]rune(c.Line.String()), c.RuneIdx); ok {
 		c.RuneIdx = idx
-		c.ColIdx = c.RuneIdx
+		c.ColIdx = c.Line.ColumnIdx(c.RuneIdx)
 		return
 	}
 
@@ -147,7 +135,7 @@ func (c *Cursor) WordStart() {
 			c.Line = line
 			c.LineNum = lineNum
 			c.RuneIdx = idx
-			c.ColIdx = c.RuneIdx
+			c.ColIdx = c.Line.ColumnIdx(c.RuneIdx)
 			return
 		}
 
@@ -163,12 +151,12 @@ func (c *Cursor) LineStart() {
 			} else {
 				c.RuneIdx = i
 			}
-			c.ColIdx = c.RuneIdx
+			c.ColIdx = c.Line.ColumnIdx(c.RuneIdx)
 			return
 		}
 	}
 	c.RuneIdx = 0
-	c.ColIdx = c.RuneIdx
+	c.ColIdx = c.Line.ColumnIdx(c.RuneIdx)
 }
 
 func (c *Cursor) LineEnd() {
@@ -180,10 +168,10 @@ func (c *Cursor) LineEnd() {
 			} else {
 				c.RuneIdx = i
 			}
-			c.ColIdx = c.RuneIdx
+			c.ColIdx = c.Line.ColumnIdx(c.RuneIdx)
 			return
 		}
 	}
 	c.RuneIdx = c.Line.RuneCount()
-	c.ColIdx = c.RuneIdx
+	c.ColIdx = c.Line.ColumnIdx(c.RuneIdx)
 }

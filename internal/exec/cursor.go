@@ -130,16 +130,20 @@ func goCmd(lineNum, col int, tab *tab.Tab) {
 	}
 
 	line := tab.Lines.Get(lineNum)
-	if col > line.RuneCount()+1 {
-		col = line.RuneCount() + 1
+	if col > line.Columns()+1 {
+		col = line.Columns() + 1
 	}
 
+	rIdx, _, ok := line.RuneIdx(col)
+	if !ok {
+		rIdx = line.RuneCount()
+	}
 	tab.Cursors = []*cursor.Cursor{
 		&cursor.Cursor{
 			Line:    line,
 			LineNum: lineNum,
-			RuneIdx: col - 1,
-			ColIdx:  col - 1,
+			RuneIdx: rIdx,
+			ColIdx:  col,
 		},
 	}
 }

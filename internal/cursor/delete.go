@@ -40,7 +40,7 @@ func (c *Cursor) Backspace() action.Action {
 
 			c.LineNum--
 			c.RuneIdx += prevLineLen
-			c.ColIdx = c.RuneIdx
+			c.ColIdx = c.Line.ColumnIdx(c.RuneIdx)
 
 			return &action.NewlineDelete{Line: delLine, LineNum: c.LineNum}
 		}
