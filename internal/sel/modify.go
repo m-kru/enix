@@ -23,6 +23,8 @@ func (s *Selection) downCursorOnRight() *Selection {
 		return first
 	}
 
+	s.EndRuneIdx = s.Line.RuneCount()
+
 	newS := &Selection{
 		Line:         c.Line,
 		LineNum:      c.LineNum,
