@@ -37,7 +37,7 @@ func (c *Cursor) Left() {
 	} else {
 		c.RuneIdx--
 	}
-	c.ColIdx = c.RuneIdx
+	c.ColIdx = c.Line.ColumnIdx(c.RuneIdx)
 }
 
 func (c *Cursor) Right() {
@@ -50,7 +50,7 @@ func (c *Cursor) Right() {
 	} else {
 		c.RuneIdx++
 	}
-	c.ColIdx = c.RuneIdx
+	c.ColIdx = c.Line.ColumnIdx(c.RuneIdx)
 }
 
 func (c *Cursor) Up() {
