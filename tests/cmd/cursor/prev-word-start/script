@@ -1,0 +1,4 @@
+go 100:100
+4 prev-word-start
+rune x
+save got
