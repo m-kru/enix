@@ -17,30 +17,31 @@ func FromCursorsDown(curs []*cursor.Cursor) []*Selection {
 }
 
 func fromCursorDown(c *cursor.Cursor) *Selection {
+	if c.Line.Next == nil {
+		return &Selection{
+			Line:         c.Line,
+			LineNum:      c.LineNum,
+			StartRuneIdx: c.RuneIdx,
+			EndRuneIdx:   c.RuneIdx,
+			Cursor:       c,
+		}
+	}
+
 	first := &Selection{
 		Line:         c.Line,
 		LineNum:      c.LineNum,
 		StartRuneIdx: c.RuneIdx,
 		EndRuneIdx:   c.Line.RuneCount(),
-		CursorIdx:    -1,
+		Cursor:       nil,
 	}
 
-	if c.Line.Next == nil {
-		first.CursorIdx = c.Line.RuneCount()
-		return first
-	}
-
-	cIdx := c.RuneIdx
-	if c.Line.Next.RuneCount() < cIdx {
-		cIdx = c.Line.Next.RuneCount()
-	}
-
+	c.Down()
 	second := &Selection{
-		Line:         c.Line.Next,
-		LineNum:      c.LineNum + 1,
+		Line:         c.Line,
+		LineNum:      c.LineNum,
 		StartRuneIdx: 0,
-		EndRuneIdx:   cIdx,
-		CursorIdx:    cIdx,
+		EndRuneIdx:   c.RuneIdx,
+		Cursor:       c,
 	}
 
 	first.Next = second
@@ -63,12 +64,13 @@ func FromCursorsLeft(curs []*cursor.Cursor) []*Selection {
 
 func fromCursorLeft(c *cursor.Cursor) *Selection {
 	if c.RuneIdx > 0 {
+		c.Left()
 		return &Selection{
 			Line:         c.Line,
 			LineNum:      c.LineNum,
-			StartRuneIdx: c.RuneIdx - 1,
-			EndRuneIdx:   c.RuneIdx,
-			CursorIdx:    c.RuneIdx - 1,
+			StartRuneIdx: c.RuneIdx,
+			EndRuneIdx:   c.RuneIdx + 1,
+			Cursor:       c,
 		}
 	}
 
@@ -78,23 +80,24 @@ func fromCursorLeft(c *cursor.Cursor) *Selection {
 			LineNum:      c.LineNum,
 			StartRuneIdx: 0,
 			EndRuneIdx:   0,
-			CursorIdx:    0,
+			Cursor:       c,
 		}
 	}
 
+	c.Left()
 	first := &Selection{
-		Line:         c.Line.Prev,
-		LineNum:      c.LineNum - 1,
-		StartRuneIdx: c.Line.Prev.RuneCount(),
-		EndRuneIdx:   c.Line.Prev.RuneCount(),
-		CursorIdx:    c.Line.Prev.RuneCount(),
-	}
-	second := &Selection{
 		Line:         c.Line,
 		LineNum:      c.LineNum,
+		StartRuneIdx: c.RuneIdx,
+		EndRuneIdx:   c.RuneIdx,
+		Cursor:       c,
+	}
+	second := &Selection{
+		Line:         c.Line.Next,
+		LineNum:      c.LineNum + 1,
 		StartRuneIdx: 0,
 		EndRuneIdx:   0,
-		CursorIdx:    -1,
+		Cursor:       nil,
 	}
 
 	first.Next = second
@@ -115,12 +118,13 @@ func FromCursorsRight(curs []*cursor.Cursor) []*Selection {
 
 func fromCursorRight(c *cursor.Cursor) *Selection {
 	if c.RuneIdx < c.Line.RuneCount() {
+		c.Right()
 		return &Selection{
 			Line:         c.Line,
 			LineNum:      c.LineNum,
-			StartRuneIdx: c.RuneIdx,
-			EndRuneIdx:   c.RuneIdx + 1,
-			CursorIdx:    c.RuneIdx + 1,
+			StartRuneIdx: c.RuneIdx - 1,
+			EndRuneIdx:   c.RuneIdx,
+			Cursor:       c,
 		}
 	}
 
@@ -130,7 +134,7 @@ func fromCursorRight(c *cursor.Cursor) *Selection {
 			LineNum:      c.LineNum,
 			StartRuneIdx: c.RuneIdx,
 			EndRuneIdx:   c.RuneIdx,
-			CursorIdx:    c.RuneIdx,
+			Cursor:       c,
 		}
 	}
 
@@ -139,14 +143,15 @@ func fromCursorRight(c *cursor.Cursor) *Selection {
 		LineNum:      c.LineNum,
 		StartRuneIdx: c.RuneIdx,
 		EndRuneIdx:   c.RuneIdx,
-		CursorIdx:    -1,
+		Cursor:       nil,
 	}
+	c.Right()
 	second := &Selection{
-		Line:         c.Line.Next,
-		LineNum:      c.LineNum + 1,
+		Line:         c.Line,
+		LineNum:      c.LineNum,
 		StartRuneIdx: 0,
-		EndRuneIdx:   0,
-		CursorIdx:    0,
+		EndRuneIdx:   c.RuneIdx,
+		Cursor:       c,
 	}
 
 	first.Next = second

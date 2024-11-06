@@ -16,31 +16,24 @@ func (s *Selection) downCursorOnRight() *Selection {
 	first := s
 	s = s.Last()
 
-	if s.EndRuneIdx < s.Line.RuneCount() {
-		s.EndRuneIdx = s.Line.RuneCount()
-		s.CursorIdx = s.Line.RuneCount()
-	}
+	c := s.Cursor
+	c.Down()
 
-	if s.Line.Next == nil {
+	if c.LineNum == s.LineNum {
 		return first
 	}
 
-	cIdx := s.CursorIdx
-	s.CursorIdx = -1
-	if cIdx > s.Line.Next.RuneCount() {
-		cIdx = s.Line.Next.RuneCount()
-	}
-
 	newS := &Selection{
-		Line:         s.Line.Next,
-		LineNum:      s.LineNum + 1,
+		Line:         c.Line,
+		LineNum:      c.LineNum,
 		StartRuneIdx: 0,
-		EndRuneIdx:   cIdx,
-		CursorIdx:    cIdx,
+		EndRuneIdx:   c.RuneIdx,
+		Cursor:       c,
 	}
 
 	s.Next = newS
 	newS.Prev = s
+	s.Cursor = nil
 
 	return first
 }
@@ -54,28 +47,29 @@ func (s *Selection) Left() *Selection {
 }
 
 func (s *Selection) leftCursorOnLeft() *Selection {
-	if s.StartRuneIdx > 0 {
-		s.StartRuneIdx--
-		s.CursorIdx--
+	c := s.Cursor
+	c.Left()
+
+	if c.RuneIdx == s.StartRuneIdx && c.LineNum == s.LineNum {
 		return s
 	}
 
-	if s.Line.Prev == nil {
-		// Do nothing, this is start of text
+	if c.LineNum == s.LineNum {
+		s.StartRuneIdx = c.RuneIdx
 		return s
 	}
 
 	newS := &Selection{
-		Line:         s.Line.Prev,
-		LineNum:      s.LineNum - 1,
-		StartRuneIdx: s.Line.Prev.RuneCount(),
-		EndRuneIdx:   s.Line.Prev.RuneCount(),
-		CursorIdx:    s.Line.Prev.RuneCount(),
+		Line:         c.Line,
+		LineNum:      c.LineNum,
+		StartRuneIdx: c.RuneIdx,
+		EndRuneIdx:   c.RuneIdx,
+		Cursor:       c,
 	}
 
 	newS.Next = s
 	s.Prev = newS
-	s.CursorIdx = -1
+	s.Cursor = nil
 
 	return newS
 }
@@ -84,18 +78,17 @@ func (s *Selection) leftCursorOnRight() *Selection {
 	first := s
 
 	s = s.Last()
-	if s.EndRuneIdx > 0 {
-		s.EndRuneIdx--
-		s.CursorIdx--
+	c := s.Cursor
+	c.Left()
+
+	if c.LineNum == s.LineNum {
+		s.EndRuneIdx = c.RuneIdx
 		return first
 	}
 
-	if s.Prev != nil {
-		s = s.Prev
-		s.Next = nil
-		s.CursorIdx = s.EndRuneIdx
-		return first
-	}
+	s = s.Prev
+	s.Cursor = c
+	s.Next = nil
 
 	return first
 }
@@ -109,39 +102,21 @@ func (s *Selection) Right() *Selection {
 }
 
 func (s *Selection) rightCursorOnLeft() *Selection {
-	if s.StartRuneIdx < s.Line.RuneCount() {
-		if s.StartRuneIdx < s.EndRuneIdx {
-			s.StartRuneIdx++
-			s.CursorIdx++
+	c := s.Cursor
+	c.Right()
+
+	if c.LineNum == s.LineNum {
+		if s.StartRuneIdx != s.EndRuneIdx {
+			s.StartRuneIdx = c.RuneIdx
 		} else {
-			s.EndRuneIdx++
-			s.CursorIdx++
+			s.EndRuneIdx = c.RuneIdx
 		}
+
 		return s
 	}
 
-	if s.Next != nil {
-		s = s.Next
-		s.Prev = nil
-		s.CursorIdx = 0
-		return s
-	}
-
-	if s.Line.Next == nil {
-		return s
-	}
-
-	newS := &Selection{
-		Line:         s.Line.Next,
-		LineNum:      s.LineNum + 1,
-		StartRuneIdx: 0,
-		EndRuneIdx:   0,
-		CursorIdx:    0,
-	}
-
-	s.CursorIdx = -1
-	s.Next = newS
-	newS.Prev = s
+	s = s.Next
+	s.Cursor = c
 
 	return s
 }
@@ -150,28 +125,29 @@ func (s *Selection) rightCursorOnRight() *Selection {
 	first := s
 
 	s = s.Last()
-	if s.EndRuneIdx < s.Line.RuneCount() {
-		s.EndRuneIdx++
-		s.CursorIdx++
+	c := s.Cursor
+	c.Right()
+
+	if c.RuneIdx == s.EndRuneIdx && c.LineNum == s.LineNum {
 		return first
 	}
 
-	if s.Line.Next == nil {
-		// Do nothing, this is end of text
+	if c.LineNum == s.LineNum {
+		s.EndRuneIdx++
 		return first
 	}
 
 	newS := &Selection{
-		Line:         s.Line.Next,
-		LineNum:      s.LineNum + 1,
+		Line:         c.Line,
+		LineNum:      c.LineNum,
 		StartRuneIdx: 0,
-		EndRuneIdx:   0,
-		CursorIdx:    0,
+		EndRuneIdx:   c.RuneIdx,
+		Cursor:       c,
 	}
 
 	newS.Prev = s
 	s.Next = newS
-	s.CursorIdx = -1
+	s.Cursor = nil
 
 	return first
 }

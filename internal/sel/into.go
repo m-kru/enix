@@ -9,12 +9,7 @@ func IntoCursor(s *Selection) *cursor.Cursor {
 		s = s.Last()
 	}
 
-	return &cursor.Cursor{
-		Line:    s.Line,
-		LineNum: s.LineNum,
-		Idx:     s.CursorIdx,
-		RuneIdx: s.CursorIdx,
-	}
+	return s.Cursor
 }
 
 func IntoCursors(sels []*Selection) []*cursor.Cursor {

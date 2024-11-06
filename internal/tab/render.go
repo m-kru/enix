@@ -38,7 +38,7 @@ func (tab *Tab) HasCursorInLine(line *line.Line) bool {
 				if s == nil {
 					break
 				}
-				if s.Line == line && s.HasCursor() {
+				if s.Line == line && s.Cursor != nil {
 					return true
 				}
 				s = s.Next

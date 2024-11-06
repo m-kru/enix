@@ -1,6 +1,7 @@
 package sel
 
 import (
+	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/view"
 )
@@ -10,7 +11,7 @@ type Selection struct {
 	LineNum      int
 	StartRuneIdx int
 	EndRuneIdx   int
-	CursorIdx    int // -1 if given selection doesn't have cursor
+	Cursor       *cursor.Cursor
 
 	Prev *Selection
 	Next *Selection
@@ -26,16 +27,12 @@ func (s *Selection) Last() *Selection {
 	return s
 }
 
-func (s *Selection) HasCursor() bool {
-	return s.CursorIdx >= 0
-}
-
 func (s *Selection) CursorOnLeft() bool {
-	return s.HasCursor() && s.CursorIdx == s.StartRuneIdx
+	return s.Cursor != nil && s.Cursor.RuneIdx == s.StartRuneIdx
 }
 
 func (s *Selection) CursorOnRight() bool {
-	return s.HasCursor() && s.CursorIdx == s.EndRuneIdx
+	return s.Cursor != nil && s.Cursor.RuneIdx == s.EndRuneIdx
 }
 
 func (s *Selection) View() view.View {
