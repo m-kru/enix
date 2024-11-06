@@ -127,7 +127,7 @@ func (tab *Tab) AddCursor(lineNum int, colIdx int) {
 	c := &cursor.Cursor{
 		Line:    line,
 		LineNum: lineNum,
-		Idx:     runeIdx,
+		ColIdx:  runeIdx,
 		RuneIdx: runeIdx,
 	}
 

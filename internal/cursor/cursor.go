@@ -14,7 +14,7 @@ import (
 type Cursor struct {
 	Line    *line.Line
 	LineNum int
-	Idx     int
+	ColIdx  int // Line column index
 	RuneIdx int // Line rune index
 }
 

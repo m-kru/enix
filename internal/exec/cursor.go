@@ -139,7 +139,7 @@ func goCmd(lineNum, col int, tab *tab.Tab) {
 			Line:    line,
 			LineNum: lineNum,
 			RuneIdx: col - 1,
-			Idx:     col - 1,
+			ColIdx:  col - 1,
 		},
 	}
 }
