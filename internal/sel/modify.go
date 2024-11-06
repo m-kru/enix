@@ -9,7 +9,43 @@ func (s *Selection) Down() *Selection {
 }
 
 func (s *Selection) downCursorOnLeft() *Selection {
-	panic("unimplemented")
+	if s.Next == nil {
+		c := s.Cursor
+
+		s.StartRuneIdx = s.EndRuneIdx
+		s.EndRuneIdx = s.Line.RuneCount()
+		s.Cursor = nil
+
+		c.Down()
+
+		newS := &Selection{
+			Line:         c.Line,
+			LineNum:      c.LineNum,
+			StartRuneIdx: 0,
+			EndRuneIdx:   c.RuneIdx,
+			Cursor:       c,
+		}
+
+		s.Next = newS
+		newS.Prev = s
+
+		return s
+	}
+
+	c := s.Cursor
+	c.Down()
+	s = s.Next
+	s.Prev = nil
+	s.Cursor = c
+
+	if c.RuneIdx < s.EndRuneIdx {
+		s.StartRuneIdx = c.RuneIdx
+	} else {
+		s.StartRuneIdx = s.EndRuneIdx
+		s.EndRuneIdx = c.RuneIdx
+	}
+
+	return s
 }
 
 func (s *Selection) downCursorOnRight() *Selection {
