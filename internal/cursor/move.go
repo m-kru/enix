@@ -82,14 +82,17 @@ func (c *Cursor) PrevWordStart() {
 	}
 
 	line := c.Line.Prev
+	lineNum := c.LineNum
 	for {
 		if line == nil {
 			return
 		}
+		lineNum--
 
 		if idx, ok := util.PrevWordStart([]rune(line.String()), line.RuneCount()); ok {
 			c.Line = line
-			c.RuneIdx = idx + 1
+			c.LineNum = lineNum
+			c.RuneIdx = idx
 			c.Idx = c.RuneIdx
 			return
 		}
@@ -106,13 +109,16 @@ func (c *Cursor) WordEnd() {
 	}
 
 	line := c.Line.Next
+	lineNum := c.LineNum
 	for {
 		if line == nil {
 			return
 		}
+		lineNum++
 
 		if idx, ok := util.WordEnd([]rune(line.String()), 0); ok {
 			c.Line = line
+			c.LineNum = lineNum
 			c.RuneIdx = idx + 1
 			c.Idx = c.RuneIdx
 			return
@@ -130,13 +136,16 @@ func (c *Cursor) WordStart() {
 	}
 
 	line := c.Line.Next
+	lineNum := c.LineNum
 	for {
 		if line == nil {
 			return
 		}
+		lineNum++
 
-		if idx, ok := util.WordStart([]rune(line.String()), 0); ok {
+		if idx, ok := util.WordStart([]rune(line.String()), -1); ok {
 			c.Line = line
+			c.LineNum = lineNum
 			c.RuneIdx = idx
 			c.Idx = c.RuneIdx
 			return

@@ -69,6 +69,13 @@ func WordStart(line []rune, idx int) (int, bool) {
 		return 0, false
 	}
 
+	if idx < 0 {
+		if IsWordRune(line[0]) {
+			return 0, true
+		}
+		idx = 0
+	}
+
 	for {
 		idx++
 		if IsWordRune(line[idx]) && !IsWordRune(line[idx-1]) {

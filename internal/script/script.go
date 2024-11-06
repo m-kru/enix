@@ -95,6 +95,8 @@ func execCmd(c cmd.Command, tab *tab.Tab) error {
 			_, err = exec.Mark(c.Args, tab)
 		case "newline":
 			err = exec.Newline(c.Args, tab)
+		case "prev-word-start":
+			err = exec.PrevWordStart(c.Args, tab)
 		case "right":
 			err = exec.Right(c.Args, tab)
 		case "rune":
@@ -113,6 +115,10 @@ func execCmd(c cmd.Command, tab *tab.Tab) error {
 			err = exec.Trim(c.Args, tab)
 		case "up":
 			err = exec.Up(c.Args, tab)
+		case "word-end":
+			err = exec.WordEnd(c.Args, tab)
+		case "word-start":
+			err = exec.WordStart(c.Args, tab)
 		default:
 			err = fmt.Errorf("invalid or unimplemented command '%s'", c.Name)
 		}
