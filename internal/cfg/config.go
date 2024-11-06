@@ -13,7 +13,7 @@ type Config struct {
 	SafeFileSave bool
 
 	// Whiespace
-	NewlineRune rune
+	LineEndRune rune
 	TabRune     rune
 	TabPadRune  rune
 }
@@ -23,7 +23,7 @@ func ConfigDefault() Config {
 		Colorscheme:  "default",
 		TrimOnSave:   true,
 		SafeFileSave: true,
-		NewlineRune:  '¬',
+		LineEndRune:  '¬',
 		TabRune:      '▸',
 		TabPadRune:   '·',
 	}

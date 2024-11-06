@@ -78,11 +78,11 @@ func configFromFile(path string) (Config, error) {
 		)
 	}
 
-	rw := runewidth.RuneWidth(config.NewlineRune)
+	rw := runewidth.RuneWidth(config.LineEndRune)
 	if rw != 1 {
 		return config, fmt.Errorf(
-			"reading config from file %s, width of newline rune must equal 1, width of '%c' equals %d",
-			path, config.NewlineRune, rw,
+			"reading config from file %s, width of line end rune must equal 1, width of '%c' equals %d",
+			path, config.LineEndRune, rw,
 		)
 	}
 
