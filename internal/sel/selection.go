@@ -74,3 +74,94 @@ func (s *Selection) FullView() view.View {
 
 	return v
 }
+
+func (s *Selection) Overlaps(s2 *Selection) bool {
+	for {
+		if s == nil {
+			break
+		}
+
+		subs2 := s2
+		for {
+			if subs2 == nil {
+				break
+			}
+
+			if s.LineNum == subs2.LineNum &&
+				((s.EndRuneIdx >= subs2.StartRuneIdx && s.StartRuneIdx < subs2.StartRuneIdx) ||
+					(subs2.EndRuneIdx >= s.StartRuneIdx && subs2.StartRuneIdx < s.StartRuneIdx)) {
+				return true
+			}
+
+			subs2 = subs2.Next
+		}
+
+		s = s.Next
+	}
+
+	return false
+}
+
+// Merge merges two selections. However, it does not check
+// if selections overlap. User must first expliitly check it
+// by calling the Overlaps function.
+func (s *Selection) Merge(s2 *Selection) *Selection {
+	if s2.LineNum < s.LineNum || (s2.LineNum == s.LineNum && s2.StartRuneIdx < s.StartRuneIdx) {
+		tmp := s
+		s = s2
+		s2 = tmp
+	}
+
+	first := s
+
+	for {
+		if s.LineNum < s2.LineNum {
+			s = s.Next
+			continue
+		}
+
+		if s.Cursor != nil && s.Cursor.RuneIdx >= s2.StartRuneIdx {
+			if s2.Cursor != nil {
+				s.Cursor = s2.Cursor
+			} else {
+				s.Cursor = nil
+			}
+		}
+		if s2.Cursor != nil && s2.Cursor.RuneIdx <= s.EndRuneIdx {
+			s2.Cursor = nil
+		}
+
+		s.EndRuneIdx = s2.EndRuneIdx
+		s.Next = s2.Next
+		break
+	}
+
+	return first
+}
+
+func Prune(sels []*Selection) []*Selection {
+	newSels := make([]*Selection, 0, len(sels))
+	merged := make([]bool, len(sels))
+
+	for i, s := range sels {
+		if merged[i] {
+			continue
+		}
+
+		newS := s
+		for j := i + 1; j < len(sels); j++ {
+			if merged[j] {
+				continue
+			}
+			s2 := sels[j]
+			if newS.Overlaps(s2) {
+				newS = newS.Merge(s2)
+				merged[j] = true
+			}
+		}
+
+		newSels = append(newSels, newS)
+	}
+
+	return newSels
+}

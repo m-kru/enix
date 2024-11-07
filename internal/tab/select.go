@@ -22,7 +22,7 @@ func (tab *Tab) selDownSelections() {
 		tab.Selections[i] = s.Down()
 	}
 
-	// TODO: Prune selections here
+	tab.Selections = sel.Prune(tab.Selections)
 }
 
 func (tab *Tab) SelLeft() {
@@ -43,7 +43,7 @@ func (tab *Tab) selLeftSelections() {
 		tab.Selections[i] = s.Left()
 	}
 
-	// TODO: Prune selections here
+	tab.Selections = sel.Prune(tab.Selections)
 }
 
 func (tab *Tab) SelRight() {
@@ -64,5 +64,5 @@ func (tab *Tab) selRightSelections() {
 		tab.Selections[i] = s.Right()
 	}
 
-	// TODO: Prune selections here
+	tab.Selections = sel.Prune(tab.Selections)
 }
