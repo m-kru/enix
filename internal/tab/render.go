@@ -18,7 +18,7 @@ func (tab *Tab) UpdateView() {
 	if len(tab.Cursors) > 0 {
 		v = tab.Cursors[len(tab.Cursors)-1].View()
 	} else {
-		v = tab.Selections[len(tab.Selections)-1].FullView()
+		v = sel.IntoCursor(tab.Selections[len(tab.Selections)-1]).View()
 	}
 
 	tab.View = tab.View.MinAdjust(v)
