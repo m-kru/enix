@@ -66,3 +66,24 @@ func (tab *Tab) selRightSelections() {
 
 	tab.Selections = sel.Prune(tab.Selections)
 }
+
+func (tab *Tab) SelUp() {
+	if len(tab.Cursors) > 0 {
+		tab.selUpCursors()
+	} else {
+		tab.selUpSelections()
+	}
+}
+
+func (tab *Tab) selUpCursors() {
+	tab.Selections = sel.FromCursorsUp(tab.Cursors)
+	tab.Cursors = nil
+}
+
+func (tab *Tab) selUpSelections() {
+	for i, s := range tab.Selections {
+		tab.Selections[i] = s.Up()
+	}
+
+	tab.Selections = sel.Prune(tab.Selections)
+}

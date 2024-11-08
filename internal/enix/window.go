@@ -185,6 +185,8 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			err = exec.SelLeft(c.Args, tab)
 		case "sel-right":
 			err = exec.SelRight(c.Args, tab)
+		case "sel-up":
+			err = exec.SelUp(c.Args, tab)
 		case "space":
 			err = exec.Space(c.Args, tab)
 		case "spawn-down":

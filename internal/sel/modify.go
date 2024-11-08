@@ -9,6 +9,10 @@ func (s *Selection) Down() *Selection {
 }
 
 func (s *Selection) downCursorOnLeft() *Selection {
+	if s.Cursor.Line.Next == nil {
+		return s
+	}
+
 	if s.Next == nil {
 		c := s.Cursor
 
@@ -186,6 +190,82 @@ func (s *Selection) rightCursorOnRight() *Selection {
 	newS.Prev = s
 	s.Next = newS
 	s.Cursor = nil
+
+	return first
+}
+
+func (s *Selection) Up() *Selection {
+	if s.CursorOnLeft() {
+		return s.upCursorOnLeft()
+	} else {
+		return s.upCursorOnRight()
+	}
+}
+
+func (s *Selection) upCursorOnLeft() *Selection {
+	c := s.Cursor
+
+	if c.Line.Prev == nil {
+		return s
+	}
+
+	c.Up()
+	s.StartRuneIdx = 0
+	s.Cursor = nil
+
+	newS := &Selection{
+		Line:         c.Line,
+		LineNum:      c.LineNum,
+		StartRuneIdx: c.RuneIdx,
+		EndRuneIdx:   c.Line.RuneCount(),
+		Cursor:       c,
+	}
+
+	s.Prev = newS
+	newS.Next = s
+
+	return newS
+}
+
+func (s *Selection) upCursorOnRight() *Selection {
+	if s.Next == nil {
+		c := s.Cursor
+
+		s.EndRuneIdx = s.StartRuneIdx
+		s.StartRuneIdx = 0
+		s.Cursor = nil
+
+		c.Up()
+
+		newS := &Selection{
+			Line:         c.Line,
+			LineNum:      c.LineNum,
+			StartRuneIdx: c.RuneIdx,
+			EndRuneIdx:   c.Line.RuneCount(),
+			Cursor:       c,
+		}
+
+		s.Prev = newS
+		newS.Next = s
+
+		return newS
+	}
+
+	first := s
+	s = s.Last()
+
+	c := s.Cursor
+	c.Up()
+	s = s.Prev
+	s.Next = nil
+	s.Cursor = c
+
+	if c.RuneIdx > s.StartRuneIdx {
+		s.EndRuneIdx = c.RuneIdx
+	} else {
+		s.EndRuneIdx = s.StartRuneIdx
+		s.StartRuneIdx = c.RuneIdx
+	}
 
 	return first
 }
