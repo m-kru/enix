@@ -30,6 +30,7 @@ type Colorscheme struct {
 	Cursor     tcell.Style
 	CursorWord tcell.Style // Color of the word under cursor
 
+	Find      tcell.Style
 	Selection tcell.Style
 
 	StatusLine tcell.Style
@@ -142,6 +143,7 @@ func ColorschemeDefault() Colorscheme {
 		Cursor:     tcell.StyleDefault.Reverse(true),
 		CursorWord: tcell.StyleDefault.Foreground(tcell.ColorWhite),
 
+		Find:      tcell.StyleDefault.Background(tcell.ColorOlive),
 		Selection: tcell.StyleDefault.Background(tcell.ColorMaroon).Foreground(tcell.ColorWhite),
 
 		StatusLine: tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorGray),
