@@ -19,6 +19,7 @@ func (c *Cursor) LineUp() action.Action {
 	}
 	c.Line.Prev = prevLine.Prev
 	c.Line.Next = prevLine
+	prevLine.Prev = c.Line
 
 	c.LineNum--
 

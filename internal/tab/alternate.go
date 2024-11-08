@@ -49,7 +49,13 @@ func (tab *Tab) lineUpCursors() {
 	for i := 0; i < len(tab.Cursors); i++ {
 		c := tab.Cursors[i]
 
+		newFirstLine := c.Line.Prev == tab.Lines
+
 		act := c.LineUp()
+
+		if newFirstLine {
+			tab.Lines = c.Line
+		}
 
 		for _, c2 := range tab.Cursors {
 			if c2 != c {
