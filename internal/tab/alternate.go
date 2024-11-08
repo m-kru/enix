@@ -14,9 +14,15 @@ func (tab *Tab) Join() {
 }
 
 func (tab *Tab) joinCursors() {
-	for i := 0; i < len(tab.Cursors); i++ {
-		c := tab.Cursors[i]
+	// Join lines only once, even if there are multiple cursors in the line.
+	curs := make(map[*line.Line]*cursor.Cursor)
+	for _, c := range tab.Cursors {
+		if _, ok := curs[c.Line]; !ok {
+			curs[c.Line] = c
+		}
+	}
 
+	for _, c := range curs {
 		act := c.Join()
 		if act != nil {
 			tab.LineCount--
