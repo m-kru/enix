@@ -18,6 +18,9 @@ func (tab *Tab) joinCursors() {
 		c := tab.Cursors[i]
 
 		act := c.Join()
+		if act != nil {
+			tab.LineCount--
+		}
 
 		for _, c2 := range tab.Cursors {
 			if c2 != c {

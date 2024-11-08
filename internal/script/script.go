@@ -89,6 +89,8 @@ func execCmd(c cmd.Command, tab *tab.Tab) error {
 			err = exec.Go(c.Args, tab)
 		case "insert-rune":
 			err = exec.InsertRune(c.Args, tab)
+		case "join":
+			err = exec.Join(c.Args, tab)
 		case "left":
 			err = exec.Left(c.Args, tab)
 		case "mark":

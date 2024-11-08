@@ -19,7 +19,7 @@ func (c *Cursor) Delete() action.Action {
 }
 
 func (c *Cursor) Join() action.Action {
-	delLine := c.Line.Join(false)
+	delLine := c.Line.Join(true)
 	if delLine == nil {
 		return nil
 	}
