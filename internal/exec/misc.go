@@ -51,6 +51,18 @@ func KeyName(args []string, tab *tab.Tab) (string, error) {
 	return "insert a single key or key combo", nil
 }
 
+func LineDown(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf(
+			"line-down: expected 0 args, provided %d", len(args),
+		)
+	}
+
+	tab.LineDown()
+
+	return nil
+}
+
 func LineUp(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf(

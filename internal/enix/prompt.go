@@ -357,6 +357,8 @@ func (p *Prompt) Exec() TcellEventReceiver {
 			info, err = exec.KeyName(c.Args, tab)
 		case "left":
 			err = exec.Left(c.Args, tab)
+		case "line-down":
+			err = exec.LineDown(c.Args, tab)
 		case "line-end":
 			err = exec.LineEnd(c.Args, tab)
 		case "line-start":

@@ -44,6 +44,48 @@ func (tab *Tab) joinSelections() {
 	panic("unimplemented")
 }
 
+func (tab *Tab) LineDown() {
+	if len(tab.Cursors) > 0 {
+		tab.lineDownCursors()
+	} else {
+		tab.lineDownSelections()
+	}
+}
+
+func (tab *Tab) lineDownCursors() {
+	// Move lines down only once, even if there are multiple cursors in the line.
+	curs := make(map[*line.Line]*cursor.Cursor)
+	for _, c := range tab.Cursors {
+		if _, ok := curs[c.Line]; !ok {
+			curs[c.Line] = c
+		}
+	}
+
+	for _, c := range curs {
+		newFirstLine := c.Line == tab.Lines
+
+		act := c.LineDown()
+
+		if newFirstLine {
+			tab.Lines = c.Line.Prev
+		}
+
+		for _, c2 := range tab.Cursors {
+			if c2 != c {
+				c2.Inform(act)
+			}
+		}
+
+		tab.Cursors = cursor.Prune(tab.Cursors)
+	}
+
+	tab.HasChanges = true
+}
+
+func (tab *Tab) lineDownSelections() {
+	panic("unimplemented")
+}
+
 func (tab *Tab) LineUp() {
 	if len(tab.Cursors) > 0 {
 		tab.lineUpCursors()

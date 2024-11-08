@@ -25,8 +25,9 @@ func (keys Keybindings) ToCmd(ev *tcell.EventKey) (cmd.Command, error) {
 func KeybindingsDefault() Keybindings {
 	return map[string]string{
 		// Alternation
-		"Alt+Rune[u]": "line-up",
 		"Alt+Rune[j]": "join",
+		"Alt+Rune[d]": "line-down",
+		"Alt+Rune[u]": "line-up",
 		// Cmd
 		"Rune[:]": "cmd",
 		// Cursor

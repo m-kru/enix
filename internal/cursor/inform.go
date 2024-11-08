@@ -6,6 +6,8 @@ import (
 
 func (c *Cursor) Inform(act action.Action) {
 	switch a := act.(type) {
+	case *action.LineDown:
+		c.informLineDown(a)
 	case *action.LineUp:
 		c.informLineUp(a)
 	case *action.NewlineDelete:
@@ -16,6 +18,12 @@ func (c *Cursor) Inform(act action.Action) {
 		c.informRuneDelete(a)
 	case *action.RuneInsert:
 		c.informRuneInsert(a)
+	}
+}
+
+func (c *Cursor) informLineDown(ld *action.LineDown) {
+	if c.Line == ld.Line {
+		c.LineNum++
 	}
 }
 
