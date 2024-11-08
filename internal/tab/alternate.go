@@ -2,7 +2,6 @@ package tab
 
 import (
 	"github.com/m-kru/enix/internal/cursor"
-	"github.com/m-kru/enix/internal/line"
 )
 
 func (tab *Tab) Join() {
@@ -15,12 +14,7 @@ func (tab *Tab) Join() {
 
 func (tab *Tab) joinCursors() {
 	// Join lines only once, even if there are multiple cursors in the line.
-	curs := make(map[*line.Line]*cursor.Cursor)
-	for _, c := range tab.Cursors {
-		if _, ok := curs[c.Line]; !ok {
-			curs[c.Line] = c
-		}
-	}
+	curs := cursor.Uniques(tab.Cursors, true)
 
 	for _, c := range curs {
 		act := c.Join()
@@ -54,12 +48,7 @@ func (tab *Tab) LineDown() {
 
 func (tab *Tab) lineDownCursors() {
 	// Move lines down only once, even if there are multiple cursors in the line.
-	curs := make(map[*line.Line]*cursor.Cursor)
-	for _, c := range tab.Cursors {
-		if _, ok := curs[c.Line]; !ok {
-			curs[c.Line] = c
-		}
-	}
+	curs := cursor.Uniques(tab.Cursors, false)
 
 	for _, c := range curs {
 		newFirstLine := c.Line == tab.Lines
@@ -96,12 +85,7 @@ func (tab *Tab) LineUp() {
 
 func (tab *Tab) lineUpCursors() {
 	// Move lines up only once, even if there are multiple cursors in the line.
-	curs := make(map[*line.Line]*cursor.Cursor)
-	for _, c := range tab.Cursors {
-		if _, ok := curs[c.Line]; !ok {
-			curs[c.Line] = c
-		}
-	}
+	curs := cursor.Uniques(tab.Cursors, true)
 
 	for _, c := range curs {
 		newFirstLine := c.Line.Prev == tab.Lines
