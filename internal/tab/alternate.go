@@ -2,6 +2,7 @@ package tab
 
 import (
 	"github.com/m-kru/enix/internal/cursor"
+	"github.com/m-kru/enix/internal/line"
 )
 
 func (tab *Tab) Join() {
@@ -46,9 +47,15 @@ func (tab *Tab) LineUp() {
 }
 
 func (tab *Tab) lineUpCursors() {
-	for i := 0; i < len(tab.Cursors); i++ {
-		c := tab.Cursors[i]
+	// Move lines up only once, even if there are multiple cursors in the line.
+	curs := make(map[*line.Line]*cursor.Cursor)
+	for _, c := range tab.Cursors {
+		if _, ok := curs[c.Line]; !ok {
+			curs[c.Line] = c
+		}
+	}
 
+	for _, c := range curs {
 		newFirstLine := c.Line.Prev == tab.Lines
 
 		act := c.LineUp()
