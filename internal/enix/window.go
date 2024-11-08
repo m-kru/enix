@@ -127,10 +127,6 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		case "esc":
 			err = exec.Esc(c.Args, tab)
 			w.Prompt.Clear()
-		case "find":
-			tab.HasFocus = false
-			w.Prompt.Activate("find ", "todo")
-			return w.Prompt
 		case "g", "go":
 			err = exec.Go(c.Args, tab)
 		case "h", "help":
@@ -183,6 +179,10 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			err = exec.Right(c.Args, tab)
 		case "save":
 			info, err = exec.Save(c.Args, tab, w.Config.TrimOnSave)
+		case "search":
+			tab.HasFocus = false
+			w.Prompt.Activate("search ", "todo")
+			return w.Prompt
 		case "sel-down":
 			err = exec.SelDown(c.Args, tab)
 		case "sel-left":

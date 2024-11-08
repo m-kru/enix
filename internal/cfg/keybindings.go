@@ -60,7 +60,7 @@ func KeybindingsDefault() Keybindings {
 		"Enter":   "newline",
 		"Esc":     "esc",
 		"Rune[c]": "copy",
-		"Rune[f]": "find",
+		"Rune[/]": "search",
 		"Rune[i]": "insert",
 		"Rune[m]": "mark tmp",
 		"Rune[M]": "go tmp",
