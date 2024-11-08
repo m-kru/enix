@@ -24,7 +24,7 @@ func FromString(str string) (*Line, int) {
 		return Empty(), 1
 	}
 
-	lineCount := 0
+	lineCount := 1
 	startIdx := 0
 	var first *Line = nil
 	var prev *Line
@@ -62,7 +62,6 @@ func FromString(str string) (*Line, int) {
 	if str[len(str)-1] == '\n' {
 		next = &Line{Buf: make([]byte, 0, bufCap(0, 0)), Prev: prev}
 		prev.Next = next
-		lineCount++
 	}
 
 	return first, lineCount

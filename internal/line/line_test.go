@@ -12,11 +12,10 @@ func TestRuneIdx(t *testing.T) {
 	}
 
 	var tests = []struct {
-		idx      int // Test index
-		str      string
-		col      int
-		tabWidth int
-		want     Want
+		idx  int // Test index
+		str  string
+		col  int
+		want Want
 	}{
 		{
 			idx:  0,
