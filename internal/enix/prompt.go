@@ -361,6 +361,8 @@ func (p *Prompt) Exec() TcellEventReceiver {
 			err = exec.LineEnd(c.Args, tab)
 		case "line-start":
 			err = exec.LineStart(c.Args, tab)
+		case "line-up":
+			err = exec.LineUp(c.Args, tab)
 		case "newline":
 			err = exec.Newline(c.Args, tab)
 		case "m", "mark":
