@@ -93,6 +93,8 @@ func execCmd(c cmd.Command, tab *tab.Tab) error {
 			err = exec.Join(c.Args, tab)
 		case "left":
 			err = exec.Left(c.Args, tab)
+		case "line-up":
+			err = exec.LineUp(c.Args, tab)
 		case "mark":
 			_, err = exec.Mark(c.Args, tab)
 		case "newline":

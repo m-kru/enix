@@ -145,6 +145,8 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			err = exec.Left(c.Args, tab)
 		case "line-end":
 			err = exec.LineEnd(c.Args, tab)
+		case "line-up":
+			err = exec.LineUp(c.Args, tab)
 		case "line-start":
 			err = exec.LineStart(c.Args, tab)
 		case "m", "mark":

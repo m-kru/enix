@@ -59,6 +59,8 @@ The first non whitespace rune is considered the start of the line.
 However, if a cursor already is at the first non whitespace rune in the line,
 then line-start moves cursor to the first line rune, even if it is a whitespace.`,
 
+	"line-up": `line-up # Moves line by one line.`,
+
 	"prev-word-start": `word-start # Moves cursor to the previous word start.`,
 
 	"right": `right # Moves cursor right.

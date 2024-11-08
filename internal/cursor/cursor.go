@@ -1,7 +1,6 @@
 package cursor
 
 import (
-	"github.com/m-kru/enix/internal/action"
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/util"
 	"github.com/m-kru/enix/internal/view"
@@ -47,19 +46,6 @@ func (c *Cursor) View() view.View {
 		Column: c.Column(),
 		Width:  c.Width(),
 		Height: 1,
-	}
-}
-
-func (c *Cursor) Inform(act action.Action) {
-	switch a := act.(type) {
-	case *action.NewlineDelete:
-		c.informNewlineDelete(a)
-	case *action.NewlineInsert:
-		c.informNewlineInsert(a)
-	case *action.RuneDelete:
-		c.informRuneDelete(a)
-	case *action.RuneInsert:
-		c.informRuneInsert(a)
 	}
 }
 

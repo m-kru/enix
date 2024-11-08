@@ -4,6 +4,27 @@ import (
 	"github.com/m-kru/enix/internal/action"
 )
 
+func (c *Cursor) Inform(act action.Action) {
+	switch a := act.(type) {
+	case *action.LineUp:
+		c.informLineUp(a)
+	case *action.NewlineDelete:
+		c.informNewlineDelete(a)
+	case *action.NewlineInsert:
+		c.informNewlineInsert(a)
+	case *action.RuneDelete:
+		c.informRuneDelete(a)
+	case *action.RuneInsert:
+		c.informRuneInsert(a)
+	}
+}
+
+func (c *Cursor) informLineUp(lu *action.LineUp) {
+	if c.Line == lu.Line {
+		c.LineNum--
+	}
+}
+
 // informNewlineDelete informs cursor about newline deletion.
 // If cursor was pointing the the joined line, then the
 // cursor Line pointer is set to point to the previous line.

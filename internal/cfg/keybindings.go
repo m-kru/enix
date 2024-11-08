@@ -24,16 +24,9 @@ func (keys Keybindings) ToCmd(ev *tcell.EventKey) (cmd.Command, error) {
 // KeybindingsDefault returns default keybindings.
 func KeybindingsDefault() Keybindings {
 	return map[string]string{
-		/* Alternation
-		"Alt+Up":   "line-up",
-		"Alt+Down": "line-down",
-		"Rune[<]":  "deindent",
-		"Rune[>]":  "indent",
-		"Rune[r]":  "replace",
-		"Rune[u]":  "undo",
-		"Alt+J":    "join-below",
-		"Alt+K":    "join-above",
-		*/
+		// Alternation
+		"Alt+Rune[u]": "line-up",
+		"Alt+Rune[j]": "join",
 		// Cmd
 		"Rune[:]": "cmd",
 		// Cursor
@@ -63,15 +56,14 @@ func KeybindingsDefault() Keybindings {
 		// Tab
 		"Ctrl+T": "tab-open",
 		// Miscellaneous
-		"Enter":       "newline",
-		"Esc":         "esc",
-		"Rune[c]":     "copy",
-		"Rune[f]":     "find",
-		"Rune[i]":     "insert",
-		"Rune[m]":     "mark tmp",
-		"Rune[M]":     "go tmp",
-		"Alt+Rune[j]": "join",
-		"Ctrl+Z":      "suspend",
+		"Enter":   "newline",
+		"Esc":     "esc",
+		"Rune[c]": "copy",
+		"Rune[f]": "find",
+		"Rune[i]": "insert",
+		"Rune[m]": "mark tmp",
+		"Rune[M]": "go tmp",
+		"Ctrl+Z":  "suspend",
 		//"Rune[h]": "help",
 		"Rune[q]": "quit",
 		// "Ctrl+U":     "undo", Alt+U
