@@ -41,6 +41,7 @@ type Prompt struct {
 	Cursor *cursor.Cursor
 	View   view.View
 
+	PrevCmd    string
 	ShadowText string
 
 	State PromptState
@@ -93,6 +94,10 @@ func (p *Prompt) ShowInfo(msg string) {
 
 // Currently assume text + shadow text always fits screen width.
 func (p *Prompt) Activate(text, shadowText string) {
+	if text == "" && shadowText == "" {
+		shadowText = p.PrevCmd
+	}
+
 	p.Line, _ = line.FromString(text)
 
 	p.Cursor = &cursor.Cursor{
@@ -230,6 +235,8 @@ func (p *Prompt) Enter() TcellEventReceiver {
 		p.ShadowText = ""
 		p.State = InText
 	}
+
+	p.PrevCmd = p.Line.String()
 
 	return p.Exec()
 }
