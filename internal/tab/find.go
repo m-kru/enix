@@ -75,3 +75,44 @@ func (tab *Tab) FindNext() {
 	}
 	tab.Selections = []*sel.Selection{s}
 }
+
+func (tab *Tab) FindSelNext() {
+	if len(tab.Cursors) > 0 {
+		tab.FindNext()
+		return
+	}
+
+	if tab.SearchCtx.Regexp == nil {
+		if tab.SearchCtx.PrevRegexp == nil {
+			return
+		}
+		tab.SearchCtx.Regexp = tab.SearchCtx.PrevRegexp
+		search.Search(tab.Lines, tab.View.Line, &tab.SearchCtx)
+	}
+
+	finds := tab.SearchCtx.Finds
+	if len(finds) == 0 {
+		return
+	}
+
+	c := sel.IntoCursor(tab.Selections[len(tab.Selections)-1])
+
+	f := getNextFind(finds, c)
+
+	line := tab.Lines.Get(f.LineNum)
+	s := &sel.Selection{
+		Line:         line,
+		LineNum:      f.LineNum,
+		StartRuneIdx: f.StartRuneIdx,
+		EndRuneIdx:   f.EndRuneIdx - 1,
+		Cursor: &cursor.Cursor{
+			Line:    line,
+			LineNum: f.LineNum,
+			ColIdx:  line.ColumnIdx(f.StartRuneIdx),
+			RuneIdx: f.StartRuneIdx,
+		},
+	}
+
+	tab.Selections = append(tab.Selections, s)
+	tab.Selections = sel.Prune(tab.Selections)
+}

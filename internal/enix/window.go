@@ -141,6 +141,8 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			w.Prompt.Clear()
 		case "find-next":
 			err = exec.FindNext(c.Args, tab)
+		case "find-sel-next":
+			err = exec.FindSelNext(c.Args, tab)
 		case "g", "go":
 			err = exec.Go(c.Args, tab)
 		case "h", "help":

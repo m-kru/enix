@@ -107,9 +107,11 @@ If path to file is not provided, then it uses the current file path.`,
 
 	// Find
 
-	"find-next": "find-next # Select next find.",
+	"find-next": "find-next # Selects next find.",
 
-	"find-prev": "find-prev # Select previous find.",
+	"find-sel-next": "find-sel-next # Preserves selections and selects next find.",
+
+	"find-prev": "find-prev # Selects previous find.",
 
 	// Indent
 

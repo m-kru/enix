@@ -56,6 +56,7 @@ func KeybindingsDefault() Keybindings {
 		"Rune[s]": "save",
 		// Find
 		"Rune[n]": "find-next",
+		"Rune[N]": "find-sel-next",
 		// Tab
 		"Ctrl+T": "tab-open",
 		// Miscellaneous
