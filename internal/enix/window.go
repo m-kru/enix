@@ -108,6 +108,18 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		tab.RepCount = 0
 	}
 
+	// Limit the repetition count for the esc command.
+	// If user by accident provides high repetition count,
+	// then ignoring it would introduce high latency.
+	// It doesn't make sense to run in more than 4 or 5 times.
+	// However, to be immune to potential future changes set
+	// the limit to 10.
+	if c.Name == "esc" {
+		if c.RepCount > 10 {
+			c.RepCount = 10
+		}
+	}
+
 	for i := 0; i < c.RepCount; i++ {
 		switch c.Name {
 		case "add-cursor":
