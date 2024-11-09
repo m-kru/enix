@@ -22,6 +22,7 @@ func (tab *Tab) Esc() {
 	}
 
 	if tab.SearchCtx.Regexp != nil {
+		tab.SearchCtx.PrevRegexp = tab.SearchCtx.Regexp
 		tab.SearchCtx.Regexp = nil
 		return
 	}

@@ -6,9 +6,10 @@ import (
 )
 
 type Context struct {
-	Regexp   *regexp.Regexp
-	Finds    []find.Find
-	StartIdx int // Index of potentially first visible find
+	PrevRegexp *regexp.Regexp
+	Regexp     *regexp.Regexp
+	Finds      []find.Find
+	StartIdx   int // Index of potentially first visible find
 }
 
 func (ctx Context) FindsFromVisible() []find.Find {

@@ -105,6 +105,12 @@ If path to file is not provided, then it uses the current file path.`,
 
 	"type": `type type # Enforces file type.`,
 
+	// Find
+
+	"find-next": "find-next # Select next find.",
+
+	"find-prev": "find-prev # Select previous find.",
+
 	// Indent
 
 	"deindent": `deindent # Decreases indent of lines with cursor.

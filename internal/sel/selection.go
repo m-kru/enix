@@ -88,8 +88,8 @@ func (s *Selection) Overlaps(s2 *Selection) bool {
 			}
 
 			if s.LineNum == subs2.LineNum &&
-				((s.EndRuneIdx >= subs2.StartRuneIdx && s.StartRuneIdx < subs2.StartRuneIdx) ||
-					(subs2.EndRuneIdx >= s.StartRuneIdx && subs2.StartRuneIdx < s.StartRuneIdx)) {
+				((s.EndRuneIdx >= subs2.StartRuneIdx && s.StartRuneIdx <= subs2.StartRuneIdx) ||
+					(subs2.EndRuneIdx >= s.StartRuneIdx && subs2.StartRuneIdx <= s.StartRuneIdx)) {
 				return true
 			}
 
