@@ -67,10 +67,6 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 	// Render extra status information
 	b := strings.Builder{}
 
-	if len(tab.SearchCtx.Finds) != 0 {
-		b.WriteString(fmt.Sprintf("%d finds ", len(tab.SearchCtx.Finds)))
-	}
-
 	repCountStartIdx := 0
 	if tab.RepCount != 0 {
 		b.WriteString(fmt.Sprintf("%d ", tab.RepCount))
@@ -83,12 +79,24 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 	}
 	stateEndIdx := b.Len()
 
+	if len(tab.SearchCtx.Finds) != 0 {
+		if len(tab.SearchCtx.Finds) == 1 {
+			b.WriteString("1 find ")
+		} else {
+			b.WriteString(fmt.Sprintf("%d finds ", len(tab.SearchCtx.Finds)))
+		}
+	}
+
 	var c *cursor.Cursor
 	if len(tab.Cursors) > 0 {
 		c = tab.Cursors[len(tab.Cursors)-1]
 	} else {
 		c = sel.IntoCursor(tab.Selections[len(tab.Selections)-1])
-		b.WriteString("sel ")
+		if len(tab.Selections) == 1 {
+			b.WriteString("1 sel ")
+		} else {
+			b.WriteString(fmt.Sprintf("%d sels ", len(tab.Selections)))
+		}
 	}
 	b.WriteString(fmt.Sprintf("%d:%d | ", c.LineNum, c.RuneIdx+1))
 
@@ -223,9 +231,7 @@ func (tab *Tab) RenderSelections(frame frame.Frame) {
 }
 
 func (tab *Tab) Render(frame frame.Frame) {
-	// Render status line
-	tab.RenderStatusLine(frame.LastLine())
-
+	// Leave one line for the status line
 	if frame.Height > 1 {
 		frame.Height -= 1
 	}
@@ -262,4 +268,8 @@ func (tab *Tab) Render(frame frame.Frame) {
 			tab.RenderSelections(linesFrame)
 		}
 	}
+
+	// Render status line as the last one, as it requires info on finds.
+	frame.Height++
+	tab.RenderStatusLine(frame.LastLine())
 }
