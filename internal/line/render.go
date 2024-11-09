@@ -55,35 +55,13 @@ func (l *Line) Render(
 	r = l.Rune(runeIdx)
 	if r == '\t' {
 		setTab(runeSubcol)
+		runeIdx++
 	} else if runeSubcol > 0 {
 		r = ' '
 		frame.SetContent(frameX, 0, r, colors.Default)
 		frameX += runewidth.RuneWidth(r)
-	} else {
-		color := colors.Default
-		if len(hls) > 0 {
-			for {
-				if hls[currentHl].CoversCell(lineNum, runeIdx) {
-					color = hls[currentHl].Style
-					break
-				}
-				currentHl++
-			}
-		}
-		if len(finds) > 0 && currentFind < len(finds) {
-			if finds[currentFind].CoversCell(lineNum, runeIdx) {
-				color = colors.Find
-			}
-
-			if finds[currentFind].IsLastCell(lineNum, runeIdx) {
-				currentFind++
-			}
-		}
-
-		frame.SetContent(frameX, 0, r, color)
-		frameX += runewidth.RuneWidth(r)
+		runeIdx++
 	}
-	runeIdx++
 
 	for {
 		if frameX >= frame.Width {
