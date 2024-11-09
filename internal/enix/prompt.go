@@ -341,6 +341,8 @@ func (p *Prompt) Exec() TcellEventReceiver {
 			info, err = exec.DumpCursor(c.Args, tab)
 		case "end":
 			err = exec.End(c.Args, tab)
+		case "esc":
+			err = exec.Esc(c.Args, tab)
 		case "find-next":
 			err = exec.FindNext(c.Args, tab)
 		case "g", "go":
