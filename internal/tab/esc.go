@@ -18,5 +18,11 @@ func (tab *Tab) Esc() {
 
 	if len(tab.Cursors) > 1 {
 		tab.Cursors = tab.Cursors[len(tab.Cursors)-1:]
+		return
+	}
+
+	if tab.SearchCtx.Regexp != nil {
+		tab.SearchCtx.Regexp = nil
+		return
 	}
 }

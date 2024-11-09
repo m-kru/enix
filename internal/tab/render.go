@@ -7,6 +7,7 @@ import (
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/line"
+	"github.com/m-kru/enix/internal/search"
 	"github.com/m-kru/enix/internal/sel"
 	"github.com/m-kru/enix/internal/view"
 )
@@ -65,6 +66,10 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 
 	// Render extra status information
 	b := strings.Builder{}
+
+	if len(tab.SearchCtx.Finds) != 0 {
+		b.WriteString(fmt.Sprintf("%d finds ", len(tab.SearchCtx.Finds)))
+	}
 
 	repCountStartIdx := 0
 	if tab.RepCount != 0 {
@@ -152,13 +157,23 @@ func (tab *Tab) RenderLines(line *line.Line, lineNum int, frame frame.Frame) {
 	hls := tab.Highlighter.Analyze(
 		tab.Lines, line, lineNum, endLineIdx, cur, tab.Colors,
 	)
+	search.Search(tab.Lines, lineNum, &tab.SearchCtx)
+	finds := tab.SearchCtx.FindsFromVisible()
 
 	for {
 		if line == nil || renderedCount == frame.Height {
 			break
 		}
 
-		hls = line.Render(tab.Config, tab.Colors, lineNum, frame.Line(0, renderedCount), tab.View, hls)
+		hls, finds = line.Render(
+			tab.Config,
+			tab.Colors,
+			lineNum,
+			frame.Line(0, renderedCount),
+			tab.View,
+			hls,
+			finds,
+		)
 
 		line = line.Next
 		lineNum++

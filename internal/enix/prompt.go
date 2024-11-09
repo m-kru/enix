@@ -128,7 +128,7 @@ func (p *Prompt) Render() {
 		p.View = p.View.MinAdjust(p.Cursor.View())
 	}
 
-	p.Line.Render(p.Config, p.Colors, 1, p.Frame.Line(1, 0), p.View, nil)
+	p.Line.Render(p.Config, p.Colors, 1, p.Frame.Line(1, 0), p.View, nil, nil)
 
 	if len(p.ShadowText) > 0 {
 		for i, r := range p.ShadowText {
@@ -399,6 +399,8 @@ func (p *Prompt) Exec() TcellEventReceiver {
 			updateView = false
 		case "save":
 			info, err = exec.Save(c.Args, tab, p.Config.TrimOnSave)
+		case "search":
+			err = exec.Search(c.Args, tab)
 		case "sel-count":
 			p.ShowInfo(fmt.Sprintf("%d", len(tab.Selections)))
 			return p.Window

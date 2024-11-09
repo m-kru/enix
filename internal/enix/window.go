@@ -181,7 +181,7 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			info, err = exec.Save(c.Args, tab, w.Config.TrimOnSave)
 		case "search":
 			tab.HasFocus = false
-			w.Prompt.Activate("search ", "todo")
+			w.Prompt.Activate("search ", tab.GetWord())
 			return w.Prompt
 		case "sel-down":
 			err = exec.SelDown(c.Args, tab)

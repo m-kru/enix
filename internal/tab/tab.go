@@ -6,6 +6,7 @@ import (
 	"github.com/m-kru/enix/internal/lang"
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/mark"
+	"github.com/m-kru/enix/internal/search"
 	"github.com/m-kru/enix/internal/sel"
 	"github.com/m-kru/enix/internal/util"
 	"github.com/m-kru/enix/internal/view"
@@ -29,6 +30,8 @@ type Tab struct {
 
 	Cursors    []*cursor.Cursor
 	Selections []*sel.Selection
+
+	SearchCtx search.Context
 
 	Lines     *line.Line // First line
 	LineCount int
@@ -161,5 +164,14 @@ func (tab *Tab) RxEventKey(ev *tcell.EventKey) {
 		tab.RxEventKeyInsert(ev)
 	case "replace":
 		tab.RxEventKeyReplace(ev)
+	}
+}
+
+// GetWord returns word under last cursor or selection.
+func (tab *Tab) GetWord() string {
+	if len(tab.Cursors) > 0 {
+		return tab.Cursors[len(tab.Cursors)-1].GetWord()
+	} else {
+		return sel.IntoCursor(tab.Selections[len(tab.Selections)-1]).GetWord()
 	}
 }

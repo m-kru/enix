@@ -2,6 +2,7 @@ package line
 
 import (
 	"github.com/m-kru/enix/internal/cfg"
+	"github.com/m-kru/enix/internal/find"
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/highlight"
 	"github.com/m-kru/enix/internal/view"
@@ -16,8 +17,10 @@ func (l *Line) Render(
 	frame frame.Frame,
 	view view.View,
 	hls []highlight.Highlight,
-) []highlight.Highlight {
+	finds []find.Find,
+) ([]highlight.Highlight, []find.Find) {
 	currentHl := 0
+	currentFind := 0
 	frameX := 0
 	runeIdx, runeSubcol, ok := l.RuneIdx(view.Column)
 
@@ -67,6 +70,15 @@ func (l *Line) Render(
 				currentHl++
 			}
 		}
+		if len(finds) > 0 && currentFind < len(finds) {
+			if finds[currentFind].CoversCell(lineNum, runeIdx) {
+				color = colors.Find
+			}
+
+			if finds[currentFind].IsLastCell(lineNum, runeIdx) {
+				currentFind++
+			}
+		}
 
 		frame.SetContent(frameX, 0, r, color)
 		frameX += runewidth.RuneWidth(r)
@@ -90,7 +102,7 @@ func (l *Line) Render(
 			color := colors.Default
 			if hls != nil {
 				for {
-					// TODO: We shouldn't need this check, there is more bug.
+					// TODO: We shouldn't need this check, ss there some bug?
 					if currentHl >= len(hls) {
 						break
 					}
@@ -100,6 +112,16 @@ func (l *Line) Render(
 						break
 					}
 					currentHl++
+				}
+			}
+
+			if len(finds) > 0 && currentFind < len(finds) {
+				if finds[currentFind].CoversCell(lineNum, runeIdx) {
+					color = colors.Find
+				}
+
+				if finds[currentFind].IsLastCell(lineNum, runeIdx) {
+					currentFind++
 				}
 			}
 
@@ -120,5 +142,5 @@ clear:
 		frameX++
 	}
 
-	return hls[currentHl:]
+	return hls[currentHl:], finds[currentFind:]
 }

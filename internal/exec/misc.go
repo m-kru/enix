@@ -74,3 +74,13 @@ func LineUp(args []string, tab *tab.Tab) error {
 
 	return nil
 }
+
+func Search(args []string, tab *tab.Tab) error {
+	if len(args) != 1 {
+		return fmt.Errorf(
+			"search: expected 1 arg, provided %d", len(args),
+		)
+	}
+
+	return tab.Search(args[0])
+}
