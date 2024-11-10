@@ -40,24 +40,48 @@ func PrevWordStart(line []rune, idx int) (int, bool) {
 }
 
 // WordEnd finds next word end index.
+// The returned idx is the index of the first rune not belonging to the word.
 func WordEnd(line []rune, idx int) (int, bool) {
-	if idx >= len(line)-1 {
+	if idx >= len(line) {
 		return 0, false
 	}
 
-	for {
-		idx++
-		if idx == len(line)-1 {
-			if IsWordRune(line[idx]) {
-				return idx, true
-			} else {
-				break
+	type State int
+	const (
+		inWord State = iota
+		inSpace
+		inSeq // In a sequence of non word runes
+	)
+	state := inSeq
+	if IsWordRune(line[idx]) {
+		state = inWord
+	} else if unicode.IsSpace(line[idx]) {
+		state = inSpace
+	}
+
+	for i := idx + 1; i < len(line); i++ {
+		r := line[i]
+
+		switch state {
+		case inWord:
+			if !IsWordRune(r) {
+				return i, true
+			}
+		case inSpace:
+			if IsWordRune(r) {
+				state = inWord
+			} else if !unicode.IsSpace(r) {
+				state = inSeq
+			}
+		case inSeq:
+			if IsWordRune(r) || unicode.IsSpace(r) {
+				return i, true
 			}
 		}
+	}
 
-		if IsWordRune(line[idx]) && !IsWordRune(line[idx+1]) {
-			return idx, true
-		}
+	if state == inWord || state == inSeq {
+		return len(line), true
 	}
 
 	return 0, false

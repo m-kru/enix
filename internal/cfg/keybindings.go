@@ -85,6 +85,7 @@ func KeybindingsDefault() Keybindings {
 		"Rune[L]": "sel-right",
 		"Rune[K]": "sel-up",
 		"Rune[W]": "sel-word",
+		"Rune[E]": "sel-word-end",
 		// View
 		"Down":       "view-down",
 		"Ctrl+Down":  "5 view-down",

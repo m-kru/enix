@@ -91,7 +91,7 @@ func (c *Cursor) PrevWordStart() {
 
 func (c *Cursor) WordEnd() {
 	if idx, ok := util.WordEnd([]rune(c.Line.String()), c.RuneIdx); ok {
-		c.RuneIdx = idx + 1 // + 1 as we have found word end index.
+		c.RuneIdx = idx
 		c.ColIdx = c.Line.ColumnIdx(c.RuneIdx)
 		return
 	}
@@ -107,7 +107,7 @@ func (c *Cursor) WordEnd() {
 		if idx, ok := util.WordEnd([]rune(line.String()), 0); ok {
 			c.Line = line
 			c.LineNum = lineNum
-			c.RuneIdx = idx + 1
+			c.RuneIdx = idx
 			c.ColIdx = c.Line.ColumnIdx(c.RuneIdx)
 			return
 		}

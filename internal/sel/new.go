@@ -231,3 +231,46 @@ func fromCursorUp(c *cursor.Cursor) *Selection {
 
 	return first
 }
+
+func FromCursorsWordEnd(curs []*cursor.Cursor) []*Selection {
+	sels := make([]*Selection, 0, len(curs))
+
+	for _, c := range curs {
+		sels = append(sels, fromCursorWordEnd(c))
+	}
+
+	sels = Prune(sels)
+
+	return sels
+}
+
+func fromCursorWordEnd(c *cursor.Cursor) *Selection {
+	s := &Selection{
+		Line:         c.Line,
+		LineNum:      c.LineNum,
+		StartRuneIdx: c.RuneIdx,
+	}
+
+	c.WordEnd()
+
+	if c.Line == s.Line {
+		s.EndRuneIdx = c.RuneIdx
+		s.Cursor = c
+		return s
+	}
+
+	s.EndRuneIdx = s.Line.RuneCount()
+
+	s2 := &Selection{
+		Line:         c.Line,
+		LineNum:      c.LineNum,
+		StartRuneIdx: 0,
+		EndRuneIdx:   c.RuneIdx,
+		Cursor:       c,
+		Prev:         s,
+	}
+
+	s.Next = s2
+
+	return s
+}

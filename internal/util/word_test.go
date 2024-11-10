@@ -40,16 +40,17 @@ func TestWordEnd(t *testing.T) {
 	}{
 		{[]rune("    "), 1, 0, false},
 		{[]rune("abc"), 3, 0, false},
-		{[]rune("foo"), 0, 2, true},
-		{[]rune("aa bb_cc dd"), 2, 7, true},
+		{[]rune("foo"), 0, 3, true},
+		{[]rune("aa bb_cc dd"), 2, 8, true},
+		{[]rune("aa bb"), 1, 2, true},
 	}
 
 	for _, test := range tests {
 		idx, ok := WordEnd(test.line, test.startIdx)
 		if idx != test.wantIdx || ok != test.wantOk {
 			t.Fatalf(
-				"str: \"%s\", startIdx: %d, ok: %t, want idx: %d, want ok: %t",
-				string(test.line), test.startIdx, ok, test.wantIdx, test.wantOk,
+				"str: \"%s\", startIdx: %d, got idx: %d, ok: %t, want idx: %d, want ok: %t",
+				string(test.line), test.startIdx, idx, ok, test.wantIdx, test.wantOk,
 			)
 		}
 	}

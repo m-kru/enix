@@ -108,3 +108,24 @@ func (tab *Tab) selUpSelections() {
 
 	tab.Selections = sel.Prune(tab.Selections)
 }
+
+func (tab *Tab) SelWordEnd() {
+	if len(tab.Cursors) > 0 {
+		tab.selWordEndCursors()
+	} else {
+		tab.selWordEndSelections()
+	}
+}
+
+func (tab *Tab) selWordEndCursors() {
+	tab.Selections = sel.FromCursorsWordEnd(tab.Cursors)
+	tab.Cursors = nil
+}
+
+func (tab *Tab) selWordEndSelections() {
+	for i, s := range tab.Selections {
+		tab.Selections[i] = s.WordEnd()
+	}
+
+	tab.Selections = sel.Prune(tab.Selections)
+}

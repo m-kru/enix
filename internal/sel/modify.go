@@ -257,8 +257,21 @@ func (s *Selection) rightCursorOnLeft() *Selection {
 		return s
 	}
 
-	s = s.Next
-	s.Cursor = c
+	if s.Next != nil {
+		s = s.Next
+		s.Cursor = c
+	}
+
+	newS := &Selection{
+		Line:         c.Line,
+		LineNum:      c.LineNum,
+		StartRuneIdx: 0,
+		EndRuneIdx:   c.RuneIdx,
+		Cursor:       c,
+		Prev:         s,
+	}
+	s.Next = newS
+	s.Cursor = nil
 
 	return s
 }
@@ -366,6 +379,120 @@ func (s *Selection) upCursorOnRight() *Selection {
 		s.EndRuneIdx = s.StartRuneIdx
 		s.StartRuneIdx = c.RuneIdx
 	}
+
+	return first
+}
+
+func (s *Selection) WordEnd() *Selection {
+	if s.CursorOnLeft() {
+		return s.wordEndCursorOnLeft()
+	} else {
+		return s.wordEndCursorOnRight()
+	}
+}
+
+func (s *Selection) wordEndCursorOnLeft() *Selection {
+	c := s.Cursor
+	c.WordEnd()
+
+	if c.Line == s.Line {
+		if c.RuneIdx < s.EndRuneIdx {
+			s.StartRuneIdx = c.RuneIdx
+		} else {
+			s.StartRuneIdx = s.EndRuneIdx
+			s.EndRuneIdx = c.RuneIdx
+		}
+		return s
+	}
+
+	first := s
+	s.Cursor = nil
+
+	if s.Next == nil {
+		line := s.Line.Next
+		lines := c.LineNum - s.LineNum - 1
+		for i := 0; i < lines; i++ {
+			sTmp := &Selection{
+				Line:         line,
+				LineNum:      s.LineNum + 1,
+				StartRuneIdx: 0,
+				EndRuneIdx:   line.RuneCount(),
+				Prev:         s,
+			}
+			s.Next = sTmp
+			s = sTmp
+			line = line.Next
+		}
+
+		last := &Selection{
+			Line:         c.Line,
+			LineNum:      c.LineNum,
+			StartRuneIdx: 0,
+			EndRuneIdx:   c.RuneIdx,
+			Cursor:       c,
+			Prev:         s,
+		}
+
+		s.Next = last
+
+		return first
+	}
+
+	s = s.Next
+	s.Prev = nil
+
+	if c.Line == s.Line {
+		s.Cursor = c
+		if c.RuneIdx > s.EndRuneIdx {
+			s.EndRuneIdx = c.RuneIdx
+		} else {
+			s.StartRuneIdx = c.RuneIdx
+		}
+		return s
+	}
+
+	return s
+}
+
+func (s *Selection) wordEndCursorOnRight() *Selection {
+	first := s
+	s = s.Last()
+
+	c := s.Cursor
+	c.WordEnd()
+
+	if c.Line == s.Line {
+		s.EndRuneIdx = c.RuneIdx
+		return first
+	}
+
+	s.Cursor = nil
+
+	line := s.Line.Next
+	lines := c.LineNum - s.LineNum - 1
+	for i := 0; i < lines; i++ {
+		sTmp := &Selection{
+			Line:         line,
+			LineNum:      s.LineNum + 1,
+			StartRuneIdx: 0,
+			EndRuneIdx:   line.RuneCount(),
+			Prev:         s,
+		}
+		s.Next = sTmp
+		s = sTmp
+		line = line.Next
+	}
+
+	last := &Selection{
+		Line:         c.Line,
+		LineNum:      c.LineNum,
+		StartRuneIdx: 0,
+		EndRuneIdx:   c.RuneIdx,
+		Cursor:       c,
+		Prev:         s,
+	}
+
+	s.Next = last
 
 	return first
 }
