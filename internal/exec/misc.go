@@ -41,14 +41,29 @@ func Join(args []string, tab *tab.Tab) error {
 	return nil
 }
 
-func KeyName(args []string, tab *tab.Tab) (string, error) {
+func KeyName(args []string, t *tab.Tab) (string, error) {
 	if len(args) > 0 {
 		return "", fmt.Errorf(
 			"key-name: expected 0 args, provided %d", len(args),
 		)
 	}
 
-	return "insert a single key or key combo", nil
+	path := "key-name"
+	idx := 2
+	for {
+		if !t.Exists(path) {
+			break
+		}
+		path = fmt.Sprintf("key-name-%d", idx)
+		idx++
+	}
+
+	newT := tab.FromString(t.Config, t.Colors, t.Keys, "insert a single key or key combo:\n", path)
+	newT.State = "key-name"
+
+	t.Append(newT)
+
+	return "", nil
 }
 
 func LineDown(args []string, tab *tab.Tab) error {

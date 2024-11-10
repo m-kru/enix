@@ -180,6 +180,8 @@ func (tab *Tab) RxEventKey(ev *tcell.EventKey) {
 	switch tab.State {
 	case "insert":
 		tab.RxEventKeyInsert(ev)
+	case "key-name":
+		tab.RxEventKeyKeyName(ev)
 	case "replace":
 		tab.RxEventKeyReplace(ev)
 	}
