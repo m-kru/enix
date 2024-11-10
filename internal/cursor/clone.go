@@ -6,6 +6,7 @@ func Clone(cursors []*Cursor) []*Cursor {
 	for _, c := range cursors {
 		c := &Cursor{
 			Line:    c.Line,
+			LineNum: c.LineNum,
 			ColIdx:  c.ColIdx,
 			RuneIdx: c.RuneIdx,
 		}
