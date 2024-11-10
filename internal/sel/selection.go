@@ -69,7 +69,7 @@ func (s *Selection) FullView() view.View {
 		s = s.Next
 	}
 
-	v.Height = s.LineNum - v.Line
+	v.Height = s.LineNum - v.Line + 1
 
 	col2 := s.Line.ColumnIdx(s.StartRuneIdx)
 	if col1 <= col2 {
