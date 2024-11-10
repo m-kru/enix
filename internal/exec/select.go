@@ -29,6 +29,18 @@ func SelLeft(args []string, tab *tab.Tab) error {
 	return nil
 }
 
+func SelLine(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf(
+			"sel-line: provided %d args, expected 0", len(args),
+		)
+	}
+
+	tab.SelLine()
+
+	return nil
+}
+
 func SelRight(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf(

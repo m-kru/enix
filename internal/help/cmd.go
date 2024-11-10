@@ -113,6 +113,8 @@ If path to file is not provided, then it uses the current file path.`,
 
 	"find-prev": "find-prev # Selects previous find.",
 
+	"find-sel-prev": "find-sel-prev # Preserves selections and selects previous find.",
+
 	// Indent
 
 	"deindent": `deindent # Decreases indent of lines with cursor.
@@ -203,6 +205,9 @@ enters the insert moode for a single insertion.`,
 	"sel-count": `sel-count # Prints the number of selections in the current tab.`,
 
 	"sel-left": `sel-left # Extends/shrinks selection one rune left.`,
+
+	"sel-line": `sel-line # Selects whole line.
+If whole current line is already selected, then it extends the selection with the next line.`,
 
 	"sel-right": `sel-right # Extends/shrinks selection one rune right.`,
 

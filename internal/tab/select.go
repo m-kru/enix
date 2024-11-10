@@ -46,6 +46,27 @@ func (tab *Tab) selLeftSelections() {
 	tab.Selections = sel.Prune(tab.Selections)
 }
 
+func (tab *Tab) SelLine() {
+	if len(tab.Cursors) > 0 {
+		tab.selLineCursors()
+	} else {
+		tab.selLineSelections()
+	}
+}
+
+func (tab *Tab) selLineCursors() {
+	tab.Selections = sel.FromCursorsLine(tab.Cursors)
+	tab.Cursors = nil
+}
+
+func (tab *Tab) selLineSelections() {
+	for i, s := range tab.Selections {
+		tab.Selections[i] = s.NextLine()
+	}
+
+	tab.Selections = sel.Prune(tab.Selections)
+}
+
 func (tab *Tab) SelRight() {
 	if len(tab.Cursors) > 0 {
 		tab.selRightCursors()

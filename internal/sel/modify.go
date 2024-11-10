@@ -1,5 +1,7 @@
 package sel
 
+import "github.com/m-kru/enix/internal/cursor"
+
 func (s *Selection) Down() *Selection {
 	if s.CursorOnLeft() {
 		return s.downCursorOnLeft()
@@ -131,6 +133,104 @@ func (s *Selection) leftCursorOnRight() *Selection {
 	s = s.Prev
 	s.Cursor = c
 	s.Next = nil
+
+	return first
+}
+
+func (s *Selection) NextLine() *Selection {
+	if s.CursorOnLeft() {
+		return s.nextLineCursorOnLeft()
+	} else {
+		return s.nextLineCursorOnRight()
+	}
+}
+
+func (s *Selection) nextLineCursorOnLeft() *Selection {
+	lineRC := s.Line.RuneCount()
+	if s.StartRuneIdx != 0 || s.EndRuneIdx != lineRC {
+		s.StartRuneIdx = 0
+		s.EndRuneIdx = lineRC
+		s.Cursor.RuneIdx = 0
+		return s
+	}
+
+	first := s
+	s = s.Last()
+
+	lineRC = s.Line.RuneCount()
+	if s.StartRuneIdx != 0 || s.EndRuneIdx != lineRC {
+		first.Cursor = nil
+		s.StartRuneIdx = 0
+		s.EndRuneIdx = lineRC
+		s.Cursor = &cursor.Cursor{
+			Line:    s.Line,
+			LineNum: s.LineNum,
+			ColIdx:  s.Line.ColumnIdx(lineRC),
+			RuneIdx: lineRC,
+		}
+		return first
+	}
+
+	if s.Line.Next == nil {
+		return first
+	}
+
+	first.Cursor = nil
+	lineRC = s.Line.Next.RuneCount()
+	c := &cursor.Cursor{
+		Line:    s.Line.Next,
+		LineNum: s.LineNum + 1,
+		ColIdx:  s.Line.Next.ColumnIdx(lineRC),
+		RuneIdx: lineRC,
+	}
+
+	newS := &Selection{
+		Line:         c.Line,
+		LineNum:      c.LineNum,
+		StartRuneIdx: 0,
+		EndRuneIdx:   lineRC,
+		Cursor:       c,
+	}
+
+	s.Next = newS
+	newS.Prev = s
+
+	return first
+}
+
+func (s *Selection) nextLineCursorOnRight() *Selection {
+	first := s
+	s = s.Last()
+
+	lineRC := s.Line.RuneCount()
+	if s.StartRuneIdx != 0 || s.EndRuneIdx != lineRC {
+		s.StartRuneIdx = 0
+		s.EndRuneIdx = lineRC
+		s.Cursor.RuneIdx = lineRC
+		s.Cursor.ColIdx = s.Line.ColumnIdx(lineRC)
+		return first
+	}
+
+	if s.Line.Next == nil {
+		return first
+	}
+
+	c := s.Cursor
+	s.Cursor = nil
+	c.Down()
+	lineRC = c.Line.RuneCount()
+	c.RuneIdx = lineRC
+	c.ColIdx = c.Line.ColumnIdx(lineRC)
+	newS := &Selection{
+		Line:         c.Line,
+		LineNum:      c.LineNum,
+		StartRuneIdx: 0,
+		EndRuneIdx:   lineRC,
+		Cursor:       c,
+	}
+
+	s.Next = newS
+	newS.Prev = s
 
 	return first
 }
