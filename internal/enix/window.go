@@ -354,13 +354,17 @@ func (w *Window) OpenArgFiles() {
 			}
 		}
 		if err != nil {
-			errMsg += err.Error() + "\n"
+			errMsg += err.Error() + "\n\n"
 		}
 	}
 
 	if len(errMsg) > 0 {
 		errTab := tab.FromString(w.Config, w.Colors, w.InsertKeys, errMsg, "enix-error")
-		w.Tabs.Append(errTab)
+		if w.Tabs == nil {
+			w.Tabs = errTab
+		} else {
+			w.Tabs.Append(errTab)
+		}
 		w.CurrentTab = errTab
 	}
 }

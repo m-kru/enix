@@ -2,6 +2,9 @@ package tab
 
 import (
 	"errors"
+	"fmt"
+	"os"
+
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/lang"
@@ -9,7 +12,6 @@ import (
 	"github.com/m-kru/enix/internal/mark"
 	"github.com/m-kru/enix/internal/util"
 	"github.com/m-kru/enix/internal/view"
-	"os"
 )
 
 func Empty(config *cfg.Config, colors *cfg.Colorscheme, keys *cfg.Keybindings) *Tab {
@@ -39,7 +41,7 @@ func Empty(config *cfg.Config, colors *cfg.Colorscheme, keys *cfg.Keybindings) *
 }
 
 // Open opens a new tab.
-// It panics if "", then new empty tab is opened.
+// It path is "", then new empty tab is opened.
 //
 // TODO: Allow opening without highlighter, useful for script mode.
 func Open(
@@ -50,6 +52,19 @@ func Open(
 ) (*Tab, error) {
 	if path == "" {
 		return Empty(config, colors, keys), nil
+	}
+
+	// Check existance of backup file. If exists, return an error.
+	backupPath := path + ".enix-bak"
+	_, err := os.Stat(backupPath)
+	if err == nil {
+		return nil, fmt.Errorf(
+			"detected backup file '%[2]s'\n"+
+				"resolve the issue manually, either:\n"+
+				"1. Remove '%[2]s'\n"+
+				"2. Replace '%[1]s' with '%[2]s'",
+			path, backupPath,
+		)
 	}
 
 	tab := &Tab{
@@ -66,7 +81,7 @@ func Open(
 	}
 
 	// Lines initialization
-	_, err := os.Stat(path)
+	_, err = os.Stat(path)
 	if errors.Is(err, os.ErrNotExist) {
 		tab.Lines, tab.LineCount = line.FromString("")
 	} else if err != nil {

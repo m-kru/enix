@@ -22,7 +22,7 @@ func Open(args []string, t *tab.Tab) (*tab.Tab, error) {
 			}
 		}
 		if err != nil {
-			errMsg += err.Error() + "\n"
+			errMsg += err.Error() + "\n\n"
 		}
 	}
 
