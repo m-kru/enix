@@ -217,7 +217,7 @@ func (tab *Tab) RenderCursors(frame frame.Frame) {
 
 func (tab *Tab) RenderSelections(frame frame.Frame) {
 	for i, s := range tab.Selections {
-		if !tab.View.IsVisible(s.View()) {
+		if !tab.View.IsVisible(s.FullView()) {
 			continue
 		}
 
