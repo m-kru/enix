@@ -41,7 +41,7 @@ func KeybindingsDefault() Keybindings {
 		"Ctrl+J":  "spawn-down",
 		"Ctrl+K":  "spawn-up",
 		"Rune[a]": "line-start",
-		"Rune[;]": "line-end",
+		"Rune[f]": "line-end",
 		// Deletion
 		"Backspace":  "backspace",
 		"Backspace2": "backspace",
@@ -57,6 +57,8 @@ func KeybindingsDefault() Keybindings {
 		// Find
 		"Rune[n]": "find-next",
 		"Rune[N]": "find-sel-next",
+		"Rune[g]": "find-prev",
+		"Rune[G]": "find-sel-prev",
 		// Tab
 		"Ctrl+T": "tab-open",
 		// Miscellaneous
@@ -68,18 +70,20 @@ func KeybindingsDefault() Keybindings {
 		"Rune[m]": "mark tmp",
 		"Rune[M]": "go tmp",
 		"Ctrl+Z":  "suspend",
-		//"Rune[h]": "help",
 		"Rune[q]": "quit",
-		// "Ctrl+U":     "undo", Alt+U
-		"Rune[v]": "paste",
-		"Rune[W]": "sel-word",
+		"Rune[p]": "paste",
+		"Rune[P]": "paste-before",
+		"Rune[y]": "yank",
 		"Rune[ ]": "space",
 		"Tab":     "tab",
 		// Selection
+		"Rune[v]": "sel-line",
+		"Rune[V]": "sel-prev-line",
 		"Rune[J]": "sel-down",
 		"Rune[H]": "sel-left",
 		"Rune[L]": "sel-right",
 		"Rune[K]": "sel-up",
+		"Rune[W]": "sel-word",
 		// View
 		"Down":       "view-down",
 		"Ctrl+Down":  "5 view-down",
