@@ -27,7 +27,17 @@ func Open(args []string, t *tab.Tab) (*tab.Tab, error) {
 	}
 
 	if len(errMsg) > 0 {
-		errTab := tab.FromString(t.Config, t.Colors, t.Keys, errMsg, "enix-error")
+		path := "enix-error"
+		idx := 2
+		for {
+			if !t.Exists(path) {
+				break
+			}
+			path = fmt.Sprintf("enix-error-%d", idx)
+			idx++
+		}
+
+		errTab := tab.FromString(t.Config, t.Colors, t.Keys, errMsg, path)
 		t.Append(errTab)
 		newCurrentTab = errTab
 	}

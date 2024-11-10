@@ -82,6 +82,24 @@ func (tab *Tab) Last() *Tab {
 	return tab
 }
 
+func (tab *Tab) Exists(path string) bool {
+	t := tab.First()
+
+	for {
+		if t == nil {
+			break
+		}
+
+		if t.Path == path {
+			return true
+		}
+
+		t = t.Next
+	}
+
+	return false
+}
+
 func (tab *Tab) Append(newTab *Tab) {
 	last := tab.Last()
 	last.Next = newTab
