@@ -35,6 +35,14 @@ func (s *Selection) CursorOnRight() bool {
 	return s.Cursor != nil && s.Cursor.RuneIdx == s.EndRuneIdx
 }
 
+func (s *Selection) GetCursor() *cursor.Cursor {
+	if !s.CursorOnLeft() {
+		s = s.Last()
+	}
+
+	return s.Cursor
+}
+
 func (s *Selection) View() view.View {
 	startCol := s.Line.ColumnIdx(s.StartRuneIdx)
 	endCol := s.Line.ColumnIdx(s.EndRuneIdx)

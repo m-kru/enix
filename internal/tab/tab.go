@@ -172,6 +172,6 @@ func (tab *Tab) GetWord() string {
 	if len(tab.Cursors) > 0 {
 		return tab.Cursors[len(tab.Cursors)-1].GetWord()
 	} else {
-		return sel.IntoCursor(tab.Selections[len(tab.Selections)-1]).GetWord()
+		return tab.Selections[len(tab.Selections)-1].GetCursor().GetWord()
 	}
 }

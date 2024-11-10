@@ -8,7 +8,6 @@ import (
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/search"
-	"github.com/m-kru/enix/internal/sel"
 	"github.com/m-kru/enix/internal/view"
 )
 
@@ -19,7 +18,7 @@ func (tab *Tab) UpdateView() {
 	if len(tab.Cursors) > 0 {
 		v = tab.Cursors[len(tab.Cursors)-1].View()
 	} else {
-		v = sel.IntoCursor(tab.Selections[len(tab.Selections)-1]).View()
+		v = tab.Selections[len(tab.Selections)-1].GetCursor().View()
 	}
 
 	tab.View = tab.View.MinAdjust(v)
@@ -91,7 +90,7 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 	if len(tab.Cursors) > 0 {
 		c = tab.Cursors[len(tab.Cursors)-1]
 	} else {
-		c = sel.IntoCursor(tab.Selections[len(tab.Selections)-1])
+		c = tab.Selections[len(tab.Selections)-1].GetCursor()
 		if len(tab.Selections) == 1 {
 			b.WriteString("1 sel ")
 		} else {

@@ -51,7 +51,7 @@ func (tab *Tab) FindNext() {
 	if len(tab.Cursors) > 0 {
 		c = tab.Cursors[len(tab.Cursors)-1]
 	} else {
-		c = sel.IntoCursor(tab.Selections[len(tab.Selections)-1])
+		c = tab.Selections[len(tab.Selections)-1].GetCursor()
 	}
 
 	f := getNextFind(finds, c)
@@ -95,7 +95,7 @@ func (tab *Tab) FindSelNext() {
 		return
 	}
 
-	c := sel.IntoCursor(tab.Selections[len(tab.Selections)-1])
+	c := tab.Selections[len(tab.Selections)-1].GetCursor()
 
 	f := getNextFind(finds, c)
 
