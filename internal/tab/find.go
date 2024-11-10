@@ -33,7 +33,34 @@ func getNextFind(finds []find.Find, c *cursor.Cursor) find.Find {
 	return firstFind
 }
 
-func (tab *Tab) FindNext() {
+func getPrevFind(finds []find.Find, c *cursor.Cursor) find.Find {
+	firstFind := finds[0]
+	lastFind := finds[len(finds)-1]
+
+	// First check wrap-around
+	if c.LineNum < firstFind.LineNum ||
+		(c.LineNum == firstFind.LineNum && c.RuneIdx <= lastFind.StartRuneIdx) ||
+		(c.LineNum == lastFind.LineNum && c.RuneIdx > lastFind.StartRuneIdx) {
+		return lastFind
+	}
+
+	// TODO: Not optimal, O(n) complexity, can be implemented as O(log(n)).
+	for i := 0; i < len(finds)-1; i++ {
+		prev := finds[i]
+		next := finds[i+1]
+		// Can below check be simplified?
+		if (prev.LineNum < c.LineNum && c.LineNum < next.LineNum) ||
+			(prev.LineNum == c.LineNum && prev.EndRuneIdx < c.RuneIdx && c.RuneIdx <= next.EndRuneIdx) ||
+			(c.LineNum == next.LineNum && c.RuneIdx <= next.EndRuneIdx) {
+			return prev
+		}
+	}
+
+	return firstFind
+}
+
+// next is true for find-next and false for find-prev.
+func (tab *Tab) Find(next bool) {
 	if tab.SearchCtx.Regexp == nil {
 		if tab.SearchCtx.PrevRegexp == nil {
 			return
@@ -54,7 +81,12 @@ func (tab *Tab) FindNext() {
 		c = tab.Selections[len(tab.Selections)-1].GetCursor()
 	}
 
-	f := getNextFind(finds, c)
+	var f find.Find
+	if next {
+		f = getNextFind(finds, c)
+	} else {
+		f = getPrevFind(finds, c)
+	}
 
 	line := tab.Lines.Get(f.LineNum)
 	s := &sel.Selection{
@@ -76,9 +108,10 @@ func (tab *Tab) FindNext() {
 	tab.Selections = []*sel.Selection{s}
 }
 
-func (tab *Tab) FindSelNext() {
+// next is true for find-sel-next and false for find-sel-prev.
+func (tab *Tab) FindSel(next bool) {
 	if len(tab.Cursors) > 0 {
-		tab.FindNext()
+		tab.Find(next)
 		return
 	}
 
@@ -97,7 +130,12 @@ func (tab *Tab) FindSelNext() {
 
 	c := tab.Selections[len(tab.Selections)-1].GetCursor()
 
-	f := getNextFind(finds, c)
+	var f find.Find
+	if next {
+		f = getNextFind(finds, c)
+	} else {
+		f = getPrevFind(finds, c)
+	}
 
 	line := tab.Lines.Get(f.LineNum)
 	s := &sel.Selection{

@@ -345,8 +345,12 @@ func (p *Prompt) Exec() TcellEventReceiver {
 			err = exec.Esc(c.Args, tab)
 		case "find-next":
 			err = exec.FindNext(c.Args, tab)
+		case "find-prev":
+			err = exec.FindPrev(c.Args, tab)
 		case "find-sel-next":
 			err = exec.FindSelNext(c.Args, tab)
+		case "find-sel-prev":
+			err = exec.FindSelPrev(c.Args, tab)
 		case "g", "go":
 			err = exec.Go(c.Args, tab)
 		case "h", "help":
