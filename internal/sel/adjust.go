@@ -32,10 +32,9 @@ func (s *Selection) adjust(c *cursor.Cursor) *Selection {
 
 			nextS := &Selection{
 				Line:         line,
-				LineNum:      c.LineNum,
+				LineNum:      lineNum,
 				StartRuneIdx: 0,
-				EndRuneIdx:   c.Line.RuneCount(),
-				Cursor:       c,
+				EndRuneIdx:   line.RuneCount(),
 			}
 
 			s.Next = nextS
