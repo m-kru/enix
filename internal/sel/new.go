@@ -45,7 +45,6 @@ func fromCursorDown(c *cursor.Cursor) *Selection {
 	}
 
 	first.Next = second
-	second.Prev = first
 
 	return first
 }
@@ -101,7 +100,6 @@ func fromCursorLeft(c *cursor.Cursor) *Selection {
 	}
 
 	first.Next = second
-	second.Prev = first
 
 	return first
 }
@@ -181,7 +179,6 @@ func fromCursorRight(c *cursor.Cursor) *Selection {
 	}
 
 	first.Next = second
-	second.Prev = first
 
 	return first
 }
@@ -227,7 +224,6 @@ func fromCursorUp(c *cursor.Cursor) *Selection {
 	}
 
 	first.Next = second
-	second.Prev = first
 
 	return first
 }
@@ -275,11 +271,9 @@ func fromCursorWordEnd(c *cursor.Cursor) *Selection {
 			LineNum:      lineNum,
 			StartRuneIdx: 0,
 			EndRuneIdx:   line.RuneCount(),
-			Prev:         s,
 		}
 
 		s.Next = nextS
-		nextS.Prev = s
 		s = nextS
 	}
 
@@ -289,7 +283,6 @@ func fromCursorWordEnd(c *cursor.Cursor) *Selection {
 		StartRuneIdx: 0,
 		EndRuneIdx:   c.RuneIdx,
 		Cursor:       c,
-		Prev:         s,
 	}
 
 	s.Next = last
@@ -341,7 +334,6 @@ func fromCursorPrevWordStart(c *cursor.Cursor) *Selection {
 			Next:         s,
 		}
 
-		s.Prev = prevS
 		s = prevS
 	}
 
@@ -353,8 +345,6 @@ func fromCursorPrevWordStart(c *cursor.Cursor) *Selection {
 		Cursor:       c,
 		Next:         s,
 	}
-
-	s.Prev = first
 
 	return first
 }

@@ -36,7 +36,6 @@ func (s *Selection) adjust(c *cursor.Cursor) *Selection {
 				StartRuneIdx: 0,
 				EndRuneIdx:   c.Line.RuneCount(),
 				Cursor:       c,
-				Prev:         s,
 			}
 
 			s.Next = nextS
@@ -87,7 +86,6 @@ func (s *Selection) adjust(c *cursor.Cursor) *Selection {
 		if oldCurOnLeft {
 			first = s
 			s.StartRuneIdx = c.RuneIdx
-			s.Prev = nil
 		} else {
 			s.EndRuneIdx = c.RuneIdx
 			s.Next = nil
@@ -103,7 +101,6 @@ func (s *Selection) adjust(c *cursor.Cursor) *Selection {
 					last.StartRuneIdx = last.EndRuneIdx
 					last.EndRuneIdx = c.RuneIdx
 				}
-				last.Prev = nil
 				first = last
 			} else {
 				last.EndRuneIdx = c.RuneIdx
@@ -121,7 +118,6 @@ func (s *Selection) adjust(c *cursor.Cursor) *Selection {
 		newFirst := first
 		if oldCurOnLeft {
 			last.StartRuneIdx = last.EndRuneIdx
-			last.Prev = nil
 			newFirst = last
 		}
 		last.EndRuneIdx = last.Line.RuneCount()
@@ -139,7 +135,6 @@ func (s *Selection) adjust(c *cursor.Cursor) *Selection {
 				LineNum:      lineNum,
 				StartRuneIdx: 0,
 				EndRuneIdx:   c.Line.RuneCount(),
-				Prev:         s,
 			}
 
 			s.Next = nextS
@@ -152,7 +147,6 @@ func (s *Selection) adjust(c *cursor.Cursor) *Selection {
 			StartRuneIdx: 0,
 			EndRuneIdx:   c.RuneIdx,
 			Cursor:       c,
-			Prev:         s,
 		}
 
 		s.Next = newLast
@@ -231,7 +225,6 @@ func (s *Selection) nextLineCursorOnLeft() *Selection {
 	}
 
 	s.Next = newS
-	newS.Prev = s
 
 	return first
 }
@@ -268,7 +261,6 @@ func (s *Selection) nextLineCursorOnRight() *Selection {
 	}
 
 	s.Next = newS
-	newS.Prev = s
 
 	return first
 }
