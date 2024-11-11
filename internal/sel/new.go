@@ -259,9 +259,31 @@ func fromCursorWordEnd(c *cursor.Cursor) *Selection {
 		return s
 	}
 
+	first := s
+
 	s.EndRuneIdx = s.Line.RuneCount()
 
-	s2 := &Selection{
+	line := s.Line
+	lineNum := s.LineNum
+
+	for i := 0; i < c.LineNum-first.LineNum-1; i++ {
+		line = line.Next
+		lineNum++
+
+		nextS := &Selection{
+			Line:         line,
+			LineNum:      lineNum,
+			StartRuneIdx: 0,
+			EndRuneIdx:   line.RuneCount(),
+			Prev:         s,
+		}
+
+		s.Next = nextS
+		nextS.Prev = s
+		s = nextS
+	}
+
+	last := &Selection{
 		Line:         c.Line,
 		LineNum:      c.LineNum,
 		StartRuneIdx: 0,
@@ -270,7 +292,69 @@ func fromCursorWordEnd(c *cursor.Cursor) *Selection {
 		Prev:         s,
 	}
 
-	s.Next = s2
+	s.Next = last
 
-	return s
+	return first
+}
+
+func FromCursorsPrevWordStart(curs []*cursor.Cursor) []*Selection {
+	sels := make([]*Selection, 0, len(curs))
+
+	for _, c := range curs {
+		sels = append(sels, fromCursorPrevWordStart(c))
+	}
+
+	sels = Prune(sels)
+
+	return sels
+}
+
+func fromCursorPrevWordStart(c *cursor.Cursor) *Selection {
+	s := &Selection{
+		Line:       c.Line,
+		LineNum:    c.LineNum,
+		EndRuneIdx: c.RuneIdx,
+	}
+
+	c.PrevWordStart()
+
+	if c.Line == s.Line {
+		s.StartRuneIdx = c.RuneIdx
+		s.Cursor = c
+		return s
+	}
+
+	s.StartRuneIdx = 0
+	last := s
+
+	line := s.Line
+	lineNum := s.LineNum
+	for i := 0; i < last.LineNum-c.LineNum-1; i++ {
+		line = line.Prev
+		lineNum--
+
+		prevS := &Selection{
+			Line:         line,
+			LineNum:      lineNum,
+			StartRuneIdx: 0,
+			EndRuneIdx:   line.RuneCount(),
+			Next:         s,
+		}
+
+		s.Prev = prevS
+		s = prevS
+	}
+
+	first := &Selection{
+		Line:         c.Line,
+		LineNum:      c.LineNum,
+		StartRuneIdx: c.RuneIdx,
+		EndRuneIdx:   c.Line.RuneCount(),
+		Cursor:       c,
+		Next:         s,
+	}
+
+	s.Prev = first
+
+	return first
 }

@@ -73,10 +73,8 @@ func (tab *Tab) SelPrevWordStart() {
 }
 
 func (tab *Tab) selPrevWordStartCursors() {
-	/*
-		tab.Selections = sel.FromCursorsPrevWordStart(tab.Cursors)
-		tab.Cursors = nil
-	*/
+	tab.Selections = sel.FromCursorsPrevWordStart(tab.Cursors)
+	tab.Cursors = nil
 }
 
 func (tab *Tab) selPrevWordStartSelections() {
