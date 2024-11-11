@@ -21,7 +21,6 @@ func (tab *Tab) selDownSelections() {
 	for i, s := range tab.Selections {
 		tab.Selections[i] = s.Down()
 	}
-
 	tab.Selections = sel.Prune(tab.Selections)
 }
 
@@ -42,7 +41,6 @@ func (tab *Tab) selLeftSelections() {
 	for i, s := range tab.Selections {
 		tab.Selections[i] = s.Left()
 	}
-
 	tab.Selections = sel.Prune(tab.Selections)
 }
 
@@ -63,7 +61,28 @@ func (tab *Tab) selLineSelections() {
 	for i, s := range tab.Selections {
 		tab.Selections[i] = s.NextLine()
 	}
+	tab.Selections = sel.Prune(tab.Selections)
+}
 
+func (tab *Tab) SelPrevWordStart() {
+	if len(tab.Cursors) > 0 {
+		tab.selPrevWordStartCursors()
+	} else {
+		tab.selPrevWordStartSelections()
+	}
+}
+
+func (tab *Tab) selPrevWordStartCursors() {
+	/*
+		tab.Selections = sel.FromCursorsPrevWordStart(tab.Cursors)
+		tab.Cursors = nil
+	*/
+}
+
+func (tab *Tab) selPrevWordStartSelections() {
+	for i, s := range tab.Selections {
+		tab.Selections[i] = s.PrevWordStart()
+	}
 	tab.Selections = sel.Prune(tab.Selections)
 }
 
@@ -84,7 +103,6 @@ func (tab *Tab) selRightSelections() {
 	for i, s := range tab.Selections {
 		tab.Selections[i] = s.Right()
 	}
-
 	tab.Selections = sel.Prune(tab.Selections)
 }
 
@@ -105,7 +123,6 @@ func (tab *Tab) selUpSelections() {
 	for i, s := range tab.Selections {
 		tab.Selections[i] = s.Up()
 	}
-
 	tab.Selections = sel.Prune(tab.Selections)
 }
 
@@ -126,6 +143,5 @@ func (tab *Tab) selWordEndSelections() {
 	for i, s := range tab.Selections {
 		tab.Selections[i] = s.WordEnd()
 	}
-
 	tab.Selections = sel.Prune(tab.Selections)
 }

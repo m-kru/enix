@@ -214,9 +214,11 @@ If whole current line is already selected, then it extends the selection with th
 	"sel-white": `sel-white # Selects sequence of whitespaces.
 If cursors is not placed on a whitespace character, nothing is selected.`,
 
+	"sel-prev-word-start": `sel-prev-word-start # Selects or extends selection to the start of previous  word.`,
+
 	"sel-word": `sel-word # Selects word under cursor.`,
 
-	"sel-word-end": `sel-word-end # Selects to the end of word or extends selection to the end of next word.`,
+	"sel-word-end": `sel-word-end # Selects or extends selection to the end of next word.`,
 
 	"suspend": `suspend # Stops process and gives control to shell.
 This command has been so far tested only on Linux.`,

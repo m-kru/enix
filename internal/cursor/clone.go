@@ -1,5 +1,16 @@
 package cursor
 
+func (c *Cursor) Clone() *Cursor {
+	newC := &Cursor{
+		Line:    c.Line,
+		LineNum: c.LineNum,
+		ColIdx:  c.ColIdx,
+		RuneIdx: c.RuneIdx,
+	}
+
+	return newC
+}
+
 func Clone(cursors []*Cursor) []*Cursor {
 	cs := make([]*Cursor, 0, len(cursors))
 
