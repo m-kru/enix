@@ -11,7 +11,7 @@ func (tab *Tab) Esc() {
 	}
 
 	if len(tab.Selections) > 0 {
-		tab.Cursors = sel.IntoCursors(tab.Selections)
+		tab.Cursors = sel.ToCursors(tab.Selections)
 		tab.Selections = nil
 		return
 	}

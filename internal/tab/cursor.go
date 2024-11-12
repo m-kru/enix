@@ -7,7 +7,7 @@ import (
 
 func (tab *Tab) Down() {
 	if len(tab.Cursors) == 0 {
-		tab.Cursors = sel.IntoCursors(tab.Selections)
+		tab.Cursors = sel.ToCursors(tab.Selections)
 		tab.Selections = nil
 	}
 
@@ -20,7 +20,7 @@ func (tab *Tab) Down() {
 
 func (tab *Tab) End() {
 	if len(tab.Cursors) == 0 {
-		tab.Cursors = sel.IntoCursors(tab.Selections)
+		tab.Cursors = sel.ToCursors(tab.Selections)
 		tab.Selections = nil
 	}
 
@@ -34,7 +34,7 @@ func (tab *Tab) End() {
 
 func (tab *Tab) Left() {
 	if len(tab.Cursors) == 0 {
-		tab.Cursors = sel.IntoCursors(tab.Selections)
+		tab.Cursors = sel.ToCursors(tab.Selections)
 		tab.Selections = nil
 	}
 
@@ -47,7 +47,7 @@ func (tab *Tab) Left() {
 
 func (tab *Tab) LineEnd() {
 	if len(tab.Cursors) == 0 {
-		tab.Cursors = sel.IntoCursors(tab.Selections)
+		tab.Cursors = sel.ToCursors(tab.Selections)
 		tab.Selections = nil
 	}
 
@@ -60,7 +60,7 @@ func (tab *Tab) LineEnd() {
 
 func (tab *Tab) LineStart() {
 	if len(tab.Cursors) == 0 {
-		tab.Cursors = sel.IntoCursors(tab.Selections)
+		tab.Cursors = sel.ToCursors(tab.Selections)
 		tab.Selections = nil
 	}
 
@@ -73,7 +73,7 @@ func (tab *Tab) LineStart() {
 
 func (tab *Tab) PrevWordStart() {
 	if len(tab.Cursors) == 0 {
-		tab.Cursors = sel.IntoCursors(tab.Selections)
+		tab.Cursors = sel.ToCursors(tab.Selections)
 		tab.Selections = nil
 	}
 
@@ -86,7 +86,7 @@ func (tab *Tab) PrevWordStart() {
 
 func (tab *Tab) Right() {
 	if len(tab.Cursors) == 0 {
-		tab.Cursors = sel.IntoCursors(tab.Selections)
+		tab.Cursors = sel.ToCursors(tab.Selections)
 		tab.Selections = nil
 	}
 
@@ -99,7 +99,7 @@ func (tab *Tab) Right() {
 
 func (tab *Tab) SpawnDown() {
 	if len(tab.Cursors) == 0 {
-		tab.Cursors = sel.IntoCursors(tab.Selections)
+		tab.Cursors = sel.ToCursors(tab.Selections)
 		tab.Selections = nil
 	}
 
@@ -124,7 +124,7 @@ func (tab *Tab) SpawnDown() {
 
 func (tab *Tab) SpawnUp() {
 	if len(tab.Cursors) == 0 {
-		tab.Cursors = sel.IntoCursors(tab.Selections)
+		tab.Cursors = sel.ToCursors(tab.Selections)
 		tab.Selections = nil
 	}
 
@@ -149,7 +149,7 @@ func (tab *Tab) SpawnUp() {
 
 func (tab *Tab) Up() {
 	if len(tab.Cursors) == 0 {
-		tab.Cursors = sel.IntoCursors(tab.Selections)
+		tab.Cursors = sel.ToCursors(tab.Selections)
 		tab.Selections = nil
 	}
 
@@ -162,7 +162,7 @@ func (tab *Tab) Up() {
 
 func (tab *Tab) WordEnd() {
 	if len(tab.Cursors) == 0 {
-		tab.Cursors = sel.IntoCursors(tab.Selections)
+		tab.Cursors = sel.ToCursors(tab.Selections)
 		tab.Selections = nil
 	}
 
@@ -175,7 +175,7 @@ func (tab *Tab) WordEnd() {
 
 func (tab *Tab) WordStart() {
 	if len(tab.Cursors) == 0 {
-		tab.Cursors = sel.IntoCursors(tab.Selections)
+		tab.Cursors = sel.ToCursors(tab.Selections)
 		tab.Selections = nil
 	}
 
