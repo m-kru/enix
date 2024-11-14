@@ -213,6 +213,8 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			err = exec.SelPrevWordStart(c.Args, tab)
 		case "sel-right":
 			err = exec.SelRight(c.Args, tab)
+		case "sel-to-tab":
+			w.CurrentTab, err = exec.SelToTab(c.Args, tab)
 		case "sel-up":
 			err = exec.SelUp(c.Args, tab)
 		case "sel-word-end":

@@ -65,6 +65,34 @@ func SelRight(args []string, tab *tab.Tab) error {
 	return nil
 }
 
+func SelToTab(args []string, tab *tab.Tab) (*tab.Tab, error) {
+	if len(args) > 1 {
+		return tab, fmt.Errorf(
+			"sel-to-tab: provided %d args, expected at most 1", len(args),
+		)
+	}
+
+	path := "no-name"
+	if len(args) == 1 {
+		path = args[0]
+	}
+
+	idx := 1
+	pathBase := path
+	for {
+		if !tab.Exists(path) {
+			break
+		}
+		path = fmt.Sprintf("%s-%d", pathBase, idx)
+		idx++
+	}
+
+	newTab := tab.SelToTab(path)
+	tab.Append(newTab)
+
+	return newTab, nil
+}
+
 func SelUp(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf(

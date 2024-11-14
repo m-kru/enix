@@ -216,6 +216,8 @@ If cursors is not placed on a whitespace character, nothing is selected.`,
 
 	"sel-prev-word-start": `sel-prev-word-start # Selects or extends selection to the start of previous  word.`,
 
+	"sel-to-tab": `sel-to-tab [tab-path] # Opens a new tab with the content of current selections.`,
+
 	"sel-word": `sel-word # Selects word under cursor.`,
 
 	"sel-word-end": `sel-word-end # Selects or extends selection to the end of next word.`,

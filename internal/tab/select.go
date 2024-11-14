@@ -143,3 +143,13 @@ func (tab *Tab) selWordEndSelections() {
 	}
 	tab.Selections = sel.Prune(tab.Selections)
 }
+
+func (tab *Tab) SelToTab(path string) *Tab {
+	if len(tab.Selections) == 0 {
+		return nil
+	}
+
+	str := sel.ToString(tab.Selections)
+
+	return FromString(tab.Config, tab.Colors, tab.Keys, str, path)
+}
