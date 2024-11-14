@@ -14,8 +14,8 @@ func (c *Cursor) Delete() action.Action {
 		return &action.NewlineDelete{Line: delLine, LineNum: c.LineNum}
 	}
 
-	c.Line.DeleteRune(c.RuneIdx)
-	return &action.RuneDelete{Line: c.Line, RuneIdx: c.RuneIdx}
+	r := c.Line.DeleteRune(c.RuneIdx)
+	return &action.RuneDelete{Line: c.Line, Rune: r, RuneIdx: c.RuneIdx}
 }
 
 func (c *Cursor) Join() action.Action {
@@ -46,8 +46,8 @@ func (c *Cursor) Backspace() action.Action {
 		}
 	}
 
-	c.Line.DeleteRune(c.RuneIdx - 1)
+	r := c.Line.DeleteRune(c.RuneIdx - 1)
 	c.RuneIdx--
 
-	return &action.RuneDelete{Line: c.Line, RuneIdx: c.RuneIdx - 1}
+	return &action.RuneDelete{Line: c.Line, Rune: r, RuneIdx: c.RuneIdx - 1}
 }

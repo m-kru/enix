@@ -2,20 +2,17 @@ package line
 
 import "unicode/utf8"
 
-func (l *Line) DeleteRune(runeIdx int) *Line {
+func (l *Line) DeleteRune(runeIdx int) rune {
 	if runeIdx == l.RuneCount() {
 		if l.Next == nil {
-			return nil
+			return 0
 		}
-
-		// Newline deletion
-		return l.Join(false)
 	}
 
 	bIdx := l.BufIdx(runeIdx)
-	_, rLen := utf8.DecodeRune(l.Buf[bIdx:])
+	r, rLen := utf8.DecodeRune(l.Buf[bIdx:])
 
 	l.Buf = append(l.Buf[:bIdx], l.Buf[bIdx+rLen:]...)
 
-	return nil
+	return r
 }

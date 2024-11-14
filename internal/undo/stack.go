@@ -1,5 +1,6 @@
 package undo
 
+/*
 type Stack struct {
 	len int
 	cap int
@@ -19,3 +20,4 @@ func (s *Stack) Push() {
 func (s *Stack) Pop() {
 
 }
+*/

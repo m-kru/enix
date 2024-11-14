@@ -16,11 +16,13 @@ type (
 
 	RuneDelete struct {
 		Line    *line.Line
+		Rune    rune
 		RuneIdx int
 	}
 
 	RuneInsert struct {
 		Line    *line.Line
+		Rune    rune
 		RuneIdx int
 	}
 )
