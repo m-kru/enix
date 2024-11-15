@@ -31,8 +31,10 @@ func (tab *Tab) undo(act *undo.Action) {
 
 	tab.Cursors = act.Cursors
 
-	for _, m := range tab.Marks {
-		m.Inform(act.Action)
+	for _, a := range as {
+		for _, m := range tab.Marks {
+			m.Inform(a)
+		}
 	}
 }
 
