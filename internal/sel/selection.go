@@ -59,25 +59,30 @@ func (s *Selection) View() view.View {
 func (s *Selection) FullView() view.View {
 	v := view.View{Line: s.LineNum}
 
-	col1 := s.Line.ColumnIdx(s.StartRuneIdx)
+	minCol := s.Line.ColumnIdx(s.StartRuneIdx)
+	maxCol := s.Line.ColumnIdx(s.EndRuneIdx)
 
 	for {
 		if s.Next == nil {
 			break
 		}
+
+		min := s.Line.ColumnIdx(s.StartRuneIdx)
+		if min < minCol {
+			minCol = min
+		}
+
+		max := s.Line.ColumnIdx(s.EndRuneIdx)
+		if max > maxCol {
+			maxCol = max
+		}
+
 		s = s.Next
 	}
 
 	v.Height = s.LineNum - v.Line + 1
-
-	col2 := s.Line.ColumnIdx(s.StartRuneIdx)
-	if col1 <= col2 {
-		v.Column = col1
-		v.Width = col2 - col1 + 1
-	} else {
-		v.Column = col2
-		v.Width = col1 - col2 + 1
-	}
+	v.Column = minCol
+	v.Width = maxCol - minCol + 1
 
 	return v
 }
