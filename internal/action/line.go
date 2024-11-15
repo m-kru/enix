@@ -14,3 +14,11 @@ type (
 
 func (ld *LineDown) isAction() {}
 func (lu *LineUp) isAction()   {}
+
+func (ld *LineDown) Reverse() Action {
+	return &LineUp{Line: ld.Line}
+}
+
+func (lu *LineUp) Reverse() Action {
+	return &LineDown{Line: lu.Line}
+}

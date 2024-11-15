@@ -32,3 +32,19 @@ func (nd *NewlineDelete) isAction() {}
 func (ni *NewlineInsert) isAction() {}
 func (rd *RuneDelete) isAction()    {}
 func (ri *RuneInsert) isAction()    {}
+
+func (nd *NewlineDelete) Reverse() Action {
+	return &NewlineInsert{Line: nd.Line, LineNum: nd.LineNum, RuneIdx: nd.RuneIdx}
+}
+
+func (ni *NewlineInsert) Reverse() Action {
+	return &NewlineDelete{Line: ni.Line, LineNum: ni.LineNum, RuneIdx: ni.RuneIdx}
+}
+
+func (rd *RuneDelete) Reverse() Action {
+	return &RuneInsert{Line: rd.Line, Rune: rd.Rune, RuneIdx: rd.RuneIdx}
+}
+
+func (ri *RuneInsert) Reverse() Action {
+	return &RuneDelete{Line: ri.Line, Rune: ri.Rune, RuneIdx: ri.RuneIdx}
+}
