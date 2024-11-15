@@ -1,0 +1,5 @@
+add-cursor 2 1
+line-down
+undo
+rune X
+save got

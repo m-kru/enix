@@ -1,0 +1,6 @@
+go 4
+add-cursor 3 1
+line-up
+undo
+rune X
+save got
