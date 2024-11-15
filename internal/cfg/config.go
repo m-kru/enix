@@ -16,6 +16,8 @@ type Config struct {
 	LineEndRune rune
 	TabRune     rune
 	TabPadRune  rune
+
+	UndoSize int // Undo and Redo stack size
 }
 
 func ConfigDefault() Config {
@@ -26,5 +28,6 @@ func ConfigDefault() Config {
 		LineEndRune:  '¬',
 		TabRune:      '▸',
 		TabPadRune:   '·',
+		UndoSize:     1024,
 	}
 }
