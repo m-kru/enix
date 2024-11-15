@@ -15,7 +15,11 @@ func (l *Line) Join(trim bool) bool {
 	delLine := l.Next
 	str := string(delLine.Buf)
 	if trim {
-		str = " " + strings.TrimLeft(str, " \t")
+		prefix := " "
+		if len(l.Buf) == 0 {
+			prefix = ""
+		}
+		str = prefix + strings.TrimLeft(str, " \t")
 	}
 
 	l.Append([]byte(str))

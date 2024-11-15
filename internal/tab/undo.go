@@ -41,6 +41,9 @@ func (tab *Tab) undo(act *undo.Action) {
 func (tab *Tab) undoActions(acts action.Actions) {
 	for _, act := range acts {
 		switch a := act.(type) {
+		case *action.NewlineDelete:
+			a.Line.Join(true)
+			tab.LineCount--
 		case *action.NewlineInsert:
 			a.Line.InsertNewline(a.RuneIdx)
 			tab.LineCount++

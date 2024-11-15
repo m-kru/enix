@@ -73,8 +73,13 @@ func (tab *Tab) InsertNewline() {
 }
 
 func (tab *Tab) insertNewlineCursors() {
+	prevCurs := cursor.Clone(tab.Cursors)
+	actions := make(action.Actions, 0, len(tab.Cursors))
+
 	for _, c := range tab.Cursors {
 		act := c.InsertNewline()
+
+		actions = append(actions, act)
 
 		tab.LineCount++
 
@@ -85,6 +90,11 @@ func (tab *Tab) insertNewlineCursors() {
 
 		}
 	}
+
+	if len(actions) > 0 {
+		tab.UndoStack.Push(actions.Reverse(), prevCurs)
+	}
+
 }
 
 func (tab *Tab) InsertRuneAtPosition(lineNum int, col int, r rune) error {
