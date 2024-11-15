@@ -1,6 +1,7 @@
 package tab
 
 import (
+	"github.com/m-kru/enix/internal/action"
 	"github.com/m-kru/enix/internal/cursor"
 )
 
@@ -47,6 +48,9 @@ func (tab *Tab) LineDown() {
 }
 
 func (tab *Tab) lineDownCursors() {
+	prevCurs := cursor.Clone(tab.Cursors)
+	actions := make(action.Actions, 0, len(tab.Cursors))
+
 	// Move lines down only once, even if there are multiple cursors in the line.
 	curs := cursor.Uniques(tab.Cursors, false)
 
@@ -54,6 +58,11 @@ func (tab *Tab) lineDownCursors() {
 		newFirstLine := c.Line == tab.Lines
 
 		act := c.LineDown()
+		if act == nil {
+			continue
+		}
+
+		actions = append(actions, act)
 
 		if newFirstLine {
 			tab.Lines = c.Line.Prev
@@ -66,6 +75,10 @@ func (tab *Tab) lineDownCursors() {
 		}
 
 		tab.Cursors = cursor.Prune(tab.Cursors)
+	}
+
+	if len(actions) > 0 {
+		tab.UndoStack.Push(actions.Reverse(), prevCurs)
 	}
 
 	tab.HasChanges = true
@@ -84,6 +97,9 @@ func (tab *Tab) LineUp() {
 }
 
 func (tab *Tab) lineUpCursors() {
+	prevCurs := cursor.Clone(tab.Cursors)
+	actions := make(action.Actions, 0, len(tab.Cursors))
+
 	// Move lines up only once, even if there are multiple cursors in the line.
 	curs := cursor.Uniques(tab.Cursors, true)
 
@@ -91,6 +107,11 @@ func (tab *Tab) lineUpCursors() {
 		newFirstLine := c.Line.Prev == tab.Lines
 
 		act := c.LineUp()
+		if act == nil {
+			continue
+		}
+
+		actions = append(actions, act)
 
 		if newFirstLine {
 			tab.Lines = c.Line
@@ -103,6 +124,10 @@ func (tab *Tab) lineUpCursors() {
 		}
 
 		tab.Cursors = cursor.Prune(tab.Cursors)
+	}
+
+	if len(actions) > 0 {
+		tab.UndoStack.Push(actions.Reverse(), prevCurs)
 	}
 
 	tab.HasChanges = true
