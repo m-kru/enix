@@ -1,0 +1,4 @@
+add-cursor 2 1
+del
+undo
+save got
