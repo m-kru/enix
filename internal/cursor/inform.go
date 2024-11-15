@@ -52,15 +52,16 @@ func (c *Cursor) informNewlineDelete(nd *action.NewlineDelete) {
 }
 
 func (c *Cursor) informNewlineInsert(ni *action.NewlineInsert) {
-	if (ni.LineNum < c.LineNum) || (ni.LineNum == c.LineNum && ni.RuneIdx < c.RuneIdx) {
-		c.LineNum++
-	}
-
-	if c.Line != ni.Line.Prev || c.RuneIdx <= ni.RuneIdx {
+	if c.LineNum < ni.LineNum || (c.LineNum == ni.LineNum && c.RuneIdx < ni.RuneIdx) {
 		return
 	}
 
-	c.Line = ni.Line
+	c.LineNum++
+	if c.LineNum > ni.LineNum+1 {
+		return
+	}
+
+	c.Line = ni.Line.Next
 	c.RuneIdx -= ni.RuneIdx
 	c.ColIdx = c.Line.ColumnIdx(c.RuneIdx)
 }

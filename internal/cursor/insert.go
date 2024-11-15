@@ -20,5 +20,5 @@ func (c *Cursor) InsertNewline() *action.NewlineInsert {
 	c.RuneIdx = 0
 	c.ColIdx = 1
 
-	return &action.NewlineInsert{Line: newLine, LineNum: lineNum, RuneIdx: rIdx}
+	return &action.NewlineInsert{Line: newLine.Prev, LineNum: lineNum, RuneIdx: rIdx}
 }
