@@ -52,7 +52,7 @@ lint:
 
 # Test targets
 .PHONY: test-all
-test-all: test test-arg test-cmd
+test-all: test test-arg test-cmd test-undo
 
 .PHONY: test
 test:
@@ -65,6 +65,10 @@ test-arg:
 .PHONY: test-cmd
 test-cmd:
 	@./scripts/test-cmd.sh
+
+.PHONY: test-undo
+test-undo:
+	@./scripts/test-undo.sh
 
 # Installation targets
 .PHONY: install

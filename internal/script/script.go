@@ -119,6 +119,8 @@ func execCmd(c cmd.Command, tab *tab.Tab) error {
 			err = exec.Tab(c.Args, tab)
 		case "trim":
 			err = exec.Trim(c.Args, tab)
+		case "undo":
+			err = exec.Undo(c.Args, tab)
 		case "up":
 			err = exec.Up(c.Args, tab)
 		case "word-end":
