@@ -62,21 +62,19 @@ func (tab *Tab) undoActions(acts action.Actions) {
 func (tab *Tab) undoLineDown(ld *action.LineDown) {
 	newFirstLine := ld.Line == tab.Lines
 
-	line := ld.Line
-	nextLine := line.Next
-	if line.Prev != nil {
-		line.Prev.Next = nextLine
-	}
-	nextLine.Prev = line.Prev
-	line.Prev = nextLine
-	line.Next = nextLine.Next
-	nextLine.Next = line
+	ld.Line.Down()
 
 	if newFirstLine {
-		tab.Lines = nextLine
+		tab.Lines = ld.Line.Prev
 	}
 }
 
-func (tab *Tab) undoLineUp(ld *action.LineUp) {
+func (tab *Tab) undoLineUp(lu *action.LineUp) {
+	newFirstLine := lu.Line == tab.Lines.Next
 
+	lu.Line.Up()
+
+	if newFirstLine {
+		tab.Lines = lu.Line
+	}
 }
