@@ -1,40 +1,53 @@
 package undo
 
+import "github.com/m-kru/enix/internal/cursor"
 import "github.com/m-kru/enix/internal/action"
 
-type action struct {
-	action action.Action
-	prev   *action
-	next   *action
+type Action struct {
+	Action  action.Action
+	Cursors []*cursor.Cursor
+	prev    *Action
+	next    *Action
 }
 
 type Stack struct {
 	len   int
 	cap   int
-	first *action
-	last  *action
+	first *Action
+	last  *Action
 }
 
 func NewStack(cap int) *Stack {
 	return &Stack{cap: cap}
 }
 
-func (s *Stack) Push(act action.Action) {
-	a := &action{action: act}
+func (s *Stack) Push(act action.Action, curs []*cursor.Cursor) {
+	if s.len == s.cap {
+		s.first = s.first.next
+		s.len--
+	}
+
+	Action := &Action{Action: act, Cursors: curs}
 
 	if s.first == nil {
-		s.first = a
-		s.last = a
+		s.first = Action
+		s.last = Action
+		s.len = 1
 		return
 	}
 
-	s.last.next = a
-	s.prev = s.last
-	s.last = a
+	s.last.next = Action
+	Action.prev = s.last
+	s.last = Action
+	s.len++
 }
 
-func (s *Stack) Pop() action.Action {
-	a := s.last
+func (s *Stack) Pop() *Action {
+	if s.first == nil {
+		return nil
+	}
+
+	Action := s.last
 
 	if s.first == s.last {
 		s.first = nil
@@ -43,5 +56,7 @@ func (s *Stack) Pop() action.Action {
 		s.last = s.last.prev
 	}
 
-	return a
+	s.len--
+
+	return Action
 }

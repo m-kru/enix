@@ -74,6 +74,8 @@ func KeybindingsDefault() Keybindings {
 		"Rune[p]": "paste",
 		"Rune[P]": "paste-before",
 		"Rune[r]": "replace",
+		"Rune[u]": "undo",
+		"Rune[U]": "redo",
 		"Rune[y]": "yank",
 		"Rune[ ]": "space",
 		"Tab":     "tab",

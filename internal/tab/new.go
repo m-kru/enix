@@ -10,6 +10,7 @@ import (
 	"github.com/m-kru/enix/internal/lang"
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/mark"
+	"github.com/m-kru/enix/internal/undo"
 	"github.com/m-kru/enix/internal/util"
 	"github.com/m-kru/enix/internal/view"
 )
@@ -28,6 +29,8 @@ func Empty(config *cfg.Config, colors *cfg.Colorscheme, keys *cfg.Keybindings) *
 		Lines:      line.Empty(),
 		Marks:      make(map[string]mark.Mark),
 		View:       view.View{Line: 1, Column: 1},
+		UndoStack:  undo.NewStack(config.UndoSize),
+		RedoStack:  undo.NewStack(config.UndoSize),
 	}
 
 	c := &cursor.Cursor{Line: tab.Lines, LineNum: 1, ColIdx: 1}
@@ -78,6 +81,8 @@ func Open(
 		HasChanges: false,
 		Marks:      make(map[string]mark.Mark),
 		View:       view.View{Line: 1, Column: 1},
+		UndoStack:  undo.NewStack(config.UndoSize),
+		RedoStack:  undo.NewStack(config.UndoSize),
 	}
 
 	// Lines initialization
@@ -124,6 +129,8 @@ func FromString(
 		HasChanges: false,
 		Marks:      make(map[string]mark.Mark),
 		View:       view.View{Line: 1, Column: 1},
+		UndoStack:  undo.NewStack(config.UndoSize),
+		RedoStack:  undo.NewStack(config.UndoSize),
 	}
 
 	tab.Lines, tab.LineCount = line.FromString(str)

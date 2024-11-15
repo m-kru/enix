@@ -99,3 +99,15 @@ func Search(args []string, tab *tab.Tab) error {
 
 	return tab.Search(args[0])
 }
+
+func Undo(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf(
+			"undo: expected 0 args, provided %d", len(args),
+		)
+	}
+
+	tab.Undo()
+
+	return nil
+}

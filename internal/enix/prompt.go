@@ -449,6 +449,8 @@ func (p *Prompt) Exec() TcellEventReceiver {
 			p.Window.CurrentTab, err = exec.TabPrev(c.Args, tab)
 		case "trim":
 			err = exec.Trim(c.Args, tab)
+		case "undo":
+			err = exec.Undo(c.Args, tab)
 		case "up":
 			err = exec.Up(c.Args, tab)
 		case "view-down":

@@ -8,6 +8,7 @@ import (
 	"github.com/m-kru/enix/internal/mark"
 	"github.com/m-kru/enix/internal/search"
 	"github.com/m-kru/enix/internal/sel"
+	"github.com/m-kru/enix/internal/undo"
 	"github.com/m-kru/enix/internal/util"
 	"github.com/m-kru/enix/internal/view"
 
@@ -41,6 +42,9 @@ type Tab struct {
 	View view.View
 
 	Highlighter *lang.Highlighter
+
+	UndoStack *undo.Stack
+	RedoStack *undo.Stack
 
 	Prev *Tab
 	Next *Tab

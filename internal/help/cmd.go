@@ -200,6 +200,8 @@ Forced version of the quit command. It quits the tab even if there are unsaved c
 The command first deletes rune under the cursor, or runes under selection, and then
 enters the insert moode for a single insertion.`,
 
+	"undo": `undo # Undos last action modifying the tab content.`,
+
 	// Selection
 
 	"sel-count": `sel-count # Prints the number of selections in the current tab.`,
