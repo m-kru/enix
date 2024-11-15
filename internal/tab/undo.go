@@ -44,6 +44,8 @@ func (tab *Tab) undoActions(acts action.Actions) {
 		case *action.NewlineInsert:
 			a.Line.InsertNewline(a.RuneIdx)
 			tab.LineCount++
+		case *action.RuneDelete:
+			a.Line.DeleteRune(a.RuneIdx)
 		case *action.RuneInsert:
 			a.Line.InsertRune(a.Rune, a.RuneIdx)
 		}

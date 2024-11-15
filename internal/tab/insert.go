@@ -5,6 +5,7 @@ import (
 	"github.com/gdamore/tcell/v2"
 
 	"github.com/m-kru/enix/internal/action"
+	"github.com/m-kru/enix/internal/cursor"
 )
 
 func (tab *Tab) RxEventKeyInsert(ev *tcell.EventKey) {
@@ -37,8 +38,13 @@ func (tab *Tab) InsertRune(r rune) {
 }
 
 func (tab *Tab) insertRuneCursors(r rune) {
+	prevCurs := cursor.Clone(tab.Cursors)
+	actions := make(action.Actions, 0, len(tab.Cursors))
+
 	for _, c := range tab.Cursors {
 		act := c.InsertRune(r)
+
+		actions = append(actions, act)
 
 		for _, c2 := range tab.Cursors {
 			if c2 != c {
@@ -49,6 +55,10 @@ func (tab *Tab) insertRuneCursors(r rune) {
 		for _, m := range tab.Marks {
 			m.Inform(act)
 		}
+	}
+
+	if len(actions) > 0 {
+		tab.UndoStack.Push(actions.Reverse(), prevCurs)
 	}
 
 	tab.HasChanges = true

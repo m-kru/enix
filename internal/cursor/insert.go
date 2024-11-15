@@ -7,7 +7,7 @@ import (
 func (c *Cursor) InsertRune(r rune) *action.RuneInsert {
 	c.Line.InsertRune(r, c.RuneIdx)
 	c.RuneIdx++
-	return &action.RuneInsert{Line: c.Line, Rune: r, RuneIdx: c.RuneIdx}
+	return &action.RuneInsert{Line: c.Line, Rune: r, RuneIdx: c.RuneIdx - 1}
 }
 
 func (c *Cursor) InsertNewline() *action.NewlineInsert {
