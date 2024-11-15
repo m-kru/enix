@@ -19,16 +19,6 @@ func (c *Cursor) Delete() action.Action {
 	return &action.RuneDelete{Line: c.Line, Rune: r, RuneIdx: c.RuneIdx}
 }
 
-func (c *Cursor) Join() action.Action {
-	rc := c.Line.RuneCount()
-	ok := c.Line.Join(true)
-	if !ok {
-		return nil
-	}
-
-	return &action.NewlineDelete{Line: c.Line, LineNum: c.LineNum, RuneIdx: rc}
-}
-
 func (c *Cursor) Backspace() action.Action {
 	if c.RuneIdx == 0 {
 		if c.Line.Prev == nil {
