@@ -4,12 +4,13 @@ import "github.com/m-kru/enix/internal/line"
 
 type (
 	NewlineDelete struct {
-		Line    *line.Line // Pointer to the deleted line
+		Line    *line.Line
 		LineNum int
+		RuneIdx int // Equals Line.RuneCount() before delete
 	}
 
 	NewlineInsert struct {
-		Line    *line.Line // Newly inserted line
+		Line    *line.Line
 		LineNum int
 		RuneIdx int
 	}

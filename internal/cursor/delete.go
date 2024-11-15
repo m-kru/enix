@@ -5,13 +5,14 @@ import (
 )
 
 func (c *Cursor) Delete() action.Action {
-	if c.RuneIdx == c.Line.RuneCount() {
-		delLine := c.Line.Join(false)
-		if delLine == nil {
+	rc := c.Line.RuneCount()
+	if c.RuneIdx == rc {
+		ok := c.Line.Join(false)
+		if !ok {
 			return nil
 		}
 
-		return &action.NewlineDelete{Line: delLine, LineNum: c.LineNum}
+		return &action.NewlineDelete{Line: c.Line, LineNum: c.LineNum, RuneIdx: rc}
 	}
 
 	r := c.Line.DeleteRune(c.RuneIdx)
@@ -19,12 +20,13 @@ func (c *Cursor) Delete() action.Action {
 }
 
 func (c *Cursor) Join() action.Action {
-	delLine := c.Line.Join(true)
-	if delLine == nil {
+	rc := c.Line.RuneCount()
+	ok := c.Line.Join(true)
+	if !ok {
 		return nil
 	}
 
-	return &action.NewlineDelete{Line: delLine, LineNum: c.LineNum}
+	return &action.NewlineDelete{Line: c.Line, LineNum: c.LineNum, RuneIdx: rc}
 }
 
 func (c *Cursor) Backspace() action.Action {
@@ -35,14 +37,14 @@ func (c *Cursor) Backspace() action.Action {
 		} else {
 			c.Line = c.Line.Prev
 			prevLineLen := c.Line.RuneCount()
-			delLine := c.Line.Join(false)
-			// delLine is for sure not nil here so do not check for nil.
+			_ = c.Line.Join(false)
+			// cursor is in the next line here, so Join must success
 
 			c.LineNum--
 			c.RuneIdx += prevLineLen
 			c.ColIdx = c.Line.ColumnIdx(c.RuneIdx)
 
-			return &action.NewlineDelete{Line: delLine, LineNum: c.LineNum}
+			return &action.NewlineDelete{Line: c.Line, LineNum: c.LineNum, RuneIdx: prevLineLen}
 		}
 	}
 

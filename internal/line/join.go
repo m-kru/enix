@@ -6,10 +6,10 @@ import (
 
 // Join joins line l with the next line.
 // Trim indicates whether leading whiespaces from the next line shal be removed.
-// Returned line points to the deleted line.
-func (l *Line) Join(trim bool) *Line {
+// Returns true if lines were joined.
+func (l *Line) Join(trim bool) bool {
 	if l.Next == nil {
-		return nil
+		return false
 	}
 
 	delLine := l.Next
@@ -25,5 +25,5 @@ func (l *Line) Join(trim bool) *Line {
 		delLine.Next.Prev = l
 	}
 
-	return delLine
+	return true
 }
