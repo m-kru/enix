@@ -166,6 +166,7 @@ selection, then escape command clears all selections.`,
 If neither topic nor command name is provided displays help message
 for the help command. The same as 'help help'. Valid topics are:
   - commands - list of available commands with their synopsys,
+  - config - general description of enix configuration,
   - cursors - what they are and how they work,
   - enix - general overview of the enix editor,
   - keybindings - how to set, and what to watch out for,
