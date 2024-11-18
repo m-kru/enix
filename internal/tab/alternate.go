@@ -14,14 +14,20 @@ func (tab *Tab) Join() {
 }
 
 func (tab *Tab) joinCursors() {
+	prevCurs := cursor.Clone(tab.Cursors)
+	actions := make(action.Actions, 0, len(tab.Cursors))
+
 	// Join lines only once, even if there are multiple cursors in the line.
 	curs := cursor.Uniques(tab.Cursors, true)
 
 	for _, c := range curs {
 		act := c.Join()
-		if act != nil {
-			tab.LineCount--
+		if act == nil {
+			continue
 		}
+		actions = append(actions, act)
+
+		tab.LineCount--
 
 		nd := act.(*action.NewlineDelete)
 		if nd.Line1 == tab.Lines {
@@ -35,6 +41,10 @@ func (tab *Tab) joinCursors() {
 		}
 
 		tab.Cursors = cursor.Prune(tab.Cursors)
+	}
+
+	if len(actions) > 0 {
+		tab.UndoStack.Push(actions.Reverse(), prevCurs, nil)
 	}
 
 	tab.HasChanges = true

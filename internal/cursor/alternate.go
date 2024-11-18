@@ -13,6 +13,8 @@ func (c *Cursor) Join() action.Action {
 		return nil
 	}
 
+	c.Line = newLine
+
 	return &action.NewlineDelete{
 		Line1:    l1,
 		Line1Num: c.LineNum,
