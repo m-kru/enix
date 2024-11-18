@@ -13,12 +13,19 @@ func (c *Cursor) InsertRune(r rune) *action.RuneInsert {
 func (c *Cursor) InsertNewline() *action.NewlineInsert {
 	rIdx := c.RuneIdx
 	lineNum := c.LineNum
-	newLine := c.Line.InsertNewline(c.RuneIdx)
+	line := c.Line
+	newLine1, newLine2 := c.Line.InsertNewline(c.RuneIdx)
 
-	c.Line = newLine
+	c.Line = newLine2
 	c.LineNum++
 	c.RuneIdx = 0
 	c.ColIdx = 1
 
-	return &action.NewlineInsert{Line: newLine.Prev, LineNum: lineNum, RuneIdx: rIdx}
+	return &action.NewlineInsert{
+		Line:     line,
+		LineNum:  lineNum,
+		RuneIdx:  rIdx,
+		NewLine1: newLine1,
+		NewLine2: newLine2,
+	}
 }

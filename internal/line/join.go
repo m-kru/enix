@@ -6,14 +6,14 @@ import (
 
 // Join joins line l with the next line.
 // Trim indicates whether leading whiespaces from the next line shal be removed.
-// Returns true if lines were joined.
-func (l *Line) Join(trim bool) bool {
+// Returns pointer to the new line, or nil if there was nothing to join.
+func (l *Line) Join(trim bool) *Line {
 	if l.Next == nil {
-		return false
+		return nil
 	}
 
-	delLine := l.Next
-	str := string(delLine.Buf)
+	l2 := l.Next
+	str := string(l2.Buf)
 	if trim {
 		prefix := " "
 		if len(l.Buf) == 0 {
@@ -22,12 +22,16 @@ func (l *Line) Join(trim bool) bool {
 		str = prefix + strings.TrimLeft(str, " \t")
 	}
 
-	l.Append([]byte(str))
+	newLine, _ := FromString(l.String() + str)
 
-	l.Next = delLine.Next
-	if delLine.Next != nil {
-		delLine.Next.Prev = l
+	newLine.Prev = l.Prev
+	newLine.Next = l2.Next
+	if l.Prev != nil {
+		l.Prev.Next = newLine
+	}
+	if l2.Next != nil {
+		l2.Next.Prev = newLine
 	}
 
-	return true
+	return newLine
 }

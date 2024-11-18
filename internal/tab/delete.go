@@ -31,11 +31,13 @@ func (tab *Tab) deleteCursors(backspace bool) {
 		if act == nil {
 			continue
 		}
-
 		actions = append(actions, act)
 
-		if _, ok := act.(*action.NewlineDelete); ok {
+		if nd, ok := act.(*action.NewlineDelete); ok {
 			tab.LineCount--
+			if nd.Line1 == tab.Lines {
+				tab.Lines = nd.NewLine
+			}
 		}
 
 		for _, c2 := range tab.Cursors {

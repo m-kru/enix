@@ -27,20 +27,25 @@ func (l *Line) InsertRune(r rune, runeIdx int) {
 }
 
 // InsertNewline inserts a newline at index idx and returns the new line.
-func (l *Line) InsertNewline(runeIdx int) *Line {
+func (l *Line) InsertNewline(runeIdx int) (*Line, *Line) {
 	bIdx := l.BufIdx(runeIdx)
 
-	newLine, _ := FromString(string(l.Buf[bIdx:]))
-	l.Buf = l.Buf[0:bIdx]
+	newLine1, _ := FromString(string(l.Buf[0:bIdx]))
+	newLine2, _ := FromString(string(l.Buf[bIdx:]))
 
-	newLine.Prev = l
-	newLine.Next = l.Next
-	if l.Next != nil {
-		l.Next.Prev = newLine
+	newLine1.Prev = l.Prev
+	newLine1.Next = newLine2
+	newLine2.Prev = newLine1
+	newLine2.Next = l.Next
+
+	if l.Prev != nil {
+		l.Prev.Next = newLine1
 	}
-	l.Next = newLine
+	if l.Next != nil {
+		l.Next.Prev = newLine2
+	}
 
-	return newLine
+	return newLine1, newLine2
 }
 
 func (l *Line) InsertString(s string, runeIdx int) {

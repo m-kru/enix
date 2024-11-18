@@ -23,6 +23,11 @@ func (tab *Tab) joinCursors() {
 			tab.LineCount--
 		}
 
+		nd := act.(*action.NewlineDelete)
+		if nd.Line1 == tab.Lines {
+			tab.Lines = nd.NewLine
+		}
+
 		for _, c2 := range tab.Cursors {
 			if c2 != c {
 				c2.Inform(act)

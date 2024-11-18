@@ -46,11 +46,9 @@ func (tab *Tab) undoActions(acts action.Actions) {
 		case *action.LineUp:
 			tab.undoLineUp(a)
 		case *action.NewlineDelete:
-			a.Line.Join(true)
-			tab.LineCount--
+			tab.undoNewlineDelete(a)
 		case *action.NewlineInsert:
-			a.Line.InsertNewline(a.RuneIdx)
-			tab.LineCount++
+			tab.undoNewlineInsert(a)
 		case *action.RuneDelete:
 			a.Line.DeleteRune(a.RuneIdx)
 		case *action.RuneInsert:
@@ -77,4 +75,32 @@ func (tab *Tab) undoLineUp(lu *action.LineUp) {
 	if newFirstLine {
 		tab.Lines = lu.Line
 	}
+}
+
+func (tab *Tab) undoNewlineDelete(nd *action.NewlineDelete) {
+	if nd.Line1.Prev != nil {
+		nd.Line1.Prev.Next = nd.NewLine
+	} else {
+		tab.Lines = nd.NewLine
+	}
+
+	if nd.Line2.Next != nil {
+		nd.Line2.Next.Prev = nd.NewLine
+	}
+
+	tab.LineCount--
+}
+
+func (tab *Tab) undoNewlineInsert(ni *action.NewlineInsert) {
+	if ni.Line.Prev != nil {
+		ni.Line.Prev.Next = ni.NewLine1
+	} else {
+		tab.Lines = ni.NewLine1
+	}
+
+	if ni.Line.Next != nil {
+		ni.Line.Next.Prev = ni.NewLine2
+	}
+
+	tab.LineCount++
 }

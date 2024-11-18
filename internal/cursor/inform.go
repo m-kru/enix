@@ -37,22 +37,32 @@ func (c *Cursor) informLineUp(lu *action.LineUp) {
 // If cursor was pointing the the joined line, then the
 // cursor Line pointer is set to point to the previous line.
 func (c *Cursor) informNewlineDelete(nd *action.NewlineDelete) {
-	if c.LineNum <= nd.LineNum {
+	if c.LineNum < nd.Line1Num {
+		return
+	}
+
+	if c.LineNum == nd.Line1Num {
+		c.Line = nd.NewLine
 		return
 	}
 
 	c.LineNum--
-	if c.LineNum > nd.LineNum {
+	if c.LineNum > nd.Line1Num {
 		return
 	}
 
-	c.Line = c.Line.Prev
+	c.Line = nd.NewLine
 	c.RuneIdx = c.RuneIdx + nd.RuneIdx
 	c.ColIdx = c.Line.ColumnIdx(c.RuneIdx)
 }
 
 func (c *Cursor) informNewlineInsert(ni *action.NewlineInsert) {
-	if c.LineNum < ni.LineNum || (c.LineNum == ni.LineNum && c.RuneIdx < ni.RuneIdx) {
+	if c.LineNum < ni.LineNum {
+		return
+	}
+
+	if c.LineNum == ni.LineNum && c.RuneIdx < ni.RuneIdx {
+		c.Line = ni.NewLine1
 		return
 	}
 
@@ -61,7 +71,7 @@ func (c *Cursor) informNewlineInsert(ni *action.NewlineInsert) {
 		return
 	}
 
-	c.Line = ni.Line.Next
+	c.Line = ni.NewLine2
 	c.RuneIdx -= ni.RuneIdx
 	c.ColIdx = c.Line.ColumnIdx(c.RuneIdx)
 }

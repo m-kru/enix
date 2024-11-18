@@ -1,0 +1,8 @@
+go 2 4
+del
+up
+del
+go 1
+2 undo
+rune X
+save got

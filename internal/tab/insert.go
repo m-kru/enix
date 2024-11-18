@@ -77,15 +77,18 @@ func (tab *Tab) insertNewlineCursors() {
 	actions := make(action.Actions, 0, len(tab.Cursors))
 
 	for _, c := range tab.Cursors {
-		act := c.InsertNewline()
+		ni := c.InsertNewline()
+		actions = append(actions, ni)
 
-		actions = append(actions, act)
+		if ni.Line == tab.Lines {
+			tab.Lines = ni.NewLine1
+		}
 
 		tab.LineCount++
 
 		for _, c2 := range tab.Cursors {
 			if c2 != c {
-				c2.Inform(act)
+				c2.Inform(ni)
 			}
 
 		}

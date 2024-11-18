@@ -5,13 +5,21 @@ import (
 )
 
 func (c *Cursor) Join() action.Action {
+	l1 := c.Line
+	l2 := l1.Next
 	rc := c.Line.RuneCount()
-	ok := c.Line.Join(true)
-	if !ok {
+	newLine := c.Line.Join(true)
+	if newLine == nil {
 		return nil
 	}
 
-	return &action.NewlineDelete{Line: c.Line, LineNum: c.LineNum, RuneIdx: rc}
+	return &action.NewlineDelete{
+		Line1:    l1,
+		Line1Num: c.LineNum,
+		RuneIdx:  rc,
+		Line2:    l2,
+		NewLine:  newLine,
+	}
 }
 
 func (c *Cursor) LineDown() action.Action {
