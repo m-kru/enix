@@ -4,8 +4,8 @@ import (
 	"unicode/utf8"
 )
 
-func (l *Line) InsertRune(r rune, runeIdx int) {
-	bIdx := l.BufIdx(runeIdx)
+func (l *Line) InsertRune(r rune, rIdx int) {
+	bIdx := l.BufIdx(rIdx)
 	runeLen := utf8.RuneLen(r)
 	newLen := len(l.Buf) + runeLen
 
@@ -27,29 +27,29 @@ func (l *Line) InsertRune(r rune, runeIdx int) {
 }
 
 // InsertNewline inserts a newline at index idx and returns the new line.
-func (l *Line) InsertNewline(runeIdx int) (*Line, *Line) {
-	bIdx := l.BufIdx(runeIdx)
+func (l *Line) InsertNewline(rIdx int) (*Line, *Line) {
+	bIdx := l.BufIdx(rIdx)
 
-	newLine1, _ := FromString(string(l.Buf[0:bIdx]))
-	newLine2, _ := FromString(string(l.Buf[bIdx:]))
+	nl1, _ := FromString(string(l.Buf[0:bIdx]))
+	nl2, _ := FromString(string(l.Buf[bIdx:]))
 
-	newLine1.Prev = l.Prev
-	newLine1.Next = newLine2
-	newLine2.Prev = newLine1
-	newLine2.Next = l.Next
+	nl1.Prev = l.Prev
+	nl1.Next = nl2
+	nl2.Prev = nl1
+	nl2.Next = l.Next
 
 	if l.Prev != nil {
-		l.Prev.Next = newLine1
+		l.Prev.Next = nl1
 	}
 	if l.Next != nil {
-		l.Next.Prev = newLine2
+		l.Next.Prev = nl2
 	}
 
-	return newLine1, newLine2
+	return nl1, nl2
 }
 
-func (l *Line) InsertString(s string, runeIdx int) {
-	bIdx := l.BufIdx(runeIdx)
+func (l *Line) InsertString(s string, rIdx int) {
+	bIdx := l.BufIdx(rIdx)
 
 	newLen := len(l.Buf) + len(s)
 	if newLen > cap(l.Buf) {

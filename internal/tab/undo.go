@@ -58,6 +58,8 @@ func (tab *Tab) undoActions(acts action.Actions) {
 			a.Line.DeleteRune(a.RuneIdx)
 		case *action.RuneInsert:
 			a.Line.InsertRune(a.Rune, a.RuneIdx)
+		case *action.StringInsert:
+			a.Line.InsertString(a.Str, a.StartRuneIdx)
 		}
 	}
 }

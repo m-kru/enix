@@ -32,9 +32,9 @@ func (s *Selection) delete() action.Action {
 			//return s.deleteNewline()
 		}
 	} else if s.StartRuneIdx == 0 && s.EndRuneIdx == rc {
-		//s.deleteLine()
+		//return s.deleteLine()
 	} else if s.EndRuneIdx < rc {
-		//s.deleteString()
+		return s.deleteString()
 	}
 
 	return nil
@@ -43,4 +43,14 @@ func (s *Selection) delete() action.Action {
 func (s *Selection) deleteRune() *action.RuneDelete {
 	r := s.Line.DeleteRune(s.StartRuneIdx)
 	return &action.RuneDelete{Line: s.Line, Rune: r, RuneIdx: s.StartRuneIdx}
+}
+
+func (s *Selection) deleteString() *action.StringDelete {
+	str := s.Line.DeleteString(s.StartRuneIdx, s.EndRuneIdx)
+	return &action.StringDelete{
+		Line:         s.Line,
+		Str:          str,
+		StartRuneIdx: s.StartRuneIdx,
+		RuneCount:    s.EndRuneIdx - s.StartRuneIdx + 1,
+	}
 }

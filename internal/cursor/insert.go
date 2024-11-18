@@ -4,12 +4,6 @@ import (
 	"github.com/m-kru/enix/internal/action"
 )
 
-func (c *Cursor) InsertRune(r rune) *action.RuneInsert {
-	c.Line.InsertRune(r, c.RuneIdx)
-	c.RuneIdx++
-	return &action.RuneInsert{Line: c.Line, Rune: r, RuneIdx: c.RuneIdx - 1}
-}
-
 func (c *Cursor) InsertNewline() *action.NewlineInsert {
 	rIdx := c.RuneIdx
 	lineNum := c.LineNum
@@ -28,4 +22,10 @@ func (c *Cursor) InsertNewline() *action.NewlineInsert {
 		NewLine1: newLine1,
 		NewLine2: newLine2,
 	}
+}
+
+func (c *Cursor) InsertRune(r rune) *action.RuneInsert {
+	c.Line.InsertRune(r, c.RuneIdx)
+	c.RuneIdx++
+	return &action.RuneInsert{Line: c.Line, Rune: r, RuneIdx: c.RuneIdx - 1}
 }
