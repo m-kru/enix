@@ -13,7 +13,9 @@ func (s *Selection) Delete() action.Action {
 		}
 
 		a := s.delete()
-		acts = append(acts, a)
+		if a != nil {
+			acts = append(acts, a)
+		}
 
 		s = s.Next
 	}
@@ -40,8 +42,11 @@ func (s *Selection) delete() action.Action {
 	return nil
 }
 
-func (s *Selection) deleteLine() *action.LineDelete {
-	s.Line.Delete()
+func (s *Selection) deleteLine() action.Action {
+	l := s.Line.Delete()
+	if l == nil {
+		return nil
+	}
 	return &action.LineDelete{Line: s.Line}
 }
 
