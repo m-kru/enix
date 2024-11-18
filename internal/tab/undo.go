@@ -32,6 +32,7 @@ func (tab *Tab) undo(act *undo.Action) {
 	tab.RedoStack.Push(act.Action.Reverse(), curs, sels)
 
 	tab.Cursors = act.Cursors
+	tab.Selections = act.Selections
 
 	for _, a := range as {
 		for _, m := range tab.Marks {
