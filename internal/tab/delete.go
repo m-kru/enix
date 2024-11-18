@@ -55,10 +55,12 @@ func (tab *Tab) deleteCursors(backspace bool) {
 }
 
 func (tab *Tab) deleteSelections() {
+	tab.Cursors = make([]*cursor.Cursor, 0, len(tab.Selections))
+
 	prevSels := sel.Clone(tab.Selections)
 	actions := make(action.Actions, 0, len(tab.Selections))
 
-	for _, s := range tab.Selections {
+	for i, s := range tab.Selections {
 		act := s.Delete()
 
 		if act == nil {
@@ -68,18 +70,32 @@ func (tab *Tab) deleteSelections() {
 
 		tab.handleAction(act)
 
-		for _, s2 := range tab.Selections {
-			if s2 != s {
-				s2.Inform(act)
-			}
+		for _, c := range tab.Cursors {
+			c.Inform(act)
+		}
+
+		// Selections are going to be destroyed anyway, so inform only
+		// unprocessed selections.
+		for _, s2 := range tab.Selections[i+1:] {
+			s2.Inform(act)
 		}
 
 		for _, m := range tab.Marks {
 			m.Inform(act)
 		}
 
-		tab.Cursors = cursor.Prune(tab.Cursors)
+		// Create cursor from the first selection rune.
+		c := &cursor.Cursor{
+			Line:    s.Line,
+			LineNum: s.LineNum,
+			ColIdx:  s.Line.ColumnIdx(s.StartRuneIdx),
+			RuneIdx: s.StartRuneIdx,
+		}
+		tab.Cursors = append(tab.Cursors, c)
 	}
+
+	tab.Cursors = cursor.Prune(tab.Cursors)
+	tab.Selections = nil
 
 	if len(actions) > 0 {
 		tab.UndoStack.Push(actions.Reverse(), nil, prevSels)

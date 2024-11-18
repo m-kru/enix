@@ -44,6 +44,8 @@ func (tab *Tab) undo(act *undo.Action) {
 func (tab *Tab) undoActions(acts action.Actions) {
 	for _, act := range acts {
 		switch a := act.(type) {
+		case action.Actions:
+			tab.undoActions(a)
 		case *action.LineDown:
 			tab.undoLineDown(a)
 		case *action.LineUp:
