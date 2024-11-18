@@ -3,6 +3,7 @@ package tab
 import (
 	"github.com/m-kru/enix/internal/action"
 	"github.com/m-kru/enix/internal/cursor"
+	"github.com/m-kru/enix/internal/sel"
 	"github.com/m-kru/enix/internal/undo"
 )
 
@@ -18,6 +19,7 @@ func (tab *Tab) Undo() {
 
 func (tab *Tab) undo(act *undo.Action) {
 	curs := cursor.Clone(tab.Cursors)
+	sels := sel.Clone(tab.Selections)
 
 	// Currently only slice of actions are pushed to the stack.
 	as, ok := act.Action.(action.Actions)
@@ -27,7 +29,7 @@ func (tab *Tab) undo(act *undo.Action) {
 
 	tab.undoActions(as)
 
-	tab.RedoStack.Push(act.Action.Reverse(), curs)
+	tab.RedoStack.Push(act.Action.Reverse(), curs, sels)
 
 	tab.Cursors = act.Cursors
 

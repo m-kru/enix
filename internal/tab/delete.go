@@ -3,6 +3,7 @@ package tab
 import (
 	"github.com/m-kru/enix/internal/action"
 	"github.com/m-kru/enix/internal/cursor"
+	"github.com/m-kru/enix/internal/sel"
 )
 
 // Delete deletes text under cursors or selections.
@@ -54,14 +55,21 @@ func (tab *Tab) deleteCursors(backspace bool) {
 	}
 
 	if len(actions) > 0 {
-		tab.UndoStack.Push(actions.Reverse(), prevCurs)
+		tab.UndoStack.Push(actions.Reverse(), prevCurs, nil)
 	}
 
 	tab.HasChanges = true
 }
 
 func (tab *Tab) deleteSelections() {
-	panic("unimplemented")
+	prevSels := sel.Clone(tab.Selections)
+	actions := make(action.Actions, 0, len(tab.Selections))
+
+	if len(actions) > 0 {
+		tab.UndoStack.Push(actions.Reverse(), nil, prevSels)
+	}
+
+	tab.HasChanges = true
 }
 
 func (tab *Tab) Backspace() {
