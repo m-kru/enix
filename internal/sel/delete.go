@@ -31,7 +31,7 @@ func (s *Selection) delete() action.Action {
 		if s.EndRuneIdx < rc {
 			return s.deleteRune()
 		} else {
-			//return s.deleteNewline()
+			return s.deleteNewline()
 		}
 	} else if s.StartRuneIdx == 0 && s.EndRuneIdx == rc {
 		return s.deleteLine()
@@ -48,6 +48,30 @@ func (s *Selection) deleteLine() action.Action {
 		return nil
 	}
 	return &action.LineDelete{Line: s.Line}
+}
+
+func (s *Selection) deleteNewline() action.Action {
+	l1 := s.Line
+	l2 := l1.Next
+	rc := s.Line.RuneCount()
+
+	newLine := s.Line.Join(false)
+	if newLine == nil {
+		return nil
+	}
+
+	// XXX: This is nasty. We modify the selection so that it is possible to
+	// create cursor in a valid place after the deletion. We can do this, because
+	// we assume after the deletion the selection is destroyed and never used again.
+	s.Line = newLine
+
+	return &action.NewlineDelete{
+		Line1:    l1,
+		Line1Num: s.LineNum,
+		RuneIdx:  rc,
+		Line2:    l2,
+		NewLine:  newLine,
+	}
 }
 
 func (s *Selection) deleteRune() *action.RuneDelete {
