@@ -2,6 +2,22 @@ package line
 
 import "unicode/utf8"
 
+func (l *Line) Delete() *Line {
+	// First line can't be deleted if it is the only line.
+	if l.Prev == nil && l.Next == nil {
+		return nil
+	}
+
+	if l.Prev != nil {
+		l.Prev.Next = l.Next
+	}
+	if l.Next != nil {
+		l.Next.Prev = l.Prev
+	}
+
+	return l
+}
+
 func (l *Line) DeleteRune(rIdx int) rune {
 	if rIdx == l.RuneCount() {
 		if l.Next == nil {

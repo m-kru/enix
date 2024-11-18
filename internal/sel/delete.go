@@ -32,12 +32,17 @@ func (s *Selection) delete() action.Action {
 			//return s.deleteNewline()
 		}
 	} else if s.StartRuneIdx == 0 && s.EndRuneIdx == rc {
-		//return s.deleteLine()
+		return s.deleteLine()
 	} else if s.EndRuneIdx < rc {
 		return s.deleteString()
 	}
 
 	return nil
+}
+
+func (s *Selection) deleteLine() *action.LineDelete {
+	s.Line.Delete()
+	return &action.LineDelete{Line: s.Line}
 }
 
 func (s *Selection) deleteRune() *action.RuneDelete {

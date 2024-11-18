@@ -3,6 +3,14 @@ package action
 import "github.com/m-kru/enix/internal/line"
 
 type (
+	LineDelete struct {
+		Line *line.Line
+	}
+
+	LineInsert struct {
+		Line *line.Line
+	}
+
 	LineDown struct {
 		Line *line.Line // Pointer to the line moved down
 	}
@@ -28,10 +36,20 @@ type (
 	}
 )
 
+func (ld *LineDelete) isAction()    {}
+func (li *LineInsert) isAction()    {}
 func (ld *LineDown) isAction()      {}
 func (lu *LineUp) isAction()        {}
 func (nd *NewlineDelete) isAction() {}
 func (ni *NewlineInsert) isAction() {}
+
+func (ld *LineDelete) Reverse() Action {
+	return &LineInsert{Line: ld.Line}
+}
+
+func (li *LineInsert) Reverse() Action {
+	return &LineDelete{Line: li.Line}
+}
 
 func (ld *LineDown) Reverse() Action {
 	return &LineUp{Line: ld.Line}

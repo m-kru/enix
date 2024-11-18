@@ -10,6 +10,16 @@ func (tab *Tab) handleAction(act action.Action) {
 		for _, subAct := range a {
 			tab.handleAction(subAct)
 		}
+	case *action.LineDelete:
+		tab.LineCount--
+		if a.Line == tab.Lines {
+			tab.Lines = a.Line.Next
+		}
+	case *action.LineInsert:
+		tab.LineCount++
+		if a.Line.Next == tab.Lines {
+			tab.Lines = a.Line
+		}
 	case *action.NewlineDelete:
 		tab.LineCount--
 		if a.Line1 == tab.Lines {
