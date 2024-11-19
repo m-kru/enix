@@ -10,15 +10,12 @@ func (l *Line) InsertRune(r rune, rIdx int) {
 	newLen := len(l.Buf) + runeLen
 
 	if newLen > cap(l.Buf) {
-		newBuf := make([]byte, newLen, newLen+(newLen%8))
-		newBuf = append(newBuf, l.Buf...)
+		newBuf := make([]byte, len(l.Buf), newLen+(newLen%8))
+		_ = copy(newBuf, l.Buf[:len(l.Buf)])
 		l.Buf = newBuf
 	}
 
-	// Can growing reslicing be done in a more efficient way?
-	for i := 0; i < runeLen; i++ {
-		l.Buf = append(l.Buf, 0)
-	}
+	l.Buf = l.Buf[:len(l.Buf)+1]
 
 	for i := len(l.Buf) - 1; i > bIdx; i-- {
 		l.Buf[i] = l.Buf[i-runeLen]
@@ -54,12 +51,12 @@ func (l *Line) InsertString(s string, rIdx int) {
 	prevLen := len(l.Buf)
 	newLen := len(l.Buf) + len(s)
 	if newLen > cap(l.Buf) {
-		newBuf := make([]byte, 0, newLen+(newLen%8))
-		newBuf = append(newBuf, l.Buf...)
+		newBuf := make([]byte, prevLen, newLen+(newLen%8))
+		_ = copy(newBuf, l.Buf[:prevLen])
 		l.Buf = newBuf
 	}
 
-	l.Buf = append(l.Buf, []byte(s)...)
+	l.Buf = l.Buf[:newLen]
 
 	for i := 0; i < prevLen-bIdx; i++ {
 		l.Buf[bIdx+len(s)+i] = l.Buf[bIdx+i]
