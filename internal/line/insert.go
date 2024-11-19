@@ -51,6 +51,7 @@ func (l *Line) InsertNewline(rIdx int) (*Line, *Line) {
 func (l *Line) InsertString(s string, rIdx int) {
 	bIdx := l.BufIdx(rIdx)
 
+	prevLen := len(l.Buf)
 	newLen := len(l.Buf) + len(s)
 	if newLen > cap(l.Buf) {
 		newBuf := make([]byte, 0, newLen+(newLen%8))
@@ -58,11 +59,15 @@ func (l *Line) InsertString(s string, rIdx int) {
 		l.Buf = newBuf
 	}
 
-	// TODO: Below code probably needs fix.
-	right := l.Buf[bIdx:len(l.Buf)]
-	l.Buf = l.Buf[0:bIdx]
 	l.Buf = append(l.Buf, []byte(s)...)
-	l.Buf = append(l.Buf, right...)
+
+	for i := 0; i < prevLen-bIdx; i++ {
+		l.Buf[bIdx+len(s)+i] = l.Buf[bIdx+i]
+	}
+
+	for i := 0; i < len(s); i++ {
+		l.Buf[bIdx+i] = s[i]
+	}
 }
 
 func (l *Line) Append(b []byte) {
