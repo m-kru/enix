@@ -1,6 +1,8 @@
 package cursor
 
 import (
+	"unicode/utf8"
+
 	"github.com/m-kru/enix/internal/action"
 )
 
@@ -28,4 +30,17 @@ func (c *Cursor) InsertRune(r rune) *action.RuneInsert {
 	c.Line.InsertRune(r, c.RuneIdx)
 	c.RuneIdx++
 	return &action.RuneInsert{Line: c.Line, Rune: r, RuneIdx: c.RuneIdx - 1}
+}
+
+func (c *Cursor) InsertString(s string) *action.StringInsert {
+	c.Line.InsertString(s, c.RuneIdx)
+	rIdx := c.RuneIdx
+	rc := utf8.RuneCountInString(s)
+	c.RuneIdx += rc
+	return &action.StringInsert{
+		Line:         c.Line,
+		Str:          s,
+		StartRuneIdx: rIdx,
+		RuneCount:    rc,
+	}
 }

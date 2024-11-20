@@ -41,9 +41,9 @@ func Join(args []string, tab *tab.Tab) error {
 	return nil
 }
 
-func KeyName(args []string, t *tab.Tab) (string, error) {
+func KeyName(args []string, t *tab.Tab) (*tab.Tab, error) {
 	if len(args) > 0 {
-		return "", fmt.Errorf(
+		return nil, fmt.Errorf(
 			"key-name: expected 0 args, provided %d", len(args),
 		)
 	}
@@ -58,12 +58,18 @@ func KeyName(args []string, t *tab.Tab) (string, error) {
 		idx++
 	}
 
-	newT := tab.FromString(t.Config, t.Colors, t.Keys, "insert a single key or key combo:\n", path)
+	newT := tab.FromString(
+		t.Config, t.Colors, t.Keys,
+		"insert a single key or key combo, press esc to exit\n", path,
+	)
+	c := newT.Cursors[0]
+	c.LineNum = 2
+	c.Line = c.Line.Next
 	newT.State = "key-name"
 
 	t.Append(newT)
 
-	return "", nil
+	return newT, nil
 }
 
 func LineDown(args []string, tab *tab.Tab) error {

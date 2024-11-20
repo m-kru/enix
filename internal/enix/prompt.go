@@ -364,7 +364,10 @@ func (p *Prompt) Exec() TcellEventReceiver {
 		case "join":
 			err = exec.Join(c.Args, tab)
 		case "key-name":
-			info, err = exec.KeyName(c.Args, tab)
+			knTab, err := exec.KeyName(c.Args, tab)
+			if err == nil {
+				p.Window.CurrentTab = knTab
+			}
 		case "left":
 			err = exec.Left(c.Args, tab)
 		case "line-down":
