@@ -6,6 +6,8 @@ import (
 
 func (c *Cursor) Inform(act action.Action) {
 	switch a := act.(type) {
+	case action.Actions:
+		c.Inform(a)
 	case *action.LineDown:
 		c.informLineDown(a)
 	case *action.LineUp:

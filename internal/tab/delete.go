@@ -63,7 +63,7 @@ func (tab *Tab) deleteSelections() {
 	for i, s := range tab.Selections {
 		act := s.Delete()
 
-		if act == nil {
+		if len(act) == 0 {
 			continue
 		}
 		actions = append(actions, act)

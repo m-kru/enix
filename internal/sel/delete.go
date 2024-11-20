@@ -4,7 +4,7 @@ import (
 	"github.com/m-kru/enix/internal/action"
 )
 
-func (s *Selection) Delete() action.Action {
+func (s *Selection) Delete() action.Actions {
 	acts := make(action.Actions, 0, 8)
 
 	for {
