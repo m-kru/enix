@@ -63,12 +63,10 @@ func (tab *Tab) deleteSelections() {
 	for i, s := range tab.Selections {
 		act := s.Delete()
 
-		if len(act) == 0 {
-			continue
+		if len(act) > 0 {
+			actions = append(actions, act)
+			tab.handleAction(act)
 		}
-		actions = append(actions, act)
-
-		tab.handleAction(act)
 
 		for _, c := range tab.Cursors {
 			c.Inform(act)

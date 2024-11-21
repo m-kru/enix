@@ -37,9 +37,9 @@ func (s *Selection) delete() action.Action {
 		return s.deleteLine()
 	} else if s.EndRuneIdx < rc {
 		return s.deleteString()
+	} else {
+		return s.deleteStringAndNewline()
 	}
-
-	return nil
 }
 
 func (s *Selection) deleteLine() action.Action {
@@ -87,4 +87,44 @@ func (s *Selection) deleteString() *action.StringDelete {
 		StartRuneIdx: s.StartRuneIdx,
 		RuneCount:    s.EndRuneIdx - s.StartRuneIdx + 1,
 	}
+}
+
+func (s *Selection) deleteStringAndNewline() action.Actions {
+	acts := make(action.Actions, 0, 2)
+
+	// String delete
+	str := s.Line.DeleteString(s.StartRuneIdx, s.EndRuneIdx)
+	acts = append(acts,
+		&action.StringDelete{
+			Line:         s.Line,
+			Str:          str,
+			StartRuneIdx: s.StartRuneIdx,
+			RuneCount:    s.EndRuneIdx - s.StartRuneIdx + 1,
+		},
+	)
+
+	// Newline delete
+	l1 := s.Line
+	l2 := l1.Next
+	rc := s.Line.RuneCount()
+
+	newLine := s.Line.Join(false)
+	if newLine == nil {
+		return acts
+	}
+
+	// XXX: The same nasty trick as in case of deleteNewline.
+	s.Line = newLine
+
+	acts = append(acts,
+		&action.NewlineDelete{
+			Line1:    l1,
+			Line1Num: s.LineNum,
+			RuneIdx:  rc,
+			Line2:    l2,
+			NewLine:  newLine,
+		},
+	)
+
+	return acts
 }
