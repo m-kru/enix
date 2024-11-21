@@ -31,6 +31,7 @@ func (s *Selection) Clone() *Selection {
 		}
 
 		prevS.Next = nextS
+		nextS.Prev = prevS
 		prevS = nextS
 
 		s = s.Next
