@@ -58,8 +58,8 @@ func (l *Line) InsertString(s string, rIdx int) {
 
 	l.Buf = l.Buf[:newLen]
 
-	for i := 0; i < prevLen-bIdx; i++ {
-		l.Buf[bIdx+len(s)+i] = l.Buf[bIdx+i]
+	for i := prevLen - 1; i >= bIdx; i-- {
+		l.Buf[i+len(s)] = l.Buf[i]
 	}
 
 	for i := 0; i < len(s); i++ {
