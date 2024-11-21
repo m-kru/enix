@@ -47,7 +47,13 @@ func (s *Selection) delete() action.Action {
 func (s *Selection) deleteLine() action.Action {
 	l := s.Line.Delete()
 	if l == nil {
-		return nil
+		str := s.Line.DeleteString(0, s.EndRuneIdx-1)
+		return &action.StringDelete{
+			Line:         s.Line,
+			Str:          str,
+			StartRuneIdx: s.StartRuneIdx,
+			RuneCount:    s.EndRuneIdx - s.StartRuneIdx,
+		}
 	}
 
 	ld := &action.LineDelete{Line: s.Line, NewLine: l}
