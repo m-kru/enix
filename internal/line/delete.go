@@ -15,7 +15,11 @@ func (l *Line) Delete() *Line {
 		l.Next.Prev = l.Prev
 	}
 
-	return l
+	if l.Next != nil {
+		return l.Next
+	}
+
+	return l.Prev
 }
 
 func (l *Line) DeleteRune(rIdx int) rune {

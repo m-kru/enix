@@ -49,7 +49,15 @@ func (s *Selection) deleteLine() action.Action {
 	if l == nil {
 		return nil
 	}
-	return &action.LineDelete{Line: s.Line}
+
+	ld := &action.LineDelete{Line: s.Line, NewLine: l}
+
+	if l == s.Line.Prev {
+		s.LineNum--
+	}
+	s.Line = l
+
+	return ld
 }
 
 func (s *Selection) deleteNewline() action.Action {
