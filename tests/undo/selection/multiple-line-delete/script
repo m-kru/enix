@@ -1,0 +1,7 @@
+down
+3 sel-line
+del
+undo
+esc
+rune X
+save got

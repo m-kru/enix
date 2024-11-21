@@ -13,6 +13,7 @@ type Selection struct {
 	EndRuneIdx   int
 	Cursor       *cursor.Cursor
 
+	Prev *Selection
 	Next *Selection
 }
 

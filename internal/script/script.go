@@ -109,6 +109,8 @@ func execCmd(c cmd.Command, tab *tab.Tab) error {
 			err = exec.Rune(c.Args, tab)
 		case "save":
 			_, err = exec.Save(c.Args, tab, false)
+		case "sel-line":
+			err = exec.SelLine(c.Args, tab)
 		case "sel-right":
 			err = exec.SelRight(c.Args, tab)
 		case "space":

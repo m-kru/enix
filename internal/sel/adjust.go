@@ -38,6 +38,7 @@ func (s *Selection) adjust(c *cursor.Cursor) *Selection {
 			}
 
 			s.Next = nextS
+			nextS.Prev = s
 			s = nextS
 		}
 
@@ -137,6 +138,7 @@ func (s *Selection) adjust(c *cursor.Cursor) *Selection {
 			}
 
 			s.Next = nextS
+			nextS.Prev = s
 			s = nextS
 		}
 
@@ -149,6 +151,7 @@ func (s *Selection) adjust(c *cursor.Cursor) *Selection {
 		}
 
 		s.Next = newLast
+		newLast.Prev = s
 
 		return newFirst
 	}
@@ -224,6 +227,7 @@ func (s *Selection) nextLineCursorOnLeft() *Selection {
 	}
 
 	s.Next = newS
+	newS.Prev = s
 
 	return first
 }
@@ -260,6 +264,7 @@ func (s *Selection) nextLineCursorOnRight() *Selection {
 	}
 
 	s.Next = newS
+	newS.Prev = s
 
 	return first
 }

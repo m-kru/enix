@@ -7,6 +7,8 @@ import (
 func (s *Selection) Delete() action.Actions {
 	acts := make(action.Actions, 0, 8)
 
+	s = s.Last()
+
 	for {
 		if s == nil {
 			break
@@ -17,7 +19,7 @@ func (s *Selection) Delete() action.Actions {
 			acts = append(acts, a)
 		}
 
-		s = s.Next
+		s = s.Prev
 	}
 
 	return acts
