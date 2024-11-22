@@ -35,9 +35,9 @@ func (m *Mouse) RxTcellEventMouse(ev *tcell.EventMouse) Event {
 		return m.rxEventDoublePrimaryClick(ev)
 	case primaryClickCtrl:
 		return m.rxEventPrimaryClickCtrl(ev)
-	default:
-		panic("unimplemented")
 	}
+
+	return nil
 }
 
 func (m *Mouse) rxEventIdle(ev *tcell.EventMouse) Event {
