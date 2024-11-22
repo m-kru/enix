@@ -33,7 +33,8 @@ type Prompt struct {
 	Frame  frame.Frame
 
 	// History of executed commands.
-	History []string
+	History    []string
+	HistoryIdx int
 
 	Window *Window
 
@@ -41,7 +42,6 @@ type Prompt struct {
 	Cursor *cursor.Cursor
 	View   view.View
 
-	PrevCmd    string
 	ShadowText string
 
 	State PromptState
@@ -94,8 +94,11 @@ func (p *Prompt) ShowInfo(msg string) {
 
 // Currently assume text + shadow text always fits screen width.
 func (p *Prompt) Activate(text, shadowText string) {
-	if text == "" && shadowText == "" {
-		shadowText = p.PrevCmd
+	p.HistoryIdx = len(p.History)
+
+	if text == "" && shadowText == "" && len(p.History) > 0 {
+		p.HistoryIdx--
+		shadowText = p.History[p.HistoryIdx]
 	}
 
 	p.Line, _ = line.FromString(text)
@@ -168,8 +171,27 @@ func (p *Prompt) Down() {
 		p.ShadowText = ""
 		p.State = InText
 	case InText:
-		// Implement history handling here.
-		panic("unimplemeted")
+		if p.HistoryIdx < len(p.History)-1 {
+			p.HistoryIdx++
+			p.Line, _ = line.FromString(p.History[p.HistoryIdx])
+		}
+		p.Cursor.RuneIdx = p.Line.RuneCount()
+	}
+}
+
+func (p *Prompt) Up() {
+	if p.State == InShadow {
+		if len(p.History) == 0 {
+			p.Line.Append([]byte(p.ShadowText))
+		}
+		p.ShadowText = ""
+		p.State = InText
+	}
+
+	if len(p.History) > 0 && p.HistoryIdx > 0 {
+		p.HistoryIdx--
+		p.Line, _ = line.FromString(p.History[p.HistoryIdx])
+		p.Cursor.RuneIdx = p.Line.RuneCount()
 	}
 }
 
@@ -236,7 +258,10 @@ func (p *Prompt) Enter() TcellEventReceiver {
 		p.State = InText
 	}
 
-	p.PrevCmd = p.Line.String()
+	if len(p.History) == cap(p.History) {
+		p.History = p.History[1:]
+	}
+	p.History = append(p.History, p.Line.String())
 
 	return p.Exec()
 }
@@ -284,6 +309,8 @@ func (p *Prompt) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 			p.Right()
 		case "prev-word-start":
 			p.PrevWordStart()
+		case "up":
+			p.Up()
 		case "word-end":
 			p.WordEnd()
 		default:

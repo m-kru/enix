@@ -104,6 +104,8 @@ func KeybindingsDefault() Keybindings {
 // PromptKeybindingsDefault returns default keybindings for command prompt.
 func PromptKeybindingsDefault() Keybindings {
 	return map[string]string{
+		"Down":       "down",
+		"Up":         "up",
 		"Left":       "left",
 		"Right":      "right",
 		"Ctrl+Left":  "prev-word-start",

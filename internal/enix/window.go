@@ -432,6 +432,7 @@ func Start(
 			Width:  width,
 			Height: 1,
 		},
+		History: make([]string, 0, 64),
 	}
 
 	w.Prompt = &p
