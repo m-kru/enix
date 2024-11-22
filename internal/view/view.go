@@ -58,8 +58,10 @@ func (v View) Intersection(v2 View) View {
 
 // MinAdjust returns a new View with minimal adjustments so that inner view (iv) is visible.
 func (v View) MinAdjust(iv View) View {
+	// Under what circumstances inner view can span greater area than view?
+	// It is not yet clear.
 	if iv.Width > v.Width || iv.Height > v.Height {
-		panic("unimplemented")
+		return iv.MinAdjust(v)
 	}
 
 	if iv.Column < v.Column {
