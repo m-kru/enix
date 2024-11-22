@@ -95,6 +95,8 @@ func execCmd(c cmd.Command, tab *tab.Tab) error {
 			err = exec.Left(c.Args, tab)
 		case "line-down":
 			err = exec.LineDown(c.Args, tab)
+		case "line-end":
+			err = exec.LineEnd(c.Args, tab)
 		case "line-up":
 			err = exec.LineUp(c.Args, tab)
 		case "mark":
