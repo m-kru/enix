@@ -41,6 +41,10 @@ func (s *Selection) Clone() *Selection {
 }
 
 func Clone(sels []*Selection) []*Selection {
+	if sels == nil {
+		return nil
+	}
+
 	ss := make([]*Selection, 0, len(sels))
 
 	for _, s := range sels {

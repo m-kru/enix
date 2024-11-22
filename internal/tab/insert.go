@@ -6,6 +6,7 @@ import (
 
 	"github.com/m-kru/enix/internal/action"
 	"github.com/m-kru/enix/internal/cursor"
+	"github.com/m-kru/enix/internal/sel"
 )
 
 func (tab *Tab) RxEventKeyInsert(ev *tcell.EventKey) {
@@ -30,15 +31,26 @@ func (tab *Tab) RxEventKeyInsert(ev *tcell.EventKey) {
 }
 
 func (tab *Tab) InsertRune(r rune) {
+	prevCurs := cursor.Clone(tab.Cursors)
+	prevSels := sel.Clone(tab.Selections)
+
+	actions := tab.insertRune(r)
+
+	if actions != nil {
+		tab.UndoStack.Push(actions.Reverse(), prevCurs, prevSels)
+		tab.HasChanges = true
+	}
+}
+
+func (tab *Tab) insertRune(r rune) action.Action {
 	if tab.Cursors != nil {
-		tab.insertRuneCursors(r)
+		return tab.insertRuneCursors(r)
 	} else {
 		panic("insert rune for selections unimplemented")
 	}
 }
 
-func (tab *Tab) insertRuneCursors(r rune) {
-	prevCurs := cursor.Clone(tab.Cursors)
+func (tab *Tab) insertRuneCursors(r rune) action.Action {
 	actions := make(action.Actions, 0, len(tab.Cursors))
 
 	for _, c := range tab.Cursors {
@@ -57,23 +69,30 @@ func (tab *Tab) insertRuneCursors(r rune) {
 		}
 	}
 
-	if len(actions) > 0 {
-		tab.UndoStack.Push(actions.Reverse(), prevCurs, nil)
-	}
-
-	tab.HasChanges = true
+	return actions
 }
 
 func (tab *Tab) InsertNewline() {
+	prevCurs := cursor.Clone(tab.Cursors)
+	prevSels := sel.Clone(tab.Selections)
+
+	actions := tab.insertNewline()
+
+	if actions != nil {
+		tab.UndoStack.Push(actions.Reverse(), prevCurs, prevSels)
+		tab.HasChanges = true
+	}
+}
+
+func (tab *Tab) insertNewline() action.Action {
 	if tab.Cursors != nil {
-		tab.insertNewlineCursors()
+		return tab.insertNewlineCursors()
 	} else {
 		panic("insert newline for selections unimplemented")
 	}
 }
 
-func (tab *Tab) insertNewlineCursors() {
-	prevCurs := cursor.Clone(tab.Cursors)
+func (tab *Tab) insertNewlineCursors() action.Action {
 	actions := make(action.Actions, 0, len(tab.Cursors))
 
 	for _, c := range tab.Cursors {
@@ -94,10 +113,7 @@ func (tab *Tab) insertNewlineCursors() {
 		}
 	}
 
-	if len(actions) > 0 {
-		tab.UndoStack.Push(actions.Reverse(), prevCurs, nil)
-	}
-
+	return actions
 }
 
 func (tab *Tab) InsertRuneAtPosition(lineNum int, col int, r rune) error {

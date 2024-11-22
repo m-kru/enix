@@ -8,15 +8,30 @@ import (
 
 // Delete deletes text under cursors or selections.
 func (tab *Tab) Delete() {
-	if tab.Cursors != nil {
-		tab.deleteCursors(false)
-	} else {
-		tab.deleteSelections()
+	prevCurs := cursor.Clone(tab.Cursors)
+	prevSels := sel.Clone(tab.Selections)
+
+	actions := tab.delete()
+
+	if len(actions) > 0 {
+		tab.UndoStack.Push(actions.Reverse(), prevCurs, prevSels)
+		tab.HasChanges = true
 	}
 }
 
-func (tab *Tab) deleteCursors(backspace bool) {
-	prevCurs := cursor.Clone(tab.Cursors)
+func (tab *Tab) delete() action.Actions {
+	var actions action.Actions
+
+	if tab.Cursors != nil {
+		actions = tab.deleteCursors(false)
+	} else {
+		actions = tab.deleteSelections()
+	}
+
+	return actions
+}
+
+func (tab *Tab) deleteCursors(backspace bool) action.Actions {
 	actions := make(action.Actions, 0, len(tab.Cursors))
 
 	for _, c := range tab.Cursors {
@@ -47,17 +62,12 @@ func (tab *Tab) deleteCursors(backspace bool) {
 		tab.Cursors = cursor.Prune(tab.Cursors)
 	}
 
-	if len(actions) > 0 {
-		tab.UndoStack.Push(actions.Reverse(), prevCurs, nil)
-	}
-
-	tab.HasChanges = true
+	return actions
 }
 
-func (tab *Tab) deleteSelections() {
+func (tab *Tab) deleteSelections() action.Actions {
 	tab.Cursors = make([]*cursor.Cursor, 0, len(tab.Selections))
 
-	prevSels := sel.Clone(tab.Selections)
 	actions := make(action.Actions, 0, len(tab.Selections))
 
 	for i, s := range tab.Selections {
@@ -95,11 +105,7 @@ func (tab *Tab) deleteSelections() {
 	tab.Cursors = cursor.Prune(tab.Cursors)
 	tab.Selections = nil
 
-	if len(actions) > 0 {
-		tab.UndoStack.Push(actions.Reverse(), nil, prevSels)
-	}
-
-	tab.HasChanges = true
+	return actions
 }
 
 func (tab *Tab) Backspace() {

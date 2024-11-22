@@ -12,6 +12,10 @@ func (c *Cursor) Clone() *Cursor {
 }
 
 func Clone(cursors []*Cursor) []*Cursor {
+	if cursors == nil {
+		return nil
+	}
+
 	cs := make([]*Cursor, 0, len(cursors))
 
 	for _, c := range cursors {
