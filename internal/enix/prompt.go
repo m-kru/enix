@@ -386,8 +386,6 @@ func (p *Prompt) Exec() TcellEventReceiver {
 				p.Window.CurrentTab = tab
 			}
 			updateView = false
-		case "insert-rune":
-			err = exec.InsertRune(c.Args, tab)
 		case "join":
 			err = exec.Join(c.Args, tab)
 		case "key-name":

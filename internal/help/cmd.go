@@ -129,11 +129,6 @@ selection starts/ends in the middle of a line.`,
 
 	"insert": `insert # Enters tab insert mode.`,
 
-	"insert-rune": `insert l c r # Inserts rune r at line l column c.
-The difference between the rune and insert-rune command is that rune inserts a rune
-under the cursor or selection position. The insert-rune command allows inserting
-a rune in an arbitrary place.`,
-
 	"newline": `newline # Inserts a newline.`,
 
 	"rune": `rune r # Inserts rune r under the cursor or selection position.`,
