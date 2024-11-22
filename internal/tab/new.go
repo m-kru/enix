@@ -16,31 +16,28 @@ import (
 )
 
 func Empty(config *cfg.Config, colors *cfg.Colorscheme, keys *cfg.Keybindings) *Tab {
-	tab := &Tab{
-		Config:     config,
-		Colors:     colors,
-		Keys:       keys,
-		Path:       "No Name",
-		Newline:    "\n",
-		FileType:   "",
-		HasFocus:   true,
-		HasChanges: false,
-		LineCount:  1,
-		Lines:      line.Empty(),
-		Marks:      make(map[string]mark.Mark),
-		View:       view.View{Line: 1, Column: 1},
-		UndoStack:  undo.NewStack(config.UndoSize),
-		RedoStack:  undo.NewStack(config.UndoSize),
+	lines := line.Empty()
+
+	c := &cursor.Cursor{Line: lines, LineNum: 1, ColIdx: 1}
+	curs := make([]*cursor.Cursor, 1, 16)
+	curs[0] = c
+
+	return &Tab{
+		Config:      config,
+		Colors:      colors,
+		Keys:        keys,
+		Path:        "No Name",
+		Newline:     "\n",
+		HasFocus:    true,
+		Lines:       lines,
+		LineCount:   1,
+		Cursors:     curs,
+		Marks:       make(map[string]mark.Mark),
+		View:        view.View{Line: 1, Column: 1},
+		Highlighter: lang.DefaultHighlighter(),
+		UndoStack:   undo.NewStack(config.UndoSize),
+		RedoStack:   undo.NewStack(config.UndoSize),
 	}
-
-	c := &cursor.Cursor{Line: tab.Lines, LineNum: 1, ColIdx: 1}
-	tab.Cursors = make([]*cursor.Cursor, 1, 16)
-	tab.Cursors[0] = c
-
-	hl := lang.DefaultHighlighter()
-	tab.Highlighter = &hl
-
-	return tab
 }
 
 // Open opens a new tab.
@@ -70,25 +67,11 @@ func Open(
 		)
 	}
 
-	tab := &Tab{
-		Config:     config,
-		Colors:     colors,
-		Keys:       keys,
-		Path:       path,
-		Newline:    "\n",
-		FileType:   util.FileNameToType(path),
-		HasFocus:   true,
-		HasChanges: false,
-		Marks:      make(map[string]mark.Mark),
-		View:       view.View{Line: 1, Column: 1},
-		UndoStack:  undo.NewStack(config.UndoSize),
-		RedoStack:  undo.NewStack(config.UndoSize),
-	}
-
 	// Lines initialization
+	lines, lineCount := line.FromString("")
 	_, err = os.Stat(path)
 	if errors.Is(err, os.ErrNotExist) {
-		tab.Lines, tab.LineCount = line.FromString("")
+		// Do notjing
 	} else if err != nil {
 		return nil, err
 	} else {
@@ -96,19 +79,36 @@ func Open(
 		if err != nil {
 			return nil, err
 		}
-		tab.Lines, tab.LineCount = line.FromString(string(bytes))
+		lines, lineCount = line.FromString(string(bytes))
 	}
 
 	// Cursor initialization
-	c := &cursor.Cursor{Line: tab.Lines, LineNum: 1, ColIdx: 1}
-	tab.Cursors = make([]*cursor.Cursor, 1, 16)
-	tab.Cursors[0] = c
+	c := &cursor.Cursor{Line: lines, LineNum: 1, ColIdx: 1}
+	curs := make([]*cursor.Cursor, 1, 16)
+	curs[0] = c
+
+	fileType := util.FileNameToType(path)
 
 	// Highlighter initialization
-	hl, err := lang.NewHighlighter(tab.FileType)
-	tab.Highlighter = &hl
+	hl, err := lang.NewHighlighter(fileType)
 
-	return tab, err
+	return &Tab{
+		Config:      config,
+		Colors:      colors,
+		Keys:        keys,
+		Path:        path,
+		Newline:     "\n",
+		FileType:    fileType,
+		HasFocus:    true,
+		Lines:       lines,
+		LineCount:   lineCount,
+		Cursors:     curs,
+		Marks:       make(map[string]mark.Mark),
+		View:        view.View{Line: 1, Column: 1},
+		Highlighter: hl,
+		UndoStack:   undo.NewStack(config.UndoSize),
+		RedoStack:   undo.NewStack(config.UndoSize),
+	}, err
 }
 
 func FromString(
@@ -118,29 +118,27 @@ func FromString(
 	str string,
 	path string,
 ) *Tab {
-	tab := &Tab{
-		Config:     config,
-		Colors:     colors,
-		Keys:       keys,
-		Path:       path,
-		Newline:    "\n",
-		FileType:   "None",
-		HasFocus:   true,
-		HasChanges: false,
-		Marks:      make(map[string]mark.Mark),
-		View:       view.View{Line: 1, Column: 1},
-		UndoStack:  undo.NewStack(config.UndoSize),
-		RedoStack:  undo.NewStack(config.UndoSize),
+	lines, lineCount := line.FromString(str)
+
+	c := &cursor.Cursor{Line: lines, LineNum: 1, ColIdx: 1}
+	curs := make([]*cursor.Cursor, 1, 16)
+	curs[0] = c
+
+	return &Tab{
+		Config:      config,
+		Colors:      colors,
+		Keys:        keys,
+		Path:        path,
+		Newline:     "\n",
+		FileType:    "None",
+		HasFocus:    true,
+		Lines:       lines,
+		LineCount:   lineCount,
+		Cursors:     curs,
+		Marks:       make(map[string]mark.Mark),
+		View:        view.View{Line: 1, Column: 1},
+		Highlighter: lang.DefaultHighlighter(),
+		UndoStack:   undo.NewStack(config.UndoSize),
+		RedoStack:   undo.NewStack(config.UndoSize),
 	}
-
-	tab.Lines, tab.LineCount = line.FromString(str)
-
-	c := &cursor.Cursor{Line: tab.Lines, LineNum: 1, ColIdx: 1}
-	tab.Cursors = make([]*cursor.Cursor, 1, 16)
-	tab.Cursors[0] = c
-
-	hl := lang.DefaultHighlighter()
-	tab.Highlighter = &hl
-
-	return tab
 }

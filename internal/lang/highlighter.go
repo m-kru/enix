@@ -17,11 +17,11 @@ type Highlighter struct {
 }
 
 // DefaultHighlighter returns a highlighter highlighting only a cursor word.
-func DefaultHighlighter() Highlighter {
-	return Highlighter{Regions: []*Region{&Region{Name: "Default"}}}
+func DefaultHighlighter() *Highlighter {
+	return &Highlighter{Regions: []*Region{&Region{Name: "Default"}}}
 }
 
-func NewHighlighter(lang string) (Highlighter, error) {
+func NewHighlighter(lang string) (*Highlighter, error) {
 	if lang == "" {
 		return DefaultHighlighter(), nil
 	}
@@ -38,7 +38,7 @@ func NewHighlighter(lang string) (Highlighter, error) {
 			fmt.Errorf("%s highlighter: %v", lang, err)
 	}
 
-	return hl, nil
+	return &hl, nil
 }
 
 func readLangDefFromJSON(lang string) ([]any, error) {

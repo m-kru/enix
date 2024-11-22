@@ -29,13 +29,13 @@ type Tab struct {
 	State      string // Valid states: "" - normal mode, "insert", "replace", "key-name".
 	RepCount   int    // Command repetition count in normal mode
 
+	Lines     *line.Line // First line
+	LineCount int
+
 	Cursors    []*cursor.Cursor
 	Selections []*sel.Selection
 
 	SearchCtx search.Context
-
-	Lines     *line.Line // First line
-	LineCount int
 
 	Marks map[string]mark.Mark
 
