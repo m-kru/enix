@@ -39,12 +39,7 @@ func (tab *Tab) joinCursors() action.Actions {
 		}
 		actions = append(actions, act)
 
-		tab.LineCount--
-
-		nd := act.(*action.NewlineDelete)
-		if nd.Line1 == tab.Lines {
-			tab.Lines = nd.NewLine
-		}
+		tab.handleAction(act)
 
 		for _, c2 := range tab.Cursors {
 			if c2 != c {
