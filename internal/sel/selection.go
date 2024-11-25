@@ -17,6 +17,10 @@ type Selection struct {
 	Next *Selection
 }
 
+func (s *Selection) RuneCount() int {
+	return s.EndRuneIdx - s.StartRuneIdx + 1
+}
+
 func (s *Selection) Last() *Selection {
 	for {
 		if s.Next == nil {
