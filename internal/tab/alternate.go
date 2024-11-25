@@ -3,22 +3,34 @@ package tab
 import (
 	"github.com/m-kru/enix/internal/action"
 	"github.com/m-kru/enix/internal/cursor"
+	"github.com/m-kru/enix/internal/sel"
 )
 
 func (tab *Tab) Join() {
-	if len(tab.Cursors) > 0 {
-		tab.joinCursors()
-	} else {
-		tab.joinSelections()
+	prevCurs := cursor.Clone(tab.Cursors)
+	prevSels := sel.Clone(tab.Selections)
+
+	actions := tab.join()
+
+	if len(actions) > 0 {
+		tab.UndoStack.Push(actions.Reverse(), prevCurs, prevSels)
+		tab.HasChanges = true
 	}
 }
 
-func (tab *Tab) joinCursors() {
-	prevCurs := cursor.Clone(tab.Cursors)
-	actions := make(action.Actions, 0, len(tab.Cursors))
+func (tab *Tab) join() action.Actions {
+	if len(tab.Cursors) > 0 {
+		return tab.joinCursors()
+	} else {
+		return tab.joinSelections()
+	}
+}
 
+func (tab *Tab) joinCursors() action.Actions {
 	// Join lines only once, even if there are multiple cursors in the line.
 	curs := cursor.Uniques(tab.Cursors, true)
+
+	actions := make(action.Actions, 0, len(tab.Cursors))
 
 	for _, c := range curs {
 		act := c.Join()
@@ -43,15 +55,11 @@ func (tab *Tab) joinCursors() {
 		tab.Cursors = cursor.Prune(tab.Cursors)
 	}
 
-	if len(actions) > 0 {
-		tab.UndoStack.Push(actions.Reverse(), prevCurs, nil)
-	}
-
-	tab.HasChanges = true
+	return actions
 }
 
-func (tab *Tab) joinSelections() {
-	panic("unimplemented")
+func (tab *Tab) joinSelections() action.Actions {
+	return nil
 }
 
 func (tab *Tab) LineDown() {
