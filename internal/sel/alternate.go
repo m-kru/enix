@@ -21,6 +21,7 @@ func (s *Selection) joinSingleLine() (action.Actions, *Selection) {
 	}
 
 	s.Line = newLine
+	s.Cursor.Line = newLine
 
 	return action.Actions{
 		&action.NewlineDelete{
