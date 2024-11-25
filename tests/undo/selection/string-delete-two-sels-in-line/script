@@ -1,0 +1,8 @@
+add-cursor 1 5
+sel-word-end
+del
+2 right
+undo
+esc
+rune X
+save got

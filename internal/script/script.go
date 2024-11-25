@@ -113,6 +113,8 @@ func execCmd(c cmd.Command, tab *tab.Tab) error {
 			err = exec.SelLine(c.Args, tab)
 		case "sel-right":
 			err = exec.SelRight(c.Args, tab)
+		case "sel-word-end":
+			err = exec.SelWordEnd(c.Args, tab)
 		case "space":
 			err = exec.Space(c.Args, tab)
 		case "spawn-down":

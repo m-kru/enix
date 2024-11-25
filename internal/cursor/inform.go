@@ -7,7 +7,9 @@ import (
 func (c *Cursor) Inform(act action.Action) {
 	switch a := act.(type) {
 	case action.Actions:
-		c.Inform(a)
+		for _, subA := range a {
+			c.Inform(subA)
+		}
 	case *action.LineDown:
 		c.informLineDown(a)
 	case *action.LineUp:
