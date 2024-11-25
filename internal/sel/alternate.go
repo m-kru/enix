@@ -15,7 +15,7 @@ func (s *Selection) joinSingleLine() (action.Actions, *Selection) {
 	l1 := s.Line
 	l2 := l1.Next
 	rc := s.Line.RuneCount()
-	newLine := s.Line.Join(true)
+	newLine, trimmedCount := s.Line.Join(true)
 	if newLine == nil {
 		return nil, nil
 	}
@@ -25,11 +25,12 @@ func (s *Selection) joinSingleLine() (action.Actions, *Selection) {
 
 	return action.Actions{
 		&action.NewlineDelete{
-			Line1:    l1,
-			Line1Num: s.LineNum,
-			RuneIdx:  rc,
-			Line2:    l2,
-			NewLine:  newLine,
+			Line1:        l1,
+			Line1Num:     s.LineNum,
+			RuneIdx:      rc,
+			Line2:        l2,
+			TrimmedCount: trimmedCount,
+			NewLine:      newLine,
 		},
 	}, s
 }

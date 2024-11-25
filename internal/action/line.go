@@ -21,11 +21,12 @@ type (
 	}
 
 	NewlineDelete struct {
-		Line1    *line.Line
-		Line1Num int
-		RuneIdx  int // Equals Line1.RuneCount() before delete
-		Line2    *line.Line
-		NewLine  *line.Line
+		Line1        *line.Line
+		Line1Num     int
+		RuneIdx      int // Equals Line1.RuneCount() before delete
+		Line2        *line.Line
+		TrimmedCount int // Number of runes trimmed from the Line2
+		NewLine      *line.Line
 	}
 
 	NewlineInsert struct {

@@ -8,7 +8,7 @@ func (c *Cursor) Join() action.Action {
 	l1 := c.Line
 	l2 := l1.Next
 	rc := c.Line.RuneCount()
-	newLine := c.Line.Join(true)
+	newLine, trimmedCount := c.Line.Join(true)
 	if newLine == nil {
 		return nil
 	}
@@ -16,11 +16,12 @@ func (c *Cursor) Join() action.Action {
 	c.Line = newLine
 
 	return &action.NewlineDelete{
-		Line1:    l1,
-		Line1Num: c.LineNum,
-		RuneIdx:  rc,
-		Line2:    l2,
-		NewLine:  newLine,
+		Line1:        l1,
+		Line1Num:     c.LineNum,
+		RuneIdx:      rc,
+		Line2:        l2,
+		TrimmedCount: trimmedCount,
+		NewLine:      newLine,
 	}
 }
 

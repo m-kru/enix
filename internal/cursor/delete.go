@@ -9,7 +9,7 @@ func (c *Cursor) Delete() action.Action {
 	l2 := l1.Next
 	rc := c.Line.RuneCount()
 	if c.RuneIdx == rc {
-		newLine := c.Line.Join(false)
+		newLine, _ := c.Line.Join(false)
 		if newLine == nil {
 			return nil
 		}
@@ -38,7 +38,7 @@ func (c *Cursor) Backspace() action.Action {
 			l1 := c.Line.Prev
 			l2 := c.Line
 			l1Len := l1.RuneCount()
-			newLine := l1.Join(false)
+			newLine, _ := l1.Join(false)
 			// cursor is in the next line here, so Join must success
 
 			c.Line = newLine

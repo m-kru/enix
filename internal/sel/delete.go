@@ -71,7 +71,7 @@ func (s *Selection) deleteNewline() action.Action {
 	l2 := l1.Next
 	rc := s.Line.RuneCount()
 
-	newLine := s.Line.Join(false)
+	newLine, _ := s.Line.Join(false)
 	if newLine == nil {
 		return nil
 	}
@@ -124,7 +124,7 @@ func (s *Selection) deleteStringAndNewline() action.Actions {
 	l2 := l1.Next
 	rc := s.Line.RuneCount()
 
-	newLine := s.Line.Join(false)
+	newLine, _ := s.Line.Join(false)
 	if newLine == nil {
 		return acts
 	}

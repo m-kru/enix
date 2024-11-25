@@ -2,24 +2,30 @@ package line
 
 import (
 	"strings"
+	"unicode/utf8"
 )
 
 // Join joins line l with the next line.
 // Trim indicates whether leading whiespaces from the next line shal be removed.
 // Returns pointer to the new line, or nil if there was nothing to join.
-func (l *Line) Join(trim bool) *Line {
+// The second return is the number of trimmed runes.
+func (l *Line) Join(trim bool) (*Line, int) {
 	if l.Next == nil {
-		return nil
+		return nil, 0
 	}
 
 	l2 := l.Next
 	str := string(l2.Buf)
+	trimmedCount := utf8.RuneCountInString(str) - 1 // - 1 becase we potentailly add one extra space ' '
 	if trim {
 		prefix := " "
 		if len(l.Buf) == 0 {
 			prefix = ""
+			trimmedCount++ // Increment, there is not extra ' '
 		}
-		str = prefix + strings.TrimLeft(str, " \t")
+		str = strings.TrimLeft(str, " \t")
+		trimmedCount -= utf8.RuneCountInString(str)
+		str = prefix + str
 	}
 
 	newLine, _ := FromString(l.String() + str)
@@ -33,5 +39,5 @@ func (l *Line) Join(trim bool) *Line {
 		l2.Next.Prev = newLine
 	}
 
-	return newLine
+	return newLine, trimmedCount
 }
