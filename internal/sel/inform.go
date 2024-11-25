@@ -11,6 +11,9 @@ func (s *Selection) Inform(act action.Action) {
 		}
 
 		s.inform(act)
+		if s.Cursor != nil {
+			s.Cursor.Inform(act)
+		}
 
 		s = s.Next
 	}
@@ -27,7 +30,7 @@ func (s *Selection) inform(act action.Action) {
 	case *action.LineUp:
 		//s.informLineUp(a)
 	case *action.NewlineDelete:
-		//s.informNewlineDelete(a)
+		s.informNewlineDelete(a)
 	case *action.NewlineInsert:
 		//s.informNewlineInsert(a)
 	case *action.RuneDelete:
@@ -37,6 +40,25 @@ func (s *Selection) inform(act action.Action) {
 	case *action.StringDelete:
 		s.informStringDelete(a)
 	}
+}
+
+func (s *Selection) informNewlineDelete(nd *action.NewlineDelete) {
+	if s.LineNum < nd.Line1Num {
+		return
+	}
+
+	if s.Line == nd.Line1 {
+		s.Line = nd.NewLine
+		return
+	}
+
+	if s.Line == nd.Line2 {
+		s.Line = nd.NewLine
+		s.StartRuneIdx += nd.RuneIdx
+		s.EndRuneIdx += nd.RuneIdx
+	}
+
+	s.LineNum--
 }
 
 func (s *Selection) informRuneDelete(rd *action.RuneDelete) {

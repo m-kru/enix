@@ -54,7 +54,43 @@ func (tab *Tab) joinCursors() action.Actions {
 }
 
 func (tab *Tab) joinSelections() action.Actions {
-	return nil
+	// New selections
+	sels := make([]*sel.Selection, 0, len(tab.Selections))
+
+	actions := make(action.Actions, 0, len(tab.Cursors))
+
+	for i, s := range tab.Selections {
+		act, newS := s.Join()
+
+		if len(act) == 0 {
+			sels = append(sels, s.Clone())
+			continue
+		}
+
+		actions = append(actions, act)
+
+		tab.handleAction(act)
+
+		// Selections are going to be changed, inform only unprocessed selections.
+		for _, s2 := range tab.Selections[i+1:] {
+			s2.Inform(act)
+		}
+
+		// Inform new selections
+		for _, s2 := range sels {
+			s2.Inform(act)
+		}
+
+		for _, m := range tab.Marks {
+			m.Inform(act)
+		}
+
+		sels = append(sels, newS)
+	}
+
+	tab.Selections = sels
+
+	return actions
 }
 
 func (tab *Tab) LineDown() {
