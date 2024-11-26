@@ -15,6 +15,10 @@ func (tab *Tab) handleAction(act action.Action) {
 		if a.Line == tab.Lines {
 			tab.Lines = a.Line.Next
 		}
+	case *action.LineDown:
+		if a.Line == tab.Lines {
+			tab.Lines = a.Line.Prev
+		}
 	case *action.LineInsert:
 		tab.LineCount++
 		if a.Line.Next == tab.Lines {

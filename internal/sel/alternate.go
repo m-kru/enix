@@ -98,3 +98,25 @@ func (s *Selection) joinMultiLine() (action.Actions, *Selection) {
 
 	return actions, newS
 }
+
+func (s *Selection) LineDown() (action.Actions, *Selection) {
+	actions := make(action.Actions, 0, 8)
+
+	s = s.Last()
+	for {
+		ok := s.Line.Down()
+		if !ok {
+			break
+		}
+
+		s.LineNum++
+		actions = append(actions, &action.LineDown{Line: s.Line})
+
+		if s.Prev == nil {
+			break
+		}
+		s = s.Prev
+	}
+
+	return actions, s
+}
