@@ -202,30 +202,22 @@ func (tab *Tab) RenderLines(line *line.Line, lineNum int, frame frame.Frame) {
 }
 
 func (tab *Tab) RenderCursors(frame frame.Frame) {
-	for i, c := range tab.Cursors {
+	for _, c := range tab.Cursors {
 		if !tab.View.IsVisible(c.View()) {
 			continue
 		}
 
-		primary := false
-		if tab.HasFocus && i == len(tab.Cursors)-1 {
-			primary = true
-		}
-		c.Render(tab.Colors, frame.Line(0, c.LineNum-tab.View.Line), tab.View, primary)
+		c.Render(tab.Colors, frame.Line(0, c.LineNum-tab.View.Line), tab.View)
 	}
 }
 
 func (tab *Tab) RenderSelections(frame frame.Frame) {
-	for i, s := range tab.Selections {
+	for _, s := range tab.Selections {
 		if !tab.View.IsVisible(s.FullView()) {
 			continue
 		}
 
-		primary := false
-		if tab.HasFocus && i == len(tab.Selections)-1 {
-			primary = true
-		}
-		s.Render(tab.Colors, frame, tab.View, primary)
+		s.Render(tab.Colors, frame, tab.View)
 	}
 }
 

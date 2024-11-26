@@ -139,7 +139,7 @@ func (p *Prompt) Render() {
 		}
 	}
 
-	p.Cursor.Render(p.Colors, p.Frame.Line(1, 0), p.View, true)
+	p.Cursor.Render(p.Colors, p.Frame.Line(1, 0), p.View)
 
 	p.Screen.Show()
 }

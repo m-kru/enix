@@ -10,14 +10,9 @@ func (c *Cursor) Render(
 	colors *cfg.Colorscheme,
 	frame frame.Frame,
 	view view.View,
-	primary bool,
 ) {
 	x := c.Line.ColumnIdx(c.RuneIdx) - view.Column
 
-	if primary {
-		frame.ShowCursor(x, 0)
-	} else {
-		r := frame.GetContent(x, 0)
-		frame.SetContent(x, 0, r, colors.Cursor)
-	}
+	r := frame.GetContent(x, 0)
+	frame.SetContent(x, 0, r, colors.Cursor)
 }

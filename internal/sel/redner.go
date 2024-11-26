@@ -10,7 +10,6 @@ func (s *Selection) Render(
 	colors *cfg.Colorscheme,
 	frame frame.Frame, // Tab frame
 	view view.View,
-	primary bool,
 ) {
 	for {
 		if s == nil {
@@ -31,11 +30,7 @@ func (s *Selection) Render(
 			r := frame.GetContent(x, y)
 
 			if c == sv.Column && s.CursorOnLeft() || c == sv.LastColumn() && s.CursorOnRight() {
-				if primary {
-					frame.ShowCursor(x, y)
-				} else {
-					frame.SetContent(x, y, r, colors.Cursor)
-				}
+				frame.SetContent(x, y, r, colors.Cursor)
 			} else {
 				frame.SetContent(x, y, r, colors.Selection)
 			}
