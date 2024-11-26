@@ -108,14 +108,41 @@ func (s *Selection) LineDown() (action.Actions, *Selection) {
 		if !ok {
 			break
 		}
+		actions = append(actions, &action.LineDown{Line: s.Line})
 
 		s.LineNum++
-		actions = append(actions, &action.LineDown{Line: s.Line})
+		if s.Cursor != nil {
+			s.Cursor.LineNum++
+		}
 
 		if s.Prev == nil {
 			break
 		}
 		s = s.Prev
+	}
+
+	return actions, s
+}
+
+func (s *Selection) LineUp() (action.Actions, *Selection) {
+	actions := make(action.Actions, 0, 8)
+
+	for {
+		ok := s.Line.Up()
+		if !ok {
+			break
+		}
+		actions = append(actions, &action.LineUp{Line: s.Line})
+
+		s.LineNum--
+		if s.Cursor != nil {
+			s.Cursor.LineNum--
+		}
+
+		if s.Next == nil {
+			break
+		}
+		s = s.Next
 	}
 
 	return actions, s
