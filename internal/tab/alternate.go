@@ -94,15 +94,26 @@ func (tab *Tab) joinSelections() action.Actions {
 }
 
 func (tab *Tab) LineDown() {
-	if len(tab.Cursors) > 0 {
-		tab.lineDownCursors()
-	} else {
-		tab.lineDownSelections()
+	prevCurs := cursor.Clone(tab.Cursors)
+	prevSels := sel.Clone(tab.Selections)
+
+	actions := tab.lineDown()
+
+	if len(actions) > 0 {
+		tab.UndoStack.Push(actions.Reverse(), prevCurs, prevSels)
+		tab.HasChanges = true
 	}
 }
 
-func (tab *Tab) lineDownCursors() {
-	prevCurs := cursor.Clone(tab.Cursors)
+func (tab *Tab) lineDown() action.Actions {
+	if len(tab.Cursors) > 0 {
+		return tab.lineDownCursors()
+	} else {
+		return tab.lineDownSelections()
+	}
+}
+
+func (tab *Tab) lineDownCursors() action.Actions {
 	actions := make(action.Actions, 0, len(tab.Cursors))
 
 	// Move lines down only once, even if there are multiple cursors in the line.
@@ -131,27 +142,34 @@ func (tab *Tab) lineDownCursors() {
 		tab.Cursors = cursor.Prune(tab.Cursors)
 	}
 
-	if len(actions) > 0 {
-		tab.UndoStack.Push(actions.Reverse(), prevCurs, nil)
-	}
-
-	tab.HasChanges = true
+	return actions
 }
 
-func (tab *Tab) lineDownSelections() {
-	panic("unimplemented")
+func (tab *Tab) lineDownSelections() action.Actions {
+	return nil
 }
 
 func (tab *Tab) LineUp() {
-	if len(tab.Cursors) > 0 {
-		tab.lineUpCursors()
-	} else {
-		tab.lineUpSelections()
+	prevCurs := cursor.Clone(tab.Cursors)
+	prevSels := sel.Clone(tab.Selections)
+
+	actions := tab.lineUp()
+
+	if len(actions) > 0 {
+		tab.UndoStack.Push(actions.Reverse(), prevCurs, prevSels)
+		tab.HasChanges = true
 	}
 }
 
-func (tab *Tab) lineUpCursors() {
-	prevCurs := cursor.Clone(tab.Cursors)
+func (tab *Tab) lineUp() action.Actions {
+	if len(tab.Cursors) > 0 {
+		return tab.lineUpCursors()
+	} else {
+		return tab.lineUpSelections()
+	}
+}
+
+func (tab *Tab) lineUpCursors() action.Actions {
 	actions := make(action.Actions, 0, len(tab.Cursors))
 
 	// Move lines up only once, even if there are multiple cursors in the line.
@@ -180,13 +198,9 @@ func (tab *Tab) lineUpCursors() {
 		tab.Cursors = cursor.Prune(tab.Cursors)
 	}
 
-	if len(actions) > 0 {
-		tab.UndoStack.Push(actions.Reverse(), prevCurs, nil)
-	}
-
-	tab.HasChanges = true
+	return actions
 }
 
-func (tab *Tab) lineUpSelections() {
-	panic("unimplemented")
+func (tab *Tab) lineUpSelections() action.Actions {
+	return nil
 }
