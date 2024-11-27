@@ -10,6 +10,13 @@ import (
 	"github.com/m-kru/enix/internal/sel"
 )
 
+func (tab *Tab) Insert() {
+	tab.State = "insert"
+	tab.InsertActions = make(action.Actions, 0, 16)
+	tab.PrevInsertCursors = cursor.Clone(tab.Cursors)
+	tab.PrevInsertSelections = sel.Clone(tab.Selections)
+}
+
 func shouldInsertUndo(actions action.Action) bool {
 	switch a := actions.(type) {
 	case action.Actions:

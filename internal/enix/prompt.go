@@ -355,6 +355,8 @@ func (p *Prompt) Exec() TcellEventReceiver {
 		case "exec-info":
 			p.ShowInfo(strings.Join(c.Args, " "))
 			return p.Window
+		case "change":
+			err = exec.Change(c.Args, tab)
 		case "config-dir":
 			info, err = exec.ConfigDir(c.Args)
 		case "cursor-count":

@@ -5,14 +5,11 @@ import (
 	"log"
 	"unicode"
 
-	"github.com/m-kru/enix/internal/action"
 	"github.com/m-kru/enix/internal/arg"
 	"github.com/m-kru/enix/internal/cfg"
-	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/exec"
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/mouse"
-	"github.com/m-kru/enix/internal/sel"
 	"github.com/m-kru/enix/internal/tab"
 	"github.com/m-kru/enix/internal/tabbar"
 
@@ -129,6 +126,8 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			err = exec.AddCursor(c.Args, tab)
 		case "backspace":
 			err = exec.Backspace(c.Args, tab)
+		case "change":
+			err = exec.Change(c.Args, tab)
 		case "cmd":
 			tab.HasFocus = false
 			w.Prompt.Activate("", "")
@@ -157,10 +156,7 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			w.Prompt.Activate("help ", "")
 			return w.Prompt
 		case "insert":
-			tab.State = "insert"
-			tab.InsertActions = make(action.Actions, 0, 16)
-			tab.PrevInsertCursors = cursor.Clone(tab.Cursors)
-			tab.PrevInsertSelections = sel.Clone(tab.Selections)
+			tab.Insert()
 		case "join":
 			err = exec.Join(c.Args, tab)
 		case "left":

@@ -77,6 +77,8 @@ func execCmd(c cmd.Command, tab *tab.Tab) error {
 			err = exec.AddCursor(c.Args, tab)
 		case "backspace":
 			err = exec.Backspace(c.Args, tab)
+		case "change":
+			err = exec.Change(c.Args, tab)
 		case "del":
 			err = exec.Del(c.Args, tab)
 		case "down":
