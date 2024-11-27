@@ -158,7 +158,7 @@ func goMark(name string, tab *tab.Tab) error {
 	case *mark.CursorMark:
 		tab.Cursors = cursor.Clone(m.Cursors)
 	default:
-		panic("selection mark unimplemented")
+		// Going to selection mark unimplemented
 	}
 
 	return nil
