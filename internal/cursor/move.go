@@ -66,6 +66,7 @@ func (c *Cursor) Up() {
 func (c *Cursor) PrevWordStart() {
 	if idx, ok := util.PrevWordStart([]rune(c.Line.String()), c.RuneIdx); ok {
 		c.RuneIdx = idx
+		c.ColIdx = c.Line.ColumnIdx(c.RuneIdx)
 		return
 	}
 
