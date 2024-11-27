@@ -22,6 +22,7 @@ type Region struct {
 	Code            *regexp.Regexp
 	Comment         *regexp.Regexp
 	Documentation   *regexp.Regexp
+	EscapeSequence  *regexp.Regexp
 	FormatSpecifier *regexp.Regexp
 	Function        *regexp.Regexp
 	Heading         *regexp.Regexp
@@ -50,6 +51,7 @@ type Matches struct {
 	Codes            [][2]int
 	Comments         [][2]int
 	Documentations   [][2]int
+	EscapeSequences  [][2]int
 	FormatSpecifiers [][2]int
 	Functions        [][2]int
 	Headings         [][2]int
@@ -109,6 +111,19 @@ func (reg Region) Match(line *line.Line, startIdx int, endIdx int) Matches {
 				m[0] = util.ByteIdxToRuneIdx(str, b[0]) + startIdx
 				m[1] = util.ByteIdxToRuneIdx(str, b[1]) + startIdx
 				matches.Builtins = append(matches.Builtins, m)
+			}
+		}
+	}
+
+	if reg.EscapeSequence != nil {
+		seqs := reg.EscapeSequence.FindAllStringIndex(str, -1)
+		if len(seqs) > 0 {
+			matches.EscapeSequences = make([][2]int, 0, len(seqs))
+			for _, s := range seqs {
+				var m [2]int
+				m[0] = util.ByteIdxToRuneIdx(str, s[0]) + startIdx
+				m[1] = util.ByteIdxToRuneIdx(str, s[1]) + startIdx
+				matches.EscapeSequences = append(matches.EscapeSequences, m)
 			}
 		}
 	}

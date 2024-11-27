@@ -98,6 +98,8 @@ func fieldToRegexp(name string, regDef map[string]any, reg *Region) error {
 		reg.Comment = re
 	case "Documentation":
 		reg.Documentation = re
+	case "EscapeSequence":
+		reg.EscapeSequence = re
 	case "FormatSpecifier":
 		reg.FormatSpecifier = re
 	case "Function":
@@ -236,6 +238,9 @@ func langDefIntoHighlighter(langDef []any) (Highlighter, error) {
 			return hl, fmt.Errorf("region %q: %v", name, err)
 		}
 		if err := fieldToRegexp("Documentation", regDef, &reg); err != nil {
+			return hl, fmt.Errorf("region %q: %v", name, err)
+		}
+		if err := fieldToRegexp("EscapeSequence", regDef, &reg); err != nil {
 			return hl, fmt.Errorf("region %q: %v", name, err)
 		}
 		if err := fieldToRegexp("FormatSpecifier", regDef, &reg); err != nil {

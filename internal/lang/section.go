@@ -66,6 +66,13 @@ func (sec Section) Analyze(line *line.Line, startLineIdx int, colors *cfg.Colors
 			insertHighlight(&hls, hl)
 		}
 
+		for _, m := range matches.EscapeSequences {
+			hl := highlight.Highlight{
+				LineNum: lineIdx, StartRuneIdx: m[0], EndRuneIdx: m[1], Style: colors.EscapeSequence,
+			}
+			insertHighlight(&hls, hl)
+		}
+
 		for _, m := range matches.FormatSpecifiers {
 			hl := highlight.Highlight{
 				LineNum: lineIdx, StartRuneIdx: m[0], EndRuneIdx: m[1], Style: colors.FormatSpecifier,

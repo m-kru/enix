@@ -47,6 +47,7 @@ type Colorscheme struct {
 	Code            tcell.Style
 	Comment         tcell.Style
 	Documentation   tcell.Style
+	EscapeSequence  tcell.Style
 	FormatSpecifier tcell.Style
 	Function        tcell.Style
 	Heading         tcell.Style
@@ -82,6 +83,8 @@ func (cs *Colorscheme) Style(name string) tcell.Style {
 		return cs.Comment
 	case "Documentation":
 		return cs.Documentation
+	case "EscapeSequence":
+		return cs.EscapeSequence
 	case "FormatSpecifier":
 		return cs.FormatSpecifier
 	case "Function":
@@ -156,6 +159,7 @@ func ColorschemeDefault() Colorscheme {
 		Attribute:       tcell.StyleDefault.Foreground(tcell.ColorTeal),
 		Builtin:         tcell.StyleDefault.Bold(true),
 		Comment:         tcell.StyleDefault.Foreground(tcell.ColorGray),
+		EscapeSequence:  tcell.StyleDefault.Foreground(tcell.ColorOlive),
 		FormatSpecifier: tcell.StyleDefault.Foreground(tcell.ColorMaroon),
 		Keyword:         tcell.StyleDefault.Foreground(tcell.ColorNavy),
 		Meta:            tcell.StyleDefault.Foreground(tcell.ColorPurple),

@@ -26,6 +26,7 @@
 		"Style": "String",
 		"StartRegex": "\"",
 		"EndRegex": "\"",
-		"FormatSpecifier": "\\\\(t|n)|%(c|d|f|p|s|u|x)"
+		"EscapeSequence": "\\\\(a|b|e|f|n|r|t|v|\\\\)",
+		"FormatSpecifier": "%(c|d|f|p|s|u|x)"
 	}
 ]
