@@ -1,6 +1,7 @@
 package tab
 
 import (
+	"github.com/m-kru/enix/internal/action"
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/lang"
@@ -34,6 +35,10 @@ type Tab struct {
 
 	Cursors    []*cursor.Cursor
 	Selections []*sel.Selection
+
+	InsertActions        action.Actions
+	PrevInsertCursors    []*cursor.Cursor
+	PrevInsertSelections []*sel.Selection
 
 	SearchCtx search.Context
 

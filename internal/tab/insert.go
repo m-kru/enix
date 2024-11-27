@@ -1,6 +1,8 @@
 package tab
 
 import (
+	"unicode"
+
 	"github.com/gdamore/tcell/v2"
 
 	"github.com/m-kru/enix/internal/action"
@@ -8,37 +10,82 @@ import (
 	"github.com/m-kru/enix/internal/sel"
 )
 
+func shouldInsertUndo(actions action.Action) bool {
+	switch a := actions.(type) {
+	case action.Actions:
+		for _, subA := range a {
+			undo := shouldInsertUndo(subA)
+			if undo {
+				return true
+			}
+		}
+	case *action.NewlineInsert, *action.NewlineDelete:
+		return true
+	case *action.LineDown, *action.LineUp:
+		return true
+	case *action.RuneDelete:
+		return unicode.IsSpace(a.Rune)
+	case *action.RuneInsert:
+		return unicode.IsSpace(a.Rune)
+	}
+	return false
+}
+
 func (tab *Tab) RxEventKeyInsert(ev *tcell.EventKey) {
+	var act action.Action = nil
+	updateView := true
+
 	switch ev.Key() {
 	case tcell.KeyRune:
-		tab.InsertRune(ev.Rune())
+		act = tab.insertRune(ev.Rune())
 	case tcell.KeyTab:
-		tab.InsertRune('\t')
+		act = tab.insertRune('\t')
 	case tcell.KeyBackspace2:
-		tab.Backspace()
+		act = tab.backspace()
 	case tcell.KeyDelete:
-		tab.Delete()
+		act = tab.delete()
 	case tcell.KeyEnter:
-		tab.InsertNewline()
+		act = tab.insertNewline()
 	default:
 		c, _ := tab.Keys.ToCmd(ev)
 		switch c.Name {
 		case "esc":
 			tab.State = "" // Go back to normal mode
+			updateView = false
 		case "view-down":
 			tab.ViewDown()
+			updateView = false
 		case "view-left":
 			tab.ViewLeft()
+			updateView = false
 		case "view-right":
 			tab.ViewRight()
+			updateView = false
 		case "view-up":
 			tab.ViewUp()
+			updateView = false
 		}
-
-		return
 	}
 
-	tab.UpdateView()
+	if act != nil {
+		tab.InsertActions = append(tab.InsertActions, act)
+	}
+
+	if (shouldInsertUndo(act) || tab.State == "") && len(tab.InsertActions) > 0 {
+		tab.UndoStack.Push(
+			tab.InsertActions.Reverse(),
+			tab.PrevInsertCursors,
+			tab.PrevInsertSelections,
+		)
+
+		tab.InsertActions = make(action.Actions, 0, 16)
+		tab.PrevInsertCursors = cursor.Clone(tab.Cursors)
+		tab.PrevInsertSelections = sel.Clone(tab.Selections)
+	}
+
+	if updateView {
+		tab.UpdateView()
+	}
 }
 
 func (tab *Tab) InsertRune(r rune) {
@@ -49,17 +96,24 @@ func (tab *Tab) InsertRune(r rune) {
 
 	if actions != nil {
 		tab.UndoStack.Push(actions.Reverse(), prevCurs, prevSels)
-		tab.HasChanges = true
 	}
 }
 
 func (tab *Tab) insertRune(r rune) action.Action {
+	var a action.Action
+
 	if tab.Cursors != nil {
-		return tab.insertRuneCursors(r)
+		a = tab.insertRuneCursors(r)
 	} else {
-		return nil
+		a = nil
 		// insert rune for selections unimplemented
 	}
+
+	if a != nil {
+		tab.HasChanges = true
+	}
+
+	return a
 }
 
 func (tab *Tab) insertRuneCursors(r rune) action.Action {
