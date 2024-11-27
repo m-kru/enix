@@ -100,7 +100,8 @@ func (tab *Tab) insertNewline() action.Action {
 	if tab.Cursors != nil {
 		return tab.insertNewlineCursors()
 	} else {
-		panic("insert newline for selections unimplemented")
+		// insert newline for selections unimplemented
+		return nil
 	}
 }
 
