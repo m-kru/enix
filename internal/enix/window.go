@@ -398,7 +398,7 @@ func Start(
 	screen.EnableMouse()
 
 	// Catch panics in a defer, clean up, and re-raise them.
-	// Otherwise the application can  die without leaving any diagnostic trace.
+	// Otherwise the application can die without leaving any diagnostic trace.
 	quit := func() {
 		maybePanic := recover()
 		screen.Fini()
