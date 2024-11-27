@@ -130,5 +130,10 @@ func InsertKeybindingsDefault() Keybindings {
 		"Delete":     "del",
 		"Enter":      "enter",
 		"Esc":        "esc",
+		// View
+		"Down":  "view-down",
+		"Right": "view-right",
+		"Up":    "view-up",
+		"Left":  "view-left",
 	}
 }

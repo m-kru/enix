@@ -20,13 +20,25 @@ func (tab *Tab) RxEventKeyInsert(ev *tcell.EventKey) {
 		tab.Delete()
 	case tcell.KeyEnter:
 		tab.InsertNewline()
+	default:
+		c, _ := tab.Keys.ToCmd(ev)
+		switch c.Name {
+		case "esc":
+			tab.State = "" // Go back to normal mode
+		case "view-down":
+			tab.ViewDown()
+		case "view-left":
+			tab.ViewLeft()
+		case "view-right":
+			tab.ViewRight()
+		case "view-up":
+			tab.ViewUp()
+		}
+
+		return
 	}
 
-	c, _ := tab.Keys.ToCmd(ev)
-	switch c.Name {
-	case "esc":
-		tab.State = "" // Go back to normal mode
-	}
+	tab.UpdateView()
 }
 
 func (tab *Tab) InsertRune(r rune) {
