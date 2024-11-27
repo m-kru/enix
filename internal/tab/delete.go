@@ -109,9 +109,21 @@ func (tab *Tab) deleteSelections() action.Actions {
 }
 
 func (tab *Tab) Backspace() {
+	prevCurs := cursor.Clone(tab.Cursors)
+	prevSels := sel.Clone(tab.Selections)
+
+	actions := tab.backspace()
+
+	if len(actions) > 0 {
+		tab.UndoStack.Push(actions.Reverse(), prevCurs, prevSels)
+		tab.HasChanges = true
+	}
+}
+
+func (tab *Tab) backspace() action.Actions {
 	if tab.Cursors != nil {
-		tab.deleteCursors(true)
+		return tab.deleteCursors(true)
 	} else {
-		tab.deleteSelections()
+		return tab.deleteSelections()
 	}
 }

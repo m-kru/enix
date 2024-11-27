@@ -59,5 +59,5 @@ func (c *Cursor) Backspace() action.Action {
 	r := c.Line.DeleteRune(c.RuneIdx - 1)
 	c.RuneIdx--
 
-	return &action.RuneDelete{Line: c.Line, Rune: r, RuneIdx: c.RuneIdx - 1}
+	return &action.RuneDelete{Line: c.Line, Rune: r, RuneIdx: c.RuneIdx}
 }
