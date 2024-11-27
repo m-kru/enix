@@ -57,7 +57,8 @@ func (tab *Tab) insertRune(r rune) action.Action {
 	if tab.Cursors != nil {
 		return tab.insertRuneCursors(r)
 	} else {
-		panic("insert rune for selections unimplemented")
+		return nil
+		// insert rune for selections unimplemented
 	}
 }
 
