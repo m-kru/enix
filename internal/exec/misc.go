@@ -117,3 +117,15 @@ func Undo(args []string, tab *tab.Tab) error {
 
 	return nil
 }
+
+func Yank(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf(
+			"yank: expected 0 args, provided %d", len(args),
+		)
+	}
+
+	tab.Yank()
+
+	return nil
+}

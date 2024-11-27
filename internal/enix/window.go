@@ -255,6 +255,8 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			err = exec.WordEnd(c.Args, tab)
 		case "word-start":
 			err = exec.WordStart(c.Args, tab)
+		case "yank":
+			err = exec.Yank(c.Args, tab)
 		case "prev-word-start":
 			err = exec.PrevWordStart(c.Args, tab)
 		default:
