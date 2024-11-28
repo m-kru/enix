@@ -17,7 +17,7 @@ import (
 func init() {
 	var err error
 
-	ConfigDir = os.Getenv("ENIX_CONFIG_HOME")
+	ConfigDir = os.Getenv("ENIX_CONFIG_DIR")
 	if ConfigDir == "" {
 		ConfigDir = os.Getenv("XDG_CONFIG_HOME")
 

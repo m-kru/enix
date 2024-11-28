@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path"
 	"path/filepath"
 	"regexp"
 
@@ -42,9 +43,15 @@ func NewHighlighter(lang string) (*Highlighter, error) {
 }
 
 func readLangDefFromJSON(lang string) ([]any, error) {
-	langsDir := filepath.Join(cfg.ConfigDir, "langs")
+	langsDir := ""
 	if arg.LangsDir != "" {
 		langsDir = arg.LangsDir
+	}
+	if langsDir == "" {
+		langsDir = path.Join(os.Getenv("ENIX_RC_DIR"), "langs")
+	}
+	if langsDir == "" {
+		langsDir = filepath.Join(cfg.ConfigDir, "langs")
 	}
 
 	path := filepath.Join(langsDir, lang+".json")
