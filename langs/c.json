@@ -25,8 +25,8 @@
 		"Name": "String",
 		"Style": "String",
 		"StartRegex": "\"",
-		"EndRegex": "\"",
-		"EscapeSequence": "\\\\(a|b|e|f|n|r|t|v|\\\\)",
+		"EndRegex": "(?:[^\\\\]|^)\"",
+		"EscapeSequence": "\\\\(a|b|e|f|n|r|t|v|\"|\\\\)",
 		"FormatSpecifier": "%(c|d|f|p|s|u|x)"
 	}
 ]

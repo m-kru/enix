@@ -74,7 +74,7 @@ func splitIntoSections(
 				sec.StartLine = lineIdx
 				sec.StartIdx = tok.StartIdx
 			} else {
-				if tok.Start || tok.Region != reg || tok.StartIdx == sec.StartIdx {
+				if tok.Start || tok.Region != reg || tok.EndIdx == (sec.StartIdx+1) {
 					continue
 				}
 
@@ -148,11 +148,20 @@ func tokenizeLine(regions []*Region, line string) []RegionToken {
 	}
 
 	sortFunc := func(i, j int) bool {
-		if toks[i].StartIdx == toks[j].StartIdx {
-			return toks[i].Start
+		ti := toks[i]
+		tj := toks[j]
+
+		if ti.Overlaps(tj) {
+			if ti.Start && !tj.Start {
+				return true
+			} else if !ti.Start && tj.Start {
+				return false
+			} else {
+				return ti.StartIdx < tj.StartIdx
+			}
 		}
 
-		return toks[i].StartIdx < toks[j].StartIdx
+		return ti.StartIdx < tj.StartIdx
 	}
 
 	sort.Slice(toks, sortFunc)
