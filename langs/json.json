@@ -1,0 +1,14 @@
+[
+	{
+		"Name": "Default",
+		"Number": "\\d+(?:\\.\\d+)?(?:[eE][+-]?\\d*)?",
+		"Value": "\\b(false|true|null)\\b"
+	},
+	{
+		"Name": "String",
+		"Style": "String",
+		"StartRegex": "\"",
+		"EndRegex": "(?:[^\\\\]|^)\"",
+		"EscapeSequence": "\\\\(b|f|n|r|t|\"|\\\\)"
+	}
+]
