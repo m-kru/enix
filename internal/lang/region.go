@@ -232,5 +232,18 @@ func (reg Region) Match(line *line.Line, startIdx int, endIdx int) Matches {
 		}
 	}
 
+	if reg.Variable != nil {
+		vars := reg.Variable.FindAllStringIndex(str, -1)
+		if len(vars) > 0 {
+			matches.Variables = make([][2]int, 0, len(vars))
+			for _, v := range vars {
+				var m [2]int
+				m[0] = util.ByteIdxToRuneIdx(str, v[0]) + startIdx
+				m[1] = util.ByteIdxToRuneIdx(str, v[1]) + startIdx
+				matches.Variables = append(matches.Variables, m)
+			}
+		}
+	}
+
 	return matches
 }

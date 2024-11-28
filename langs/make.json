@@ -1,0 +1,20 @@
+[
+	{
+		"Name": "Default",
+		"Keyword": "^.*:",
+		"Value": "\\$\\(\\w+\\)"
+	},
+	{
+		"Name": "Line Comment",
+		"Style": "Comment",
+		"StartRegex": "#",
+		"EndRegex": "$"
+	},
+	{
+		"Name": "String",
+		"Style": "String",
+		"StartRegex": "\"",
+		"EndRegex": "(?:[^\\\\]|^)\"",
+		"Variable": "\\$\\(\\w+\\)"
+	}
+]

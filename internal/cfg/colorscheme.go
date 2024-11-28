@@ -168,6 +168,7 @@ func ColorschemeDefault() Colorscheme {
 		String:          tcell.StyleDefault.Foreground(tcell.ColorGreen),
 		Type:            tcell.StyleDefault.Foreground(tcell.ColorOlive),
 		Value:           tcell.StyleDefault.Foreground(tcell.ColorMaroon),
+		Variable:        tcell.StyleDefault.Foreground(tcell.ColorMaroon),
 	}
 }
 

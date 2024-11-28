@@ -129,6 +129,13 @@ func (sec Section) Analyze(line *line.Line, startLineIdx int, colors *cfg.Colors
 			insertHighlight(&hls, hl)
 		}
 
+		for _, m := range matches.Variables {
+			hl := highlight.Highlight{
+				LineNum: lineIdx, StartRuneIdx: m[0], EndRuneIdx: m[1], Style: colors.Variable,
+			}
+			insertHighlight(&hls, hl)
+		}
+
 		if lineIdx < sec.EndLine {
 			line = line.Next
 		}
