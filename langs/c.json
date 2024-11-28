@@ -10,6 +10,12 @@
 		"Value": "\\b(false|true|NULL|nullptr|stderr|stdin|stdout|EXIT_FAILURE|EXIT_SUCCESS)\\b"
 	},
 	{
+		"Name": "Block Comment",
+		"Style": "Comment",
+		"StartRegex": "/\\*",
+		"EndRegex": "\\*/"
+	},
+	{
 		"Name": "Line Comment",
 		"Style": "Comment",
 		"StartRegex": "//",
