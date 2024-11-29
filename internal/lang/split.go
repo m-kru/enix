@@ -54,7 +54,7 @@ func splitIntoSections(
 			secs = secs[startIdx:]
 		}
 
-		lineToks := tokenizeLine(regions, line.String())
+		lineToks := tokenizeLine(regions, line.Buf)
 
 		for _, tok := range lineToks {
 			if reg.Name == "Default" {
@@ -127,7 +127,7 @@ func splitIntoSections(
 	return secs
 }
 
-func tokenizeLine(regions []*Region, line string) []RegionToken {
+func tokenizeLine(regions []*Region, line []byte) []RegionToken {
 	toks := []RegionToken{}
 	var tok RegionToken
 	var negLookBeh [][]int
@@ -139,9 +139,9 @@ func tokenizeLine(regions []*Region, line string) []RegionToken {
 		// Find start tokens
 		negLookBeh = negLookBeh[0:0]
 		tok.Start = true
-		locs := r.StartRegex.Regex.FindAllStringIndex(line, -1)
+		locs := r.StartRegex.Regex.FindAllIndex(line, -1)
 		if len(locs) > 0 && r.StartRegex.NegativeLookbehind != nil {
-			negLookBeh = r.StartRegex.NegativeLookbehind.FindAllStringIndex(line, -1)
+			negLookBeh = r.StartRegex.NegativeLookbehind.FindAllIndex(line, -1)
 		}
 		for _, l := range locs {
 			ok := true
@@ -162,9 +162,9 @@ func tokenizeLine(regions []*Region, line string) []RegionToken {
 		// Find end tokens
 		negLookBeh = negLookBeh[0:0]
 		tok.Start = false
-		locs = r.EndRegex.Regex.FindAllStringIndex(line, -1)
+		locs = r.EndRegex.Regex.FindAllIndex(line, -1)
 		if len(locs) > 0 && r.EndRegex.NegativeLookbehind != nil {
-			negLookBeh = r.EndRegex.NegativeLookbehind.FindAllStringIndex(line, -1)
+			negLookBeh = r.EndRegex.NegativeLookbehind.FindAllIndex(line, -1)
 		}
 		for _, l := range locs {
 			ok := true
