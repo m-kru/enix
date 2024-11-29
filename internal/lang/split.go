@@ -74,7 +74,7 @@ func splitIntoSections(
 				sec.StartLine = lineIdx
 				sec.StartIdx = tok.StartIdx
 			} else {
-				if tok.Start || tok.Region != reg || tok.StartIdx == sec.StartIdx {
+				if tok.Start || tok.Region != reg || (tok.StartIdx == sec.StartIdx && lineIdx == sec.StartLine) {
 					continue
 				}
 
