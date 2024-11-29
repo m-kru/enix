@@ -17,7 +17,9 @@
 		},
 		"EndRegex": {
 			"Regex": "\\*/"
-		}
+		},
+		"ToDo": "(?i)(todo|note|xxx):"
+
 	},
 	{
 		"Name": "Line Comment",
@@ -27,7 +29,8 @@
 		},
 		"EndRegex": {
 			"Regex": "$"
-		}
+		},
+		"ToDo": "(?i)(todo|note|xxx):"
 	},
 	{
 		"Name": "Meta",

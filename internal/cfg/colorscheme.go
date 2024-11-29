@@ -167,6 +167,7 @@ func ColorschemeDefault() Colorscheme {
 		Number:          tcell.StyleDefault.Foreground(tcell.ColorMaroon),
 		Operator:        tcell.StyleDefault.Foreground(tcell.ColorOlive),
 		String:          tcell.StyleDefault.Foreground(tcell.ColorGreen),
+		ToDo:            tcell.StyleDefault.Bold(true),
 		Type:            tcell.StyleDefault.Foreground(tcell.ColorOlive),
 		Value:           tcell.StyleDefault.Foreground(tcell.ColorMaroon),
 		Variable:        tcell.StyleDefault.Foreground(tcell.ColorMaroon),

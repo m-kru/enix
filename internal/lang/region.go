@@ -214,6 +214,19 @@ func (reg Region) Match(line *line.Line, startIdx int, endIdx int) Matches {
 		}
 	}
 
+	if reg.ToDo != nil {
+		todos := reg.ToDo.FindAllStringIndex(str, -1)
+		if len(todos) > 0 {
+			matches.ToDos = make([][2]int, 0, len(todos))
+			for _, t := range todos {
+				var m [2]int
+				m[0] = util.ByteIdxToRuneIdx(str, t[0]) + startIdx
+				m[1] = util.ByteIdxToRuneIdx(str, t[1]) + startIdx
+				matches.ToDos = append(matches.ToDos, m)
+			}
+		}
+	}
+
 	if reg.Type != nil {
 		types := reg.Type.FindAllStringIndex(str, -1)
 		if len(types) > 0 {
