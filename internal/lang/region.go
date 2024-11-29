@@ -7,22 +7,12 @@ import (
 	"github.com/m-kru/enix/internal/util"
 )
 
-type RegionStartRegex struct {
-	Regex              *regexp.Regexp
-	NegativeLookbehind *regexp.Regexp
-}
-
-type RegionEndRegex struct {
-	Regex              *regexp.Regexp
-	NegativeLookbehind *regexp.Regexp
-}
-
 type Region struct {
 	Name  string
 	Style string // Region default style
 
-	StartRegex RegionStartRegex
-	EndRegex   RegionEndRegex
+	Start Regex
+	End   Regex
 
 	CursorWord *regexp.Regexp
 

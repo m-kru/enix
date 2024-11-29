@@ -7,10 +7,10 @@
 	{
 		"Name": "String",
 		"Style": "String",
-		"StartRegex": {
+		"Start": {
 			"Regex": "\""
 		},
-		"EndRegex": {
+		"End": {
 			"Regex": "\"",
 			"NegativeLookbehind": "(?:[^\\\\])\\\\"
 		},

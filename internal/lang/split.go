@@ -130,57 +130,29 @@ func splitIntoSections(
 func tokenizeLine(regions []*Region, line []byte) []RegionToken {
 	toks := []RegionToken{}
 	var tok RegionToken
-	var negLookBeh [][]int
 
 	// Skip the default region
 	for _, r := range regions[1:] {
 		tok.Region = r
 
 		// Find start tokens
-		negLookBeh = negLookBeh[0:0]
 		tok.Start = true
-		locs := r.StartRegex.Regex.FindAllIndex(line, -1)
-		if len(locs) > 0 && r.StartRegex.NegativeLookbehind != nil {
-			negLookBeh = r.StartRegex.NegativeLookbehind.FindAllIndex(line, -1)
-		}
-		for _, l := range locs {
-			ok := true
-			for _, nlb := range negLookBeh {
-				if nlb[1] == l[0] {
-					ok = false
-					break
-				}
-			}
-			if !ok {
-				continue
-			}
-			tok.StartIdx = l[0]
-			tok.EndIdx = l[1]
+		finds := r.Start.FindAll(line)
+		for _, f := range finds {
+			tok.StartIdx = f.start
+			tok.EndIdx = f.end
 			toks = append(toks, tok)
 		}
 
 		// Find end tokens
-		negLookBeh = negLookBeh[0:0]
 		tok.Start = false
-		locs = r.EndRegex.Regex.FindAllIndex(line, -1)
-		if len(locs) > 0 && r.EndRegex.NegativeLookbehind != nil {
-			negLookBeh = r.EndRegex.NegativeLookbehind.FindAllIndex(line, -1)
-		}
-		for _, l := range locs {
-			ok := true
-			for _, nlb := range negLookBeh {
-				if nlb[1] == l[0] {
-					ok = false
-					break
-				}
-			}
-			if !ok {
-				continue
-			}
-			tok.StartIdx = l[0]
-			tok.EndIdx = l[1]
+		finds = r.End.FindAll(line)
+		for _, f := range finds {
+			tok.StartIdx = f.start
+			tok.EndIdx = f.end
 			toks = append(toks, tok)
 		}
+
 	}
 
 	sortFunc := func(i, j int) bool {

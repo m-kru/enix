@@ -11,10 +11,10 @@
 	{
 		"Name": "Line Comment",
 		"Style": "Comment",
-		"StartRegex": {
+		"Start": {
 			"Regex": "//"
 		},
-		"EndRegex": {
+		"End": {
 			"Regex": "$"
 		},
 		"ToDo": "(?i)(todo|note|xxx):"
@@ -22,10 +22,10 @@
 	{
 		"Name": "String",
 		"Style": "String",
-		"StartRegex": {
+		"Start": {
 			"Regex": "\""
 		},
-		"EndRegex": {
+		"End": {
 			"Regex": "\"",
 			"NegativeLookbehind": "(?:[^\\\\])\\\\"
 		},

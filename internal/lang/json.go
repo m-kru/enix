@@ -17,11 +17,11 @@ type RegionJSON struct {
 	Name  string
 	Style string
 
-	StartRegex struct {
+	Start struct {
 		Regex              string
 		NegativeLookbehind string
 	}
-	EndRegex struct {
+	End struct {
 		Regex              string
 		NegativeLookbehind string
 	}
@@ -55,32 +55,32 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 	var err error
 
 	var sre *regexp.Regexp
-	if rj.StartRegex.Regex != "" {
-		sre, err = regexp.Compile(rj.StartRegex.Regex)
+	if rj.Start.Regex != "" {
+		sre, err = regexp.Compile(rj.Start.Regex)
 		if err != nil {
 			return nil, fmt.Errorf("can't compile start regex: %v", err)
 		}
 	}
 
 	var snlb *regexp.Regexp
-	if rj.StartRegex.NegativeLookbehind != "" {
-		snlb, err = regexp.Compile(rj.StartRegex.NegativeLookbehind)
+	if rj.Start.NegativeLookbehind != "" {
+		snlb, err = regexp.Compile(rj.Start.NegativeLookbehind)
 		if err != nil {
 			return nil, fmt.Errorf("can't compile start regex negative lookbehind: %v", err)
 		}
 	}
 
 	var ere *regexp.Regexp
-	if rj.EndRegex.Regex != "" {
-		ere, err = regexp.Compile(rj.EndRegex.Regex)
+	if rj.End.Regex != "" {
+		ere, err = regexp.Compile(rj.End.Regex)
 		if err != nil {
 			return nil, fmt.Errorf("can't compile end regex: %v", err)
 		}
 	}
 
 	var enlb *regexp.Regexp
-	if rj.EndRegex.NegativeLookbehind != "" {
-		enlb, err = regexp.Compile(rj.EndRegex.NegativeLookbehind)
+	if rj.End.NegativeLookbehind != "" {
+		enlb, err = regexp.Compile(rj.End.NegativeLookbehind)
 		if err != nil {
 			return nil, fmt.Errorf("can't compile edn regex negative lookbehind: %v", err)
 		}
@@ -273,11 +273,11 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 	return &Region{
 		Name:  rj.Name,
 		Style: rj.Style,
-		StartRegex: RegionStartRegex{
+		Start: Regex{
 			Regex:              sre,
 			NegativeLookbehind: snlb,
 		},
-		EndRegex: RegionEndRegex{
+		End: Regex{
 			Regex:              ere,
 			NegativeLookbehind: enlb,
 		},

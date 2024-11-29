@@ -12,10 +12,10 @@
 	{
 		"Name": "Block Comment",
 		"Style": "Comment",
-		"StartRegex": {
+		"Start": {
 			"Regex": "/\\*"
 		},
-		"EndRegex": {
+		"End": {
 			"Regex": "\\*/"
 		},
 		"ToDo": "(?i)(todo|note|xxx):"
@@ -24,10 +24,10 @@
 	{
 		"Name": "Line Comment",
 		"Style": "Comment",
-		"StartRegex": {
+		"Start": {
 			"Regex": "//"
 		},
-		"EndRegex": {
+		"End": {
 			"Regex": "$"
 		},
 		"ToDo": "(?i)(todo|note|xxx):"
@@ -35,20 +35,20 @@
 	{
 		"Name": "Meta",
 		"Style": "Meta",
-		"StartRegex": {
+		"Start": {
 			"Regex": "^\\s*#"
 		},
-		"EndRegex": {
+		"End": {
 			"Regex": "\\s|$"
 		}
 	},
 	{
 		"Name": "String",
 		"Style": "String",
-		"StartRegex": {
+		"Start": {
 			"Regex": "\""
 		},
-		"EndRegex": {
+		"End": {
 			"Regex": "\"",
 			"NegativeLookbehind": "(?:[^\\\\])\\\\"
 		},

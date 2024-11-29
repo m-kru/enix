@@ -58,11 +58,11 @@ func langDefIntoHighlighter(regionsJSON []RegionJSON) (Highlighter, error) {
 
 	for i := 1; i < len(hl.Regions); i++ {
 		r := hl.Regions[i]
-		if r.StartRegex.Regex == nil {
+		if r.Start.Regex == nil {
 			panic(fmt.Sprintf("missing start regex for region '%s'", r.Name))
 			//return hl, fmt.Errorf("missing start regex for region '%s'", r.Name)
 		}
-		if r.EndRegex.Regex == nil {
+		if r.End.Regex == nil {
 			panic(fmt.Sprintf("missing end regex for region '%s'", r.Name))
 			//return hl, fmt.Errorf("missing end regex for region '%s'", r.Name)
 		}
