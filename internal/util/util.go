@@ -63,23 +63,23 @@ func IsBracket(r rune) bool {
 		r == '<' || r == '>'
 }
 
-// ByteIdxToRuneIdx returns rune index in string based on byte index.
+// ByteIdxToRuneIdx returns rune index in string (represented as byte slice) based on byte index.
 // The function assumes provided string has only valid runes.
-// In case of invalid runes value 0 is returned.
-func ByteIdxToRuneIdx(str string, bidx int) int {
+// In case of an invalid rune, value 0 is returned.
+func ByteIdxToRuneIdx(buf []byte, byteIdx int) int {
 	rIdx := 0
-	idx := 0
-	for _, r := range str {
-		rl := utf8.RuneLen(r)
-		if rl < 0 {
+	bIdx := 0
+	for {
+		r, rLen := utf8.DecodeRune(buf[bIdx:])
+		if r == utf8.RuneError {
 			return 0
 		}
 
-		if idx >= bidx {
-			return rIdx
+		if bIdx >= byteIdx {
+			break
 		}
 
-		idx += rl
+		bIdx += rLen
 		rIdx++
 	}
 

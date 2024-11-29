@@ -26,9 +26,7 @@ func Search(line *line.Line, startLine int, ctx *Context) {
 			break
 		}
 
-		str := line.String()
-
-		matches := ctx.Regexp.FindAllStringIndex(str, -1)
+		matches := ctx.Regexp.FindAllIndex(line.Buf, -1)
 		if len(matches) == 0 {
 			line = line.Next
 			lineNum++
@@ -42,8 +40,8 @@ func Search(line *line.Line, startLine int, ctx *Context) {
 		for _, m := range matches {
 			f := find.Find{
 				LineNum:      lineNum,
-				StartRuneIdx: util.ByteIdxToRuneIdx(str, m[0]),
-				EndRuneIdx:   util.ByteIdxToRuneIdx(str, m[1]),
+				StartRuneIdx: util.ByteIdxToRuneIdx(line.Buf, m[0]),
+				EndRuneIdx:   util.ByteIdxToRuneIdx(line.Buf, m[1]),
 			}
 			ctx.Finds = append(ctx.Finds, f)
 		}
