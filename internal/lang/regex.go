@@ -31,6 +31,9 @@ func (r Regex) FindAll(buf []byte) []Match {
 		}
 	}
 
+	// Note: Below code can be optimized.
+	// If i'th find consumed j'th lookaround,
+	// the for (i+1)'th find we can start from (j+1)'th lookaround. 
 	for _, f := range finds {
 		ok := true
 		for _, nlb := range negLookBeh {
