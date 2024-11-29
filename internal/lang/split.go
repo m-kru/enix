@@ -74,6 +74,8 @@ func splitIntoSections(
 				sec.StartLine = lineIdx
 				sec.StartIdx = tok.StartIdx
 			} else {
+				// TODO: Why do we need last condition, can it be simplified.
+				// Removing it breaks tests.
 				if tok.Start || tok.Region != reg || (tok.StartIdx == sec.StartIdx && lineIdx == sec.StartLine) {
 					continue
 				}
