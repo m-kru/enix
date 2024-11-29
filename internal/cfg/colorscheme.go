@@ -64,7 +64,6 @@ type Colorscheme struct {
 	Type            tcell.Style
 	Value           tcell.Style
 	Variable        tcell.Style
-	Other           tcell.Style
 }
 
 func (cs *Colorscheme) Style(name string) tcell.Style {
@@ -117,8 +116,6 @@ func (cs *Colorscheme) Style(name string) tcell.Style {
 		return cs.Value
 	case "Variable":
 		return cs.Variable
-	case "Other":
-		return cs.Other
 	default:
 		return cs.Default
 	}
