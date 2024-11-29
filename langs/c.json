@@ -47,7 +47,7 @@
 		},
 		"EndRegex": {
 			"Regex": "\"",
-			"NegativeLookbehind": "\\\\"
+			"NegativeLookbehind": "(?:[^\\\\])\\\\"
 		},
 		"EscapeSequence": "\\\\(a|b|e|f|n|r|t|v|\"|\\\\)",
 		"FormatSpecifier": "%(c|d|f|p|s|u|x)"

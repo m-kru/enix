@@ -7,8 +7,13 @@
 	{
 		"Name": "String",
 		"Style": "String",
-		"StartRegex": "\"",
-		"EndRegex": "(?:[^\\\\]|^)\"",
+		"StartRegex": {
+			"Regex": "\""
+		},
+		"EndRegex": {
+			"Regex": "\"",
+			"NegativeLookbehind": "(?:[^\\\\])\\\\"
+		},
 		"EscapeSequence": "\\\\(b|f|n|r|t|\"|\\\\)"
 	}
 ]

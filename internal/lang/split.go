@@ -56,9 +56,9 @@ func splitIntoSections(
 
 		lineToks := tokenizeLine(regions, line.String())
 
-		for i, tok := range lineToks {
+		for _, tok := range lineToks {
 			if reg.Name == "Default" {
-				if !tok.Start || (i > 0 && tok.Overlaps(lineToks[i-1])) {
+				if !tok.Start {
 					continue
 				}
 
@@ -74,9 +74,12 @@ func splitIntoSections(
 				sec.StartLine = lineIdx
 				sec.StartIdx = tok.StartIdx
 			} else {
-				// TODO: Why do we need last condition, can it be simplified.
-				// Removing it breaks tests.
-				if tok.Start || tok.Region != reg || (tok.StartIdx == sec.StartIdx && lineIdx == sec.StartLine) {
+				if tok.Start || tok.Region != reg {
+					continue
+				}
+
+				// Some regions have identical start and end tokens, for example string in C.
+				if tok.StartIdx == sec.StartIdx && sec.StartLine == lineIdx {
 					continue
 				}
 
