@@ -5,7 +5,7 @@
 		"Builtin": "\\b(__DATE__|__FILE__|__LINE__|__TIME__|__VA_ARGS__)\\b",
 		"Keyword": "\\b(break|case|continue|default|do|else|enum|for|goto|if|return|switch|typedef|while)\\b",
 		"Number": "\\b-?(0[xX][0-9a-fA-F]+|\\d+)([uU][lL]{0,2}|[lL]{1,2}[uU]?|[fFdDiI]|([eE][-+]?\\d+))?|'((\\\\.)?|[^'\\\\])'",
-		"Operator": "=|\\+|-|>|<|\\*|/|&|%|!|\\||~|\\.|\\(|\\)|\\[|\\]|\\b(sizeof|typeof)\\b",
+		"Operator": "=|\\+|-|>|<|\\*|/|&|%|!|\\||~|\\b(sizeof|typeof)\\b",
 		"Type": "\\b(bool|char|double|float|int|int8_t|int16_t|int32_t|int64_t|int128_t|long|uint8_t|uint16_t|uint32_t|uint64_t|uint128_t|unsigned|signed|struct|void)\\b",
 		"Value": "\\b(false|true|NULL|nullptr|stderr|stdin|stdout|EXIT_FAILURE|EXIT_SUCCESS)\\b"
 	},

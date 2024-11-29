@@ -162,6 +162,7 @@ func ColorschemeDefault() Colorscheme {
 		Comment:         tcell.StyleDefault.Foreground(tcell.ColorGray),
 		EscapeSequence:  tcell.StyleDefault.Foreground(tcell.ColorOlive),
 		FormatSpecifier: tcell.StyleDefault.Foreground(tcell.ColorMaroon),
+		Function:        tcell.StyleDefault.Foreground(tcell.ColorTeal),
 		Keyword:         tcell.StyleDefault.Foreground(tcell.ColorNavy),
 		Meta:            tcell.StyleDefault.Foreground(tcell.ColorPurple),
 		Number:          tcell.StyleDefault.Foreground(tcell.ColorMaroon),

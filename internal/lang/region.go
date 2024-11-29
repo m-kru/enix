@@ -149,6 +149,19 @@ func (reg Region) Match(line *line.Line, startIdx int, endIdx int) Matches {
 		}
 	}
 
+	if reg.Function != nil {
+		funcs := reg.Function.FindAllStringIndex(str, -1)
+		if len(funcs) > 0 {
+			matches.Functions = make([][2]int, 0, len(funcs))
+			for _, f := range funcs {
+				var m [2]int
+				m[0] = util.ByteIdxToRuneIdx(str, f[0]) + startIdx
+				m[1] = util.ByteIdxToRuneIdx(str, f[1]) + startIdx
+				matches.Functions = append(matches.Functions, m)
+			}
+		}
+	}
+
 	if reg.Keyword != nil {
 		keywords := reg.Keyword.FindAllStringIndex(str, -1)
 		if len(keywords) > 0 {
