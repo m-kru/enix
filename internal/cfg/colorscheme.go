@@ -158,6 +158,7 @@ func ColorschemeDefault() Colorscheme {
 
 		Attribute:       tcell.StyleDefault.Foreground(tcell.ColorTeal),
 		Builtin:         tcell.StyleDefault.Bold(true),
+		Bold:            tcell.StyleDefault.Bold(true),
 		Comment:         tcell.StyleDefault.Foreground(tcell.ColorGray),
 		EscapeSequence:  tcell.StyleDefault.Foreground(tcell.ColorOlive),
 		FormatSpecifier: tcell.StyleDefault.Foreground(tcell.ColorMaroon),

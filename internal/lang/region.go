@@ -7,12 +7,22 @@ import (
 	"github.com/m-kru/enix/internal/util"
 )
 
+type RegionStartRegex struct {
+	Regex              *regexp.Regexp
+	NegativeLookbehind *regexp.Regexp
+}
+
+type RegionEndRegex struct {
+	Regex              *regexp.Regexp
+	NegativeLookbehind *regexp.Regexp
+}
+
 type Region struct {
 	Name  string
 	Style string // Region default style
 
-	StartRegexp *regexp.Regexp
-	EndRegexp   *regexp.Regexp
+	StartRegex RegionStartRegex
+	EndRegex   RegionEndRegex
 
 	CursorWord *regexp.Regexp
 
@@ -39,7 +49,6 @@ type Region struct {
 	Type            *regexp.Regexp
 	Value           *regexp.Regexp
 	Variable        *regexp.Regexp
-	Other           *regexp.Regexp
 }
 
 type Matches struct {
@@ -68,7 +77,6 @@ type Matches struct {
 	Types            [][2]int
 	Values           [][2]int
 	Variables        [][2]int
-	Others           [][2]int
 }
 
 func (reg Region) Match(line *line.Line, startIdx int, endIdx int) Matches {

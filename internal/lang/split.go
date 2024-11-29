@@ -74,7 +74,7 @@ func splitIntoSections(
 				sec.StartLine = lineIdx
 				sec.StartIdx = tok.StartIdx
 			} else {
-				if tok.Start || tok.Region != reg || tok.EndIdx == (sec.StartIdx+1) {
+				if tok.Start || tok.Region != reg || tok.StartIdx == sec.StartIdx {
 					continue
 				}
 
@@ -131,7 +131,7 @@ func tokenizeLine(regions []*Region, line string) []RegionToken {
 		tok.Region = r
 
 		tok.Start = true
-		locs := r.StartRegexp.FindAllStringIndex(line, -1)
+		locs := r.StartRegex.Regex.FindAllStringIndex(line, -1)
 		for _, l := range locs {
 			tok.StartIdx = l[0]
 			tok.EndIdx = l[1]
@@ -139,7 +139,7 @@ func tokenizeLine(regions []*Region, line string) []RegionToken {
 		}
 
 		tok.Start = false
-		locs = r.EndRegexp.FindAllStringIndex(line, -1)
+		locs = r.EndRegex.Regex.FindAllStringIndex(line, -1)
 		for _, l := range locs {
 			tok.StartIdx = l[0]
 			tok.EndIdx = l[1]
@@ -151,14 +151,8 @@ func tokenizeLine(regions []*Region, line string) []RegionToken {
 		ti := toks[i]
 		tj := toks[j]
 
-		if ti.Overlaps(tj) {
-			if ti.Start && !tj.Start {
-				return true
-			} else if !ti.Start && tj.Start {
-				return false
-			} else {
-				return ti.StartIdx < tj.StartIdx
-			}
+		if ti.StartIdx == tj.StartIdx {
+			return ti.Start
 		}
 
 		return ti.StartIdx < tj.StartIdx
