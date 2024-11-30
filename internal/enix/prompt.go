@@ -165,41 +165,37 @@ func (p *Prompt) Delete() {
 }
 
 func (p *Prompt) Down() {
-	switch p.State {
-	case InShadow:
-		p.Line.Append([]byte(p.ShadowText))
-		p.ShadowText = ""
-		p.State = InText
-	case InText:
-		if p.HistoryIdx < len(p.History)-1 {
-			p.HistoryIdx++
-			p.Line, _ = line.FromString(p.History[p.HistoryIdx])
-		}
-		p.Cursor.RuneIdx = p.Line.RuneCount()
+	if p.HistoryIdx == len(p.History)-1 {
+		return
 	}
+
+	p.HistoryIdx++
+	p.Line, _ = line.FromString("")
+	p.ShadowText = p.History[p.HistoryIdx]
+	p.State = InShadow
+	p.Cursor.RuneIdx = 0
 }
 
 func (p *Prompt) Up() {
-	if p.State == InShadow {
-		if len(p.History) == 0 {
-			p.Line.Append([]byte(p.ShadowText))
-		}
-		p.ShadowText = ""
-		p.State = InText
+	if p.HistoryIdx == 0 {
+		return
 	}
 
-	if len(p.History) > 0 && p.HistoryIdx > 0 {
-		p.HistoryIdx--
-		p.Line, _ = line.FromString(p.History[p.HistoryIdx])
-		p.Cursor.RuneIdx = p.Line.RuneCount()
-	}
+	p.HistoryIdx--
+	p.Line, _ = line.FromString("")
+	p.ShadowText = p.History[p.HistoryIdx]
+	p.State = InShadow
+	p.Cursor.RuneIdx = 0
 }
 
 func (p *Prompt) Left() {
 	switch p.State {
 	case InShadow:
+		p.Line.Append([]byte(p.ShadowText))
 		p.ShadowText = ""
 		p.State = InText
+		p.Cursor.Line = p.Line
+		p.Cursor.RuneIdx = 0
 	case InText:
 		p.Cursor.Left()
 	}
@@ -209,6 +205,7 @@ func (p *Prompt) Right() {
 	switch p.State {
 	case InShadow:
 		p.Line.Append([]byte(p.ShadowText))
+		p.Cursor.Line = p.Line
 		p.Cursor.RuneIdx += len(p.ShadowText)
 		p.ShadowText = ""
 		p.State = InText
