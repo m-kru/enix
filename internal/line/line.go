@@ -186,7 +186,7 @@ func (l *Line) RuneIdx(colIdx int) (int, int, bool) {
 		rIdx++
 	}
 
-	return 0, 0, false
+	return rIdx, 0, false
 }
 
 // Count returns number of lines in the list starting from the line l.

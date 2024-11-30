@@ -14,9 +14,10 @@ func Mark(args []string, tab *tab.Tab) (string, error) {
 	}
 
 	name := args[0]
-	if unicode.IsDigit([]rune(name)[0]) {
+	r0 := []rune(name)[0]
+	if unicode.IsDigit(r0) || r0 == '-' {
 		return "", fmt.Errorf(
-			"mark: invalid name '%s', name must not start with a digit",
+			"mark: invalid name '%s', name must not start with a digit or '-' rune",
 			name,
 		)
 	}

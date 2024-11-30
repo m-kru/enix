@@ -7,7 +7,6 @@ import (
 )
 
 type Command struct {
-	//HasReps  bool // Command has repetitions
 	RepCount int
 	Name     string
 	Args     []string
@@ -18,7 +17,8 @@ func Parse(line string) (Command, error) {
 	cmd := Command{RepCount: 1}
 
 	// The command might be a short version of go command.
-	if unicode.IsDigit([]rune(line)[0]) {
+	r0 := []rune(line)[0]
+	if unicode.IsDigit(r0) || r0 == '-' {
 		cmd, ok := parseShortGoto(line)
 		if ok {
 			return cmd, nil
@@ -56,11 +56,14 @@ func Parse(line string) (Command, error) {
 //   - 1
 //   - 1:2
 //   - 1 2
+//   - -1
+//   - -1:2
+//   - -1 2
 func parseShortGoto(line string) (Command, bool) {
 	cmd := Command{RepCount: 1, Name: "go"}
 
 	for _, r := range line {
-		if !unicode.IsDigit(r) && r != ':' && r != ' ' {
+		if !unicode.IsDigit(r) && r != ':' && r != ' ' && r != '-' {
 			return cmd, false
 		}
 	}

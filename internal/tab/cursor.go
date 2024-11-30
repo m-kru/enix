@@ -18,20 +18,6 @@ func (tab *Tab) Down() {
 	tab.Cursors = cursor.Prune(tab.Cursors)
 }
 
-func (tab *Tab) End() {
-	if len(tab.Cursors) == 0 {
-		tab.Cursors = sel.ToCursors(tab.Selections)
-		tab.Selections = nil
-	}
-
-	tab.Cursors = []*cursor.Cursor{
-		&cursor.Cursor{
-			Line:    tab.Lines.Last(),
-			LineNum: tab.LineCount,
-		},
-	}
-}
-
 func (tab *Tab) Left() {
 	if len(tab.Cursors) == 0 {
 		tab.Cursors = sel.ToCursors(tab.Selections)

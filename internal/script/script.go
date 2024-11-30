@@ -83,8 +83,6 @@ func execCmd(c cmd.Command, tab *tab.Tab) error {
 			err = exec.Del(c.Args, tab)
 		case "down":
 			err = exec.Down(c.Args, tab)
-		case "end":
-			err = exec.End(c.Args, tab)
 		case "esc":
 			err = exec.Esc(c.Args, tab)
 		case "go":

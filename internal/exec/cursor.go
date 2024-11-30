@@ -2,8 +2,6 @@ package exec
 
 import (
 	"fmt"
-	"github.com/m-kru/enix/internal/cursor"
-	"github.com/m-kru/enix/internal/mark"
 	"github.com/m-kru/enix/internal/tab"
 	"strconv"
 	"strings"
@@ -58,108 +56,54 @@ func Up(args []string, tab *tab.Tab) error {
 	return nil
 }
 
-func End(args []string, tab *tab.Tab) error {
-	if len(args) > 0 {
-		return fmt.Errorf(
-			"end: expected 0 args, provided %d", len(args),
-		)
-	}
-
-	tab.End()
-
-	return nil
-}
-
 func Go(args []string, tab *tab.Tab) error {
 	var err error
-	line := 0
-	col := 0
 
 	if len(args) == 0 {
 		return fmt.Errorf("go: missing at least line number or mark name")
-	}
-
-	if len(args) == 1 && !unicode.IsDigit([]rune(args[0])[0]) {
-		return goMark(args[0], tab)
-	}
-
-	if len(args) == 1 {
-		if strings.Contains(args[0], ":") {
-			lineStr, colStr, _ := strings.Cut(args[0], ":")
-			line, err = strconv.Atoi(lineStr)
-			if err != nil {
-				return fmt.Errorf("go: %v", err)
-			}
-			col, err = strconv.Atoi(colStr)
-			if err != nil {
-				return fmt.Errorf("go: %v", err)
-			}
-		} else {
-			line, err = strconv.Atoi(args[0])
-			if err != nil {
-				return fmt.Errorf("go: %v", err)
-			}
-		}
-	} else if len(args) == 2 {
-		line, err = strconv.Atoi(args[0])
-		if err != nil {
-			return fmt.Errorf("go: %v", err)
-		}
-		col, err = strconv.Atoi(args[1])
-		if err != nil {
-			return fmt.Errorf("go: %v", err)
-		}
-	} else {
+	} else if len(args) > 2 {
 		return fmt.Errorf("go: expected at most 2 args, provided %d", len(args))
 	}
 
-	goCmd(line, col, tab)
-
-	return nil
-}
-
-func goCmd(lineNum, col int, tab *tab.Tab) {
-	if lineNum < 1 {
-		lineNum = 1
-	}
-	if col < 1 {
-		col = 1
-	}
-	if lineNum > tab.LineCount {
-		lineNum = tab.LineCount
+	arg0 := args[0]
+	arg1 := ""
+	if len(args) > 1 {
+		arg1 = args[1]
 	}
 
-	line := tab.Lines.Get(lineNum)
-	if col > line.Columns()+1 {
-		col = line.Columns() + 1
+	if len(args) == 1 && !unicode.IsDigit([]rune(arg0)[0]) && arg0[0] != '-' {
+		return tab.GoMark(arg0)
 	}
 
-	rIdx, _, ok := line.RuneIdx(col)
-	if !ok {
-		rIdx = line.RuneCount()
-	}
-	tab.Cursors = []*cursor.Cursor{
-		&cursor.Cursor{
-			Line:    line,
-			LineNum: lineNum,
-			RuneIdx: rIdx,
-			ColIdx:  col,
-		},
-	}
-}
+	lineStr := arg0
+	colStr := ""
+	line := 0
+	col := 0
 
-func goMark(name string, tab *tab.Tab) error {
-	m, ok := tab.Marks[name]
-	if !ok {
-		return fmt.Errorf("go: no '%s' mark", name)
+	if arg1 == "" {
+		if strings.Contains(arg0, ":") {
+			lineStr, colStr, _ = strings.Cut(arg0, ":")
+		}
+	} else {
+		lineStr = arg0
+		colStr = arg1
 	}
 
-	switch m := m.(type) {
-	case *mark.CursorMark:
-		tab.Cursors = cursor.Clone(m.Cursors)
-	default:
-		// Going to selection mark unimplemented
+	// Prase line
+	line, err = strconv.Atoi(lineStr)
+	if err != nil {
+		return fmt.Errorf("go: %v", err)
 	}
+
+	// Parse column
+	if colStr != "" {
+		col, err = strconv.Atoi(colStr)
+		if err != nil {
+			return fmt.Errorf("go: %v", err)
+		}
+	}
+
+	tab.Go(line, col)
 
 	return nil
 }

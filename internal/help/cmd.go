@@ -35,17 +35,17 @@ If cursor is in the last line, nothing happens.`,
 	"dump-cursor": `dump-cursor N # Dumps Nth cursor data.
 This command is useful for enix debugging and development.`,
 
-	"end": `end # Moves cursor to the last line.
-If there are multiple cursors, they are first reduced to a single cursor.`,
-
 	"g": `g # An alias to the go command.`,
 
 	"go": `go position|mark-name # Goes to the position or restores a mark.
 Valid syntaxes for the position are:
-  - go 10   # Goes to line 10 column 1,
-  - go 10 5 # Goes to line 10 column 5,
-  - go 10:5 # Goes to line 10 column 5,
-  - go tmp  # Goes to mark named tmp.`,
+  - go 10    # Goes to line 10 column 1,
+  - go 10 5  # Goes to line 10 column 5,
+  - go 10:5  # Goes to line 10 column 5,
+  - go -1    # Goes to the last line column 1,
+  - go -1 -1 # Goes to the last line last column,
+  - go -1:-1 # Goes to the last line last column,
+  - go tmp   # Goes to mark named tmp.`,
 
 	"left": `left # Moves cursor left.
 If cursor is in the first column of a line, then it is moved into the last
@@ -177,8 +177,8 @@ key-name command again.`,
 
 	"mark": `mark name # Creates new named mark.
 Marks allow to record current cursors or selections positions.
-Mark name must not start with a digit. To resotre marks one has to
-use the go command providing as an argument the name of a mark.`,
+Mark name must not start with a digit or '-' rune. To restore marks one
+has to use the go command providing as an argument the name of a mark.`,
 	"m": `m # An alias to the mark command.`,
 
 	"q": `q # An alias to the quit command.`,
