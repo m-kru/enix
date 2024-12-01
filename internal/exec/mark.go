@@ -22,7 +22,10 @@ func Mark(args []string, tab *tab.Tab) (string, error) {
 		)
 	}
 
-	tab.Mark(name)
+	err := tab.Mark(name)
+	if err != nil {
+		return "", fmt.Errorf("mark: %v", err)
+	}
 
 	return fmt.Sprintf("mark '%s' created", name), nil
 }
