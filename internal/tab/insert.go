@@ -1,6 +1,7 @@
 package tab
 
 import (
+	"fmt"
 	"unicode"
 
 	"github.com/gdamore/tcell/v2"
@@ -15,6 +16,67 @@ func (tab *Tab) Insert() {
 	tab.InsertActions = make(action.Actions, 0, 16)
 	tab.PrevInsertCursors = cursor.Clone(tab.Cursors)
 	tab.PrevInsertSelections = sel.Clone(tab.Selections)
+}
+
+func (tab *Tab) InsertLineBelow() error {
+	prevCurs := cursor.Clone(tab.Cursors)
+	prevSels := sel.Clone(tab.Selections)
+
+	var actions action.Actions
+
+	if len(tab.Cursors) > 0 {
+		actions = tab.insertLineBelowCursors()
+	} else {
+		return fmt.Errorf("unimplemented for selections")
+	}
+
+	if len(actions) > 0 {
+		tab.UndoStack.Push(actions.Reverse(), prevCurs, prevSels)
+	}
+
+	tab.Insert()
+
+	return nil
+}
+
+func (tab *Tab) insertLineBelowCursors() action.Actions {
+	actions := make(action.Actions, 0, 4)
+	newCurs := make([]*cursor.Cursor, 0, len(tab.Cursors))
+
+	curs := cursor.Uniques(tab.Cursors, true)
+
+	for i, c := range curs {
+		indent := c.Line.Indent()
+		nnel := c.Line.GetNextNonEmpty()
+		nnei := nnel.Indent()
+		if len(nnei) > len(indent) {
+			indent = nnei
+		}
+
+		act := c.InsertLineBelow(indent)
+		// act can't be nil here
+		actions = append(actions, act)
+
+		// Inform only remaining cursors, as we create new cursors anyway.
+		for _, c2 := range curs[i+1:] {
+			c2.Inform(act)
+		}
+
+		newLine := c.Line.Next
+		rIdx := newLine.RuneCount()
+		newC := &cursor.Cursor{
+			Line:    newLine,
+			LineNum: c.LineNum + 1,
+			ColIdx:  newLine.ColumnIdx(rIdx),
+			RuneIdx: rIdx,
+		}
+
+		newCurs = append(newCurs, newC)
+	}
+
+	tab.Cursors = newCurs
+
+	return actions
 }
 
 func shouldInsertUndo(actions action.Action) bool {

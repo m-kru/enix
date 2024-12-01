@@ -7,6 +7,21 @@ import (
 	"github.com/m-kru/enix/internal/tab"
 )
 
+func InsertLineBelow(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf(
+			"insert-line-below: expected 0 args, provided %d", len(args),
+		)
+	}
+
+	err := tab.InsertLineBelow()
+	if err != nil {
+		return fmt.Errorf("insert-line-below: %v", err)
+	}
+
+	return nil
+}
+
 func Space(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf(

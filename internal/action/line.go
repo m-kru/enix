@@ -5,11 +5,13 @@ import "github.com/m-kru/enix/internal/line"
 type (
 	LineDelete struct {
 		Line    *line.Line
+		LineNum int        // Currently unused
 		NewLine *line.Line // A line in the place of Line, not actually a new line.
 	}
 
 	LineInsert struct {
-		Line *line.Line
+		Line    *line.Line
+		LineNum int
 	}
 
 	LineDown struct {
@@ -46,11 +48,11 @@ func (nd *NewlineDelete) isAction() {}
 func (ni *NewlineInsert) isAction() {}
 
 func (ld *LineDelete) Reverse() Action {
-	return &LineInsert{Line: ld.Line}
+	return &LineInsert{Line: ld.Line, LineNum: ld.LineNum}
 }
 
 func (li *LineInsert) Reverse() Action {
-	return &LineDelete{Line: li.Line}
+	return &LineDelete{Line: li.Line, LineNum: li.LineNum}
 }
 
 func (ld *LineDown) Reverse() Action {

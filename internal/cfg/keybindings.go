@@ -52,7 +52,6 @@ func KeybindingsDefault() Keybindings {
 		"Alt+[":      "del-within-bracket",
 		"Alt+(":      "del-within-paren",
 		// File
-		"Rune[o]": "open",
 		"Rune[s]": "save",
 		// Find
 		"Rune[n]": "find-next",
@@ -67,6 +66,7 @@ func KeybindingsDefault() Keybindings {
 		"Rune[c]": "change",
 		"Rune[/]": "search",
 		"Rune[i]": "insert",
+		"Rune[o]": "insert-line-below",
 		"Rune[m]": "mark tmp",
 		"Rune[M]": "go tmp",
 		"Ctrl+Z":  "suspend",

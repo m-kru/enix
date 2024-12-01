@@ -1,6 +1,7 @@
 package line
 
 import (
+	"unicode"
 	"unicode/utf8"
 
 	"github.com/mattn/go-runewidth"
@@ -97,6 +98,42 @@ func (l *Line) Get(n int) *Line {
 
 		l = l.Next
 		i--
+	}
+
+	return nil
+}
+
+func (l *Line) GetNextNonEmpty() *Line {
+	l = l.Next
+
+	for {
+		if l == nil {
+			break
+		}
+
+		if len(l.Buf) > 0 {
+			return l
+		}
+
+		l = l.Next
+	}
+
+	return nil
+}
+
+func (l *Line) GetPrevNonEmpty() *Line {
+	l = l.Prev
+
+	for {
+		if l == nil {
+			break
+		}
+
+		if len(l.Buf) > 0 {
+			return l
+		}
+
+		l = l.Prev
 	}
 
 	return nil
@@ -218,4 +255,20 @@ func (l *Line) TrimRight() int {
 	l.Buf = l.Buf[0 : len(l.Buf)-trimCount]
 
 	return trimCount
+}
+
+func (l *Line) Indent() string {
+	sIdx := 0
+	eIdx := 0
+	for {
+		r, rLen := utf8.DecodeRune(l.Buf[eIdx:])
+		if r == utf8.RuneError {
+			break
+		}
+		if !unicode.IsSpace(r) {
+			break
+		}
+		eIdx += rLen
+	}
+	return string(l.Buf[sIdx:eIdx])
 }

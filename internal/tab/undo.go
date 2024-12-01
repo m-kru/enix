@@ -46,6 +46,8 @@ func (tab *Tab) undoActions(acts action.Actions) {
 		switch a := act.(type) {
 		case action.Actions:
 			tab.undoActions(a)
+		case *action.LineDelete:
+			tab.undoLineDelete(a)
 		case *action.LineInsert:
 			tab.undoLineInsert(a)
 		case *action.LineDown:
@@ -64,6 +66,21 @@ func (tab *Tab) undoActions(acts action.Actions) {
 			a.Line.InsertString(a.Str, a.StartRuneIdx)
 		}
 	}
+}
+
+func (tab *Tab) undoLineDelete(ld *action.LineDelete) {
+	if ld.Line.Prev != nil {
+		ld.Line.Prev.Next = ld.Line.Next
+	}
+	if ld.Line.Next != nil {
+		ld.Line.Next.Prev = ld.Line.Prev
+	}
+
+	if tab.Lines == ld.Line {
+		tab.Lines = ld.Line.Next
+	}
+
+	tab.LineCount--
 }
 
 func (tab *Tab) undoLineInsert(li *action.LineInsert) {

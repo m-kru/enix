@@ -4,6 +4,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/m-kru/enix/internal/action"
+	"github.com/m-kru/enix/internal/line"
 )
 
 func (c *Cursor) InsertNewline() *action.NewlineInsert {
@@ -43,4 +44,17 @@ func (c *Cursor) InsertString(s string) *action.StringInsert {
 		StartRuneIdx: rIdx,
 		RuneCount:    rc,
 	}
+}
+
+func (c *Cursor) InsertLineBelow(s string) *action.LineInsert {
+	newLine, _ := line.FromString(s)
+
+	if c.Line.Next != nil {
+		c.Line.Next.Prev = newLine
+	}
+	newLine.Next = c.Line.Next
+	c.Line.Next = newLine
+	newLine.Prev = c.Line
+
+	return &action.LineInsert{Line: newLine, LineNum: c.LineNum + 1}
 }
