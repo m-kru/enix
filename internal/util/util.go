@@ -72,7 +72,7 @@ func ByteIdxToRuneIdx(buf []byte, byteIdx int) int {
 	for {
 		r, rLen := utf8.DecodeRune(buf[bIdx:])
 		if r == utf8.RuneError {
-			return 0
+			return rIdx
 		}
 
 		if bIdx >= byteIdx {
