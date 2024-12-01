@@ -28,6 +28,7 @@ func (tab *Tab) undo(act *undo.Action) {
 	}
 
 	tab.undoActions(as)
+	tab.handleAction(as)
 
 	tab.RedoStack.Push(act.Action.Reverse(), curs, sels)
 
@@ -75,12 +76,6 @@ func (tab *Tab) undoLineDelete(ld *action.LineDelete) {
 	if ld.Line.Next != nil {
 		ld.Line.Next.Prev = ld.Line.Prev
 	}
-
-	if tab.Lines == ld.Line {
-		tab.Lines = ld.Line.Next
-	}
-
-	tab.LineCount--
 }
 
 func (tab *Tab) undoLineInsert(li *action.LineInsert) {
@@ -90,32 +85,14 @@ func (tab *Tab) undoLineInsert(li *action.LineInsert) {
 	if li.Line.Next != nil {
 		li.Line.Next.Prev = li.Line
 	}
-
-	if li.Line.Next == tab.Lines {
-		tab.Lines = li.Line
-	}
-
-	tab.LineCount++
 }
 
 func (tab *Tab) undoLineDown(ld *action.LineDown) {
-	newFirstLine := ld.Line == tab.Lines
-
 	ld.Line.Down()
-
-	if newFirstLine {
-		tab.Lines = ld.Line.Prev
-	}
 }
 
 func (tab *Tab) undoLineUp(lu *action.LineUp) {
-	newFirstLine := lu.Line == tab.Lines.Next
-
 	lu.Line.Up()
-
-	if newFirstLine {
-		tab.Lines = lu.Line
-	}
 }
 
 func (tab *Tab) undoNewlineDelete(nd *action.NewlineDelete) {
@@ -128,8 +105,6 @@ func (tab *Tab) undoNewlineDelete(nd *action.NewlineDelete) {
 	if nd.Line2.Next != nil {
 		nd.Line2.Next.Prev = nd.NewLine
 	}
-
-	tab.LineCount--
 }
 
 func (tab *Tab) undoNewlineInsert(ni *action.NewlineInsert) {
@@ -142,6 +117,4 @@ func (tab *Tab) undoNewlineInsert(ni *action.NewlineInsert) {
 	if ni.Line.Next != nil {
 		ni.Line.Next.Prev = ni.NewLine2
 	}
-
-	tab.LineCount++
 }

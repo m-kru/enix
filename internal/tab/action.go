@@ -25,7 +25,7 @@ func (tab *Tab) handleAction(act action.Action) {
 			tab.Lines = a.Line
 		}
 	case *action.LineUp:
-		if a.Line.Next == tab.Lines {
+		if a.Line.Prev == nil {
 			tab.Lines = a.Line
 		}
 	case *action.NewlineDelete:

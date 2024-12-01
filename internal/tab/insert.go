@@ -48,7 +48,10 @@ func (tab *Tab) insertLineBelowCursors() action.Actions {
 	for i, c := range curs {
 		indent := c.Line.Indent()
 		nnel := c.Line.GetNextNonEmpty()
-		nnei := nnel.Indent()
+		nnei := ""
+		if nnel != nil {
+			nnei = nnel.Indent()
+		}
 		if len(nnei) > len(indent) {
 			indent = nnei
 		}
@@ -56,6 +59,7 @@ func (tab *Tab) insertLineBelowCursors() action.Actions {
 		act := c.InsertLineBelow(indent)
 		// act can't be nil here
 		actions = append(actions, act)
+		tab.handleAction(act)
 
 		// Inform only remaining cursors, as we create new cursors anyway.
 		for _, c2 := range curs[i+1:] {
