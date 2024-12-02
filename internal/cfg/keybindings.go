@@ -15,7 +15,7 @@ func (keys Keybindings) ToCmd(ev *tcell.EventKey) (cmd.Command, error) {
 
 	str, ok := keys[name]
 	if !ok {
-		return cmd.Command{}, nil
+		return cmd.Command{RepCount: 0, Name: "", Args: nil}, nil
 	}
 
 	return cmd.Parse(str)

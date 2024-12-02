@@ -60,7 +60,7 @@ func Parse(line string) (Command, error) {
 //   - -1:2
 //   - -1 2
 func parseShortGoto(line string) (Command, bool) {
-	cmd := Command{RepCount: 1, Name: "go"}
+	cmd := Command{RepCount: 1, Name: "go", Args: nil}
 
 	for _, r := range line {
 		if !unicode.IsDigit(r) && r != ':' && r != ' ' && r != '-' {

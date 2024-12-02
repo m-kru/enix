@@ -28,15 +28,15 @@ func TestParse(t *testing.T) {
 		},
 		{
 			line: "down",
-			want: Command{RepCount: 1, Name: "down"},
+			want: Command{RepCount: 1, Name: "down", Args: nil},
 		},
 		{
 			line: "10 up",
-			want: Command{RepCount: 10, Name: "up"},
+			want: Command{RepCount: 10, Name: "up", Args: nil},
 		},
 		{
 			line: "1 right",
-			want: Command{RepCount: 1, Name: "right"},
+			want: Command{RepCount: 1, Name: "right", Args: nil},
 		},
 		{
 			line: "replace abc def",
