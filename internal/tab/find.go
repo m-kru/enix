@@ -19,7 +19,7 @@ func getNextFind(finds []find.Find, c *cursor.Cursor) find.Find {
 	}
 
 	// TODO: Not optimal, O(n) complexity, can be implemented as O(log(n)).
-	for i := 0; i < len(finds)-1; i++ {
+	for i := range len(finds) - 1 {
 		prevF := finds[i]
 		nextF := finds[i+1]
 		// Can below check be simplified?
@@ -45,7 +45,7 @@ func getPrevFind(finds []find.Find, c *cursor.Cursor) find.Find {
 	}
 
 	// TODO: Not optimal, O(n) complexity, can be implemented as O(log(n)).
-	for i := 0; i < len(finds)-1; i++ {
+	for i := range len(finds) - 1 {
 		prev := finds[i]
 		next := finds[i+1]
 		// Can below check be simplified?

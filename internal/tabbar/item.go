@@ -56,7 +56,7 @@ func assignItemName(item *item, lvl int) {
 	name := ""
 
 	if lvl > 0 {
-		for x := 0; x < lvl; x++ {
+		for x := range lvl {
 			if x >= len(fields)-1 {
 				break
 			}

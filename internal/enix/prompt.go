@@ -48,7 +48,7 @@ type Prompt struct {
 }
 
 func (p *Prompt) Clear() {
-	for x := 0; x < p.Frame.Width; x++ {
+	for x := range p.Frame.Width {
 		p.Frame.SetContent(x, 0, ' ', p.Colors.Default)
 	}
 	p.Screen.HideCursor()
@@ -336,7 +336,7 @@ func (p *Prompt) Exec() TcellEventReceiver {
 	tab := p.Window.CurrentTab
 	updateView := true
 
-	for i := 0; i < c.RepCount; i++ {
+	for range c.RepCount {
 		switch c.Name {
 		case "":
 		case "add-cursor":

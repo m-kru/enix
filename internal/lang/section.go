@@ -159,7 +159,7 @@ func (sec Section) Analyze(line *line.Line, startLineIdx int, colors *cfg.Colors
 }
 
 func insertHighlight(hls *[]highlight.Highlight, hl highlight.Highlight) {
-	for i := 0; i < len(*hls); i++ {
+	for i := range len(*hls) {
 		if !(*hls)[i].Contains(hl) {
 			continue
 		}
@@ -171,7 +171,7 @@ func insertHighlight(hls *[]highlight.Highlight, hl highlight.Highlight) {
 		}
 
 		if len(newHls) > 1 {
-			for j := 0; j < len(*hls)-i-len(newHls); j++ {
+			for j := range len(*hls) - i - len(newHls) {
 				(*hls)[len(*hls)-1-j] = (*hls)[(len(*hls)-1-j)-len(newHls)+1]
 			}
 		}

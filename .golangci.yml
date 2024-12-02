@@ -1,6 +1,7 @@
 linters:
   enable:
     - exhaustruct
+    - intrange
 
 issues:
   exclude-rules:

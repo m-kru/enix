@@ -30,7 +30,7 @@ func splitIntoSections(
 		sec.EndLine = endLineIdx
 
 		line = startLine
-		for i := 0; i < endLineIdx-startLineIdx; i++ {
+		for range endLineIdx - startLineIdx {
 			line = line.Next
 		}
 		sec.EndIdx = line.RuneCount()

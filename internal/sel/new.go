@@ -294,7 +294,7 @@ func fromCursorWordEnd(c *cursor.Cursor) *Selection {
 	line := s.Line
 	lineNum := s.LineNum
 
-	for i := 0; i < c.LineNum-first.LineNum-1; i++ {
+	for range c.LineNum - first.LineNum - 1 {
 		line = line.Next
 		lineNum++
 
@@ -362,7 +362,7 @@ func fromCursorPrevWordStart(c *cursor.Cursor) *Selection {
 
 	line := s.Line
 	lineNum := s.LineNum
-	for i := 0; i < last.LineNum-c.LineNum-1; i++ {
+	for range last.LineNum - c.LineNum - 1 {
 		line = line.Prev
 		lineNum--
 

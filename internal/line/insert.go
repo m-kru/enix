@@ -62,7 +62,7 @@ func (l *Line) InsertString(s string, rIdx int) {
 		l.Buf[i+len(s)] = l.Buf[i]
 	}
 
-	for i := 0; i < len(s); i++ {
+	for i := range len(s) {
 		l.Buf[bIdx+i] = s[i]
 	}
 }

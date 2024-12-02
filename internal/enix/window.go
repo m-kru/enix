@@ -121,7 +121,7 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		}
 	}
 
-	for i := 0; i < c.RepCount; i++ {
+	for range c.RepCount {
 		switch c.Name {
 		case "add-cursor":
 			err = exec.AddCursor(c.Args, tab)
@@ -356,8 +356,8 @@ func (w *Window) Render() {
 func (w *Window) OpenArgFiles() {
 	errMsg := ""
 
-	for i := 0; i < len(arg.Files); i++ {
-		t, err := tab.Open(w.Config, w.Colors, w.InsertKeys, arg.Files[i])
+	for _, file := range arg.Files {
+		t, err := tab.Open(w.Config, w.Colors, w.InsertKeys, file)
 		if t != nil {
 			if w.Tabs == nil {
 				w.Tabs = t

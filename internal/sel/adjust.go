@@ -28,7 +28,7 @@ func (s *Selection) adjust(c *cursor.Cursor) *Selection {
 
 		line := c.Line
 		lineNum := c.LineNum
-		for i := 0; i < first.LineNum-c.LineNum-1; i++ {
+		for range first.LineNum - c.LineNum - 1 {
 			line = line.Next
 			lineNum++
 
@@ -130,7 +130,7 @@ func (s *Selection) adjust(c *cursor.Cursor) *Selection {
 		line := last.Line
 		lineNum := last.LineNum
 
-		for i := 0; i < c.LineNum-last.LineNum-1; i++ {
+		for range c.LineNum - last.LineNum - 1 {
 			line = line.Next
 			lineNum++
 

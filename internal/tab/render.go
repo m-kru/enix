@@ -51,7 +51,7 @@ func (tab *Tab) HasCursorInLine(line *line.Line) bool {
 
 func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 	// Fill the background
-	for i := 0; i < frame.Width; i++ {
+	for i := range frame.Width {
 		frame.SetContent(i, 0, ' ', tab.Colors.StatusLine)
 	}
 
@@ -143,7 +143,7 @@ func (tab *Tab) RenderLineNums(line *line.Line, lineNum int, frame frame.Frame) 
 
 	// Clear remaining line numbers.
 	for ; y < frame.Height; y++ {
-		for i := 0; i < frame.Width; i++ {
+		for i := range frame.Width {
 			frame.SetContent(i, y, ' ', tab.Colors.Default)
 		}
 	}

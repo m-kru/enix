@@ -71,7 +71,7 @@ func Exec(config *cfg.Config) error {
 func execCmd(c cmd.Command, tab *tab.Tab) error {
 	var err error
 
-	for i := 0; i < c.RepCount; i++ {
+	for range c.RepCount {
 		switch c.Name {
 		case "add-cursor":
 			err = exec.AddCursor(c.Args, tab)
