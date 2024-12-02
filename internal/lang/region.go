@@ -41,36 +41,49 @@ type Region struct {
 	Variable        *regexp.Regexp
 }
 
-type Matches struct {
-	CursorWords [][2]int
-
-	Attributes       [][2]int
-	Builtins         [][2]int
-	Bolds            [][2]int
-	Codes            [][2]int
-	Comments         [][2]int
-	Documentations   [][2]int
-	EscapeSequences  [][2]int
-	FormatSpecifiers [][2]int
-	Functions        [][2]int
-	Headings         [][2]int
-	Italics          [][2]int
-	Keywords         [][2]int
-	Links            [][2]int
-	Metas            [][2]int
-	Monos            [][2]int
-	Numbers          [][2]int
-	Operators        [][2]int
-	Strings          [][2]int
-	ToDos            [][2]int
-	Titles           [][2]int
-	Types            [][2]int
-	Values           [][2]int
-	Variables        [][2]int
+func DefaultRegion() *Region {
+	return &Region{
+		Name:  "Default",
+		Style: "",
+		Start: Regex{
+			Regex:              nil,
+			NegativeLookbehind: nil,
+			PositiveLookahead:  nil,
+		},
+		End: Regex{
+			Regex:              nil,
+			NegativeLookbehind: nil,
+			PositiveLookahead:  nil,
+		},
+		CursorWord:      nil,
+		Attribute:       nil,
+		Builtin:         nil,
+		Bold:            nil,
+		Code:            nil,
+		Comment:         nil,
+		Documentation:   nil,
+		EscapeSequence:  nil,
+		FormatSpecifier: nil,
+		Function:        nil,
+		Heading:         nil,
+		Italic:          nil,
+		Keyword:         nil,
+		Link:            nil,
+		Meta:            nil,
+		Mono:            nil,
+		Number:          nil,
+		Operator:        nil,
+		String:          nil,
+		ToDo:            nil,
+		Title:           nil,
+		Type:            nil,
+		Value:           nil,
+		Variable:        nil,
+	}
 }
 
 func (reg Region) Match(line *line.Line, startIdx int, endIdx int) Matches {
-	matches := Matches{}
+	matches := DefaultMatches()
 
 	buf := line.Buf[startIdx:endIdx]
 

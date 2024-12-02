@@ -10,7 +10,7 @@ type Highlighter struct {
 
 // DefaultHighlighter returns a highlighter highlighting only a cursor word.
 func DefaultHighlighter() *Highlighter {
-	return &Highlighter{Regions: []*Region{&Region{Name: "Default"}}}
+	return &Highlighter{Regions: []*Region{DefaultRegion()}}
 }
 
 func NewHighlighter(lang string) (*Highlighter, error) {
