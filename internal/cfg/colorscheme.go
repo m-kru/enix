@@ -200,7 +200,7 @@ func colorschemeFromJSON(name string) (Colorscheme, error) {
 	}
 
 	var colorschemeMap map[string]any
-	err = json.Unmarshal([]byte(data), &colorschemeMap)
+	err = json.Unmarshal(data, &colorschemeMap)
 	if err != nil {
 		return ColorschemeDefault(), fmt.Errorf("unmarshalling json colorscheme file: %v", err)
 	}

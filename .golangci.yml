@@ -4,6 +4,7 @@ linters:
     - intrange
     - misspell
     - nilerr
+    - unconvert
 
 issues:
   exclude-rules:

@@ -336,7 +336,7 @@ func readLangDefFromJSON(lang string) ([]RegionJSON, error) {
 	}
 
 	var langDef []RegionJSON
-	err = json.Unmarshal([]byte(data), &langDef)
+	err = json.Unmarshal(data, &langDef)
 	if err != nil {
 		return nil, fmt.Errorf("unmarshalling json language file: %v", err)
 	}
