@@ -12,6 +12,7 @@ import (
 	"github.com/m-kru/enix/internal/mouse"
 	"github.com/m-kru/enix/internal/tab"
 	"github.com/m-kru/enix/internal/tabbar"
+	"github.com/m-kru/enix/internal/view"
 
 	"github.com/gdamore/tcell/v2"
 )
@@ -421,9 +422,14 @@ func Start(
 		Colors:     colors,
 		Keys:       keys,
 		InsertKeys: insertKeys,
+		Mouse:      mouse.Mouse{},
+		TabBar:     tabbar.TabBar{View: view.View{Line: 0, Column: 0, Height: 0, Width: 0}},
 		Screen:     screen,
 		Width:      width,
 		Height:     height - 1, // One line for prompt
+		Tabs:       nil,
+		CurrentTab: nil,
+		Prompt:     nil,
 	}
 
 	p := Prompt{
@@ -438,11 +444,17 @@ func Start(
 			Width:  width,
 			Height: 1,
 		},
-		History: make([]string, 0, 64),
+		History:    make([]string, 0, 64),
+		HistoryIdx: 0,
+		Window:     &w,
+		Line:       nil,
+		Cursor:     nil,
+		View:       view.View{Line: 0, Column: 0, Height: 0, Width: 0},
+		ShadowText: "",
+		State:      InText,
 	}
 
 	w.Prompt = &p
-	p.Window = &w
 
 	if len(arg.Files) == 0 {
 		w.Tabs = tab.FromString(config, colors, insertKeys, "", "no-name")
