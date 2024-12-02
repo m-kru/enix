@@ -418,18 +418,20 @@ func Start(
 	width, height := screen.Size()
 
 	w := Window{
-		Config:     config,
-		Colors:     colors,
-		Keys:       keys,
-		InsertKeys: insertKeys,
-		Mouse:      mouse.Mouse{},
-		TabBar:     tabbar.TabBar{View: view.View{Line: 0, Column: 0, Height: 0, Width: 0}},
-		Screen:     screen,
-		Width:      width,
-		Height:     height - 1, // One line for prompt
-		Tabs:       nil,
-		CurrentTab: nil,
-		Prompt:     nil,
+		Config:      config,
+		Colors:      colors,
+		Keys:        keys,
+		InsertKeys:  insertKeys,
+		Mouse:       mouse.Mouse{},
+		TabBar:      tabbar.TabBar{View: view.View{Line: 0, Column: 0, Height: 0, Width: 0}},
+		Screen:      screen,
+		Width:       width,
+		Height:      height - 1, // One line for prompt
+		TabBarFrame: &frame.Frame{Screen: screen, X: 0, Y: 0, Width: width, Height: height},
+		TabFrame:    frame.Frame{Screen: screen, X: 0, Y: 0, Width: width, Height: height},
+		Tabs:        nil,
+		CurrentTab:  nil,
+		Prompt:      nil,
 	}
 
 	p := Prompt{
