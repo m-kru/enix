@@ -10,6 +10,7 @@ import (
 	"github.com/m-kru/enix/internal/lang"
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/mark"
+	"github.com/m-kru/enix/internal/search"
 	"github.com/m-kru/enix/internal/undo"
 	"github.com/m-kru/enix/internal/util"
 	"github.com/m-kru/enix/internal/view"
@@ -18,25 +19,36 @@ import (
 func Empty(config *cfg.Config, colors *cfg.Colorscheme, keys *cfg.Keybindings) *Tab {
 	lines := line.Empty()
 
-	c := &cursor.Cursor{Line: lines, LineNum: 1, ColIdx: 1}
+	c := &cursor.Cursor{Line: lines, LineNum: 1, ColIdx: 1, RuneIdx: 0}
 	curs := make([]*cursor.Cursor, 1, 16)
 	curs[0] = c
 
 	return &Tab{
-		Config:      config,
-		Colors:      colors,
-		Keys:        keys,
-		Path:        "No Name",
-		Newline:     "\n",
-		HasFocus:    true,
-		Lines:       lines,
-		LineCount:   1,
-		Cursors:     curs,
-		Marks:       make(map[string]mark.Mark),
-		View:        view.View{Line: 1, Column: 1},
-		Highlighter: lang.DefaultHighlighter(),
-		UndoStack:   undo.NewStack(config.UndoSize),
-		RedoStack:   undo.NewStack(config.UndoSize),
+		Config:               config,
+		Colors:               colors,
+		Keys:                 keys,
+		Path:                 "No Name",
+		Newline:              "\n",
+		FileType:             "None",
+		HasFocus:             true,
+		HasChanges:           false,
+		State:                "",
+		RepCount:             0,
+		Lines:                lines,
+		LineCount:            1,
+		Cursors:              curs,
+		Selections:           nil,
+		InsertActions:        nil,
+		PrevInsertCursors:    nil,
+		PrevInsertSelections: nil,
+		SearchCtx:            search.InitialContext(),
+		Marks:                make(map[string]mark.Mark),
+		View:                 view.View{Line: 1, Column: 1, Height: 1, Width: 1},
+		Highlighter:          lang.DefaultHighlighter(),
+		UndoStack:            undo.NewStack(config.UndoSize),
+		RedoStack:            undo.NewStack(config.UndoSize),
+		Prev:                 nil,
+		Next:                 nil,
 	}
 }
 
@@ -83,7 +95,7 @@ func Open(
 	}
 
 	// Cursor initialization
-	c := &cursor.Cursor{Line: lines, LineNum: 1, ColIdx: 1}
+	c := &cursor.Cursor{Line: lines, LineNum: 1, ColIdx: 1, RuneIdx: 0}
 	curs := make([]*cursor.Cursor, 1, 16)
 	curs[0] = c
 
@@ -93,21 +105,31 @@ func Open(
 	hl, err := lang.NewHighlighter(fileType)
 
 	return &Tab{
-		Config:      config,
-		Colors:      colors,
-		Keys:        keys,
-		Path:        path,
-		Newline:     "\n",
-		FileType:    fileType,
-		HasFocus:    true,
-		Lines:       lines,
-		LineCount:   lineCount,
-		Cursors:     curs,
-		Marks:       make(map[string]mark.Mark),
-		View:        view.View{Line: 1, Column: 1},
-		Highlighter: hl,
-		UndoStack:   undo.NewStack(config.UndoSize),
-		RedoStack:   undo.NewStack(config.UndoSize),
+		Config:               config,
+		Colors:               colors,
+		Keys:                 keys,
+		Path:                 path,
+		Newline:              "\n",
+		FileType:             fileType,
+		HasFocus:             true,
+		HasChanges:           false,
+		State:                "",
+		RepCount:             0,
+		Lines:                lines,
+		LineCount:            lineCount,
+		Cursors:              curs,
+		Selections:           nil,
+		InsertActions:        nil,
+		PrevInsertCursors:    nil,
+		PrevInsertSelections: nil,
+		SearchCtx:            search.InitialContext(),
+		Marks:                make(map[string]mark.Mark),
+		View:                 view.View{Line: 1, Column: 1, Height: 1, Width: 1},
+		Highlighter:          hl,
+		UndoStack:            undo.NewStack(config.UndoSize),
+		RedoStack:            undo.NewStack(config.UndoSize),
+		Prev:                 nil,
+		Next:                 nil,
 	}, err
 }
 
@@ -120,25 +142,35 @@ func FromString(
 ) *Tab {
 	lines, lineCount := line.FromString(str)
 
-	c := &cursor.Cursor{Line: lines, LineNum: 1, ColIdx: 1}
+	c := &cursor.Cursor{Line: lines, LineNum: 1, ColIdx: 1, RuneIdx: 0}
 	curs := make([]*cursor.Cursor, 1, 16)
 	curs[0] = c
 
 	return &Tab{
-		Config:      config,
-		Colors:      colors,
-		Keys:        keys,
-		Path:        path,
-		Newline:     "\n",
-		FileType:    "None",
-		HasFocus:    true,
-		Lines:       lines,
-		LineCount:   lineCount,
-		Cursors:     curs,
-		Marks:       make(map[string]mark.Mark),
-		View:        view.View{Line: 1, Column: 1},
-		Highlighter: lang.DefaultHighlighter(),
-		UndoStack:   undo.NewStack(config.UndoSize),
-		RedoStack:   undo.NewStack(config.UndoSize),
+		Config:               config,
+		Colors:               colors,
+		Keys:                 keys,
+		Path:                 path,
+		Newline:              "\n",
+		FileType:             "None",
+		HasFocus:             true,
+		HasChanges:           false,
+		State:                "",
+		RepCount:             0,
+		Lines:                lines,
+		LineCount:            lineCount,
+		Cursors:              curs,
+		Selections:           nil,
+		InsertActions:        nil,
+		PrevInsertCursors:    nil,
+		PrevInsertSelections: nil,
+		SearchCtx:            search.InitialContext(),
+		Marks:                make(map[string]mark.Mark),
+		View:                 view.View{Line: 1, Column: 1, Height: 1, Width: 1},
+		Highlighter:          lang.DefaultHighlighter(),
+		UndoStack:            undo.NewStack(config.UndoSize),
+		RedoStack:            undo.NewStack(config.UndoSize),
+		Prev:                 nil,
+		Next:                 nil,
 	}
 }
