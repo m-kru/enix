@@ -3,6 +3,7 @@ linters:
     - exhaustruct
     - intrange
     - misspell
+    - nilerr
 
 issues:
   exclude-rules:
