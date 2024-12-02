@@ -12,6 +12,10 @@ type Frame struct {
 	Height int
 }
 
+func nilFrame() Frame {
+	return Frame{Screen: nil, X: 0, Y: 0, Width: 0, Height: 0}
+}
+
 func (f Frame) HideCursor() { f.Screen.HideCursor() }
 
 func (f Frame) GetContent(x int, y int) rune {
@@ -52,10 +56,10 @@ func (f Frame) ShowCursor(x, y int) {
 // Line returns frame f subframe for line rendering.
 func (f Frame) Line(x int, y int) Frame {
 	if x >= f.Width {
-		return Frame{}
+		return nilFrame()
 	}
 	if y >= f.Height {
-		return Frame{}
+		return nilFrame()
 	}
 
 	return Frame{
@@ -78,10 +82,10 @@ func (f Frame) LastLine() Frame {
 
 func (f Frame) Column(x int, width int) Frame {
 	if x >= f.Width {
-		return Frame{}
+		return nilFrame()
 	}
 	if x+width > f.Width {
-		return Frame{}
+		return nilFrame()
 	}
 
 	return Frame{

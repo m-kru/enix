@@ -20,6 +20,8 @@ func (s *Selection) adjust(c *cursor.Cursor) *Selection {
 			StartRuneIdx: c.RuneIdx,
 			EndRuneIdx:   c.Line.RuneCount(),
 			Cursor:       c,
+			Prev:         nil,
+			Next:         nil,
 		}
 
 		s := newFirst
