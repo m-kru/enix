@@ -14,7 +14,7 @@ type Command struct {
 
 // Parse parses command line string and returns a command.
 func Parse(line string) (Command, error) {
-	cmd := Command{RepCount: 1}
+	cmd := Command{RepCount: 1, Name: "", Args: nil}
 
 	// The command might be a short version of go command.
 	r0 := []rune(line)[0]
