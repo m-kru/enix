@@ -154,18 +154,25 @@ func ColorschemeDefault() Colorscheme {
 		PromptShadow: tcell.StyleDefault.Foreground(tcell.ColorGray),
 
 		Attribute:       tcell.StyleDefault.Foreground(tcell.ColorTeal),
-		Builtin:         tcell.StyleDefault.Bold(true),
 		Bold:            tcell.StyleDefault.Bold(true),
+		Builtin:         tcell.StyleDefault.Bold(true),
+		Code:            tcell.StyleDefault.Foreground(tcell.ColorPurple),
 		Comment:         tcell.StyleDefault.Foreground(tcell.ColorGray),
+		Documentation:   tcell.StyleDefault.Foreground(tcell.ColorGray),
 		EscapeSequence:  tcell.StyleDefault.Foreground(tcell.ColorOlive),
 		FormatSpecifier: tcell.StyleDefault.Foreground(tcell.ColorMaroon),
 		Function:        tcell.StyleDefault.Foreground(tcell.ColorTeal),
+		Heading:         tcell.StyleDefault.Foreground(tcell.ColorTeal),
+		Italic:          tcell.StyleDefault.Italic(true),
 		Keyword:         tcell.StyleDefault.Foreground(tcell.ColorNavy),
+		Link:            tcell.StyleDefault.Bold(true),
 		Meta:            tcell.StyleDefault.Foreground(tcell.ColorPurple),
+		Mono:            tcell.StyleDefault.Foreground(tcell.ColorPurple),
 		Number:          tcell.StyleDefault.Foreground(tcell.ColorMaroon),
 		Operator:        tcell.StyleDefault.Foreground(tcell.ColorOlive),
 		String:          tcell.StyleDefault.Foreground(tcell.ColorGreen),
 		ToDo:            tcell.StyleDefault.Bold(true),
+		Title:           tcell.StyleDefault.Foreground(tcell.ColorTeal),
 		Type:            tcell.StyleDefault.Foreground(tcell.ColorOlive),
 		Value:           tcell.StyleDefault.Foreground(tcell.ColorMaroon),
 		Variable:        tcell.StyleDefault.Foreground(tcell.ColorMaroon),
@@ -174,8 +181,6 @@ func ColorschemeDefault() Colorscheme {
 
 // readFromJSON reads colorscheme from file named "name.json".
 func colorschemeFromJSON(name string) (Colorscheme, error) {
-	cs := Colorscheme{}
-
 	colorsDir := filepath.Join(ConfigDir, "colors")
 	if arg.ColorsDir != "" {
 		colorsDir = arg.ColorsDir
@@ -185,24 +190,24 @@ func colorschemeFromJSON(name string) (Colorscheme, error) {
 
 	file, err := os.Open(path)
 	if err != nil {
-		return cs, fmt.Errorf("opening colorscheme file: %v", err)
+		return ColorschemeDefault(), fmt.Errorf("opening colorscheme file: %v", err)
 	}
 	defer file.Close()
 
 	data, err := io.ReadAll(file)
 	if err != nil {
-		return cs, fmt.Errorf("reading colors file: %v", err)
+		return ColorschemeDefault(), fmt.Errorf("reading colors file: %v", err)
 	}
 
 	var colorschemeMap map[string]any
 	err = json.Unmarshal([]byte(data), &colorschemeMap)
 	if err != nil {
-		return cs, fmt.Errorf("unmarshalling json colorscheme file: %v", err)
+		return ColorschemeDefault(), fmt.Errorf("unmarshalling json colorscheme file: %v", err)
 	}
 
-	cs, err = colorschemeFromMap(colorschemeMap)
+	cs, err := colorschemeFromMap(colorschemeMap)
 	if err != nil {
-		return cs, fmt.Errorf("%s: %v", path, err)
+		return ColorschemeDefault(), fmt.Errorf("%s: %v", path, err)
 	}
 
 	return cs, nil
@@ -211,7 +216,7 @@ func colorschemeFromJSON(name string) (Colorscheme, error) {
 // colorschemeFromMap creates Colorscheme from colorscheme map read from JSON file.
 func colorschemeFromMap(csm map[string]any) (Colorscheme, error) {
 	var err error
-	cs := Colorscheme{}
+	cs := ColorschemeDefault()
 
 	if cs.Default, err = readStyleFromMap("Default", csm, &tcell.StyleDefault); err != nil {
 		return cs, fmt.Errorf("%v", err)
