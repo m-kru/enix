@@ -276,11 +276,14 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 		Start: Regex{
 			Regex:              sre,
 			NegativeLookbehind: snlb,
+			PositiveLookahead:  nil,
 		},
 		End: Regex{
 			Regex:              ere,
 			NegativeLookbehind: enlb,
+			PositiveLookahead:  nil,
 		},
+		CursorWord:      nil,
 		Attribute:       attr,
 		Builtin:         builtin,
 		Bold:            bold,

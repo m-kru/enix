@@ -15,14 +15,19 @@ type Action struct {
 }
 
 type Stack struct {
-	len   int
 	cap   int
+	len   int
 	first *Action
 	last  *Action
 }
 
 func NewStack(cap int) *Stack {
-	return &Stack{cap: cap}
+	return &Stack{
+		cap:   cap,
+		len:   0,
+		first: nil,
+		last:  nil,
+	}
 }
 
 func (s *Stack) Push(act action.Action, curs []*cursor.Cursor, sels []*sel.Selection) {
