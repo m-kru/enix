@@ -34,7 +34,8 @@ func NewHighlighter(lang string) (*Highlighter, error) {
 }
 
 func langDefIntoHighlighter(regionsJSON []RegionJSON) (Highlighter, error) {
-	hl := Highlighter{}
+	hl := Highlighter{Regions: []*Region{}}
+
 	if len(regionsJSON) == 0 {
 		return hl, fmt.Errorf("no regions defined")
 	}

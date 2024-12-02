@@ -36,7 +36,13 @@ func (s *Stack) Push(act action.Action, curs []*cursor.Cursor, sels []*sel.Selec
 		s.len--
 	}
 
-	Action := &Action{Action: act, Cursors: curs, Selections: sels}
+	Action := &Action{
+		Action:     act,
+		Cursors:    curs,
+		Selections: sels,
+		prev:       nil,
+		next:       nil,
+	}
 
 	if s.first == nil {
 		s.first = Action

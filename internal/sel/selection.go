@@ -62,7 +62,7 @@ func (s *Selection) View() view.View {
 }
 
 func (s *Selection) FullView() view.View {
-	v := view.View{Line: s.LineNum}
+	line := s.LineNum
 
 	minCol := s.Line.ColumnIdx(s.StartRuneIdx)
 	maxCol := s.Line.ColumnIdx(s.EndRuneIdx)
@@ -85,11 +85,12 @@ func (s *Selection) FullView() view.View {
 		s = s.Next
 	}
 
-	v.Height = s.LineNum - v.Line + 1
-	v.Column = minCol
-	v.Width = maxCol - minCol + 1
-
-	return v
+	return view.View{
+		Line:   line,
+		Column: minCol,
+		Height: s.LineNum - line + 1,
+		Width:  maxCol - minCol + 1,
+	}
 }
 
 func (s *Selection) Overlaps(s2 *Selection) bool {
