@@ -17,11 +17,12 @@ func (c *Cursor) Delete() action.Action {
 		c.Line = newLine
 
 		return &action.NewlineDelete{
-			Line1:    l1,
-			Line1Num: c.LineNum,
-			RuneIdx:  rc,
-			Line2:    l2,
-			NewLine:  newLine,
+			Line1:        l1,
+			Line1Num:     c.LineNum,
+			RuneIdx:      rc,
+			Line2:        l2,
+			TrimmedCount: 0,
+			NewLine:      newLine,
 		}
 	}
 
@@ -47,11 +48,12 @@ func (c *Cursor) Backspace() action.Action {
 			c.ColIdx = c.Line.ColumnIdx(c.RuneIdx)
 
 			return &action.NewlineDelete{
-				Line1:    l1,
-				Line1Num: c.LineNum,
-				RuneIdx:  l1Len,
-				Line2:    l2,
-				NewLine:  newLine,
+				Line1:        l1,
+				Line1Num:     c.LineNum,
+				RuneIdx:      l1Len,
+				Line2:        l2,
+				TrimmedCount: 0,
+				NewLine:      newLine,
 			}
 		}
 	}

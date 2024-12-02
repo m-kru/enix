@@ -52,7 +52,7 @@ func (ld *LineDelete) Reverse() Action {
 }
 
 func (li *LineInsert) Reverse() Action {
-	return &LineDelete{Line: li.Line, LineNum: li.LineNum}
+	return &LineDelete{Line: li.Line, LineNum: li.LineNum, NewLine: nil}
 }
 
 func (ld *LineDown) Reverse() Action {
@@ -75,10 +75,11 @@ func (nd *NewlineDelete) Reverse() Action {
 
 func (ni *NewlineInsert) Reverse() Action {
 	return &NewlineDelete{
-		Line1:    ni.NewLine1,
-		Line1Num: ni.LineNum,
-		RuneIdx:  ni.RuneIdx,
-		Line2:    ni.NewLine2,
-		NewLine:  ni.Line,
+		Line1:        ni.NewLine1,
+		Line1Num:     ni.LineNum,
+		RuneIdx:      ni.RuneIdx,
+		Line2:        ni.NewLine2,
+		TrimmedCount: 0,
+		NewLine:      ni.Line,
 	}
 }

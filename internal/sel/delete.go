@@ -56,7 +56,11 @@ func (s *Selection) deleteLine() action.Action {
 		}
 	}
 
-	ld := &action.LineDelete{Line: s.Line, NewLine: l}
+	ld := &action.LineDelete{
+		Line:    s.Line,
+		LineNum: s.LineNum,
+		NewLine: l,
+	}
 
 	if l == s.Line.Prev {
 		s.LineNum--
@@ -82,11 +86,12 @@ func (s *Selection) deleteNewline() action.Action {
 	s.Line = newLine
 
 	return &action.NewlineDelete{
-		Line1:    l1,
-		Line1Num: s.LineNum,
-		RuneIdx:  rc,
-		Line2:    l2,
-		NewLine:  newLine,
+		Line1:        l1,
+		Line1Num:     s.LineNum,
+		RuneIdx:      rc,
+		Line2:        l2,
+		TrimmedCount: 0,
+		NewLine:      newLine,
 	}
 }
 
@@ -134,11 +139,12 @@ func (s *Selection) deleteStringAndNewline() action.Actions {
 
 	acts = append(acts,
 		&action.NewlineDelete{
-			Line1:    l1,
-			Line1Num: s.LineNum,
-			RuneIdx:  rc,
-			Line2:    l2,
-			NewLine:  newLine,
+			Line1:        l1,
+			Line1Num:     s.LineNum,
+			RuneIdx:      rc,
+			Line2:        l2,
+			TrimmedCount: 0,
+			NewLine:      newLine,
 		},
 	)
 
