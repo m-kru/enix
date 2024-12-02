@@ -1,0 +1,9 @@
+linters:
+  enable:
+    - exhaustruct
+
+issues:
+  exclude-rules:
+    - path: lang/split_test.go
+      linters:
+        - exhaustruct
