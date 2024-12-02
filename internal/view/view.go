@@ -29,31 +29,32 @@ func (v View) IsVisible(v2 View) bool {
 // It is users responsibility to first check if two views
 // intersect using the IsVisible function.
 func (v View) Intersection(v2 View) View {
-	iv := View{}
-
+	line := v.Line
 	if v.Line <= v2.Line {
-		iv.Line = v2.Line
-	} else {
-		iv.Line = v.Line
+		line = v2.Line
 	}
-	lastLine := v.LastLine()
+
+	height := v.LastLine() - line + 1
 	if v.LastLine() > v2.LastLine() {
-		lastLine = v2.LastLine()
+		height = v2.LastLine() - line + 1
 	}
-	iv.Height = lastLine - iv.Line + 1
 
+	column := v.Column
 	if v.Column <= v2.Column {
-		iv.Column = v2.Column
-	} else {
-		iv.Column = v.Column
+		column = v2.Column
 	}
-	lastCol := v.LastColumn()
-	if v.LastColumn() > v2.LastColumn() {
-		lastCol = v2.LastColumn()
-	}
-	iv.Width = lastCol - iv.Column + 1
 
-	return iv
+	width := v.LastColumn() - column + 1
+	if v.LastColumn() > v2.LastColumn() {
+		width = v2.LastColumn() - column + 1
+	}
+
+	return View{
+		Line:   line,
+		Column: column,
+		Height: height,
+		Width:  width,
+	}
 }
 
 // MinAdjust returns a new View with minimal adjustments so that inner view (iv) is visible.
