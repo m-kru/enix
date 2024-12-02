@@ -165,8 +165,9 @@ func insertHighlight(hls *[]highlight.Highlight, hl highlight.Highlight) {
 		}
 
 		newHls := (*hls)[i].Split(hl)
-		for range len(newHls) - 1 {
-			*hls = append(*hls, highlight.Highlight{})
+		for i := range len(newHls) - 1 {
+			hl := newHls[i]
+			*hls = append(*hls, hl)
 		}
 
 		if len(newHls) > 1 {
