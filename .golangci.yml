@@ -2,6 +2,7 @@ linters:
   enable:
     - exhaustruct
     - intrange
+    - misspell
 
 issues:
   exclude-rules:

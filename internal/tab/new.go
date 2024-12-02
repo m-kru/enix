@@ -66,7 +66,7 @@ func Open(
 		return Empty(config, colors, keys), nil
 	}
 
-	// Check existance of backup file. If exists, return an error.
+	// Check existence of backup file. If exists, return an error.
 	backupPath := path + ".enix-bak"
 	_, err := os.Stat(backupPath)
 	if err == nil {

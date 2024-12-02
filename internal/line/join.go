@@ -16,7 +16,7 @@ func (l *Line) Join(trim bool) (*Line, int) {
 
 	l2 := l.Next
 	str := string(l2.Buf)
-	trimmedCount := utf8.RuneCountInString(str) - 1 // - 1 becase we potentailly add one extra space ' '
+	trimmedCount := utf8.RuneCountInString(str) - 1 // - 1 becase we potentially add one extra space ' '
 	if trim {
 		prefix := " "
 		if len(l.Buf) == 0 {
