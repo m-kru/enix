@@ -24,6 +24,8 @@ func fromCursorDown(c *cursor.Cursor) *Selection {
 			StartRuneIdx: c.RuneIdx,
 			EndRuneIdx:   c.RuneIdx,
 			Cursor:       c,
+			Prev:         nil,
+			Next:         nil,
 		}
 	}
 
@@ -33,6 +35,8 @@ func fromCursorDown(c *cursor.Cursor) *Selection {
 		StartRuneIdx: c.RuneIdx,
 		EndRuneIdx:   c.Line.RuneCount(),
 		Cursor:       nil,
+		Prev:         nil,
+		Next:         nil,
 	}
 
 	c.Down()
@@ -42,10 +46,11 @@ func fromCursorDown(c *cursor.Cursor) *Selection {
 		StartRuneIdx: 0,
 		EndRuneIdx:   c.RuneIdx,
 		Cursor:       c,
+		Prev:         first,
+		Next:         nil,
 	}
 
 	first.Next = second
-	second.Prev = first
 
 	return first
 }
@@ -71,6 +76,8 @@ func fromCursorLeft(c *cursor.Cursor) *Selection {
 			StartRuneIdx: c.RuneIdx,
 			EndRuneIdx:   c.RuneIdx + 1,
 			Cursor:       c,
+			Prev:         nil,
+			Next:         nil,
 		}
 	}
 
@@ -81,6 +88,8 @@ func fromCursorLeft(c *cursor.Cursor) *Selection {
 			StartRuneIdx: 0,
 			EndRuneIdx:   0,
 			Cursor:       c,
+			Prev:         nil,
+			Next:         nil,
 		}
 	}
 
@@ -91,6 +100,8 @@ func fromCursorLeft(c *cursor.Cursor) *Selection {
 		StartRuneIdx: c.RuneIdx,
 		EndRuneIdx:   c.RuneIdx,
 		Cursor:       c,
+		Prev:         nil,
+		Next:         nil,
 	}
 	second := &Selection{
 		Line:         c.Line.Next,
@@ -98,10 +109,11 @@ func fromCursorLeft(c *cursor.Cursor) *Selection {
 		StartRuneIdx: 0,
 		EndRuneIdx:   0,
 		Cursor:       nil,
+		Prev:         first,
+		Next:         nil,
 	}
 
 	first.Next = second
-	second.Prev = first
 
 	return first
 }
@@ -127,6 +139,8 @@ func fromCursorLine(c *cursor.Cursor) *Selection {
 		StartRuneIdx: 0,
 		EndRuneIdx:   lineRC,
 		Cursor:       c,
+		Prev:         nil,
+		Next:         nil,
 	}
 }
 
@@ -151,6 +165,8 @@ func fromCursorRight(c *cursor.Cursor) *Selection {
 			StartRuneIdx: c.RuneIdx - 1,
 			EndRuneIdx:   c.RuneIdx,
 			Cursor:       c,
+			Prev:         nil,
+			Next:         nil,
 		}
 	}
 
@@ -161,6 +177,8 @@ func fromCursorRight(c *cursor.Cursor) *Selection {
 			StartRuneIdx: c.RuneIdx,
 			EndRuneIdx:   c.RuneIdx,
 			Cursor:       c,
+			Prev:         nil,
+			Next:         nil,
 		}
 	}
 
@@ -170,6 +188,8 @@ func fromCursorRight(c *cursor.Cursor) *Selection {
 		StartRuneIdx: c.RuneIdx,
 		EndRuneIdx:   c.RuneIdx,
 		Cursor:       nil,
+		Prev:         nil,
+		Next:         nil,
 	}
 	c.Right()
 	second := &Selection{
@@ -178,10 +198,11 @@ func fromCursorRight(c *cursor.Cursor) *Selection {
 		StartRuneIdx: 0,
 		EndRuneIdx:   c.RuneIdx,
 		Cursor:       c,
+		Prev:         first,
+		Next:         nil,
 	}
 
 	first.Next = second
-	second.Prev = first
 
 	return first
 }
@@ -206,6 +227,8 @@ func fromCursorUp(c *cursor.Cursor) *Selection {
 			StartRuneIdx: c.RuneIdx,
 			EndRuneIdx:   c.RuneIdx,
 			Cursor:       c,
+			Prev:         nil,
+			Next:         nil,
 		}
 	}
 
@@ -215,6 +238,8 @@ func fromCursorUp(c *cursor.Cursor) *Selection {
 		StartRuneIdx: 0,
 		EndRuneIdx:   c.RuneIdx,
 		Cursor:       nil,
+		Prev:         nil,
+		Next:         nil,
 	}
 
 	c.Up()
@@ -224,9 +249,10 @@ func fromCursorUp(c *cursor.Cursor) *Selection {
 		StartRuneIdx: c.RuneIdx,
 		EndRuneIdx:   c.Line.RuneCount(),
 		Cursor:       c,
+		Prev:         nil,
+		Next:         second,
 	}
 
-	first.Next = second
 	second.Prev = first
 
 	return first
@@ -249,6 +275,10 @@ func fromCursorWordEnd(c *cursor.Cursor) *Selection {
 		Line:         c.Line,
 		LineNum:      c.LineNum,
 		StartRuneIdx: c.RuneIdx,
+		EndRuneIdx:   c.Line.RuneCount(),
+		Cursor:       nil,
+		Prev:         nil,
+		Next:         nil,
 	}
 
 	c.WordEnd()
@@ -260,8 +290,6 @@ func fromCursorWordEnd(c *cursor.Cursor) *Selection {
 	}
 
 	first := s
-
-	s.EndRuneIdx = s.Line.RuneCount()
 
 	line := s.Line
 	lineNum := s.LineNum
@@ -275,10 +303,12 @@ func fromCursorWordEnd(c *cursor.Cursor) *Selection {
 			LineNum:      lineNum,
 			StartRuneIdx: 0,
 			EndRuneIdx:   line.RuneCount(),
+			Cursor:       nil,
+			Prev:         s,
+			Next:         nil,
 		}
 
 		s.Next = nextS
-		nextS.Prev = s
 		s = nextS
 	}
 
@@ -288,10 +318,11 @@ func fromCursorWordEnd(c *cursor.Cursor) *Selection {
 		StartRuneIdx: 0,
 		EndRuneIdx:   c.RuneIdx,
 		Cursor:       c,
+		Prev:         s,
+		Next:         nil,
 	}
 
 	s.Next = last
-	last.Prev = s
 
 	return first
 }
@@ -310,9 +341,13 @@ func FromCursorsPrevWordStart(curs []*cursor.Cursor) []*Selection {
 
 func fromCursorPrevWordStart(c *cursor.Cursor) *Selection {
 	s := &Selection{
-		Line:       c.Line,
-		LineNum:    c.LineNum,
-		EndRuneIdx: c.RuneIdx,
+		Line:         c.Line,
+		LineNum:      c.LineNum,
+		StartRuneIdx: 0,
+		EndRuneIdx:   c.RuneIdx,
+		Cursor:       nil,
+		Prev:         nil,
+		Next:         nil,
 	}
 
 	c.PrevWordStart()
@@ -323,7 +358,6 @@ func fromCursorPrevWordStart(c *cursor.Cursor) *Selection {
 		return s
 	}
 
-	s.StartRuneIdx = 0
 	last := s
 
 	line := s.Line
@@ -337,6 +371,8 @@ func fromCursorPrevWordStart(c *cursor.Cursor) *Selection {
 			LineNum:      lineNum,
 			StartRuneIdx: 0,
 			EndRuneIdx:   line.RuneCount(),
+			Cursor:       nil,
+			Prev:         nil,
 			Next:         s,
 		}
 
@@ -350,6 +386,7 @@ func fromCursorPrevWordStart(c *cursor.Cursor) *Selection {
 		StartRuneIdx: c.RuneIdx,
 		EndRuneIdx:   c.Line.RuneCount(),
 		Cursor:       c,
+		Prev:         nil,
 		Next:         s,
 	}
 

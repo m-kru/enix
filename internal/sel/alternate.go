@@ -94,6 +94,8 @@ func (s *Selection) joinMultiLine() (action.Actions, *Selection) {
 		StartRuneIdx: s.StartRuneIdx,
 		EndRuneIdx:   s.StartRuneIdx + rc - 1,
 		Cursor:       cur,
+		Prev:         nil,
+		Next:         nil,
 	}
 
 	return actions, newS
