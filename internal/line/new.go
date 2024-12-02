@@ -33,11 +33,19 @@ func FromString(str string) (*Line, int) {
 	for bIdx, r := range str {
 		if r == '\n' {
 			if first == nil {
-				first = &Line{Buf: make([]byte, 0, bufCap(startIdx, bIdx))}
+				first = &Line{
+					Buf:  make([]byte, 0, bufCap(startIdx, bIdx)),
+					Prev: nil,
+					Next: nil,
+				}
 				first.InsertString(str[startIdx:bIdx], 0)
 				prev = first
 			} else {
-				next = &Line{Buf: make([]byte, 0, bufCap(startIdx, bIdx)), Prev: prev}
+				next = &Line{
+					Buf:  make([]byte, 0, bufCap(startIdx, bIdx)),
+					Prev: prev,
+					Next: nil,
+				}
 				next.InsertString(str[startIdx:bIdx], 0)
 				prev.Next = next
 				prev = next
@@ -47,10 +55,18 @@ func FromString(str string) (*Line, int) {
 		} else if bIdx == len(str)-utf8.RuneLen(r) {
 			runeLen := utf8.RuneLen(r)
 			if first == nil {
-				first = &Line{Buf: make([]byte, 0, bufCap(startIdx, bIdx+runeLen))}
+				first = &Line{
+					Buf:  make([]byte, 0, bufCap(startIdx, bIdx+runeLen)),
+					Prev: nil,
+					Next: nil,
+				}
 				first.InsertString(str[startIdx:bIdx+runeLen], 0)
 			} else {
-				next = &Line{Buf: make([]byte, 0, bufCap(startIdx, bIdx+runeLen)), Prev: prev}
+				next = &Line{
+					Buf:  make([]byte, 0, bufCap(startIdx, bIdx+runeLen)),
+					Prev: prev,
+					Next: nil,
+				}
 				next.InsertString(str[startIdx:bIdx+runeLen], 0)
 				prev.Next = next
 			}
@@ -60,7 +76,11 @@ func FromString(str string) (*Line, int) {
 
 	// Add one extra line if string ends with newline
 	if str[len(str)-1] == '\n' {
-		next = &Line{Buf: make([]byte, 0, bufCap(0, 0)), Prev: prev}
+		next = &Line{
+			Buf:  make([]byte, 0, bufCap(0, 0)),
+			Prev: prev,
+			Next: nil,
+		}
 		prev.Next = next
 	}
 
