@@ -81,12 +81,7 @@ func (s *Selection) joinMultiLine() (action.Actions, *Selection) {
 		crIdx += rc - 1
 	}
 
-	cur := &cursor.Cursor{
-		Line:    newLine,
-		LineNum: s.LineNum,
-		ColIdx:  newLine.ColumnIdx(crIdx),
-		RuneIdx: crIdx,
-	}
+	cur := cursor.New(newLine, s.LineNum, crIdx)
 
 	newS := &Selection{
 		Line:         newLine,

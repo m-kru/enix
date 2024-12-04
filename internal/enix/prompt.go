@@ -103,12 +103,7 @@ func (p *Prompt) Activate(text, shadowText string) {
 
 	p.Line, _ = line.FromString(text)
 
-	p.Cursor = &cursor.Cursor{
-		Line:    p.Line,
-		LineNum: 1,
-		ColIdx:  len(text),
-		RuneIdx: len(text),
-	}
+	p.Cursor = cursor.New(p.Line, 1, len(text))
 
 	p.ShadowText = shadowText
 

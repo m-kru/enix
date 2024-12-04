@@ -22,15 +22,10 @@ func (tab *Tab) PrimaryClick(x, y int) {
 		idx = line.RuneCount()
 	}
 
-	c := cursor.Cursor{
-		Line:    line,
-		LineNum: line.Num(),
-		ColIdx:  idx,
-		RuneIdx: idx,
-	}
+	c := cursor.New(line, line.Num(), idx)
 
 	tab.Cursors = make([]*cursor.Cursor, 1, 16)
-	tab.Cursors[0] = &c
+	tab.Cursors[0] = c
 }
 
 // PrimaryClickCtrl handles mouse primary button click with Ctrl modifier.

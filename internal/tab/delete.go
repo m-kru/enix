@@ -96,12 +96,7 @@ func (tab *Tab) deleteSelections() action.Actions {
 		}
 
 		// Create cursor from the first selection rune.
-		c := &cursor.Cursor{
-			Line:    s.Line,
-			LineNum: s.LineNum,
-			ColIdx:  s.Line.ColumnIdx(s.StartRuneIdx),
-			RuneIdx: s.StartRuneIdx,
-		}
+		c := cursor.New(s.Line, s.LineNum, s.StartRuneIdx)
 		tab.Cursors = append(tab.Cursors, c)
 	}
 

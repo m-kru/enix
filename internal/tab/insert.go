@@ -72,12 +72,7 @@ func (tab *Tab) insertLineBelowCursors() action.Actions {
 
 		newLine := c.Line.Next
 		rIdx := newLine.RuneCount()
-		newC := &cursor.Cursor{
-			Line:    newLine,
-			LineNum: c.LineNum + 1,
-			ColIdx:  newLine.ColumnIdx(rIdx),
-			RuneIdx: rIdx,
-		}
+		newC := cursor.New(newLine, c.LineNum+1, rIdx)
 
 		newCurs = append(newCurs, newC)
 	}
@@ -141,12 +136,7 @@ func (tab *Tab) insertLineAboveCursors() action.Actions {
 
 		newLine := c.Line.Prev
 		rIdx := newLine.RuneCount()
-		newC := &cursor.Cursor{
-			Line:    newLine,
-			LineNum: c.LineNum,
-			ColIdx:  newLine.ColumnIdx(rIdx),
-			RuneIdx: rIdx,
-		}
+		newC := cursor.New(newLine, c.LineNum, rIdx)
 
 		newCurs = append(newCurs, newC)
 	}

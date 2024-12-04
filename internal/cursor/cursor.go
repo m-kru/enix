@@ -13,8 +13,8 @@ import (
 type Cursor struct {
 	Line    *line.Line
 	LineNum int
-	ColIdx  int // Line column index
 	RuneIdx int // Line rune index
+	colIdx  int // Line column index
 }
 
 // Column returns column number of the cursor within the string in the buffer.

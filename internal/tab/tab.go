@@ -154,12 +154,7 @@ func (tab *Tab) AddCursor(lineNum int, colIdx int) {
 		runeIdx = line.RuneCount()
 	}
 
-	c := &cursor.Cursor{
-		Line:    line,
-		LineNum: lineNum,
-		ColIdx:  runeIdx,
-		RuneIdx: runeIdx,
-	}
+	c := cursor.New(line, lineNum, runeIdx)
 
 	tab.Cursors = append(tab.Cursors, c)
 	tab.Cursors = cursor.Prune(tab.Cursors)

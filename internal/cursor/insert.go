@@ -16,7 +16,7 @@ func (c *Cursor) InsertNewline() *action.NewlineInsert {
 	c.Line = newLine2
 	c.LineNum++
 	c.RuneIdx = 0
-	c.ColIdx = 1
+	c.colIdx = 1
 
 	return &action.NewlineInsert{
 		Line:     line,

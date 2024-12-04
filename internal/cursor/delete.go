@@ -45,7 +45,7 @@ func (c *Cursor) Backspace() action.Action {
 			c.Line = newLine
 			c.LineNum--
 			c.RuneIdx = l1Len
-			c.ColIdx = c.Line.ColumnIdx(c.RuneIdx)
+			c.colIdx = c.Line.ColumnIdx(c.RuneIdx)
 
 			return &action.NewlineDelete{
 				Line1:        l1,

@@ -94,14 +94,9 @@ func (tab *Tab) Find(next bool) {
 		LineNum:      f.LineNum,
 		StartRuneIdx: f.StartRuneIdx,
 		EndRuneIdx:   f.EndRuneIdx - 1,
-		Cursor: &cursor.Cursor{
-			Line:    line,
-			LineNum: f.LineNum,
-			ColIdx:  line.ColumnIdx(f.StartRuneIdx),
-			RuneIdx: f.StartRuneIdx,
-		},
-		Prev: nil,
-		Next: nil,
+		Cursor:       cursor.New(line, f.LineNum, f.StartRuneIdx),
+		Prev:         nil,
+		Next:         nil,
 	}
 
 	if len(tab.Cursors) > 0 {
@@ -145,14 +140,9 @@ func (tab *Tab) FindSel(next bool) {
 		LineNum:      f.LineNum,
 		StartRuneIdx: f.StartRuneIdx,
 		EndRuneIdx:   f.EndRuneIdx - 1,
-		Cursor: &cursor.Cursor{
-			Line:    line,
-			LineNum: f.LineNum,
-			ColIdx:  line.ColumnIdx(f.StartRuneIdx),
-			RuneIdx: f.StartRuneIdx,
-		},
-		Prev: nil,
-		Next: nil,
+		Cursor:       cursor.New(line, f.LineNum, f.StartRuneIdx),
+		Prev:         nil,
+		Next:         nil,
 	}
 
 	tab.Selections = append(tab.Selections, s)

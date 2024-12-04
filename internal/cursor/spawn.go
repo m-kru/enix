@@ -8,8 +8,8 @@ func (c *Cursor) SpawnDown() *Cursor {
 	nc := &Cursor{
 		Line:    c.Line.Next,
 		LineNum: c.LineNum + 1,
-		ColIdx:  c.ColIdx,
 		RuneIdx: c.RuneIdx,
+		colIdx:  c.colIdx,
 	}
 
 	if nc.RuneIdx > nc.Line.RuneCount() {
@@ -27,8 +27,8 @@ func (c *Cursor) SpawnUp() *Cursor {
 	nc := &Cursor{
 		Line:    c.Line.Prev,
 		LineNum: c.LineNum - 1,
-		ColIdx:  c.ColIdx,
 		RuneIdx: c.RuneIdx,
+		colIdx:  c.colIdx,
 	}
 
 	if nc.RuneIdx > nc.Line.RuneCount() {

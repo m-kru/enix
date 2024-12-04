@@ -19,7 +19,7 @@ import (
 func Empty(config *cfg.Config, colors *cfg.Colorscheme, keys *cfg.Keybindings) *Tab {
 	lines := line.Empty()
 
-	c := &cursor.Cursor{Line: lines, LineNum: 1, ColIdx: 1, RuneIdx: 0}
+	c := cursor.New(lines, 1, 0)
 	curs := make([]*cursor.Cursor, 1, 16)
 	curs[0] = c
 
@@ -95,7 +95,7 @@ func Open(
 	}
 
 	// Cursor initialization
-	c := &cursor.Cursor{Line: lines, LineNum: 1, ColIdx: 1, RuneIdx: 0}
+	c := cursor.New(lines, 1, 0)
 	curs := make([]*cursor.Cursor, 1, 16)
 	curs[0] = c
 
@@ -142,7 +142,7 @@ func FromString(
 ) *Tab {
 	lines, lineCount := line.FromString(str)
 
-	c := &cursor.Cursor{Line: lines, LineNum: 1, ColIdx: 1, RuneIdx: 0}
+	c := cursor.New(lines, 1, 0)
 	curs := make([]*cursor.Cursor, 1, 16)
 	curs[0] = c
 

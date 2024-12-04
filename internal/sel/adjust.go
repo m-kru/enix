@@ -203,12 +203,7 @@ func (s *Selection) nextLineCursorOnLeft() *Selection {
 		first.Cursor = nil
 		s.StartRuneIdx = 0
 		s.EndRuneIdx = lineRC
-		s.Cursor = &cursor.Cursor{
-			Line:    s.Line,
-			LineNum: s.LineNum,
-			ColIdx:  s.Line.ColumnIdx(lineRC),
-			RuneIdx: lineRC,
-		}
+		s.Cursor = cursor.New(s.Line, s.LineNum, lineRC)
 		return first
 	}
 
@@ -218,12 +213,7 @@ func (s *Selection) nextLineCursorOnLeft() *Selection {
 
 	first.Cursor = nil
 	lineRC = s.Line.Next.RuneCount()
-	c := &cursor.Cursor{
-		Line:    s.Line.Next,
-		LineNum: s.LineNum + 1,
-		ColIdx:  s.Line.Next.ColumnIdx(lineRC),
-		RuneIdx: lineRC,
-	}
+	c := cursor.New(s.Line.Next, s.LineNum+1, lineRC)
 
 	newS := &Selection{
 		Line:         c.Line,
@@ -248,8 +238,7 @@ func (s *Selection) nextLineCursorOnRight() *Selection {
 	if s.StartRuneIdx != 0 || s.EndRuneIdx != lineRC {
 		s.StartRuneIdx = 0
 		s.EndRuneIdx = lineRC
-		s.Cursor.RuneIdx = lineRC
-		s.Cursor.ColIdx = s.Line.ColumnIdx(lineRC)
+		s.Cursor.LineEnd()
 		return first
 	}
 
@@ -260,14 +249,12 @@ func (s *Selection) nextLineCursorOnRight() *Selection {
 	c := s.Cursor
 	s.Cursor = nil
 	c.Down()
-	lineRC = c.Line.RuneCount()
-	c.RuneIdx = lineRC
-	c.ColIdx = c.Line.ColumnIdx(lineRC)
+	c.LineEnd()
 	newS := &Selection{
 		Line:         c.Line,
 		LineNum:      c.LineNum,
 		StartRuneIdx: 0,
-		EndRuneIdx:   lineRC,
+		EndRuneIdx:   c.RuneIdx,
 		Cursor:       c,
 		Prev:         s,
 		Next:         nil,

@@ -33,14 +33,7 @@ func (tab *Tab) Go(lineNum int, col int) {
 
 	rIdx, _, _ := line.RuneIdx(col)
 
-	tab.Cursors = []*cursor.Cursor{
-		&cursor.Cursor{
-			Line:    line,
-			LineNum: lineNum,
-			RuneIdx: rIdx,
-			ColIdx:  col,
-		},
-	}
+	tab.Cursors = []*cursor.Cursor{cursor.New(line, lineNum, rIdx)}
 	tab.Selections = nil
 }
 
