@@ -47,105 +47,105 @@ func (sec Section) Analyze(line *line.Line, startLineIdx int, colors *cfg.Colors
 
 		for _, m := range matches.CursorWords {
 			hl := highlight.Highlight{
-				LineNum: lineIdx, StartRuneIdx: m[0], EndRuneIdx: m[1], Style: colors.CursorWord,
+				LineNum: lineIdx, StartRuneIdx: m.start, EndRuneIdx: m.end, Style: colors.CursorWord,
 			}
 			insertHighlight(&hls, hl)
 		}
 
 		for _, m := range matches.Attributes {
 			hl := highlight.Highlight{
-				LineNum: lineIdx, StartRuneIdx: m[0], EndRuneIdx: m[1], Style: colors.Attribute,
+				LineNum: lineIdx, StartRuneIdx: m.start, EndRuneIdx: m.end, Style: colors.Attribute,
 			}
 			insertHighlight(&hls, hl)
 		}
 
 		for _, m := range matches.Builtins {
 			hl := highlight.Highlight{
-				LineNum: lineIdx, StartRuneIdx: m[0], EndRuneIdx: m[1], Style: colors.Builtin,
+				LineNum: lineIdx, StartRuneIdx: m.start, EndRuneIdx: m.end, Style: colors.Builtin,
 			}
 			insertHighlight(&hls, hl)
 		}
 
 		for _, m := range matches.EscapeSequences {
 			hl := highlight.Highlight{
-				LineNum: lineIdx, StartRuneIdx: m[0], EndRuneIdx: m[1], Style: colors.EscapeSequence,
+				LineNum: lineIdx, StartRuneIdx: m.start, EndRuneIdx: m.end, Style: colors.EscapeSequence,
 			}
 			insertHighlight(&hls, hl)
 		}
 
 		for _, m := range matches.FormatSpecifiers {
 			hl := highlight.Highlight{
-				LineNum: lineIdx, StartRuneIdx: m[0], EndRuneIdx: m[1], Style: colors.FormatSpecifier,
+				LineNum: lineIdx, StartRuneIdx: m.start, EndRuneIdx: m.end, Style: colors.FormatSpecifier,
 			}
 			insertHighlight(&hls, hl)
 		}
 
 		for _, m := range matches.Functions {
 			hl := highlight.Highlight{
-				LineNum: lineIdx, StartRuneIdx: m[0], EndRuneIdx: m[1], Style: colors.Function,
+				LineNum: lineIdx, StartRuneIdx: m.start, EndRuneIdx: m.end, Style: colors.Function,
 			}
 			insertHighlight(&hls, hl)
 		}
 
 		for _, m := range matches.Keywords {
 			hl := highlight.Highlight{
-				LineNum: lineIdx, StartRuneIdx: m[0], EndRuneIdx: m[1], Style: colors.Keyword,
+				LineNum: lineIdx, StartRuneIdx: m.start, EndRuneIdx: m.end, Style: colors.Keyword,
 			}
 			insertHighlight(&hls, hl)
 		}
 
 		for _, m := range matches.Metas {
 			hl := highlight.Highlight{
-				LineNum: lineIdx, StartRuneIdx: m[0], EndRuneIdx: m[1], Style: colors.Meta,
+				LineNum: lineIdx, StartRuneIdx: m.start, EndRuneIdx: m.end, Style: colors.Meta,
 			}
 			insertHighlight(&hls, hl)
 		}
 
-		for _, n := range matches.Numbers {
+		for _, m := range matches.Numbers {
 			hl := highlight.Highlight{
-				LineNum: lineIdx, StartRuneIdx: n[0], EndRuneIdx: n[1], Style: colors.Number,
+				LineNum: lineIdx, StartRuneIdx: m.start, EndRuneIdx: m.end, Style: colors.Number,
 			}
 			insertHighlight(&hls, hl)
 		}
 
 		for _, m := range matches.Operators {
 			hl := highlight.Highlight{
-				LineNum: lineIdx, StartRuneIdx: m[0], EndRuneIdx: m[1], Style: colors.Operator,
+				LineNum: lineIdx, StartRuneIdx: m.start, EndRuneIdx: m.end, Style: colors.Operator,
 			}
 			insertHighlight(&hls, hl)
 		}
 
 		for _, m := range matches.Strings {
 			hl := highlight.Highlight{
-				LineNum: lineIdx, StartRuneIdx: m[0], EndRuneIdx: m[1], Style: colors.String,
+				LineNum: lineIdx, StartRuneIdx: m.start, EndRuneIdx: m.end, Style: colors.String,
 			}
 			insertHighlight(&hls, hl)
 		}
 
 		for _, m := range matches.ToDos {
 			hl := highlight.Highlight{
-				LineNum: lineIdx, StartRuneIdx: m[0], EndRuneIdx: m[1], Style: colors.ToDo,
+				LineNum: lineIdx, StartRuneIdx: m.start, EndRuneIdx: m.end, Style: colors.ToDo,
 			}
 			insertHighlight(&hls, hl)
 		}
 
 		for _, m := range matches.Types {
 			hl := highlight.Highlight{
-				LineNum: lineIdx, StartRuneIdx: m[0], EndRuneIdx: m[1], Style: colors.Type,
+				LineNum: lineIdx, StartRuneIdx: m.start, EndRuneIdx: m.end, Style: colors.Type,
 			}
 			insertHighlight(&hls, hl)
 		}
 
 		for _, m := range matches.Values {
 			hl := highlight.Highlight{
-				LineNum: lineIdx, StartRuneIdx: m[0], EndRuneIdx: m[1], Style: colors.Value,
+				LineNum: lineIdx, StartRuneIdx: m.start, EndRuneIdx: m.end, Style: colors.Value,
 			}
 			insertHighlight(&hls, hl)
 		}
 
 		for _, m := range matches.Variables {
 			hl := highlight.Highlight{
-				LineNum: lineIdx, StartRuneIdx: m[0], EndRuneIdx: m[1], Style: colors.Variable,
+				LineNum: lineIdx, StartRuneIdx: m.start, EndRuneIdx: m.end, Style: colors.Variable,
 			}
 			insertHighlight(&hls, hl)
 		}

@@ -1,31 +1,36 @@
 package lang
 
-type matches struct {
-	CursorWords [][2]int
+type match struct {
+	start int
+	end   int
+}
 
-	Attributes       [][2]int
-	Builtins         [][2]int
-	Bolds            [][2]int
-	Codes            [][2]int
-	Comments         [][2]int
-	Documentations   [][2]int
-	EscapeSequences  [][2]int
-	FormatSpecifiers [][2]int
-	Functions        [][2]int
-	Headings         [][2]int
-	Italics          [][2]int
-	Keywords         [][2]int
-	Links            [][2]int
-	Metas            [][2]int
-	Monos            [][2]int
-	Numbers          [][2]int
-	Operators        [][2]int
-	Strings          [][2]int
-	ToDos            [][2]int
-	Titles           [][2]int
-	Types            [][2]int
-	Values           [][2]int
-	Variables        [][2]int
+type matches struct {
+	CursorWords []match
+
+	Attributes       []match
+	Builtins         []match
+	Bolds            []match
+	Codes            []match
+	Comments         []match
+	Documentations   []match
+	EscapeSequences  []match
+	FormatSpecifiers []match
+	Functions        []match
+	Headings         []match
+	Italics          []match
+	Keywords         []match
+	Links            []match
+	Metas            []match
+	Monos            []match
+	Numbers          []match
+	Operators        []match
+	Strings          []match
+	ToDos            []match
+	Titles           []match
+	Types            []match
+	Values           []match
+	Variables        []match
 }
 
 func defaultMatches() matches {

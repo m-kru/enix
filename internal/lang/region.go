@@ -90,11 +90,11 @@ func (reg Region) Match(line *line.Line, startIdx int, endIdx int) matches {
 	if reg.CursorWord != nil {
 		words := reg.CursorWord.FindAllIndex(buf, -1)
 		if len(words) > 0 {
-			matches.CursorWords = make([][2]int, 0, len(words))
+			matches.CursorWords = make([]match, 0, len(words))
 			for _, w := range words {
-				var m [2]int
-				m[0] = util.ByteIdxToRuneIdx(buf, w[0]) + startIdx
-				m[1] = util.ByteIdxToRuneIdx(buf, w[1]) + startIdx
+				var m match
+				m.start = util.ByteIdxToRuneIdx(buf, w[0]) + startIdx
+				m.end = util.ByteIdxToRuneIdx(buf, w[1]) + startIdx
 				matches.CursorWords = append(matches.CursorWords, m)
 			}
 		}
@@ -103,11 +103,11 @@ func (reg Region) Match(line *line.Line, startIdx int, endIdx int) matches {
 	if reg.Attribute != nil {
 		attrs := reg.Attribute.FindAllIndex(buf, -1)
 		if len(attrs) > 0 {
-			matches.Attributes = make([][2]int, 0, len(attrs))
+			matches.Attributes = make([]match, 0, len(attrs))
 			for _, a := range attrs {
-				var m [2]int
-				m[0] = util.ByteIdxToRuneIdx(buf, a[0]) + startIdx
-				m[1] = util.ByteIdxToRuneIdx(buf, a[1]) + startIdx
+				var m match
+				m.start = util.ByteIdxToRuneIdx(buf, a[0]) + startIdx
+				m.end = util.ByteIdxToRuneIdx(buf, a[1]) + startIdx
 				matches.Attributes = append(matches.Attributes, m)
 			}
 		}
@@ -116,11 +116,11 @@ func (reg Region) Match(line *line.Line, startIdx int, endIdx int) matches {
 	if reg.Builtin != nil {
 		builtins := reg.Builtin.FindAllIndex(buf, -1)
 		if len(builtins) > 0 {
-			matches.Builtins = make([][2]int, 0, len(builtins))
+			matches.Builtins = make([]match, 0, len(builtins))
 			for _, b := range builtins {
-				var m [2]int
-				m[0] = util.ByteIdxToRuneIdx(buf, b[0]) + startIdx
-				m[1] = util.ByteIdxToRuneIdx(buf, b[1]) + startIdx
+				var m match
+				m.start = util.ByteIdxToRuneIdx(buf, b[0]) + startIdx
+				m.end = util.ByteIdxToRuneIdx(buf, b[1]) + startIdx
 				matches.Builtins = append(matches.Builtins, m)
 			}
 		}
@@ -129,11 +129,11 @@ func (reg Region) Match(line *line.Line, startIdx int, endIdx int) matches {
 	if reg.EscapeSequence != nil {
 		seqs := reg.EscapeSequence.FindAllIndex(buf, -1)
 		if len(seqs) > 0 {
-			matches.EscapeSequences = make([][2]int, 0, len(seqs))
+			matches.EscapeSequences = make([]match, 0, len(seqs))
 			for _, s := range seqs {
-				var m [2]int
-				m[0] = util.ByteIdxToRuneIdx(buf, s[0]) + startIdx
-				m[1] = util.ByteIdxToRuneIdx(buf, s[1]) + startIdx
+				var m match
+				m.start = util.ByteIdxToRuneIdx(buf, s[0]) + startIdx
+				m.end = util.ByteIdxToRuneIdx(buf, s[1]) + startIdx
 				matches.EscapeSequences = append(matches.EscapeSequences, m)
 			}
 		}
@@ -142,11 +142,11 @@ func (reg Region) Match(line *line.Line, startIdx int, endIdx int) matches {
 	if reg.FormatSpecifier != nil {
 		fmts := reg.FormatSpecifier.FindAllIndex(buf, -1)
 		if len(fmts) > 0 {
-			matches.FormatSpecifiers = make([][2]int, 0, len(fmts))
+			matches.FormatSpecifiers = make([]match, 0, len(fmts))
 			for _, f := range fmts {
-				var m [2]int
-				m[0] = util.ByteIdxToRuneIdx(buf, f[0]) + startIdx
-				m[1] = util.ByteIdxToRuneIdx(buf, f[1]) + startIdx
+				var m match
+				m.start = util.ByteIdxToRuneIdx(buf, f[0]) + startIdx
+				m.end = util.ByteIdxToRuneIdx(buf, f[1]) + startIdx
 				matches.FormatSpecifiers = append(matches.FormatSpecifiers, m)
 			}
 		}
@@ -155,11 +155,11 @@ func (reg Region) Match(line *line.Line, startIdx int, endIdx int) matches {
 	if reg.Function != nil {
 		funcs := reg.Function.FindAllIndex(buf, -1)
 		if len(funcs) > 0 {
-			matches.Functions = make([][2]int, 0, len(funcs))
+			matches.Functions = make([]match, 0, len(funcs))
 			for _, f := range funcs {
-				var m [2]int
-				m[0] = util.ByteIdxToRuneIdx(buf, f[0]) + startIdx
-				m[1] = util.ByteIdxToRuneIdx(buf, f[1]) + startIdx
+				var m match
+				m.start = util.ByteIdxToRuneIdx(buf, f[0]) + startIdx
+				m.end = util.ByteIdxToRuneIdx(buf, f[1]) + startIdx
 				matches.Functions = append(matches.Functions, m)
 			}
 		}
@@ -168,11 +168,11 @@ func (reg Region) Match(line *line.Line, startIdx int, endIdx int) matches {
 	if reg.Keyword != nil {
 		keywords := reg.Keyword.FindAllIndex(buf, -1)
 		if len(keywords) > 0 {
-			matches.Keywords = make([][2]int, 0, len(keywords))
+			matches.Keywords = make([]match, 0, len(keywords))
 			for _, k := range keywords {
-				var m [2]int
-				m[0] = util.ByteIdxToRuneIdx(buf, k[0]) + startIdx
-				m[1] = util.ByteIdxToRuneIdx(buf, k[1]) + startIdx
+				var m match
+				m.start = util.ByteIdxToRuneIdx(buf, k[0]) + startIdx
+				m.end = util.ByteIdxToRuneIdx(buf, k[1]) + startIdx
 				matches.Keywords = append(matches.Keywords, m)
 			}
 		}
@@ -181,11 +181,11 @@ func (reg Region) Match(line *line.Line, startIdx int, endIdx int) matches {
 	if reg.Meta != nil {
 		metas := reg.Meta.FindAllIndex(buf, -1)
 		if len(metas) > 0 {
-			matches.Metas = make([][2]int, 0, len(metas))
+			matches.Metas = make([]match, 0, len(metas))
 			for _, x := range metas {
-				var m [2]int
-				m[0] = util.ByteIdxToRuneIdx(buf, x[0]) + startIdx
-				m[1] = util.ByteIdxToRuneIdx(buf, x[1]) + startIdx
+				var m match
+				m.start = util.ByteIdxToRuneIdx(buf, x[0]) + startIdx
+				m.end = util.ByteIdxToRuneIdx(buf, x[1]) + startIdx
 				matches.Metas = append(matches.Metas, m)
 			}
 		}
@@ -194,11 +194,11 @@ func (reg Region) Match(line *line.Line, startIdx int, endIdx int) matches {
 	if reg.Number != nil {
 		nums := reg.Number.FindAllIndex(buf, -1)
 		if len(nums) > 0 {
-			matches.Numbers = make([][2]int, 0, len(nums))
+			matches.Numbers = make([]match, 0, len(nums))
 			for _, n := range nums {
-				var m [2]int
-				m[0] = util.ByteIdxToRuneIdx(buf, n[0]) + startIdx
-				m[1] = util.ByteIdxToRuneIdx(buf, n[1]) + startIdx
+				var m match
+				m.start = util.ByteIdxToRuneIdx(buf, n[0]) + startIdx
+				m.end = util.ByteIdxToRuneIdx(buf, n[1]) + startIdx
 				matches.Numbers = append(matches.Numbers, m)
 			}
 		}
@@ -207,11 +207,11 @@ func (reg Region) Match(line *line.Line, startIdx int, endIdx int) matches {
 	if reg.Operator != nil {
 		ops := reg.Operator.FindAllIndex(buf, -1)
 		if len(ops) > 0 {
-			matches.Operators = make([][2]int, 0, len(ops))
+			matches.Operators = make([]match, 0, len(ops))
 			for _, o := range ops {
-				var m [2]int
-				m[0] = util.ByteIdxToRuneIdx(buf, o[0]) + startIdx
-				m[1] = util.ByteIdxToRuneIdx(buf, o[1]) + startIdx
+				var m match
+				m.start = util.ByteIdxToRuneIdx(buf, o[0]) + startIdx
+				m.end = util.ByteIdxToRuneIdx(buf, o[1]) + startIdx
 				matches.Operators = append(matches.Operators, m)
 			}
 		}
@@ -220,11 +220,11 @@ func (reg Region) Match(line *line.Line, startIdx int, endIdx int) matches {
 	if reg.String != nil {
 		strs := reg.String.FindAllIndex(buf, -1)
 		if len(strs) > 0 {
-			matches.Strings = make([][2]int, 0, len(strs))
+			matches.Strings = make([]match, 0, len(strs))
 			for _, s := range strs {
-				var m [2]int
-				m[0] = util.ByteIdxToRuneIdx(buf, s[0]) + startIdx
-				m[1] = util.ByteIdxToRuneIdx(buf, s[1]) + startIdx
+				var m match
+				m.start = util.ByteIdxToRuneIdx(buf, s[0]) + startIdx
+				m.end = util.ByteIdxToRuneIdx(buf, s[1]) + startIdx
 				matches.Strings = append(matches.Strings, m)
 			}
 		}
@@ -233,11 +233,11 @@ func (reg Region) Match(line *line.Line, startIdx int, endIdx int) matches {
 	if reg.ToDo != nil {
 		todos := reg.ToDo.FindAllIndex(buf, -1)
 		if len(todos) > 0 {
-			matches.ToDos = make([][2]int, 0, len(todos))
+			matches.ToDos = make([]match, 0, len(todos))
 			for _, t := range todos {
-				var m [2]int
-				m[0] = util.ByteIdxToRuneIdx(buf, t[0]) + startIdx
-				m[1] = util.ByteIdxToRuneIdx(buf, t[1]) + startIdx
+				var m match
+				m.start = util.ByteIdxToRuneIdx(buf, t[0]) + startIdx
+				m.end = util.ByteIdxToRuneIdx(buf, t[1]) + startIdx
 				matches.ToDos = append(matches.ToDos, m)
 			}
 		}
@@ -246,11 +246,11 @@ func (reg Region) Match(line *line.Line, startIdx int, endIdx int) matches {
 	if reg.Type != nil {
 		types := reg.Type.FindAllIndex(buf, -1)
 		if len(types) > 0 {
-			matches.Types = make([][2]int, 0, len(types))
+			matches.Types = make([]match, 0, len(types))
 			for _, t := range types {
-				var m [2]int
-				m[0] = util.ByteIdxToRuneIdx(buf, t[0]) + startIdx
-				m[1] = util.ByteIdxToRuneIdx(buf, t[1]) + startIdx
+				var m match
+				m.start = util.ByteIdxToRuneIdx(buf, t[0]) + startIdx
+				m.end = util.ByteIdxToRuneIdx(buf, t[1]) + startIdx
 				matches.Types = append(matches.Types, m)
 			}
 		}
@@ -259,11 +259,11 @@ func (reg Region) Match(line *line.Line, startIdx int, endIdx int) matches {
 	if reg.Value != nil {
 		values := reg.Value.FindAllIndex(buf, -1)
 		if len(values) > 0 {
-			matches.Values = make([][2]int, 0, len(values))
+			matches.Values = make([]match, 0, len(values))
 			for _, v := range values {
-				var m [2]int
-				m[0] = util.ByteIdxToRuneIdx(buf, v[0]) + startIdx
-				m[1] = util.ByteIdxToRuneIdx(buf, v[1]) + startIdx
+				var m match
+				m.start = util.ByteIdxToRuneIdx(buf, v[0]) + startIdx
+				m.end = util.ByteIdxToRuneIdx(buf, v[1]) + startIdx
 				matches.Values = append(matches.Values, m)
 			}
 		}
@@ -272,11 +272,11 @@ func (reg Region) Match(line *line.Line, startIdx int, endIdx int) matches {
 	if reg.Variable != nil {
 		vars := reg.Variable.FindAllIndex(buf, -1)
 		if len(vars) > 0 {
-			matches.Variables = make([][2]int, 0, len(vars))
+			matches.Variables = make([]match, 0, len(vars))
 			for _, v := range vars {
-				var m [2]int
-				m[0] = util.ByteIdxToRuneIdx(buf, v[0]) + startIdx
-				m[1] = util.ByteIdxToRuneIdx(buf, v[1]) + startIdx
+				var m match
+				m.start = util.ByteIdxToRuneIdx(buf, v[0]) + startIdx
+				m.end = util.ByteIdxToRuneIdx(buf, v[1]) + startIdx
 				matches.Variables = append(matches.Variables, m)
 			}
 		}
