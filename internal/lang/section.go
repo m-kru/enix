@@ -34,7 +34,7 @@ func (sec Section) Analyze(line *line.Line, startLineIdx int, colors *cfg.Colors
 			endIdx = sec.EndIdx
 		}
 
-		matches := sec.Region.Match(line, startIdx, endIdx)
+		matches := sec.Region.match(line, startIdx, endIdx)
 
 		// First create region default highlight
 		hl := highlight.Highlight{
