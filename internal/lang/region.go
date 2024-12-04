@@ -82,7 +82,7 @@ func DefaultRegion() *Region {
 	}
 }
 
-func (reg Region) Match(line *line.Line, startIdx int, endIdx int) Matches {
+func (reg Region) Match(line *line.Line, startIdx int, endIdx int) matches {
 	matches := defaultMatches()
 
 	buf := line.Buf[startIdx:endIdx]

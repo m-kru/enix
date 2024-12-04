@@ -1,6 +1,6 @@
 package lang
 
-type Matches struct {
+type matches struct {
 	CursorWords [][2]int
 
 	Attributes       [][2]int
@@ -28,8 +28,8 @@ type Matches struct {
 	Variables        [][2]int
 }
 
-func defaultMatches() Matches {
-	return Matches{
+func defaultMatches() matches {
+	return matches{
 		CursorWords:      nil,
 		Attributes:       nil,
 		Builtins:         nil,
