@@ -7,6 +7,21 @@ import (
 	"github.com/m-kru/enix/internal/tab"
 )
 
+func InsertLineAbove(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf(
+			"insert-line-above: expected 0 args, provided %d", len(args),
+		)
+	}
+
+	err := tab.InsertLineAbove()
+	if err != nil {
+		return fmt.Errorf("insert-line-above: %v", err)
+	}
+
+	return nil
+}
+
 func InsertLineBelow(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf(

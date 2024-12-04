@@ -129,6 +129,8 @@ selection starts/ends in the middle of a line.`,
 
 	"insert": `insert # Enters tab insert mode.`,
 
+	"insert-line-above": `insert-line-above # Adds an empty line above and enters the insert mode.`,
+
 	"insert-line-below": `insert-line-below # Adds an empty line below and enters the insert mode.`,
 
 	"newline": `newline # Inserts a newline.`,

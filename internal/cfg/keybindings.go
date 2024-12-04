@@ -67,6 +67,7 @@ func KeybindingsDefault() Keybindings {
 		"Rune[/]": "search",
 		"Rune[i]": "insert",
 		"Rune[o]": "insert-line-below",
+		"Rune[O]": "insert-line-above",
 		"Rune[m]": "mark tmp",
 		"Rune[M]": "go tmp",
 		"Ctrl+Z":  "suspend",

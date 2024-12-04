@@ -66,11 +66,84 @@ func (tab *Tab) insertLineBelowCursors() action.Actions {
 			c2.Inform(act)
 		}
 
+		for _, m := range tab.Marks {
+			m.Inform(act)
+		}
+
 		newLine := c.Line.Next
 		rIdx := newLine.RuneCount()
 		newC := &cursor.Cursor{
 			Line:    newLine,
 			LineNum: c.LineNum + 1,
+			ColIdx:  newLine.ColumnIdx(rIdx),
+			RuneIdx: rIdx,
+		}
+
+		newCurs = append(newCurs, newC)
+	}
+
+	tab.Cursors = newCurs
+
+	return actions
+}
+
+func (tab *Tab) InsertLineAbove() error {
+	prevCurs := cursor.Clone(tab.Cursors)
+	prevSels := sel.Clone(tab.Selections)
+
+	var actions action.Actions
+
+	if len(tab.Cursors) > 0 {
+		actions = tab.insertLineAboveCursors()
+	} else {
+		return fmt.Errorf("unimplemented for selections")
+	}
+
+	if len(actions) > 0 {
+		tab.UndoStack.Push(actions.Reverse(), prevCurs, prevSels)
+	}
+
+	tab.Insert()
+
+	return nil
+}
+
+func (tab *Tab) insertLineAboveCursors() action.Actions {
+	actions := make(action.Actions, 0, 4)
+	newCurs := make([]*cursor.Cursor, 0, len(tab.Cursors))
+
+	curs := cursor.Uniques(tab.Cursors, true)
+
+	for i, c := range curs {
+		indent := c.Line.Indent()
+		pnel := c.Line.GetPrevNonEmpty()
+		pnei := ""
+		if pnel != nil {
+			pnei = pnel.Indent()
+		}
+		if len(pnei) > len(indent) {
+			indent = pnei
+		}
+
+		act := c.InsertLineAbove(indent)
+		// act can't be nil here
+		actions = append(actions, act)
+		tab.handleAction(act)
+
+		// Inform only remaining cursors, as we create new cursors anyway.
+		for _, c2 := range curs[i+1:] {
+			c2.Inform(act)
+		}
+
+		for _, m := range tab.Marks {
+			m.Inform(act)
+		}
+
+		newLine := c.Line.Prev
+		rIdx := newLine.RuneCount()
+		newC := &cursor.Cursor{
+			Line:    newLine,
+			LineNum: c.LineNum,
 			ColIdx:  newLine.ColumnIdx(rIdx),
 			RuneIdx: rIdx,
 		}

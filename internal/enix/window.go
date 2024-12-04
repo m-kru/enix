@@ -158,6 +158,8 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			return w.Prompt
 		case "insert":
 			tab.Insert()
+		case "insert-line-above":
+			err = exec.InsertLineAbove(c.Args, tab)
 		case "insert-line-below":
 			err = exec.InsertLineBelow(c.Args, tab)
 		case "join":

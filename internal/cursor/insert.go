@@ -46,6 +46,19 @@ func (c *Cursor) InsertString(s string) *action.StringInsert {
 	}
 }
 
+func (c *Cursor) InsertLineAbove(s string) *action.LineInsert {
+	newLine, _ := line.FromString(s)
+
+	if c.Line.Prev != nil {
+		c.Line.Prev.Next = newLine
+	}
+	newLine.Next = c.Line
+	newLine.Prev = c.Line.Prev
+	c.Line.Prev = newLine
+
+	return &action.LineInsert{Line: newLine, LineNum: c.LineNum}
+}
+
 func (c *Cursor) InsertLineBelow(s string) *action.LineInsert {
 	newLine, _ := line.FromString(s)
 
