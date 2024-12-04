@@ -121,13 +121,13 @@ func (cs *Colorscheme) Style(name string) tcell.Style {
 	}
 }
 
-// ColorschemeDefault return the default color scheme.
+// DefaultColorscheme return the default color scheme.
 //
 // The default color scheme doesn't require any color scheme files to be installed
 // as it is embedded into the program's binary.
 //
 // The default color scheme uses the same colors as the terminal.
-func ColorschemeDefault() Colorscheme {
+func DefaultColorscheme() Colorscheme {
 	return Colorscheme{
 		Default: tcell.StyleDefault,
 
@@ -190,24 +190,24 @@ func colorschemeFromJSON(name string) (Colorscheme, error) {
 
 	file, err := os.Open(path)
 	if err != nil {
-		return ColorschemeDefault(), fmt.Errorf("opening colorscheme file: %v", err)
+		return DefaultColorscheme(), fmt.Errorf("opening colorscheme file: %v", err)
 	}
 	defer file.Close()
 
 	data, err := io.ReadAll(file)
 	if err != nil {
-		return ColorschemeDefault(), fmt.Errorf("reading colors file: %v", err)
+		return DefaultColorscheme(), fmt.Errorf("reading colors file: %v", err)
 	}
 
 	var colorschemeMap map[string]any
 	err = json.Unmarshal(data, &colorschemeMap)
 	if err != nil {
-		return ColorschemeDefault(), fmt.Errorf("unmarshalling json colorscheme file: %v", err)
+		return DefaultColorscheme(), fmt.Errorf("unmarshalling json colorscheme file: %v", err)
 	}
 
 	cs, err := colorschemeFromMap(colorschemeMap)
 	if err != nil {
-		return ColorschemeDefault(), fmt.Errorf("%s: %v", path, err)
+		return DefaultColorscheme(), fmt.Errorf("%s: %v", path, err)
 	}
 
 	return cs, nil
@@ -216,7 +216,7 @@ func colorschemeFromJSON(name string) (Colorscheme, error) {
 // colorschemeFromMap creates Colorscheme from colorscheme map read from JSON file.
 func colorschemeFromMap(csm map[string]any) (Colorscheme, error) {
 	var err error
-	cs := ColorschemeDefault()
+	cs := DefaultColorscheme()
 
 	if cs.Default, err = readStyleFromMap("Default", csm, &tcell.StyleDefault); err != nil {
 		return cs, fmt.Errorf("%v", err)

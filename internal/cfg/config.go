@@ -20,7 +20,7 @@ type Config struct {
 	UndoSize int // Undo and Redo stack size
 }
 
-func ConfigDefault() Config {
+func DefaultConfig() Config {
 	return Config{
 		Colorscheme:  "default",
 		TrimOnSave:   true,

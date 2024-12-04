@@ -28,7 +28,7 @@ type Matches struct {
 	Variables        [][2]int
 }
 
-func DefaultMatches() Matches {
+func defaultMatches() Matches {
 	return Matches{
 		CursorWords:      nil,
 		Attributes:       nil,

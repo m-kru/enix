@@ -21,8 +21,8 @@ func (keys Keybindings) ToCmd(ev *tcell.EventKey) (cmd.Command, error) {
 	return cmd.Parse(str)
 }
 
-// KeybindingsDefault returns default keybindings.
-func KeybindingsDefault() Keybindings {
+// DefaultKeybindings returns default keybindings.
+func DefaultKeybindings() Keybindings {
 	return map[string]string{
 		// Alternation
 		"Alt+Rune[j]": "join",
@@ -102,8 +102,8 @@ func KeybindingsDefault() Keybindings {
 	}
 }
 
-// PromptKeybindingsDefault returns default keybindings for command prompt.
-func PromptKeybindingsDefault() Keybindings {
+// DefaultPromptKeybindings returns default keybindings for command prompt.
+func DefaultPromptKeybindings() Keybindings {
 	return map[string]string{
 		"Down":       "down",
 		"Up":         "up",
@@ -120,8 +120,8 @@ func PromptKeybindingsDefault() Keybindings {
 	}
 }
 
-// InsertKeybindingsDefault returns default keybindings for tab insert mode.
-func InsertKeybindingsDefault() Keybindings {
+// DefaultInsertKeybindings returns default keybindings for tab insert mode.
+func DefaultInsertKeybindings() Keybindings {
 	return map[string]string{
 		"Ctrl+Left":  "prev-word-start",
 		"Ctrl+Right": "word-end",
