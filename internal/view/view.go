@@ -7,6 +7,10 @@ type View struct {
 	Width  int
 }
 
+func Zero() View {
+	return View{Line: 0, Column: 0, Height: 0, Width: 0}
+}
+
 func (v View) LastColumn() int {
 	return v.Column + v.Width - 1
 }

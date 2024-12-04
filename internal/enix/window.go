@@ -425,7 +425,7 @@ func Start(
 		Keys:        keys,
 		InsertKeys:  insertKeys,
 		Mouse:       mouse.Mouse{},
-		TabBar:      tabbar.TabBar{View: view.View{Line: 0, Column: 0, Height: 0, Width: 0}},
+		TabBar:      tabbar.TabBar{View: view.Zero()},
 		Screen:      screen,
 		Width:       width,
 		Height:      height - 1, // One line for prompt
@@ -453,7 +453,7 @@ func Start(
 		Window:     &w,
 		Line:       nil,
 		Cursor:     nil,
-		View:       view.View{Line: 0, Column: 0, Height: 0, Width: 0},
+		View:       view.Zero(),
 		ShadowText: "",
 		State:      InText,
 	}
