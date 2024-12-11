@@ -161,7 +161,7 @@ func (p *Prompt) Delete() {
 }
 
 func (p *Prompt) Down() {
-	if p.HistoryIdx == len(p.History)-1 {
+	if p.HistoryIdx == len(p.History) {
 		return
 	}
 
@@ -190,8 +190,6 @@ func (p *Prompt) Left() {
 		p.Line.Append([]byte(p.ShadowText))
 		p.ShadowText = ""
 		p.State = InText
-		p.Cursor.Line = p.Line
-		p.Cursor.RuneIdx = 0
 	case InText:
 		p.Cursor.Left()
 	}
