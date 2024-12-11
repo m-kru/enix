@@ -48,11 +48,13 @@ func DefaultRegion() *Region {
 		Start: Regex{
 			Regex:              nil,
 			NegativeLookbehind: nil,
+			NegativeLookahead:  nil,
 			PositiveLookahead:  nil,
 		},
 		End: Regex{
 			Regex:              nil,
 			NegativeLookbehind: nil,
+			NegativeLookahead:  nil,
 			PositiveLookahead:  nil,
 		},
 		CursorWord:      nil,

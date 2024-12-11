@@ -20,10 +20,12 @@ type RegionJSON struct {
 	Start struct {
 		Regex              string
 		NegativeLookbehind string
+		NegativeLookahead  string
 	}
 	End struct {
 		Regex              string
 		NegativeLookbehind string
+		NegativeLookahead  string
 	}
 
 	Attribute       string
@@ -70,6 +72,14 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 		}
 	}
 
+	var snla *regexp.Regexp
+	if rj.Start.NegativeLookahead != "" {
+		snla, err = regexp.Compile(rj.Start.NegativeLookahead)
+		if err != nil {
+			return nil, fmt.Errorf("can't compile start regex negative lookahead: %v", err)
+		}
+	}
+
 	var ere *regexp.Regexp
 	if rj.End.Regex != "" {
 		ere, err = regexp.Compile(rj.End.Regex)
@@ -83,6 +93,14 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 		enlb, err = regexp.Compile(rj.End.NegativeLookbehind)
 		if err != nil {
 			return nil, fmt.Errorf("can't compile edn regex negative lookbehind: %v", err)
+		}
+	}
+
+	var enla *regexp.Regexp
+	if rj.End.NegativeLookahead != "" {
+		enla, err = regexp.Compile(rj.End.NegativeLookahead)
+		if err != nil {
+			return nil, fmt.Errorf("can't compile edn regex negative lookahead: %v", err)
 		}
 	}
 
@@ -276,11 +294,13 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 		Start: Regex{
 			Regex:              sre,
 			NegativeLookbehind: snlb,
+			NegativeLookahead:  snla,
 			PositiveLookahead:  nil,
 		},
 		End: Regex{
 			Regex:              ere,
 			NegativeLookbehind: enlb,
+			NegativeLookahead:  enla,
 			PositiveLookahead:  nil,
 		},
 		CursorWord:      nil,

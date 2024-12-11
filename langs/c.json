@@ -43,6 +43,18 @@
 		}
 	},
 	{
+		"Name": "Rune",
+		"Style": "String",
+		"Start": {
+			"Regex": "'"
+		},
+		"End": {
+			"Regex": "'",
+			"NegativeLookahead": "'",
+			"NegativeLookbehind": "'"
+		}
+	},
+	{
 		"Name": "String",
 		"Style": "String",
 		"Start": {
