@@ -11,9 +11,9 @@ type Match struct {
 
 type Regex struct {
 	Regex              *regexp.Regexp
-	NegativeLookbehind *regexp.Regexp
-	NegativeLookahead  *regexp.Regexp
-	PositiveLookahead  *regexp.Regexp
+	NegativeLookBehind *regexp.Regexp
+	NegativeLookAhead  *regexp.Regexp
+	PositiveLookAhead  *regexp.Regexp
 }
 
 func (r Regex) FindAll(buf []byte) []Match {
@@ -25,14 +25,14 @@ func (r Regex) FindAll(buf []byte) []Match {
 	finds := r.Regex.FindAllIndex(buf, -1)
 
 	if len(finds) > 0 {
-		if r.NegativeLookbehind != nil {
-			negLookBeh = r.NegativeLookbehind.FindAllIndex(buf, -1)
+		if r.NegativeLookBehind != nil {
+			negLookBeh = r.NegativeLookBehind.FindAllIndex(buf, -1)
 		}
-		if r.NegativeLookahead != nil {
-			negLookAhead = r.NegativeLookahead.FindAllIndex(buf, -1)
+		if r.NegativeLookAhead != nil {
+			negLookAhead = r.NegativeLookAhead.FindAllIndex(buf, -1)
 		}
-		if r.PositiveLookahead != nil {
-			posLookAhead = r.PositiveLookahead.FindAllIndex(buf, -1)
+		if r.PositiveLookAhead != nil {
+			posLookAhead = r.PositiveLookAhead.FindAllIndex(buf, -1)
 		}
 	}
 
@@ -64,37 +64,37 @@ func (r Regex) FindAll(buf []byte) []Match {
 			}
 		}
 
-		if r.NegativeLookbehind != nil && r.NegativeLookahead == nil && r.PositiveLookahead == nil {
+		if r.NegativeLookBehind != nil && r.NegativeLookAhead == nil && r.PositiveLookAhead == nil {
 			if nlbFound {
 				continue
 			}
 		}
-		if r.NegativeLookbehind != nil && r.NegativeLookahead != nil && r.PositiveLookahead == nil {
+		if r.NegativeLookBehind != nil && r.NegativeLookAhead != nil && r.PositiveLookAhead == nil {
 			if nlbFound && nlaFound {
 				continue
 			}
 		}
-		if r.NegativeLookbehind != nil && r.NegativeLookahead == nil && r.PositiveLookahead != nil {
+		if r.NegativeLookBehind != nil && r.NegativeLookAhead == nil && r.PositiveLookAhead != nil {
 			if nlbFound && !plaFound {
 				continue
 			}
 		}
-		if r.NegativeLookbehind != nil && r.NegativeLookahead != nil && r.PositiveLookahead != nil {
+		if r.NegativeLookBehind != nil && r.NegativeLookAhead != nil && r.PositiveLookAhead != nil {
 			if nlbFound && nlaFound && !plaFound {
 				continue
 			}
 		}
-		if r.NegativeLookbehind == nil && r.NegativeLookahead != nil && r.PositiveLookahead == nil {
+		if r.NegativeLookBehind == nil && r.NegativeLookAhead != nil && r.PositiveLookAhead == nil {
 			if nlaFound {
 				continue
 			}
 		}
-		if r.NegativeLookbehind == nil && r.NegativeLookahead != nil && r.PositiveLookahead != nil {
+		if r.NegativeLookBehind == nil && r.NegativeLookAhead != nil && r.PositiveLookAhead != nil {
 			if nlaFound && !plaFound {
 				continue
 			}
 		}
-		if r.NegativeLookbehind == nil && r.NegativeLookahead == nil && r.PositiveLookahead != nil {
+		if r.NegativeLookBehind == nil && r.NegativeLookAhead == nil && r.PositiveLookAhead != nil {
 			if !plaFound {
 				continue
 			}

@@ -19,13 +19,13 @@ type RegionJSON struct {
 
 	Start struct {
 		Regex              string
-		NegativeLookbehind string
-		NegativeLookahead  string
+		NegativeLookBehind string
+		NegativeLookAhead  string
 	}
 	End struct {
 		Regex              string
-		NegativeLookbehind string
-		NegativeLookahead  string
+		NegativeLookBehind string
+		NegativeLookAhead  string
 	}
 
 	Attribute       string
@@ -65,16 +65,16 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 	}
 
 	var snlb *regexp.Regexp
-	if rj.Start.NegativeLookbehind != "" {
-		snlb, err = regexp.Compile(rj.Start.NegativeLookbehind)
+	if rj.Start.NegativeLookBehind != "" {
+		snlb, err = regexp.Compile(rj.Start.NegativeLookBehind)
 		if err != nil {
 			return nil, fmt.Errorf("can't compile start regex negative lookbehind: %v", err)
 		}
 	}
 
 	var snla *regexp.Regexp
-	if rj.Start.NegativeLookahead != "" {
-		snla, err = regexp.Compile(rj.Start.NegativeLookahead)
+	if rj.Start.NegativeLookAhead != "" {
+		snla, err = regexp.Compile(rj.Start.NegativeLookAhead)
 		if err != nil {
 			return nil, fmt.Errorf("can't compile start regex negative lookahead: %v", err)
 		}
@@ -89,16 +89,16 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 	}
 
 	var enlb *regexp.Regexp
-	if rj.End.NegativeLookbehind != "" {
-		enlb, err = regexp.Compile(rj.End.NegativeLookbehind)
+	if rj.End.NegativeLookBehind != "" {
+		enlb, err = regexp.Compile(rj.End.NegativeLookBehind)
 		if err != nil {
 			return nil, fmt.Errorf("can't compile edn regex negative lookbehind: %v", err)
 		}
 	}
 
 	var enla *regexp.Regexp
-	if rj.End.NegativeLookahead != "" {
-		enla, err = regexp.Compile(rj.End.NegativeLookahead)
+	if rj.End.NegativeLookAhead != "" {
+		enla, err = regexp.Compile(rj.End.NegativeLookAhead)
 		if err != nil {
 			return nil, fmt.Errorf("can't compile edn regex negative lookahead: %v", err)
 		}
@@ -293,15 +293,15 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 		Style: rj.Style,
 		Start: Regex{
 			Regex:              sre,
-			NegativeLookbehind: snlb,
-			NegativeLookahead:  snla,
-			PositiveLookahead:  nil,
+			NegativeLookBehind: snlb,
+			NegativeLookAhead:  snla,
+			PositiveLookAhead:  nil,
 		},
 		End: Regex{
 			Regex:              ere,
-			NegativeLookbehind: enlb,
-			NegativeLookahead:  enla,
-			PositiveLookahead:  nil,
+			NegativeLookBehind: enlb,
+			NegativeLookAhead:  enla,
+			PositiveLookAhead:  nil,
 		},
 		CursorWord:      nil,
 		Attribute:       attr,

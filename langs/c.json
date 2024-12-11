@@ -50,8 +50,8 @@
 		},
 		"End": {
 			"Regex": "'",
-			"NegativeLookahead": "'",
-			"NegativeLookbehind": "'"
+			"NegativeLookAhead": "'",
+			"NegativeLookBehind": "'"
 		}
 	},
 	{
@@ -62,7 +62,7 @@
 		},
 		"End": {
 			"Regex": "\"",
-			"NegativeLookbehind": "(?:[^\\\\])\\\\"
+			"NegativeLookBehind": "(?:[^\\\\])\\\\"
 		},
 		"EscapeSequence": "\\\\(a|b|e|f|n|r|t|v|\"|\\\\)",
 		"FormatSpecifier": "%(c|d|f|p|s|u|x)"

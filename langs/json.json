@@ -12,7 +12,7 @@
 		},
 		"End": {
 			"Regex": "\"",
-			"NegativeLookbehind": "(?:[^\\\\])\\\\"
+			"NegativeLookBehind": "(?:[^\\\\])\\\\"
 		},
 		"EscapeSequence": "\\\\(b|f|n|r|t|\"|\\\\)"
 	}
