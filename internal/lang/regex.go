@@ -14,6 +14,7 @@ type Regex struct {
 	NegativeLookBehind *regexp.Regexp
 	NegativeLookAhead  *regexp.Regexp
 	PositiveLookAhead  *regexp.Regexp
+	PositiveLookBehind *regexp.Regexp
 }
 
 func (r Regex) FindAll(buf []byte) []Match {
@@ -21,6 +22,7 @@ func (r Regex) FindAll(buf []byte) []Match {
 	var negLookBeh [][]int
 	var negLookAhead [][]int
 	var posLookAhead [][]int
+	var posLookBeh [][]int
 
 	finds := r.Regex.FindAllIndex(buf, -1)
 
@@ -34,6 +36,9 @@ func (r Regex) FindAll(buf []byte) []Match {
 		if r.PositiveLookAhead != nil {
 			posLookAhead = r.PositiveLookAhead.FindAllIndex(buf, -1)
 		}
+		if r.PositiveLookBehind != nil {
+			posLookBeh = r.PositiveLookBehind.FindAllIndex(buf, -1)
+		}
 	}
 
 	// Note: Below code can be optimized.
@@ -44,6 +49,14 @@ func (r Regex) FindAll(buf []byte) []Match {
 		for _, nlb := range negLookBeh {
 			if nlb[1] == f[0] {
 				nlbFound = true
+				break
+			}
+		}
+
+		plbFound := false
+		for _, plb := range posLookBeh {
+			if plb[1] == f[0] {
+				plbFound = true
 				break
 			}
 		}
@@ -64,43 +77,19 @@ func (r Regex) FindAll(buf []byte) []Match {
 			}
 		}
 
-		if r.NegativeLookBehind != nil && r.NegativeLookAhead == nil && r.PositiveLookAhead == nil {
-			if nlbFound {
-				continue
-			}
-		}
-		if r.NegativeLookBehind != nil && r.NegativeLookAhead != nil && r.PositiveLookAhead == nil {
-			if nlbFound && nlaFound {
-				continue
-			}
-		}
-		if r.NegativeLookBehind != nil && r.NegativeLookAhead == nil && r.PositiveLookAhead != nil {
-			if nlbFound && !plaFound {
-				continue
-			}
-		}
-		if r.NegativeLookBehind != nil && r.NegativeLookAhead != nil && r.PositiveLookAhead != nil {
-			if nlbFound && nlaFound && !plaFound {
-				continue
-			}
-		}
-		if r.NegativeLookBehind == nil && r.NegativeLookAhead != nil && r.PositiveLookAhead == nil {
-			if nlaFound {
-				continue
-			}
-		}
-		if r.NegativeLookBehind == nil && r.NegativeLookAhead != nil && r.PositiveLookAhead != nil {
-			if nlaFound && !plaFound {
-				continue
-			}
-		}
-		if r.NegativeLookBehind == nil && r.NegativeLookAhead == nil && r.PositiveLookAhead != nil {
-			if !plaFound {
-				continue
-			}
+		behindOk := true
+		if (r.NegativeLookBehind != nil && nlbFound) || (r.PositiveLookBehind != nil && !plbFound) {
+			behindOk = false
 		}
 
-		matches = append(matches, Match{start: f[0], end: f[1]})
+		aheadOk := true
+		if (r.NegativeLookAhead != nil && nlaFound) || (r.PositiveLookAhead != nil && !plaFound) {
+			aheadOk = false
+		}
+
+		if behindOk && aheadOk {
+			matches = append(matches, Match{start: f[0], end: f[1]})
+		}
 	}
 
 	return matches
