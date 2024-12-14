@@ -52,8 +52,17 @@
 		},
 		"End": {
 			"Regex": "'"
+		}
+	},
+	{
+		"Name": "Bit String",
+		"Style": "Value",
+		"Start": {
+			"Regex": "(b|B|o|O|x|X)\""
 		},
-		"Meta": "(?i)u|x|w|-"
+		"End": {
+			"Regex": "\""
+		}
 	},
 	{
 		"Name": "String",

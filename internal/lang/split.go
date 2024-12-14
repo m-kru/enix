@@ -55,6 +55,7 @@ func splitIntoSections(
 		}
 
 		lineToks := tokenizeLine(regions, line.Buf)
+		startTokEndIdx := 0
 
 		for _, tok := range lineToks {
 			if reg.Name == "Default" {
@@ -73,13 +74,14 @@ func splitIntoSections(
 				sec.Region = reg
 				sec.StartLine = lineIdx
 				sec.StartIdx = tok.StartIdx
+				startTokEndIdx = tok.EndIdx
 			} else {
 				if tok.Start || tok.Region != reg {
 					continue
 				}
 
 				// Some regions have identical start and end tokens, for example string in C.
-				if tok.StartIdx == sec.StartIdx && sec.StartLine == lineIdx {
+				if sec.StartLine == lineIdx && tok.StartIdx < startTokEndIdx {
 					continue
 				}
 
