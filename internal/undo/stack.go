@@ -30,6 +30,12 @@ func NewStack(cap int) *Stack {
 	}
 }
 
+func (s *Stack) Clear() {
+	s.first = nil
+	s.last = nil
+	s.len = 0
+}
+
 func (s *Stack) Push(act action.Action, curs []*cursor.Cursor, sels []*sel.Selection) {
 	if s.len == s.cap {
 		s.first = s.first.next
