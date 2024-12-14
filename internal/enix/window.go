@@ -373,6 +373,9 @@ func (w *Window) OpenArgFiles() {
 		if err != nil {
 			errMsg += err.Error() + "\n\n"
 		}
+
+		t.Go(arg.Line, arg.Column)
+		t.UpdateView()
 	}
 
 	if len(errMsg) > 0 {

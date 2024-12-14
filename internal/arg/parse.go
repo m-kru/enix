@@ -13,7 +13,7 @@ import (
 func handleLineAndColumn(arg string) {
 	// Handle line only case
 	if !strings.Contains(arg, ":") {
-		n, err := strconv.Atoi(arg[1 : len(arg)-1])
+		n, err := strconv.Atoi(arg[1:])
 		if err != nil {
 			handleFile(arg)
 		}
@@ -22,7 +22,7 @@ func handleLineAndColumn(arg string) {
 	}
 
 	// Handle line and column case
-	lineStr, colStr, _ := strings.Cut(arg[1:len(arg)-1], ":")
+	lineStr, colStr, _ := strings.Cut(arg[1:], ":")
 	var line, col int
 	var err error
 	line, err = strconv.Atoi(lineStr)
