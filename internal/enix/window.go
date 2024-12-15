@@ -55,13 +55,21 @@ func (w *Window) RxMouseEvent(ev mouse.Event) {
 	case mouse.PrimaryClickCtrl:
 		w.CurrentTab.PrimaryClickCtrl(x, y)
 	case mouse.WheelDown:
-		w.CurrentTab.ViewDown()
+		for range 2 {
+			w.CurrentTab.ViewDown()
+		}
 	case mouse.WheelUp:
-		w.CurrentTab.ViewUp()
+		for range 2 {
+			w.CurrentTab.ViewUp()
+		}
 	case mouse.WheelLeft:
-		w.CurrentTab.ViewLeft()
+		for range 2 {
+			w.CurrentTab.ViewLeft()
+		}
 	case mouse.WheelRight:
-		w.CurrentTab.ViewRight()
+		for range 2 {
+			w.CurrentTab.ViewRight()
+		}
 	}
 }
 
