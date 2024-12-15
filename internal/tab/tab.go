@@ -205,3 +205,12 @@ func (tab *Tab) GetWord() string {
 		return tab.Selections[len(tab.Selections)-1].GetCursor().GetWord()
 	}
 }
+
+// undoPush is a wrapper for pushing to the undo stack.
+// Each time the tab is changed because of command other than undo or redo,
+// the UndoCount has to be increment and redo stack has to be cleared.
+func (tab *Tab) undoPush(actions action.Action, curs []*cursor.Cursor, sels []*sel.Selection) {
+	tab.UndoStack.Push(actions, curs, sels)
+	tab.UndoCount++
+	tab.RedoStack.Clear()
+}

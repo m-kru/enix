@@ -13,9 +13,7 @@ func (tab *Tab) Join() {
 	actions := tab.join()
 
 	if len(actions) > 0 {
-		tab.UndoStack.Push(actions.Reverse(), prevCurs, prevSels)
-		tab.RedoStack.Clear()
-		tab.UndoCount++
+		tab.undoPush(actions.Reverse(), prevCurs, prevSels)
 	}
 }
 
@@ -100,9 +98,7 @@ func (tab *Tab) LineDown() {
 	actions := tab.lineDown()
 
 	if len(actions) > 0 {
-		tab.UndoStack.Push(actions.Reverse(), prevCurs, prevSels)
-		tab.RedoStack.Clear()
-		tab.UndoCount++
+		tab.undoPush(actions.Reverse(), prevCurs, prevSels)
 	}
 }
 
@@ -188,9 +184,7 @@ func (tab *Tab) LineUp() {
 	actions := tab.lineUp()
 
 	if len(actions) > 0 {
-		tab.UndoStack.Push(actions.Reverse(), prevCurs, prevSels)
-		tab.RedoStack.Clear()
-		tab.UndoCount++
+		tab.undoPush(actions.Reverse(), prevCurs, prevSels)
 	}
 }
 
