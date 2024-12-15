@@ -14,6 +14,7 @@ func (tab *Tab) Join() {
 
 	if len(actions) > 0 {
 		tab.UndoStack.Push(actions.Reverse(), prevCurs, prevSels)
+		tab.RedoStack.Clear()
 		tab.HasChanges = true
 	}
 }
@@ -100,6 +101,7 @@ func (tab *Tab) LineDown() {
 
 	if len(actions) > 0 {
 		tab.UndoStack.Push(actions.Reverse(), prevCurs, prevSels)
+		tab.RedoStack.Clear()
 		tab.HasChanges = true
 	}
 }
@@ -187,6 +189,7 @@ func (tab *Tab) LineUp() {
 
 	if len(actions) > 0 {
 		tab.UndoStack.Push(actions.Reverse(), prevCurs, prevSels)
+		tab.RedoStack.Clear()
 		tab.HasChanges = true
 	}
 }

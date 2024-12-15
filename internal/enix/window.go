@@ -200,6 +200,8 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 				w.Tabs = w.CurrentTab.First()
 			}
 			updateView = false
+		case "redo":
+			err = exec.Redo(c.Args, tab)
 		case "replace":
 			tab.State = "replace"
 		case "right":

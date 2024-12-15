@@ -15,6 +15,7 @@ func (tab *Tab) Delete() {
 
 	if len(actions) > 0 {
 		tab.UndoStack.Push(actions.Reverse(), prevCurs, prevSels)
+		tab.RedoStack.Clear()
 	}
 }
 
@@ -114,6 +115,7 @@ func (tab *Tab) Backspace() {
 
 	if len(actions) > 0 {
 		tab.UndoStack.Push(actions.Reverse(), prevCurs, prevSels)
+		tab.RedoStack.Clear()
 	}
 }
 

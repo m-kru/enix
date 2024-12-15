@@ -7,6 +7,21 @@ import (
 	"github.com/m-kru/enix/internal/undo"
 )
 
+func (tab *Tab) Redo() {
+	action := tab.RedoStack.Pop()
+
+	if action == nil {
+		return
+	}
+
+	curs := cursor.Clone(tab.Cursors)
+	sels := sel.Clone(tab.Selections)
+
+	tab.undo(action)
+
+	tab.UndoStack.Push(action.Action.Reverse(), curs, sels)
+}
+
 func (tab *Tab) Undo() {
 	action := tab.UndoStack.Pop()
 
@@ -14,13 +29,15 @@ func (tab *Tab) Undo() {
 		return
 	}
 
-	tab.undo(action)
-}
-
-func (tab *Tab) undo(act *undo.Action) {
 	curs := cursor.Clone(tab.Cursors)
 	sels := sel.Clone(tab.Selections)
 
+	tab.undo(action)
+
+	tab.RedoStack.Push(action.Action.Reverse(), curs, sels)
+}
+
+func (tab *Tab) undo(act *undo.Action) {
 	// Currently only slice of actions are pushed to the stack.
 	as, ok := act.Action.(action.Actions)
 	if !ok {
@@ -29,8 +46,6 @@ func (tab *Tab) undo(act *undo.Action) {
 
 	tab.undoActions(as)
 	tab.handleAction(as)
-
-	tab.RedoStack.Push(act.Action.Reverse(), curs, sels)
 
 	tab.Cursors = act.Cursors
 	tab.Selections = act.Selections

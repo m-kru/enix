@@ -108,6 +108,18 @@ func LineUp(args []string, tab *tab.Tab) error {
 	return nil
 }
 
+func Redo(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf(
+			"redo: expected 0 args, provided %d", len(args),
+		)
+	}
+
+	tab.Redo()
+
+	return nil
+}
+
 func Search(args []string, tab *tab.Tab) error {
 	if len(args) != 1 {
 		return fmt.Errorf(
