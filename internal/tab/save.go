@@ -26,7 +26,8 @@ func (tab *Tab) Save(strWr io.StringWriter) error {
 		i++
 	}
 
-	tab.HasChanges = false
+	tab.UndoCount = 0
+	tab.RedoCount = 0
 
 	return nil
 }

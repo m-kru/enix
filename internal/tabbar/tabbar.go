@@ -36,7 +36,7 @@ func (tb TabBar) Render(
 		}
 
 		b.WriteRune(' ')
-		if t.HasChanges {
+		if t.HasChanges() {
 			b.WriteRune('*')
 		}
 		b.WriteString(tb.items[x].Name)

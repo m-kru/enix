@@ -16,6 +16,7 @@ func (tab *Tab) Delete() {
 	if len(actions) > 0 {
 		tab.UndoStack.Push(actions.Reverse(), prevCurs, prevSels)
 		tab.RedoStack.Clear()
+		tab.UndoCount++
 	}
 }
 
@@ -26,10 +27,6 @@ func (tab *Tab) delete() action.Actions {
 		actions = tab.deleteCursors(false)
 	} else {
 		actions = tab.deleteSelections()
-	}
-
-	if len(actions) > 0 {
-		tab.HasChanges = true
 	}
 
 	return actions
@@ -116,6 +113,7 @@ func (tab *Tab) Backspace() {
 	if len(actions) > 0 {
 		tab.UndoStack.Push(actions.Reverse(), prevCurs, prevSels)
 		tab.RedoStack.Clear()
+		tab.UndoCount++
 	}
 }
 
@@ -126,10 +124,6 @@ func (tab *Tab) backspace() action.Actions {
 		a = tab.deleteCursors(true)
 	} else {
 		a = tab.deleteSelections()
-	}
-
-	if len(a) > 0 {
-		tab.HasChanges = true
 	}
 
 	return a

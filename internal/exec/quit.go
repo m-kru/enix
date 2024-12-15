@@ -10,7 +10,7 @@ func Quit(args []string, tab *tab.Tab, force bool) (*tab.Tab, error) {
 		return tab, fmt.Errorf("quit: expected 0 args, provided %d", len(args))
 	}
 
-	if tab.HasChanges && !force {
+	if tab.HasChanges() && !force {
 		return tab, fmt.Errorf("quit: tab has unsaved changes")
 	}
 

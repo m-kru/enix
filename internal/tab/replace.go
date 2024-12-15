@@ -44,7 +44,7 @@ func (tab *Tab) RxEventKeyReplace(ev *tcell.EventKey) {
 	if len(actions) > 0 {
 		tab.UndoStack.Push(actions.Reverse(), prevCurs, prevSels)
 		tab.RedoStack.Clear()
-		tab.HasChanges = true
+		tab.UndoCount++
 	}
 
 	tab.Cursors = curs

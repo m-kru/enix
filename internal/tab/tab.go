@@ -25,10 +25,9 @@ type Tab struct {
 	Newline  string // Newline encoding
 	FileType string
 
-	HasFocus   bool
-	HasChanges bool
-	State      string // Valid states: "" - normal mode, "insert", "replace", "key-name".
-	RepCount   int    // Command repetition count in normal mode
+	HasFocus bool
+	State    string // Valid states: "" - normal mode, "insert", "replace", "key-name".
+	RepCount int    // Command repetition count in normal mode
 
 	Lines     *line.Line // First line
 	LineCount int
@@ -51,12 +50,19 @@ type Tab struct {
 	UndoStack *undo.Stack
 	RedoStack *undo.Stack
 
+	UndoCount int // Undo stack count to track if tab has unsaved changes.
+	RedoCount int // Redo stack count to track if tab has unsaved changes.
+
 	Prev *Tab
 	Next *Tab
 }
 
 func (tab *Tab) LineNumWidth() int {
 	return util.IntWidth(tab.LineCount)
+}
+
+func (tab *Tab) HasChanges() bool {
+	return !(tab.UndoCount == 0 && tab.RedoCount == 0)
 }
 
 func (tab *Tab) Count() int {

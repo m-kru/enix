@@ -33,6 +33,7 @@ func (tab *Tab) InsertLineBelow() error {
 	if len(actions) > 0 {
 		tab.UndoStack.Push(actions.Reverse(), prevCurs, prevSels)
 		tab.RedoStack.Clear()
+		tab.UndoCount++
 	}
 
 	tab.Insert()
@@ -98,6 +99,7 @@ func (tab *Tab) InsertLineAbove() error {
 	if len(actions) > 0 {
 		tab.UndoStack.Push(actions.Reverse(), prevCurs, prevSels)
 		tab.RedoStack.Clear()
+		tab.UndoCount++
 	}
 
 	tab.Insert()
@@ -216,6 +218,7 @@ func (tab *Tab) RxEventKeyInsert(ev *tcell.EventKey) {
 			tab.PrevInsertSelections,
 		)
 		tab.RedoStack.Clear()
+		tab.UndoCount++
 
 		tab.InsertActions = make(action.Actions, 0, 16)
 		tab.PrevInsertCursors = cursor.Clone(tab.Cursors)
@@ -236,6 +239,7 @@ func (tab *Tab) InsertRune(r rune) {
 	if actions != nil {
 		tab.UndoStack.Push(actions.Reverse(), prevCurs, prevSels)
 		tab.RedoStack.Clear()
+		tab.UndoCount++
 	}
 }
 
@@ -247,10 +251,6 @@ func (tab *Tab) insertRune(r rune) action.Action {
 	} else {
 		a = nil
 		// insert rune for selections unimplemented
-	}
-
-	if a != nil {
-		tab.HasChanges = true
 	}
 
 	return a
@@ -287,7 +287,7 @@ func (tab *Tab) InsertNewline() {
 	if actions != nil {
 		tab.UndoStack.Push(actions.Reverse(), prevCurs, prevSels)
 		tab.RedoStack.Clear()
-		tab.HasChanges = true
+		tab.UndoCount++
 	}
 }
 

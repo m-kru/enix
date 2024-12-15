@@ -18,6 +18,11 @@ func (tab *Tab) Redo() {
 	sels := sel.Clone(tab.Selections)
 
 	tab.undo(action)
+	if tab.RedoCount > 0 {
+		tab.RedoCount--
+	} else {
+		tab.UndoCount++
+	}
 
 	tab.UndoStack.Push(action.Action.Reverse(), curs, sels)
 }
@@ -33,6 +38,11 @@ func (tab *Tab) Undo() {
 	sels := sel.Clone(tab.Selections)
 
 	tab.undo(action)
+	if tab.UndoCount > 0 {
+		tab.UndoCount--
+	} else {
+		tab.RedoCount++
+	}
 
 	tab.RedoStack.Push(action.Action.Reverse(), curs, sels)
 }
