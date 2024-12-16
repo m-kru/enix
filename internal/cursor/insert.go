@@ -7,10 +7,12 @@ import (
 	"github.com/m-kru/enix/internal/line"
 )
 
-func (c *Cursor) InsertNewline() *action.NewlineInsert {
+func (c *Cursor) InsertNewline() action.Actions {
+
 	rIdx := c.RuneIdx
 	lineNum := c.LineNum
 	line := c.Line
+	indent := line.Indent()
 	newLine1, newLine2 := c.Line.InsertNewline(c.RuneIdx)
 
 	c.Line = newLine2
@@ -18,13 +20,23 @@ func (c *Cursor) InsertNewline() *action.NewlineInsert {
 	c.RuneIdx = 0
 	c.colIdx = 1
 
-	return &action.NewlineInsert{
+	actions := make(action.Actions, 1, 2)
+	actions[0] = &action.NewlineInsert{
 		Line:     line,
 		LineNum:  lineNum,
 		RuneIdx:  rIdx,
 		NewLine1: newLine1,
 		NewLine2: newLine2,
 	}
+
+	if indent == "" {
+		return actions
+	}
+
+	si := c.InsertString(indent)
+	actions = append(actions, si)
+
+	return actions
 }
 
 func (c *Cursor) InsertRune(r rune) *action.RuneInsert {
