@@ -5,6 +5,21 @@ import (
 	"github.com/m-kru/enix/internal/tab"
 )
 
+func Align(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf(
+			"align: expected 0 args, provided %d", len(args),
+		)
+	}
+
+	err := tab.Align()
+	if err != nil {
+		return fmt.Errorf("align: %v", err)
+	}
+
+	return nil
+}
+
 func Change(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf(

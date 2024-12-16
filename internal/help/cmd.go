@@ -151,6 +151,8 @@ selection starts/ends in the middle of a line.`,
 
 	// Miscellaneous
 
+	"align": `align # Aligns columns of cursors.`,
+
 	"dump-colors": `dump-colors # Dumps colorscheme configuration to JSON format.`,
 
 	"esc": `esc # Escapes the current context.

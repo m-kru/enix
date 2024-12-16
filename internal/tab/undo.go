@@ -90,6 +90,8 @@ func (tab *Tab) undoActions(acts action.Actions) {
 			a.Line.InsertRune(a.Rune, a.RuneIdx)
 		case *action.StringInsert:
 			a.Line.InsertString(a.Str, a.StartRuneIdx)
+		case *action.StringDelete:
+			a.Line.DeleteString(a.StartRuneIdx, a.StartRuneIdx+a.RuneCount-1)
 		}
 	}
 }

@@ -335,6 +335,8 @@ func (p *Prompt) Exec() TcellEventReceiver {
 		case "add-cursor":
 			err = exec.AddCursor(c.Args, tab)
 			// Do nothing
+		case "align":
+			err = exec.Align(c.Args, tab)
 		case "backspace":
 			err = exec.Backspace(c.Args, tab)
 		case "exec":
@@ -430,6 +432,8 @@ func (p *Prompt) Exec() TcellEventReceiver {
 				p.Window.CurrentTab = tab
 			}
 			updateView = false
+		case "redo":
+			err = exec.Redo(c.Args, tab)
 		case "save":
 			info, err = exec.Save(c.Args, tab, p.Config.TrimOnSave)
 		case "search":
