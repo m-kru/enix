@@ -1,6 +1,9 @@
 package cursor
 
 import (
+	"unicode"
+	"unicode/utf8"
+
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/util"
 	"github.com/m-kru/enix/internal/view"
@@ -47,6 +50,25 @@ func (c *Cursor) View() view.View {
 		Width:  c.Width(),
 		Height: 1,
 	}
+}
+
+func (c *Cursor) WithinIndent() bool {
+	bIdx := 0
+	rIdx := 0
+	for {
+		if rIdx == c.RuneIdx {
+			break
+		}
+
+		r, rLen := utf8.DecodeRune(c.Line.Buf[bIdx:])
+		if !unicode.IsSpace(r) {
+			return false
+		}
+
+		bIdx += rLen
+		rIdx++
+	}
+	return true
 }
 
 // Prune function removes duplicates from cursor list.
