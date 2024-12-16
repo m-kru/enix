@@ -8,26 +8,33 @@ import (
 	"github.com/m-kru/enix/internal/clip"
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/line"
+	"github.com/m-kru/enix/internal/sel"
 )
 
 func (tab *Tab) Paste() error {
+	text := clip.Read()
+	if len(text) == 0 {
+		return nil
+	}
+
+	prevCurs := cursor.Clone(tab.Cursors)
+	prevSels := sel.Clone(tab.Selections)
+
+	var actions action.Actions
 	if len(tab.Cursors) > 0 {
-		tab.pasteCursors()
+		actions = tab.pasteCursors(text)
 	} else {
 		return fmt.Errorf("unimplemented for selections")
+	}
+
+	if len(actions) > 0 {
+		tab.undoPush(actions.Reverse(), prevCurs, prevSels)
 	}
 
 	return nil
 }
 
-func (tab *Tab) pasteCursors() {
-	text := clip.Read()
-	if len(text) == 0 {
-		return
-	}
-
-	prevCurs := cursor.Clone(tab.Cursors)
-
+func (tab *Tab) pasteCursors(text string) action.Actions {
 	var actions action.Actions
 	if strings.HasSuffix(text, "\n") {
 		actions = tab.pasteCursorsLineBased(text)
@@ -35,9 +42,7 @@ func (tab *Tab) pasteCursors() {
 		panic("unimplemented")
 	}
 
-	if len(actions) > 0 {
-		tab.undoPush(actions.Reverse(), prevCurs, nil)
-	}
+	return actions
 }
 
 func (tab *Tab) pasteCursorsLineBased(text string) action.Actions {
