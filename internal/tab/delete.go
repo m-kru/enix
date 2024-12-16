@@ -50,7 +50,9 @@ func (tab *Tab) deleteCursors(backspace bool) action.Actions {
 				}
 				for range n {
 					a := c.Backspace()
-					as = append(as, a)
+					if a != nil {
+						as = append(as, a)
+					}
 				}
 				act = as
 			} else {
