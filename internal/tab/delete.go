@@ -1,6 +1,8 @@
 package tab
 
 import (
+	"unicode/utf8"
+
 	"github.com/m-kru/enix/internal/action"
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/sel"
@@ -36,7 +38,24 @@ func (tab *Tab) deleteCursors(backspace bool) action.Actions {
 	for _, c := range tab.Cursors {
 		var act action.Action
 		if backspace {
-			act = c.Backspace()
+			if c.WithinIndent() {
+				n := utf8.RuneCountInString(tab.Indent)
+				as := make(action.Actions, 0, n)
+				if c.RuneIdx == 0 {
+					n = 1
+				} else if c.RuneIdx < n {
+					n = c.RuneIdx
+				} else if c.RuneIdx%n != 0 {
+					n = c.RuneIdx % n
+				}
+				for range n {
+					a := c.Backspace()
+					as = append(as, a)
+				}
+				act = as
+			} else {
+				act = c.Backspace()
+			}
 		} else {
 			act = c.Delete()
 		}
