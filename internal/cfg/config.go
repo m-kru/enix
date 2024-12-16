@@ -18,6 +18,8 @@ type Config struct {
 	TabPadRune  rune
 
 	UndoSize int // Undo and Redo stack size
+
+	Indent map[string]string
 }
 
 func DefaultConfig() Config {
@@ -29,5 +31,17 @@ func DefaultConfig() Config {
 		TabRune:      '▸',
 		TabPadRune:   '·',
 		UndoSize:     1024,
+		Indent: map[string]string{
+			"python": "    ",
+			"rust":   "    ",
+			"vhdl":   "  ",
+		},
 	}
+}
+
+func (cfg Config) GetIndent(lang string) string {
+	if indent, ok := cfg.Indent[lang]; ok {
+		return indent
+	}
+	return "\t"
 }

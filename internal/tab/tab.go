@@ -24,6 +24,7 @@ type Tab struct {
 	Path     string // File path
 	Newline  string // Newline encoding
 	FileType string
+	Indent   string
 
 	HasFocus bool
 	State    string // Valid states: "" - normal mode, "insert", "replace", "key-name".
