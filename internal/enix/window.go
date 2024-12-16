@@ -192,6 +192,8 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			tab.HasFocus = false
 			w.Prompt.Activate("open ", "")
 			return w.Prompt
+		case "paste":
+			err = exec.Paste(c.Args, tab)
 		case "quit", "q":
 			tab, err = exec.Quit(c.Args, tab, false)
 			if err == nil && tab == nil {

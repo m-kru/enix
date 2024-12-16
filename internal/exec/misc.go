@@ -123,6 +123,21 @@ func LineUp(args []string, tab *tab.Tab) error {
 	return nil
 }
 
+func Paste(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf(
+			"paste: expected 0 args, provided %d", len(args),
+		)
+	}
+
+	err := tab.Paste()
+	if err != nil {
+		return fmt.Errorf("paste: %v", err)
+	}
+
+	return nil
+}
+
 func Redo(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf(
