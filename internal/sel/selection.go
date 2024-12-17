@@ -21,6 +21,7 @@ func (s *Selection) RuneCount() int {
 	return s.EndRuneIdx - s.StartRuneIdx + 1
 }
 
+// Last returns last chunk being part of the selection s.
 func (s *Selection) Last() *Selection {
 	for {
 		if s.Next == nil {
