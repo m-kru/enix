@@ -257,6 +257,8 @@ func (l *Line) TrimRight() int {
 	return trimCount
 }
 
+// Indent returns line indent as a string.
+// An indent is a sequence of whitespace runes at the line beginning.
 func (l *Line) Indent() string {
 	sIdx := 0
 	eIdx := 0
@@ -271,4 +273,23 @@ func (l *Line) Indent() string {
 		eIdx += rLen
 	}
 	return string(l.Buf[sIdx:eIdx])
+}
+
+func (l *Line) HasOnlySpaces() bool {
+	if len(l.Buf) == 0 {
+		return false
+	}
+
+	bIdx := 0
+	for {
+		if bIdx >= len(l.Buf) {
+			break
+		}
+		r, rLen := utf8.DecodeRune(l.Buf[bIdx:])
+		if !unicode.IsSpace(r) {
+			return false
+		}
+		bIdx += rLen
+	}
+	return true
 }

@@ -2,6 +2,11 @@ package line
 
 import "unicode/utf8"
 
+// Clear empties the line buffer.
+func (l *Line) Clear() {
+	l.Buf = l.Buf[0:0]
+}
+
 func (l *Line) Delete() *Line {
 	// First line can't be deleted if it is the only line.
 	if l.Prev == nil && l.Next == nil {

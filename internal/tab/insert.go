@@ -312,6 +312,20 @@ func (tab *Tab) insertNewlineCursors() action.Action {
 		for _, m := range tab.Marks {
 			m.Inform(act)
 		}
+
+		// Remove spaces from "empty" lines.
+		ni := act[0].(*action.NewlineInsert)
+		skip := false
+		for _, c2 := range tab.Cursors {
+			if c2.Line == ni.NewLine1 {
+				skip = true
+				break
+			}
+		}
+		if skip || !ni.NewLine1.HasOnlySpaces() {
+			continue
+		}
+		ni.NewLine1.Clear()
 	}
 
 	return actions
