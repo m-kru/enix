@@ -1,7 +1,7 @@
 [
 	{
 		"Name": "Default",
-		"Builtin": "\\b(cap|copy|len|make|panic)\\b",
+		"Builtin": "\\b(append|cap|copy|len|make|panic)\\b",
 		"Keyword": "\\b(break|case|chan|const|continue|default|defer|else|fallthrough|for|func|go|goto|if|import|package|range|return|select|switch|type|var)\\b",
 		"Number": "\\b-?(0[bBoOxX][0-9a-fA-F]+|\\d+)([uU][lL]{0,2}|[lL]{1,2}[uU]?|[fFdDiI]|([eE][-+]?\\d+))?|'((\\\\.)?|[^'\\\\])'",
 		"Operator": "=|:=|!=|<|>|\\+|-|\\*|/|%|&|!|\\^|\\|",
