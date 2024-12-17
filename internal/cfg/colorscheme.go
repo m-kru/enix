@@ -36,6 +36,7 @@ type Colorscheme struct {
 	StatusLine tcell.Style
 	RepCount   tcell.Style
 	StateMark  tcell.Style
+	FindMark   tcell.Style
 
 	Prompt       tcell.Style
 	PromptShadow tcell.Style
@@ -148,7 +149,8 @@ func DefaultColorscheme() Colorscheme {
 
 		StatusLine: tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorGray),
 		RepCount:   tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorTeal),
-		StateMark:  tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorOlive),
+		StateMark:  tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorGreen),
+		FindMark:   tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorOlive),
 
 		Prompt:       tcell.StyleDefault.Foreground(tcell.ColorWhite),
 		PromptShadow: tcell.StyleDefault.Foreground(tcell.ColorGray),

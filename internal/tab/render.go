@@ -78,6 +78,7 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 	}
 	stateEndIdx := b.Len()
 
+	findStartIdx := b.Len()
 	if len(tab.SearchCtx.Finds) != 0 {
 		if len(tab.SearchCtx.Finds) == 1 {
 			b.WriteString("1 find ")
@@ -85,6 +86,7 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 			b.WriteString(fmt.Sprintf("%d finds ", len(tab.SearchCtx.Finds)))
 		}
 	}
+	findEndIdx := b.Len()
 
 	var c *cursor.Cursor
 	if len(tab.Cursors) > 0 {
@@ -113,6 +115,8 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 			style = tab.Colors.RepCount
 		} else if tab.State != "" && stateStartIdx <= i && i < stateEndIdx {
 			style = tab.Colors.StateMark
+		} else if len(tab.SearchCtx.Finds) > 0 && findStartIdx <= i && i < findEndIdx {
+			style = tab.Colors.FindMark
 		}
 
 		frame.SetContent(startIdx+i, 0, r, style)
