@@ -1,0 +1,77 @@
+[
+	{
+		"Name": "Default"
+	},
+	{
+		"Name": "Heading",
+		"Style": "Heading",
+		"Start": {
+			"Regex": "#"
+		},
+		"End": {
+			"Regex": "$"
+		}
+	},
+	{
+		"Name": "Bold",
+		"Style": "Bold",
+		"Start": {
+			"Regex": "\\*\\*"
+		},
+		"End": {
+			"Regex": "\\*\\*"
+		}
+	},
+	{
+		"Name": "Italic",
+		"Style": "Italic",
+		"Start": {
+			"Regex": "\\*",
+			"NegativeLookBehind": "(\\*|\\\\)",
+			"NegativeLookAhead": "\\*"
+		},
+		"End": {
+			"Regex": "\\*",
+			"NegativeLookBehind": "\\*",
+			"NegativeLookAhead": "\\*"
+		}
+	},
+	{
+		"Name": "Code",
+		"Style": "Code",
+		"Start": {
+			"Regex": "`",
+			"NegativeLookBehind": "`",
+			"NegativeLookAhead": "`"
+		},
+		"End": {
+			"Regex": "`",
+			"NegativeLookBehind": "`",
+			"NegativeLookAhead": "`"
+		}
+	},
+	{
+		"Name": "Code Block 3",
+		"Style": "Code",
+		"Start": {
+			"Regex": "```",
+			"NegativeLookBehind": "`",
+			"NegativeLookAhead": "`"
+		},
+		"End": {
+			"Regex": "```",
+			"NegativeLookBehind": "`",
+			"NegativeLookAhead": "`"
+		}
+	},
+	{
+		"Name": "Code Block 4",
+		"Style": "Code",
+		"Start": {
+			"Regex": "````"
+		},
+		"End": {
+			"Regex": "````"
+		}
+	}
+]

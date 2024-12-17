@@ -18,6 +18,7 @@ var fileExtToType = map[string]string{
 	"lisp":  "lisp",
 	"tex":   "latex",
 	"lua":   "lua",
+	"md":    "markdown",
 	"php":   "php",
 	"proto": "protobuf",
 	"py":    "python",

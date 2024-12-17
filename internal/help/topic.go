@@ -1,6 +1,19 @@
 package help
 
 var Topics = map[string]string{
+	"enix": `Enix is a terminal-based modal text editor trying to follow the *nix philosophy.
+
+Enix is created with simplicity and orthogonality in mind.
+For example, there is only one way to enter the insert state.
+Namely, the 'insert' commamnd (and its derivatives), there is no 'append'.
+
+There is no custom plugin system.
+However, it is possible to pass selections as standard input to external programs.
+The selections are then replaced with the program standard output.
+This is achieved using the 'sh' command (not yet implemented).
+Enter 'help sh' command for more details.
+`,
+
 	"keybindings": `enix tries to offer sane default keybindings so that the user doesn't have to
 configure much out of the box and can use the editor straight after installation
 on various machines.
