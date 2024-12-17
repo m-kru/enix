@@ -61,6 +61,8 @@ func (tab *Tab) pasteCursorsLineBased(text string) action.Actions {
 			act := cur.InsertLineBelow(line.String())
 			acts = append(acts, act)
 
+			tab.handleAction(act)
+
 			cur.Down()
 
 			for _, cur2 := range curs {
@@ -120,6 +122,8 @@ func (tab *Tab) pasteSelectionsLineBased(text string) action.Actions {
 
 			act := cur.InsertLineBelow(line.String())
 			acts = append(acts, act)
+
+			tab.handleAction(act)
 
 			cur.Down()
 
