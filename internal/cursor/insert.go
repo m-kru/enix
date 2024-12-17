@@ -50,6 +50,7 @@ func (c *Cursor) InsertString(s string) *action.StringInsert {
 	rIdx := c.RuneIdx
 	rc := utf8.RuneCountInString(s)
 	c.RuneIdx += rc
+	c.colIdx = c.Line.ColumnIdx(c.RuneIdx)
 	return &action.StringInsert{
 		Line:         c.Line,
 		Str:          s,
