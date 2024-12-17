@@ -27,6 +27,8 @@ func (s *Selection) inform(act action.Action) {
 		}
 	case *action.LineDown:
 		//s.informLineDown(a)
+	case *action.LineInsert:
+		s.informLineInsert(a)
 	case *action.LineUp:
 		//s.informLineUp(a)
 	case *action.NewlineDelete:
@@ -40,6 +42,14 @@ func (s *Selection) inform(act action.Action) {
 	case *action.StringDelete:
 		s.informStringDelete(a)
 	}
+}
+
+func (s *Selection) informLineInsert(li *action.LineInsert) {
+	if li.LineNum > s.LineNum {
+		return
+	}
+
+	s.LineNum++
 }
 
 func (s *Selection) informNewlineDelete(nd *action.NewlineDelete) {

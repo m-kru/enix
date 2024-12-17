@@ -130,10 +130,7 @@ func Paste(args []string, tab *tab.Tab) error {
 		)
 	}
 
-	err := tab.Paste()
-	if err != nil {
-		return fmt.Errorf("paste: %v", err)
-	}
+	tab.Paste()
 
 	return nil
 }
