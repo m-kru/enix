@@ -42,5 +42,15 @@
 			"NegativeLookBehind": "(?:[^\\\\])\\\\"
 		},
 		"EscapeSequence": "\\\\(a|b|e|f|n|r|t|v|\"|\\\\)"
+	},
+	{
+		"Name": "Raw String",
+		"Style": "String",
+		"Start": {
+			"Regex": "`"
+		},
+		"End": {
+			"Regex": "`"
+		}
 	}
 ]
