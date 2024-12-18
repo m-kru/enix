@@ -139,10 +139,10 @@ func (tab *Tab) selWordCursors() {
 
 func (tab *Tab) selWordSelections() {
 	/*
-	for i, s := range tab.Selections {
-		tab.Selections[i] = s.Word()
-	}
-	tab.Selections = sel.Prune(tab.Selections)
+		for i, s := range tab.Selections {
+			tab.Selections[i] = s.Word()
+		}
+		tab.Selections = sel.Prune(tab.Selections)
 	*/
 }
 

@@ -11,6 +11,14 @@ import (
 	"github.com/mattn/go-runewidth"
 )
 
+type WordPosition int
+
+const (
+	InSpace = iota
+	AtWordStart
+	InWord
+)
+
 // Cursors must be stored in order. Thanks to this, only next cursors must be
 // informed about line changes.
 type Cursor struct {
@@ -71,33 +79,16 @@ func (c *Cursor) WithinIndent() bool {
 	return true
 }
 
-// Prune function removes duplicates from cursor list.
-// A duplicate is a cursor pointing to the same line with equal buffer index.
-// It also removes dead cursors pointing to the nil Line.
-// Cursors may become dead, for example, when line is removed.
-func Prune(cursors []*Cursor) []*Cursor {
-	cs := make([]*Cursor, 0, len(cursors))
-
-	for _, c := range cursors {
-		// Check if this is dead cursor
-		if c.Line == nil {
-			continue
-		}
-
-		duplicate := false
-		for _, c2 := range cs {
-			if Equal(c, c2) {
-				duplicate = true
-				break
-			}
-		}
-
-		if duplicate {
-			continue
-		}
-
-		cs = append(cs, c)
+/*
+func (c *Cursor) WordPosition() WordPosition {
+	if c.RuneIdx == c.Line.RuneCount() || unicode.IsSpace(c.Line.Rune(c.RuneIdx)) {
+		return InSpace
 	}
 
-	return cs
+	if !util.IsWordRune(c.Line.Rune(c.RuneIdx-1)) {
+		return AtWordStart
+	}
+
+	return InWord
 }
+*/

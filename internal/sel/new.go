@@ -260,15 +260,43 @@ func fromCursorUp(c *cursor.Cursor) *Selection {
 
 func FromCursorsWord(curs []*cursor.Cursor) []*Selection {
 	/*
-	sels := make([]*Selection, 0, len(curs))
+		sels := make([]*Selection, 0, len(curs))
 
-	for _, c := range curs {
-		sels = append(sels, fromCursorWord(c))
-	}
+		for _, c := range curs {
+			sels = append(sels, fromCursorWord(c))
+		}
 
-	sels = Prune(sels)
+		sels = Prune(sels)
 
-	return sels
+		return sels
+	*/
+	return nil
+}
+
+func fromCursorWord(c *cursor.Cursor) *Selection {
+	/*
+		wordPos := c.WordPosition()
+
+		switch wordPos {
+		case cursor.InSpace:
+			c.WordStart()
+		case cursor.InWord:
+			c.PrevWordStart()
+		}
+
+		srIdx := c.RuneIdx
+		c.WordEnd()
+		c.Left()
+
+		return &Selection{
+			Line:         c.Line,
+			LineNum:      c.LineNum,
+			StartRuneIdx: srIdx,
+			EndRuneIdx:   c.RuneIdx,
+			Cursor:       c,
+			Prev:         nil,
+			Next:         nil,
+		}
 	*/
 	return nil
 }
