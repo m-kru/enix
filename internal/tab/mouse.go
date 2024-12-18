@@ -46,7 +46,10 @@ func (tab *Tab) PrimaryClickCtrl(x, y int) {
 		idx = line.RuneCount()
 	}
 
-	tab.AddCursor(
-		line.Num(), line.ColumnIdx(idx),
-	)
+	idx, ok = tab.AddCursor(line.Num(), line.ColumnIdx(idx))
+	if ok || len(tab.Cursors) == 1 {
+		return
+	}
+
+	tab.Cursors = append(tab.Cursors[0:idx], tab.Cursors[idx+1:]...)
 }

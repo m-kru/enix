@@ -150,7 +150,10 @@ func (tab *Tab) Trim() {
 }
 
 // AddCursor spawns a new cursor in given line and column.
-func (tab *Tab) AddCursor(lineNum int, colIdx int) {
+// On success returns 0 and true.
+// If cursor in give position already exists, then it returns
+// index of the existing cursor and true.
+func (tab *Tab) AddCursor(lineNum int, colIdx int) (int, bool) {
 	line := tab.Lines.Get(lineNum)
 	if line == nil {
 		line = tab.Lines.Last()
@@ -161,10 +164,18 @@ func (tab *Tab) AddCursor(lineNum int, colIdx int) {
 		runeIdx = line.RuneCount()
 	}
 
-	c := cursor.New(line, lineNum, runeIdx)
+	newC := cursor.New(line, lineNum, runeIdx)
 
-	tab.Cursors = append(tab.Cursors, c)
+	for i, c := range tab.Cursors {
+		if cursor.Equal(newC, c) {
+			return i, false
+		}
+	}
+
+	tab.Cursors = append(tab.Cursors, newC)
 	tab.Cursors = cursor.Prune(tab.Cursors)
+
+	return 0, true
 }
 
 func (tab *Tab) LastColumnIdx() int {
