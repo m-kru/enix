@@ -5,6 +5,14 @@ import (
 	"unicode"
 )
 
+type State int
+
+const (
+	inWord State = iota
+	inSpace
+	inSeq // In a sequence of non word runes
+)
+
 func IsWordRune(r rune) bool {
 	return unicode.IsLetter(r) || unicode.IsDigit(r) || r == '_'
 }
@@ -21,12 +29,6 @@ func PrevWordStart(line []rune, idx int) (int, bool) {
 		return 0, false
 	}
 
-	type State int
-	const (
-		inWord State = iota
-		inSpace
-		inSeq // In a sequence of non word runes
-	)
 	state := inSeq
 	if idx == len(line) || unicode.IsSpace(line[idx]) {
 		state = inSpace
@@ -85,12 +87,6 @@ func WordEnd(line []rune, idx int) (int, bool) {
 		return 0, false
 	}
 
-	type State int
-	const (
-		inWord State = iota
-		inSpace
-		inSeq // In a sequence of non word runes
-	)
 	state := inSeq
 	if IsWordRune(line[idx]) {
 		state = inWord
@@ -128,10 +124,9 @@ func WordEnd(line []rune, idx int) (int, bool) {
 
 // WordStart finds next word start rune index.
 func WordStart(line []rune, idx int) (int, bool) {
-	if idx >= len(line) - 1 {
+	if idx >= len(line)-1 {
 		return 0, false
 	}
-
 
 	if idx < 0 {
 		if !unicode.IsSpace(line[0]) {
@@ -140,12 +135,6 @@ func WordStart(line []rune, idx int) (int, bool) {
 		idx = 0
 	}
 
-	type State int
-	const (
-		inWord State = iota
-		inSpace
-		inSeq // In a sequence of non word runes
-	)
 	state := inSeq
 	if IsWordRune(line[idx]) {
 		state = inWord
