@@ -10,6 +10,8 @@ func (c *Cursor) Inform(act action.Action) {
 		for _, subA := range a {
 			c.Inform(subA)
 		}
+	case *action.LineDelete:
+		c.informLineDelete(a)
 	case *action.LineInsert:
 		c.informLineInsert(a)
 	case *action.LineDown:
@@ -24,6 +26,12 @@ func (c *Cursor) Inform(act action.Action) {
 		c.informRuneDelete(a)
 	case *action.RuneInsert:
 		c.informRuneInsert(a)
+	}
+}
+
+func (c *Cursor) informLineDelete(ld *action.LineDelete) {
+	if ld.LineNum < c.LineNum {
+		c.LineNum--
 	}
 }
 

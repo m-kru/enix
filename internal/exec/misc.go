@@ -34,6 +34,18 @@ func Change(args []string, tab *tab.Tab) error {
 	return nil
 }
 
+func Cut(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf(
+			"cut: expected 0 args, provided %d", len(args),
+		)
+	}
+
+	tab.Cut()
+
+	return nil
+}
+
 func Esc(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf(

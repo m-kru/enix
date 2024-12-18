@@ -355,6 +355,8 @@ func (p *Prompt) Exec() TcellEventReceiver {
 		case "cursor-count":
 			p.ShowInfo(fmt.Sprintf("%d", len(tab.Cursors)))
 			return p.Window
+		case "cut":
+			err = exec.Cut(c.Args, tab)
 		case "del":
 			err = exec.Del(c.Args, tab)
 		case "down":

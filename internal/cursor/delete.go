@@ -63,3 +63,31 @@ func (c *Cursor) Backspace() action.Action {
 
 	return &action.RuneDelete{Line: c.Line, Rune: r, RuneIdx: c.RuneIdx}
 }
+
+func (c *Cursor) DeleteLine() action.Action {
+	delLine := c.Line
+	newLine := c.Line.Delete()
+	if newLine != nil {
+		c.Line = newLine
+		c.RuneIdx = 0
+		c.colIdx = c.Line.ColumnIdx(0)
+		return &action.LineDelete{
+			Line:    delLine,
+			LineNum: c.LineNum,
+			NewLine: c.Line,
+		}
+	}
+
+	act := &action.StringDelete{
+		Line:         c.Line,
+		Str:          c.Line.String(),
+		StartRuneIdx: 0,
+		RuneCount:    c.Line.RuneCount(),
+	}
+
+	c.Line.Clear()
+	c.RuneIdx = 0
+	c.colIdx = c.Line.ColumnIdx(0)
+
+	return act
+}

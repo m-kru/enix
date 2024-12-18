@@ -145,6 +145,8 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			return w.Prompt
 		case "config-dir":
 			info, err = exec.ConfigDir(c.Args)
+		case "cut":
+			err = exec.Cut(c.Args, tab)
 		case "del":
 			err = exec.Del(c.Args, tab)
 		case "down":

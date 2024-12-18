@@ -79,6 +79,7 @@ func DefaultKeybindings() Keybindings {
 		"Rune[r]": "replace",
 		"Rune[u]": "undo",
 		"Rune[U]": "redo",
+		"Rune[x]": "cut",
 		"Rune[y]": "yank",
 		"Rune[ ]": "space",
 		"Tab":     "tab",
