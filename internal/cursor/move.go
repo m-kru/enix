@@ -66,7 +66,7 @@ func (c *Cursor) Up() {
 func (c *Cursor) PrevWordStart() {
 	if idx, ok := util.PrevWordStart([]rune(c.Line.String()), c.RuneIdx); ok {
 		c.RuneIdx = idx
-		c.colIdx = c.Line.ColumnIdx(c.RuneIdx)
+		c.colIdx = c.Line.ColumnIdx(idx)
 		return
 	}
 
@@ -82,7 +82,7 @@ func (c *Cursor) PrevWordStart() {
 			c.Line = line
 			c.LineNum = lineNum
 			c.RuneIdx = idx
-			c.colIdx = c.Line.ColumnIdx(c.RuneIdx)
+			c.colIdx = c.Line.ColumnIdx(idx)
 			return
 		}
 
@@ -93,7 +93,7 @@ func (c *Cursor) PrevWordStart() {
 func (c *Cursor) WordEnd() {
 	if idx, ok := util.WordEnd([]rune(c.Line.String()), c.RuneIdx); ok {
 		c.RuneIdx = idx
-		c.colIdx = c.Line.ColumnIdx(c.RuneIdx)
+		c.colIdx = c.Line.ColumnIdx(idx)
 		return
 	}
 
@@ -109,7 +109,7 @@ func (c *Cursor) WordEnd() {
 			c.Line = line
 			c.LineNum = lineNum
 			c.RuneIdx = idx
-			c.colIdx = c.Line.ColumnIdx(c.RuneIdx)
+			c.colIdx = c.Line.ColumnIdx(idx)
 			return
 		}
 
@@ -120,7 +120,7 @@ func (c *Cursor) WordEnd() {
 func (c *Cursor) WordStart() {
 	if idx, ok := util.WordStart([]rune(c.Line.String()), c.RuneIdx); ok {
 		c.RuneIdx = idx
-		c.colIdx = c.Line.ColumnIdx(c.RuneIdx)
+		c.colIdx = c.Line.ColumnIdx(idx)
 		return
 	}
 
@@ -136,7 +136,7 @@ func (c *Cursor) WordStart() {
 			c.Line = line
 			c.LineNum = lineNum
 			c.RuneIdx = idx
-			c.colIdx = c.Line.ColumnIdx(c.RuneIdx)
+			c.colIdx = c.Line.ColumnIdx(idx)
 			return
 		}
 
