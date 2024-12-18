@@ -410,6 +410,8 @@ func (p *Prompt) Exec() TcellEventReceiver {
 				p.Window.CurrentTab = tab
 			}
 			updateView = false
+		case "pwd":
+			info, err = exec.Pwd(c.Args)
 		case "paste":
 			err = exec.Paste(c.Args, tab)
 		case "right":

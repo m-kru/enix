@@ -105,10 +105,22 @@ func SelUp(args []string, tab *tab.Tab) error {
 	return nil
 }
 
+func SelWord(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf(
+			"sel-word: provided &D args, expected 0, len(args)",
+		)
+	}
+
+	tab.SelWord()
+
+	return nil
+}
+
 func SelWordEnd(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf(
-			"sel-up: provided %d args, expected 0", len(args),
+			"sel-word-end: provided %d args, expected 0", len(args),
 		)
 	}
 

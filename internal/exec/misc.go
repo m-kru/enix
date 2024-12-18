@@ -2,6 +2,8 @@ package exec
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/m-kru/enix/internal/tab"
 )
 
@@ -133,6 +135,21 @@ func Paste(args []string, tab *tab.Tab) error {
 	tab.Paste()
 
 	return nil
+}
+
+func Pwd(args []string) (string, error) {
+	if len(args) > 0 {
+		return "", fmt.Errorf(
+			"pwd: expected 0 args, provided %d", len(args),
+		)
+	}
+
+	pwd, err := os.Getwd()
+	if err != nil {
+		return "", fmt.Errorf("pwd: %v", err)
+	}
+
+	return pwd, nil
 }
 
 func Redo(args []string, tab *tab.Tab) error {

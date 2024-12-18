@@ -9,6 +9,18 @@
 		"Value": "\\b(false|true|nil)\\b"
 	},
 	{
+		"Name": "Block Comment",
+		"Style": "Comment",
+		"Start": {
+			"Regex": "/\\*"
+		},
+		"End": {
+			"Regex": "\\*/"
+		},
+		"ToDo": "(?i)(todo|note|xxx):"
+
+	},
+	{
 		"Name": "Line Comment",
 		"Style": "Comment",
 		"Start": {

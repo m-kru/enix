@@ -258,6 +258,21 @@ func fromCursorUp(c *cursor.Cursor) *Selection {
 	return first
 }
 
+func FromCursorsWord(curs []*cursor.Cursor) []*Selection {
+	/*
+	sels := make([]*Selection, 0, len(curs))
+
+	for _, c := range curs {
+		sels = append(sels, fromCursorWord(c))
+	}
+
+	sels = Prune(sels)
+
+	return sels
+	*/
+	return nil
+}
+
 func FromCursorsWordEnd(curs []*cursor.Cursor) []*Selection {
 	sels := make([]*Selection, 0, len(curs))
 

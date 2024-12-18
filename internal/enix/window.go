@@ -194,6 +194,8 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			return w.Prompt
 		case "paste":
 			err = exec.Paste(c.Args, tab)
+		case "pwd":
+			info, err = exec.Pwd(c.Args)
 		case "quit", "q":
 			tab, err = exec.Quit(c.Args, tab, false)
 			if err == nil && tab == nil {
@@ -238,6 +240,8 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			w.CurrentTab, err = exec.SelToTab(c.Args, tab)
 		case "sel-up":
 			err = exec.SelUp(c.Args, tab)
+		case "sel-word":
+			err = exec.SelWord(c.Args, tab)
 		case "sel-word-end":
 			err = exec.SelWordEnd(c.Args, tab)
 		case "space":

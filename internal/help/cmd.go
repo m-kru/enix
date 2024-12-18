@@ -187,6 +187,8 @@ Mark name must not start with a digit or '-' rune. To restore marks one
 has to use the go command providing as an argument the name of a mark.`,
 	"m": `m # An alias to the mark command.`,
 
+	"pwd": `pwd # Prints working directory.`,
+
 	"q": `q # An alias to the quit command.`,
 
 	"quit": `quit # Quits tab.
