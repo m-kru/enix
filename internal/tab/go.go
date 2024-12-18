@@ -2,6 +2,7 @@ package tab
 
 import (
 	"fmt"
+	"github.com/m-kru/enix/internal/arg"
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/mark"
 )
@@ -33,8 +34,27 @@ func (tab *Tab) Go(lineNum int, col int) {
 
 	rIdx, _, _ := line.RuneIdx(col)
 
-	tab.Cursors = []*cursor.Cursor{cursor.New(line, lineNum, rIdx)}
+	cur := cursor.New(line, lineNum, rIdx)
+	tab.Cursors = []*cursor.Cursor{cur}
 	tab.Selections = nil
+
+	// Don't change the view if running in running in script mode.
+	if arg.Script != "" {
+		return
+	}
+
+	if tab.View.IsVisible(cur.View()) {
+		return
+	}
+
+	// Center the screen if possible.
+	lineNum = cur.LineNum - tab.Frame.Height/2
+	if lineNum < 1 {
+		lineNum = 1
+	}
+	tab.View.Line = lineNum
+
+	// TODO: Should column be adjusted here as well?
 }
 
 func (tab *Tab) GoMark(name string) error {

@@ -225,7 +225,9 @@ func (tab *Tab) RenderSelections(frame frame.Frame) {
 	}
 }
 
-func (tab *Tab) Render(frame frame.Frame) {
+func (tab *Tab) Render() {
+	frame := *tab.Frame
+
 	// Leave one line for the status line
 	if frame.Height > 1 {
 		frame.Height -= 1

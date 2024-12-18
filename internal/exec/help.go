@@ -49,7 +49,7 @@ func Help(args []string, t *tab.Tab) (*tab.Tab, error) {
 		}
 	}
 
-	helpTab := tab.FromString(t.Config, t.Colors, t.Keys, msg, "help-"+arg)
+	helpTab := tab.FromString(t.Config, t.Colors, t.Keys, t.Frame, msg, "help-"+arg)
 	t.Append(helpTab)
 
 	return helpTab, nil

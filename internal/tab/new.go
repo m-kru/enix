@@ -7,6 +7,7 @@ import (
 
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
+	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/lang"
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/mark"
@@ -16,7 +17,12 @@ import (
 	"github.com/m-kru/enix/internal/view"
 )
 
-func Empty(config *cfg.Config, colors *cfg.Colorscheme, keys *cfg.Keybindings) *Tab {
+func Empty(
+	config *cfg.Config,
+	colors *cfg.Colorscheme,
+	keys *cfg.Keybindings,
+	frame *frame.Frame,
+) *Tab {
 	lines := line.Empty()
 
 	c := cursor.New(lines, 1, 0)
@@ -43,6 +49,7 @@ func Empty(config *cfg.Config, colors *cfg.Colorscheme, keys *cfg.Keybindings) *
 		PrevInsertSelections: nil,
 		SearchCtx:            search.InitialContext(),
 		Marks:                make(map[string]mark.Mark),
+		Frame:                frame,
 		View:                 view.View{Line: 1, Column: 1, Height: 1, Width: 1},
 		Highlighter:          lang.DefaultHighlighter(),
 		UndoStack:            undo.NewStack(config.UndoSize),
@@ -62,10 +69,11 @@ func Open(
 	config *cfg.Config,
 	colors *cfg.Colorscheme,
 	keys *cfg.Keybindings,
+	frame *frame.Frame,
 	path string,
 ) (*Tab, error) {
 	if path == "" {
-		return Empty(config, colors, keys), nil
+		return Empty(config, colors, keys, frame), nil
 	}
 
 	// Check existence of backup file. If exists, return an error.
@@ -126,6 +134,7 @@ func Open(
 		PrevInsertSelections: nil,
 		SearchCtx:            search.InitialContext(),
 		Marks:                make(map[string]mark.Mark),
+		Frame:                frame,
 		View:                 view.View{Line: 1, Column: 1, Height: 1, Width: 1},
 		Highlighter:          hl,
 		UndoStack:            undo.NewStack(config.UndoSize),
@@ -141,6 +150,7 @@ func FromString(
 	config *cfg.Config,
 	colors *cfg.Colorscheme,
 	keys *cfg.Keybindings,
+	frame *frame.Frame,
 	str string,
 	path string,
 ) *Tab {
@@ -170,6 +180,7 @@ func FromString(
 		PrevInsertSelections: nil,
 		SearchCtx:            search.InitialContext(),
 		Marks:                make(map[string]mark.Mark),
+		Frame:                frame,
 		View:                 view.View{Line: 1, Column: 1, Height: 1, Width: 1},
 		Highlighter:          lang.DefaultHighlighter(),
 		UndoStack:            undo.NewStack(config.UndoSize),

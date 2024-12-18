@@ -4,6 +4,7 @@ import (
 	"github.com/m-kru/enix/internal/action"
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
+	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/lang"
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/mark"
@@ -44,7 +45,8 @@ type Tab struct {
 
 	Marks map[string]mark.Mark
 
-	View view.View
+	Frame *frame.Frame
+	View  view.View
 
 	Highlighter *lang.Highlighter
 

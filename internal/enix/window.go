@@ -370,7 +370,7 @@ func (w *Window) Render() {
 		w.TabBar.Render(w.Tabs, w.CurrentTab, w.Colors, *w.TabBarFrame)
 	}
 
-	w.CurrentTab.Render(w.TabFrame)
+	w.CurrentTab.Render()
 
 	w.Screen.Show()
 }
@@ -379,7 +379,7 @@ func (w *Window) OpenArgFiles() {
 	errMsg := ""
 
 	for _, file := range arg.Files {
-		t, err := tab.Open(w.Config, w.Colors, w.InsertKeys, file)
+		t, err := tab.Open(w.Config, w.Colors, w.InsertKeys, &w.TabFrame, file)
 		if t != nil {
 			if w.Tabs == nil {
 				w.Tabs = t
@@ -399,7 +399,7 @@ func (w *Window) OpenArgFiles() {
 	}
 
 	if len(errMsg) > 0 {
-		errTab := tab.FromString(w.Config, w.Colors, w.InsertKeys, errMsg, "enix-error")
+		errTab := tab.FromString(w.Config, w.Colors, w.InsertKeys, &w.TabFrame, errMsg, "enix-error")
 		if w.Tabs == nil {
 			w.Tabs = errTab
 		} else {
@@ -484,7 +484,7 @@ func Start(
 	w.Prompt = &p
 
 	if len(arg.Files) == 0 {
-		w.Tabs = tab.FromString(config, colors, insertKeys, "", "no-name")
+		w.Tabs = tab.FromString(config, colors, insertKeys, &w.TabFrame, "", "no-name")
 		w.CurrentTab = w.Tabs
 	} else {
 		w.OpenArgFiles()
