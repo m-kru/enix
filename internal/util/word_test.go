@@ -14,8 +14,8 @@ func TestPrevWordStart(t *testing.T) {
 		{[]rune("foo"), 0, 0, false},
 		{[]rune("    "), 3, 0, false},
 		{[]rune("Hello World!"), 6, 0, true},
-		{[]rune("a-b"), 2, 0, true},
-		{[]rune("foo + bar"), 6, 0, true},
+		{[]rune("a-b"), 2, 1, true},
+		{[]rune("foo + bar"), 6, 4, true},
 		{[]rune("abc def  agh"), 9, 4, true},
 		{[]rune("aa bb_cc dd"), 9, 3, true},
 	}

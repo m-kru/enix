@@ -10,36 +10,75 @@ func IsWordRune(r rune) bool {
 }
 
 // IntWidth returns number of digits required to print n.
-// TODO: Improbe speed, not the fastest implementation.
+// TODO: Improve speed, not the fastest implementation.
 func IntWidth(i int) int {
 	return len(fmt.Sprintf("%d", i))
 }
 
-// PrevWordStart finds previous word start index.
+// PrevWordStart finds previous word start rune index.
 func PrevWordStart(line []rune, idx int) (int, bool) {
 	if idx == 0 {
 		return 0, false
 	}
 
-	for {
-		idx--
-		if idx == 0 {
-			if IsWordRune(line[idx]) {
-				return idx, true
-			} else {
-				break
+	type State int
+	const (
+		inWord State = iota
+		inSpace
+		inSeq // In a sequence of non word runes
+	)
+	state := inSeq
+	if idx == len(line) || unicode.IsSpace(line[idx]) {
+		state = inSpace
+	} else if IsWordRune(line[idx]) {
+		state = inWord
+	}
+
+	for i := idx - 1; i >= 0; i-- {
+		r := line[i]
+
+		switch state {
+		case inWord:
+			if unicode.IsSpace(r) {
+				if i < idx-1 {
+					return i + 1, true
+				}
+				state = inSpace
+			} else if !IsWordRune(r) {
+				if i < idx-1 {
+					return i + 1, true
+				}
+				state = inSeq
+			}
+		case inSpace:
+			if IsWordRune(r) {
+				state = inWord
+			} else if !unicode.IsSpace(r) {
+				state = inSeq
+			}
+		case inSeq:
+			if IsWordRune(r) || unicode.IsSpace(r) {
+				if i < idx-1 {
+					return i + 1, true
+				}
+				state = inWord
+			} else if unicode.IsSpace(r) {
+				if i < idx-1 {
+					return i + 1, true
+				}
+				state = inSpace
 			}
 		}
+	}
 
-		if IsWordRune(line[idx]) && !IsWordRune(line[idx-1]) {
-			return idx, true
-		}
+	if state == inWord || state == inSeq {
+		return 0, true
 	}
 
 	return 0, false
 }
 
-// WordEnd finds next word end index.
+// WordEnd finds next word end rune index.
 // The returned idx is the index of the first rune not belonging to the word.
 func WordEnd(line []rune, idx int) (int, bool) {
 	if idx >= len(line) {
@@ -87,7 +126,7 @@ func WordEnd(line []rune, idx int) (int, bool) {
 	return 0, false
 }
 
-// WordStart finds next word start index.
+// WordStart finds next word start rune index.
 func WordStart(line []rune, idx int) (int, bool) {
 	if idx >= len(line)-1 {
 		return 0, false
