@@ -86,5 +86,6 @@ func (tab *Tab) cutCursors() action.Actions {
 }
 
 func (tab *Tab) cutSelections() action.Actions {
-	return nil
+	tab.yankSelections()
+	return tab.deleteSelections()
 }

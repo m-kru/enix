@@ -1,12 +1,18 @@
 package sel
 
 import (
+	"slices"
+
 	"github.com/m-kru/enix/internal/action"
 )
 
 func (s *Selection) Delete() action.Actions {
 	acts := make(action.Actions, 0, 8)
 
+	// TODO: Why iterate in the backward direction? I don't remember.
+	// However, iterating in the forward direction breaks the code.
+	// Iterating in the backward direction requires additional actions
+	// slice reverse before return.
 	s = s.Last()
 
 	for {
@@ -22,6 +28,7 @@ func (s *Selection) Delete() action.Actions {
 		s = s.Prev
 	}
 
+	slices.Reverse(acts)
 	return acts
 }
 

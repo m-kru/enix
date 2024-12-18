@@ -25,6 +25,8 @@ func (s *Selection) inform(act action.Action) {
 		for _, subA := range a {
 			s.inform(subA)
 		}
+	case *action.LineDelete:
+		s.informLineDelete(a)
 	case *action.LineDown:
 		//s.informLineDown(a)
 	case *action.LineInsert:
@@ -44,11 +46,17 @@ func (s *Selection) inform(act action.Action) {
 	}
 }
 
+func (s *Selection) informLineDelete(ld *action.LineDelete) {
+	if ld.LineNum > s.LineNum {
+		return
+	}
+	s.LineNum--
+}
+
 func (s *Selection) informLineInsert(li *action.LineInsert) {
 	if li.LineNum > s.LineNum {
 		return
 	}
-
 	s.LineNum++
 }
 
