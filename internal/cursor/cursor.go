@@ -79,16 +79,29 @@ func (c *Cursor) WithinIndent() bool {
 	return true
 }
 
-/*
 func (c *Cursor) WordPosition() WordPosition {
-	if c.RuneIdx == c.Line.RuneCount() || unicode.IsSpace(c.Line.Rune(c.RuneIdx)) {
+	lineRC := c.Line.RuneCount()
+	r := c.Line.Rune(c.RuneIdx)
+
+	if c.RuneIdx == 0 && lineRC > 0 && !unicode.IsSpace(r) {
+		return AtWordStart
+	}
+
+	if c.RuneIdx == lineRC || unicode.IsSpace(r) {
 		return InSpace
 	}
 
-	if !util.IsWordRune(c.Line.Rune(c.RuneIdx-1)) {
+	prevR := c.Line.Rune(c.RuneIdx - 1)
+	if unicode.IsSpace(prevR) {
+		return AtWordStart
+	}
+
+	rWordRune := util.IsWordRune(r)
+	prevRWordRune := util.IsWordRune(prevR)
+
+	if prevRWordRune && !rWordRune || !prevRWordRune && rWordRune {
 		return AtWordStart
 	}
 
 	return InWord
 }
-*/
