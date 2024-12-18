@@ -63,10 +63,12 @@ func TestWordStart(t *testing.T) {
 		wantIdx  int
 		wantOk   bool
 	}{
-		{[]rune("    "), 1, 0, false},
+		{[]rune("    "), 1, 4, false},
 		{[]rune("  abc"), 0, 2, true},
 		{[]rune("  abc def"), 2, 6, true},
-		{[]rune("  def12"), 4, 0, false},
+		{[]rune("  def12"), 4, 7, false},
+		{[]rune("a + b"), 0, 2, true},
+		{[]rune("a-b"), 0, 1, true},
 	}
 
 	for _, test := range tests {

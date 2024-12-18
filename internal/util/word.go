@@ -128,29 +128,55 @@ func WordEnd(line []rune, idx int) (int, bool) {
 
 // WordStart finds next word start rune index.
 func WordStart(line []rune, idx int) (int, bool) {
-	if idx >= len(line)-1 {
+	if idx >= len(line) - 1 {
 		return 0, false
 	}
 
+
 	if idx < 0 {
-		if IsWordRune(line[0]) {
+		if !unicode.IsSpace(line[0]) {
 			return 0, true
 		}
 		idx = 0
 	}
 
-	for {
-		idx++
-		if IsWordRune(line[idx]) && !IsWordRune(line[idx-1]) {
-			return idx, true
-		}
+	type State int
+	const (
+		inWord State = iota
+		inSpace
+		inSeq // In a sequence of non word runes
+	)
+	state := inSeq
+	if IsWordRune(line[idx]) {
+		state = inWord
+	} else if unicode.IsSpace(line[idx]) {
+		state = inSpace
+	}
 
-		if idx == len(line)-1 {
-			break
+	for i := idx + 1; i < len(line); i++ {
+		r := line[i]
+
+		switch state {
+		case inWord:
+			if unicode.IsSpace(r) {
+				state = inSpace
+			} else if !IsWordRune(r) {
+				return i, true
+			}
+		case inSpace:
+			if !unicode.IsSpace(r) {
+				return i, true
+			}
+		case inSeq:
+			if IsWordRune(r) {
+				return i, true
+			} else if unicode.IsSpace(r) {
+				state = inSpace
+			}
 		}
 	}
 
-	return 0, false
+	return len(line), false
 }
 
 // GetWord returns word containing index idx.
