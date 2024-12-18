@@ -153,6 +153,13 @@ selection starts/ends in the middle of a line.`,
 
 	"align": `align # Aligns columns of cursors.`,
 
+	"cut": `cut # Cuts selected text.
+For cursors, the cut command cuts all lines containing cursors.
+This is because the user rarely wants to cut a single rune.
+On the other hand, cutting a single line is a very common action.
+Cutting a single rune is still possible by creating a selection of width 1.
+For example, by executing commands 'sel-right' and 'sel-left.`,
+
 	"dump-colors": `dump-colors # Dumps colorscheme configuration to JSON format.`,
 
 	"esc": `esc # Escapes the current context.
@@ -205,6 +212,13 @@ The command first deletes rune under the cursor, or runes under selection, and t
 enters the insert moode for a single insertion.`,
 
 	"undo": `undo # Undos last action modifying the tab content.`,
+
+	"yank": `yank # Copies selected text.
+For cursors, the yank command copies all lines containing cursors.
+This is because the user rarely wants to copy a single rune.
+On the other hand, copying a single line is a very common action.
+Copying a single rune is still possible by creating a selection of width 1.
+For example, by executing commands 'sel-right' and 'sel-left.`,
 
 	// Selection
 
