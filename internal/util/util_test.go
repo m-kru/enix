@@ -9,6 +9,7 @@ func TestFileNameToType(t *testing.T) {
 		name string
 		want string
 	}{
+		{"COMMIT_EDITMSG", "git-commit"},
 		{"makefile", "make"},
 		{"Makefile", "make"},
 		{"Dockerfile", "docker"},

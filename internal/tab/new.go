@@ -3,6 +3,7 @@ package tab
 import (
 	"errors"
 	"fmt"
+	"path/filepath"
 	"os"
 
 	"github.com/m-kru/enix/internal/cfg"
@@ -109,7 +110,7 @@ func Open(
 	curs := make([]*cursor.Cursor, 1, 16)
 	curs[0] = c
 
-	fileType := util.FileNameToType(path)
+	fileType := util.FileNameToType(filepath.Base(path))
 
 	// Highlighter initialization
 	hl, err := lang.NewHighlighter(fileType)

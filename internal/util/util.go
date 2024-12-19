@@ -37,6 +37,8 @@ var fileExtToType = map[string]string{
 // FileNameToType returns file type based on the file name.
 func FileNameToType(name string) string {
 	switch name {
+	case "COMMIT_EDITMSG":
+		return "git-commit"
 	case "Makefile", "makefile":
 		return "make"
 	case "Dockerfile":
