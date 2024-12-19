@@ -3,6 +3,7 @@ package lang
 import (
 	"regexp"
 
+	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/highlight"
 	"github.com/m-kru/enix/internal/line"
@@ -30,7 +31,7 @@ func (hl Highlighter) Analyze(
 	}
 
 	cursorWord := ""
-	if cursor != nil {
+	if cursor != nil && cfg.Cfg.HighlightCursorWord {
 		cursorWord = cursor.GetWord()
 	}
 	if len(cursorWord) == 1 && util.IsBracket(rune(cursorWord[0])) {
