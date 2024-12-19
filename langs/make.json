@@ -1,20 +1,29 @@
 [
 	{
 		"Name": "Default",
-		"Keyword": "^.*:",
+		"Keyword": "^\\w*:",
 		"Value": "\\$\\(\\w+\\)"
 	},
 	{
 		"Name": "Line Comment",
 		"Style": "Comment",
-		"StartRegex": "#",
-		"EndRegex": "$"
+		"Start": {
+			"Regex": "#"
+		},
+		"End": {
+			"Regex": "$"
+		}
 	},
 	{
 		"Name": "String",
 		"Style": "String",
-		"StartRegex": "\"",
-		"EndRegex": "(?:[^\\\\]|^)\"",
-		"Variable": "\\$\\(\\w+\\)"
+		"Start": {
+			"Regex": "\""
+		},
+		"End": {
+			"Regex": "\"",
+			"NegativeLookBehind": "(?:[^\\\\])\\\\"
+		},
+		"Value": "\\$\\(\\w+\\)"
 	}
 ]
