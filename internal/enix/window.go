@@ -411,7 +411,6 @@ func (w *Window) OpenArgFiles() {
 
 func Start(
 	keys *cfg.Keybindings,
-	promptKeys *cfg.Keybindings,
 	insertKeys *cfg.Keybindings,
 ) {
 	screen, err := tcell.NewScreen()
@@ -456,7 +455,6 @@ func Start(
 	}
 
 	p := Prompt{
-		Keys:   promptKeys,
 		Screen: screen,
 		Frame: frame.Frame{
 			Screen: screen,

@@ -18,7 +18,7 @@ func main() {
 
 	arg.Parse()
 
-	keys, promptKeys, insertKeys, err := cfg.Init()
+	keys, insertKeys, err := cfg.Init()
 	if err != nil {
 		log.Fatalf("%v", err)
 	}
@@ -40,7 +40,7 @@ func main() {
 	}
 
 	if arg.DumpPromptKeys {
-		data, err := json.MarshalIndent(promptKeys, "", "\t")
+		data, err := json.MarshalIndent(cfg.PromptKeys, "", "\t")
 		if err != nil {
 			log.Fatalf("%v", err)
 		}
@@ -70,5 +70,5 @@ func main() {
 		os.Exit(0)
 	}
 
-	enix.Start(&keys, &promptKeys, &insertKeys)
+	enix.Start(&keys, &insertKeys)
 }

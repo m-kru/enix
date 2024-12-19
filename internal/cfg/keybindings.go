@@ -7,6 +7,8 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
+var PromptKeys Keybindings
+
 // Keybindings struct represents configured keybindings.
 type Keybindings map[string]string
 
