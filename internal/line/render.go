@@ -1,7 +1,7 @@
 package line
 
 import (
-	"github.com/m-kru/enix/internal/cfg"
+	config "github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/find"
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/highlight"
@@ -11,8 +11,7 @@ import (
 )
 
 func (l *Line) Render(
-	cfg *cfg.Config,
-	colors *cfg.Colorscheme,
+	cfg *config.Config,
 	lineNum int,
 	frame frame.Frame,
 	view view.View,
@@ -29,7 +28,7 @@ func (l *Line) Render(
 	setTab := func(tabSubcol int) {
 		var colIdx int
 		if tabSubcol == 0 {
-			frame.SetContent(frameX, 0, cfg.TabRune, colors.Whitespace)
+			frame.SetContent(frameX, 0, cfg.TabRune, config.Colors.Whitespace)
 			frameX++
 			colIdx = l.ColumnIdx(runeIdx) + 1
 		} else {
@@ -40,7 +39,7 @@ func (l *Line) Render(
 			if colIdx%8 == 1 || frameX >= frame.Width {
 				break
 			}
-			frame.SetContent(frameX, 0, cfg.TabPadRune, colors.Whitespace)
+			frame.SetContent(frameX, 0, cfg.TabPadRune, config.Colors.Whitespace)
 			frameX++
 			colIdx++
 		}
@@ -58,7 +57,7 @@ func (l *Line) Render(
 		runeIdx++
 	} else if runeSubcol > 0 {
 		r = ' '
-		frame.SetContent(frameX, 0, r, colors.Default)
+		frame.SetContent(frameX, 0, r, config.Colors.Default)
 		frameX += runewidth.RuneWidth(r)
 		runeIdx++
 	}
@@ -73,7 +72,7 @@ func (l *Line) Render(
 		if r == '\t' {
 			setTab(0)
 		} else {
-			color := colors.Default
+			color := config.Colors.Default
 			if hls != nil {
 				for {
 					// TODO: We shouldn't need this check, ss there some bug?
@@ -91,7 +90,7 @@ func (l *Line) Render(
 
 			if len(finds) > 0 && currentFind < len(finds) {
 				if finds[currentFind].CoversCell(lineNum, runeIdx) {
-					color = colors.Find
+					color = config.Colors.Find
 				}
 
 				if finds[currentFind].IsLastCell(lineNum, runeIdx) {
@@ -106,11 +105,11 @@ func (l *Line) Render(
 	}
 
 clear:
-	frame.SetContent(frameX, 0, cfg.LineEndRune, colors.Whitespace)
+	frame.SetContent(frameX, 0, cfg.LineEndRune, config.Colors.Whitespace)
 	frameX++
 
 	for frameX < frame.Width {
-		frame.SetContent(frameX, 0, ' ', colors.Default)
+		frame.SetContent(frameX, 0, ' ', config.Colors.Default)
 		frameX++
 	}
 

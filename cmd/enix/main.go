@@ -18,7 +18,7 @@ func main() {
 
 	arg.Parse()
 
-	config, colors, keys, promptKeys, insertKeys, err := cfg.Init()
+	config, keys, promptKeys, insertKeys, err := cfg.Init()
 	if err != nil {
 		log.Fatalf("%v", err)
 	}
@@ -70,5 +70,5 @@ func main() {
 		os.Exit(0)
 	}
 
-	enix.Start(&config, &colors, &keys, &promptKeys, &insertKeys)
+	enix.Start(&config, &keys, &promptKeys, &insertKeys)
 }

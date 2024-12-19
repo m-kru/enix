@@ -20,7 +20,6 @@ import (
 
 func Empty(
 	config *cfg.Config,
-	colors *cfg.Colorscheme,
 	keys *cfg.Keybindings,
 	frame *frame.Frame,
 ) *Tab {
@@ -32,7 +31,6 @@ func Empty(
 
 	return &Tab{
 		Config:               config,
-		Colors:               colors,
 		Keys:                 keys,
 		Path:                 "No Name",
 		Newline:              "\n",
@@ -68,13 +66,12 @@ func Empty(
 // TODO: Allow opening without highlighter, useful for script mode.
 func Open(
 	config *cfg.Config,
-	colors *cfg.Colorscheme,
 	keys *cfg.Keybindings,
 	frame *frame.Frame,
 	path string,
 ) (*Tab, error) {
 	if path == "" {
-		return Empty(config, colors, keys, frame), nil
+		return Empty(config, keys, frame), nil
 	}
 
 	// Check existence of backup file. If exists, return an error.
@@ -117,7 +114,6 @@ func Open(
 
 	return &Tab{
 		Config:               config,
-		Colors:               colors,
 		Keys:                 keys,
 		Path:                 path,
 		Newline:              "\n",
@@ -149,7 +145,6 @@ func Open(
 
 func FromString(
 	config *cfg.Config,
-	colors *cfg.Colorscheme,
 	keys *cfg.Keybindings,
 	frame *frame.Frame,
 	str string,
@@ -163,7 +158,6 @@ func FromString(
 
 	return &Tab{
 		Config:               config,
-		Colors:               colors,
 		Keys:                 keys,
 		Path:                 path,
 		Newline:              "\n",

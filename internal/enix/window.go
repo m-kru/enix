@@ -19,7 +19,6 @@ import (
 
 type Window struct {
 	Config     *cfg.Config
-	Colors     *cfg.Colorscheme
 	Keys       *cfg.Keybindings
 	InsertKeys *cfg.Keybindings // Insert mode keybindings
 
@@ -328,7 +327,7 @@ func (w *Window) RxDigit(digit rune) TcellEventReceiver {
 
 // Resize handles all the required logic when screen is resized.
 func (w *Window) Resize() {
-	w.Screen.Fill(' ', w.Colors.Default)
+	w.Screen.Fill(' ', cfg.Colors.Default)
 	w.Screen.Sync()
 
 	width, height := w.Screen.Size()
@@ -369,7 +368,7 @@ func (w *Window) Render() {
 	}
 
 	if w.TabBarFrame != nil {
-		w.TabBar.Render(w.Tabs, w.CurrentTab, w.Colors, *w.TabBarFrame)
+		w.TabBar.Render(w.Tabs, w.CurrentTab, *w.TabBarFrame)
 	}
 
 	w.CurrentTab.Render()
@@ -381,7 +380,7 @@ func (w *Window) OpenArgFiles() {
 	errMsg := ""
 
 	for _, file := range arg.Files {
-		t, err := tab.Open(w.Config, w.Colors, w.InsertKeys, &w.TabFrame, file)
+		t, err := tab.Open(w.Config, w.InsertKeys, &w.TabFrame, file)
 		if t != nil {
 			if w.Tabs == nil {
 				w.Tabs = t
@@ -401,7 +400,7 @@ func (w *Window) OpenArgFiles() {
 	}
 
 	if len(errMsg) > 0 {
-		errTab := tab.FromString(w.Config, w.Colors, w.InsertKeys, &w.TabFrame, errMsg, "enix-error")
+		errTab := tab.FromString(w.Config, w.InsertKeys, &w.TabFrame, errMsg, "enix-error")
 		if w.Tabs == nil {
 			w.Tabs = errTab
 		} else {
@@ -413,7 +412,6 @@ func (w *Window) OpenArgFiles() {
 
 func Start(
 	config *cfg.Config,
-	colors *cfg.Colorscheme,
 	keys *cfg.Keybindings,
 	promptKeys *cfg.Keybindings,
 	insertKeys *cfg.Keybindings,
@@ -446,7 +444,6 @@ func Start(
 
 	w := Window{
 		Config:      config,
-		Colors:      colors,
 		Keys:        keys,
 		InsertKeys:  insertKeys,
 		Mouse:       mouse.Mouse{},
@@ -463,7 +460,6 @@ func Start(
 
 	p := Prompt{
 		Config: config,
-		Colors: colors,
 		Keys:   promptKeys,
 		Screen: screen,
 		Frame: frame.Frame{
@@ -486,7 +482,7 @@ func Start(
 	w.Prompt = &p
 
 	if len(arg.Files) == 0 {
-		w.Tabs = tab.FromString(config, colors, insertKeys, &w.TabFrame, "", "no-name")
+		w.Tabs = tab.FromString(config, insertKeys, &w.TabFrame, "", "no-name")
 		w.CurrentTab = w.Tabs
 	} else {
 		w.OpenArgFiles()

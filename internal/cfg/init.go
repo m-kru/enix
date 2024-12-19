@@ -34,9 +34,9 @@ func init() {
 }
 
 // Function Init initializes and returns various configurations at the program start.
-func Init() (Config, Colorscheme, Keybindings, Keybindings, Keybindings, error) {
+func Init() (Config, Keybindings, Keybindings, Keybindings, error) {
 	config := DefaultConfig()
-	colorscheme := DefaultColorscheme()
+	Colors = DefaultColorscheme()
 	keys := DefaultKeybindings()
 	promptKeys := DefaultPromptKeybindings()
 	insertKeys := DefaultInsertKeybindings()
@@ -51,14 +51,14 @@ func Init() (Config, Colorscheme, Keybindings, Keybindings, Keybindings, error) 
 	}
 
 	if config.Colorscheme != "default" {
-		colorscheme, err = colorschemeFromJSON(config.Colorscheme)
+		Colors, err = colorschemeFromJSON(config.Colorscheme)
 		if err != nil {
 			goto exit
 		}
 	}
 
 exit:
-	return config, colorscheme, keys, promptKeys, insertKeys, err
+	return config, keys, promptKeys, insertKeys, err
 }
 
 func configFromFile(path string) (Config, error) {

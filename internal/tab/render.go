@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/line"
@@ -52,7 +53,7 @@ func (tab *Tab) HasCursorInLine(line *line.Line) bool {
 func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 	// Fill the background
 	for i := range frame.Width {
-		frame.SetContent(i, 0, ' ', tab.Colors.StatusLine)
+		frame.SetContent(i, 0, ' ', cfg.Colors.StatusLine)
 	}
 
 	// Render file path
@@ -60,7 +61,7 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 		if i >= frame.Width {
 			break
 		}
-		frame.SetContent(i, 0, r, tab.Colors.StatusLine)
+		frame.SetContent(i, 0, r, cfg.Colors.StatusLine)
 	}
 
 	// Render extra status information
@@ -110,13 +111,13 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 
 	startIdx := frame.Width - len(statusStr)
 	for i, r := range statusStr {
-		style := tab.Colors.StatusLine
+		style := cfg.Colors.StatusLine
 		if tab.RepCount > 0 && repCountStartIdx <= i && i < repCountEndIdx {
-			style = tab.Colors.RepCount
+			style = cfg.Colors.RepCount
 		} else if tab.State != "" && stateStartIdx <= i && i < stateEndIdx {
-			style = tab.Colors.StateMark
+			style = cfg.Colors.StateMark
 		} else if len(tab.SearchCtx.Finds) > 0 && findStartIdx <= i && i < findEndIdx {
-			style = tab.Colors.FindMark
+			style = cfg.Colors.FindMark
 		}
 
 		frame.SetContent(startIdx+i, 0, r, style)
@@ -130,9 +131,9 @@ func (tab *Tab) RenderLineNums(line *line.Line, lineNum int, frame frame.Frame) 
 		str := fmt.Sprintf("%*d ", frame.Width-1, lineNum)
 		for i, r := range str {
 			if tab.HasCursorInLine(line) && i < len(str)-1 {
-				frame.SetContent(i, y, r, tab.Colors.Cursor)
+				frame.SetContent(i, y, r, cfg.Colors.Cursor)
 			} else {
-				frame.SetContent(i, y, r, tab.Colors.LineNum)
+				frame.SetContent(i, y, r, cfg.Colors.LineNum)
 			}
 		}
 
@@ -148,7 +149,7 @@ func (tab *Tab) RenderLineNums(line *line.Line, lineNum int, frame frame.Frame) 
 	// Clear remaining line numbers.
 	for ; y < frame.Height; y++ {
 		for i := range frame.Width {
-			frame.SetContent(i, y, ' ', tab.Colors.Default)
+			frame.SetContent(i, y, ' ', cfg.Colors.Default)
 		}
 	}
 }
@@ -166,7 +167,7 @@ func (tab *Tab) RenderLines(line *line.Line, lineNum int, frame frame.Frame) {
 		cur = tab.Cursors[len(tab.Cursors)-1]
 	}
 	hls := tab.Highlighter.Analyze(
-		tab.Lines, line, lineNum, endLineIdx, cur, tab.Colors,
+		tab.Lines, line, lineNum, endLineIdx, cur,
 	)
 	search.Search(tab.Lines, lineNum, &tab.SearchCtx)
 	finds := tab.SearchCtx.FindsFromVisible()
@@ -178,7 +179,6 @@ func (tab *Tab) RenderLines(line *line.Line, lineNum int, frame frame.Frame) {
 
 		hls, finds = line.Render(
 			tab.Config,
-			tab.Colors,
 			lineNum,
 			frame.Line(0, renderedCount),
 			tab.View,
@@ -198,7 +198,7 @@ func (tab *Tab) RenderLines(line *line.Line, lineNum int, frame frame.Frame) {
 		}
 
 		for w := range frame.Width {
-			frame.SetContent(w, renderedCount, ' ', tab.Colors.Default)
+			frame.SetContent(w, renderedCount, ' ', cfg.Colors.Default)
 		}
 
 		renderedCount++
@@ -211,7 +211,7 @@ func (tab *Tab) RenderCursors(frame frame.Frame) {
 			continue
 		}
 
-		c.Render(tab.Colors, frame.Line(0, c.LineNum-tab.View.Line), tab.View)
+		c.Render(frame.Line(0, c.LineNum-tab.View.Line), tab.View)
 	}
 }
 
@@ -221,7 +221,7 @@ func (tab *Tab) RenderSelections(frame frame.Frame) {
 			continue
 		}
 
-		s.Render(tab.Colors, frame, tab.View)
+		s.Render(frame, tab.View)
 	}
 }
 

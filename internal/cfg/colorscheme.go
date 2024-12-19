@@ -13,6 +13,8 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
+var Colors Colorscheme
+
 type Colorscheme struct {
 	Default tcell.Style
 

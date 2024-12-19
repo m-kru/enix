@@ -3,7 +3,6 @@ package lang
 import (
 	"regexp"
 
-	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/highlight"
 	"github.com/m-kru/enix/internal/line"
@@ -19,7 +18,6 @@ func (hl Highlighter) Analyze(
 	startLineIdx int,
 	endLineIdx int,
 	cursor *cursor.Cursor,
-	colors *cfg.Colorscheme,
 ) []highlight.Highlight {
 	highlights := []highlight.Highlight{}
 
@@ -60,7 +58,7 @@ func (hl Highlighter) Analyze(
 			lineIdx++
 		}
 
-		hls, line = sec.Analyze(line, lineIdx, colors)
+		hls, line = sec.Analyze(line, lineIdx)
 		highlights = append(highlights, hls...)
 		lineIdx = sec.EndLine
 	}

@@ -19,7 +19,6 @@ import (
 
 type Tab struct {
 	Config *cfg.Config
-	Colors *cfg.Colorscheme
 	Keys   *cfg.Keybindings
 
 	Path     string // File path

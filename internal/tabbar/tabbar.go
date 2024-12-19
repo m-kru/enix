@@ -17,7 +17,6 @@ type TabBar struct {
 func (tb TabBar) Render(
 	tabs *tab.Tab,
 	currentTab *tab.Tab,
-	colors *cfg.Colorscheme,
 	frame frame.Frame,
 ) {
 	tb.items = createItems(tabs)
@@ -49,15 +48,15 @@ func (tb TabBar) Render(
 	}
 
 	for i, r := range b.String() {
-		style := colors.TabBar
+		style := cfg.Colors.TabBar
 		if cTabStartIdx <= i && i < cTabEndIdx {
-			style = colors.CurrentTab
+			style = cfg.Colors.CurrentTab
 		}
 		frame.SetContent(i, 0, r, style)
 	}
 
 	// Clear remaining cells
 	for x := b.Len(); x < frame.Width; x++ {
-		frame.SetContent(x, 0, ' ', colors.TabBar)
+		frame.SetContent(x, 0, ' ', cfg.Colors.TabBar)
 	}
 }

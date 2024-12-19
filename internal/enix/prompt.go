@@ -26,7 +26,6 @@ const (
 // Prompt represents command line prompt.
 type Prompt struct {
 	Config *cfg.Config
-	Colors *cfg.Colorscheme
 	Keys   *cfg.Keybindings
 
 	Screen tcell.Screen
@@ -49,7 +48,7 @@ type Prompt struct {
 
 func (p *Prompt) Clear() {
 	for x := range p.Frame.Width {
-		p.Frame.SetContent(x, 0, ' ', p.Colors.Default)
+		p.Frame.SetContent(x, 0, ' ', cfg.Colors.Default)
 	}
 	p.Screen.HideCursor()
 	p.Screen.Show()
@@ -61,14 +60,14 @@ func (p *Prompt) ShowError(msg string) {
 		if x == p.Frame.Width {
 			break
 		}
-		p.Frame.SetContent(x, 0, r, p.Colors.Error)
+		p.Frame.SetContent(x, 0, r, cfg.Colors.Error)
 		x++
 	}
 	for {
 		if x == p.Frame.Width {
 			break
 		}
-		p.Frame.SetContent(x, 0, ' ', p.Colors.Prompt)
+		p.Frame.SetContent(x, 0, ' ', cfg.Colors.Prompt)
 		x++
 	}
 	p.Screen.Show()
@@ -78,14 +77,14 @@ func (p *Prompt) ShowError(msg string) {
 func (p *Prompt) ShowInfo(msg string) {
 	x := 0
 	for _, r := range msg {
-		p.Frame.SetContent(x, 0, r, p.Colors.Default)
+		p.Frame.SetContent(x, 0, r, cfg.Colors.Default)
 		x++
 	}
 	for {
 		if x == p.Frame.Width {
 			break
 		}
-		p.Frame.SetContent(x, 0, ' ', p.Colors.Default)
+		p.Frame.SetContent(x, 0, ' ', cfg.Colors.Default)
 		x++
 	}
 	p.Screen.Show()
@@ -121,21 +120,21 @@ func (p *Prompt) Activate(text, shadowText string) {
 }
 
 func (p *Prompt) Render() {
-	p.Frame.SetContent(0, 0, ':', p.Colors.Prompt)
+	p.Frame.SetContent(0, 0, ':', cfg.Colors.Prompt)
 
 	if !p.View.IsVisible(p.Cursor.View()) {
 		p.View = p.View.MinAdjust(p.Cursor.View())
 	}
 
-	p.Line.Render(p.Config, p.Colors, 1, p.Frame.Line(1, 0), p.View, nil, nil)
+	p.Line.Render(p.Config, 1, p.Frame.Line(1, 0), p.View, nil, nil)
 
 	if len(p.ShadowText) > 0 {
 		for i, r := range p.ShadowText {
-			p.Frame.SetContent(i+1+p.Line.RuneCount(), 0, r, p.Colors.PromptShadow)
+			p.Frame.SetContent(i+1+p.Line.RuneCount(), 0, r, cfg.Colors.PromptShadow)
 		}
 	}
 
-	p.Cursor.Render(p.Colors, p.Frame.Line(1, 0), p.View)
+	p.Cursor.Render(p.Frame.Line(1, 0), p.View)
 
 	p.Screen.Show()
 }
