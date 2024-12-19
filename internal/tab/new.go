@@ -3,8 +3,8 @@ package tab
 import (
 	"errors"
 	"fmt"
-	"path/filepath"
 	"os"
+	"path/filepath"
 
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
