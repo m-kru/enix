@@ -178,7 +178,6 @@ func (tab *Tab) RenderLines(line *line.Line, lineNum int, frame frame.Frame) {
 		}
 
 		hls, finds = line.Render(
-			tab.Config,
 			lineNum,
 			frame.Line(0, renderedCount),
 			tab.View,

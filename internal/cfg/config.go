@@ -3,6 +3,8 @@ package cfg
 // Path to the enix config home directory.
 var ConfigDir string
 
+var Cfg Config
+
 type Config struct {
 	Colorscheme string
 

@@ -18,7 +18,6 @@ import (
 )
 
 type Window struct {
-	Config     *cfg.Config
 	Keys       *cfg.Keybindings
 	InsertKeys *cfg.Keybindings // Insert mode keybindings
 
@@ -222,7 +221,7 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		case "right":
 			err = exec.Right(c.Args, tab)
 		case "save":
-			info, err = exec.Save(c.Args, tab, w.Config.TrimOnSave)
+			info, err = exec.Save(c.Args, tab, cfg.Cfg.TrimOnSave)
 		case "search":
 			tab.HasFocus = false
 			w.Prompt.Activate("search ", tab.GetWord())
@@ -380,7 +379,7 @@ func (w *Window) OpenArgFiles() {
 	errMsg := ""
 
 	for _, file := range arg.Files {
-		t, err := tab.Open(w.Config, w.InsertKeys, &w.TabFrame, file)
+		t, err := tab.Open(w.InsertKeys, &w.TabFrame, file)
 		if t != nil {
 			if w.Tabs == nil {
 				w.Tabs = t
@@ -400,7 +399,7 @@ func (w *Window) OpenArgFiles() {
 	}
 
 	if len(errMsg) > 0 {
-		errTab := tab.FromString(w.Config, w.InsertKeys, &w.TabFrame, errMsg, "enix-error")
+		errTab := tab.FromString(w.InsertKeys, &w.TabFrame, errMsg, "enix-error")
 		if w.Tabs == nil {
 			w.Tabs = errTab
 		} else {
@@ -411,7 +410,6 @@ func (w *Window) OpenArgFiles() {
 }
 
 func Start(
-	config *cfg.Config,
 	keys *cfg.Keybindings,
 	promptKeys *cfg.Keybindings,
 	insertKeys *cfg.Keybindings,
@@ -443,7 +441,6 @@ func Start(
 	width, height := screen.Size()
 
 	w := Window{
-		Config:      config,
 		Keys:        keys,
 		InsertKeys:  insertKeys,
 		Mouse:       mouse.Mouse{},
@@ -459,7 +456,6 @@ func Start(
 	}
 
 	p := Prompt{
-		Config: config,
 		Keys:   promptKeys,
 		Screen: screen,
 		Frame: frame.Frame{
@@ -482,7 +478,7 @@ func Start(
 	w.Prompt = &p
 
 	if len(arg.Files) == 0 {
-		w.Tabs = tab.FromString(config, insertKeys, &w.TabFrame, "", "no-name")
+		w.Tabs = tab.FromString(insertKeys, &w.TabFrame, "", "no-name")
 		w.CurrentTab = w.Tabs
 	} else {
 		w.OpenArgFiles()

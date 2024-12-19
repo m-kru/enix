@@ -14,7 +14,7 @@ func Open(args []string, t *tab.Tab) (*tab.Tab, error) {
 
 	errMsg := ""
 	for i, path := range args {
-		newT, err := tab.Open(t.Config, t.Keys, t.Frame, path)
+		newT, err := tab.Open(t.Keys, t.Frame, path)
 		if newT != nil {
 			t.Append(newT)
 			if i == 0 {
@@ -37,7 +37,7 @@ func Open(args []string, t *tab.Tab) (*tab.Tab, error) {
 			idx++
 		}
 
-		errTab := tab.FromString(t.Config, t.Keys, t.Frame, errMsg, path)
+		errTab := tab.FromString(t.Keys, t.Frame, errMsg, path)
 		t.Append(errTab)
 		newCurrentTab = errTab
 	}

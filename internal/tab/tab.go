@@ -18,8 +18,7 @@ import (
 )
 
 type Tab struct {
-	Config *cfg.Config
-	Keys   *cfg.Keybindings
+	Keys *cfg.Keybindings
 
 	Path     string // File path
 	Newline  string // Newline encoding

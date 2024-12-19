@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/m-kru/enix/internal/arg"
-	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cmd"
 	"github.com/m-kru/enix/internal/exec"
 	"github.com/m-kru/enix/internal/tab"
@@ -46,14 +45,14 @@ func parseScript() ([]cmd.Command, error) {
 	return cmds, nil
 }
 
-func Exec(config *cfg.Config) error {
+func Exec() error {
 	cmds, err := parseScript()
 	if err != nil {
 		return err
 	}
 
 	for _, file := range arg.Files {
-		tab, err := tab.Open(config, nil, nil, file)
+		tab, err := tab.Open(nil, nil, file)
 		if err != nil {
 			return err
 		}

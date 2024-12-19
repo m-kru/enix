@@ -18,13 +18,13 @@ func main() {
 
 	arg.Parse()
 
-	config, keys, promptKeys, insertKeys, err := cfg.Init()
+	keys, promptKeys, insertKeys, err := cfg.Init()
 	if err != nil {
 		log.Fatalf("%v", err)
 	}
 
 	if arg.DumpConfig {
-		data, err := json.MarshalIndent(config, "", "\t")
+		data, err := json.MarshalIndent(cfg.Cfg, "", "\t")
 		if err != nil {
 			log.Fatalf("%v", err)
 		}
@@ -63,12 +63,12 @@ func main() {
 	}
 
 	if arg.Script != "" {
-		err := script.Exec(&config)
+		err := script.Exec()
 		if err != nil {
 			log.Fatalf("%v", err)
 		}
 		os.Exit(0)
 	}
 
-	enix.Start(&config, &keys, &promptKeys, &insertKeys)
+	enix.Start(&keys, &promptKeys, &insertKeys)
 }

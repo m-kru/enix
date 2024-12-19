@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/tab"
 )
 
@@ -22,7 +23,7 @@ func Save(args []string, tab *tab.Tab, trim bool) (string, error) {
 		tab.Trim()
 	}
 
-	if tab.Config.SafeFileSave {
+	if cfg.Cfg.SafeFileSave {
 		return safeSave(tab, path)
 	} else {
 		return save(tab, path)

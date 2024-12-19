@@ -19,7 +19,6 @@ import (
 )
 
 func Empty(
-	config *cfg.Config,
 	keys *cfg.Keybindings,
 	frame *frame.Frame,
 ) *Tab {
@@ -30,12 +29,11 @@ func Empty(
 	curs[0] = c
 
 	return &Tab{
-		Config:               config,
 		Keys:                 keys,
 		Path:                 "No Name",
 		Newline:              "\n",
 		FileType:             "None",
-		Indent:               config.GetIndent(""),
+		Indent:               cfg.Cfg.GetIndent(""),
 		HasFocus:             true,
 		State:                "",
 		RepCount:             0,
@@ -51,8 +49,8 @@ func Empty(
 		Frame:                frame,
 		View:                 view.View{Line: 1, Column: 1, Height: 1, Width: 1},
 		Highlighter:          lang.DefaultHighlighter(),
-		UndoStack:            undo.NewStack(config.UndoSize),
-		RedoStack:            undo.NewStack(config.UndoSize),
+		UndoStack:            undo.NewStack(cfg.Cfg.UndoSize),
+		RedoStack:            undo.NewStack(cfg.Cfg.UndoSize),
 		UndoCount:            0,
 		RedoCount:            0,
 		Prev:                 nil,
@@ -65,13 +63,12 @@ func Empty(
 //
 // TODO: Allow opening without highlighter, useful for script mode.
 func Open(
-	config *cfg.Config,
 	keys *cfg.Keybindings,
 	frame *frame.Frame,
 	path string,
 ) (*Tab, error) {
 	if path == "" {
-		return Empty(config, keys, frame), nil
+		return Empty(keys, frame), nil
 	}
 
 	// Check existence of backup file. If exists, return an error.
@@ -113,12 +110,11 @@ func Open(
 	hl, err := lang.NewHighlighter(fileType)
 
 	return &Tab{
-		Config:               config,
 		Keys:                 keys,
 		Path:                 path,
 		Newline:              "\n",
 		FileType:             fileType,
-		Indent:               config.GetIndent(fileType),
+		Indent:               cfg.Cfg.GetIndent(fileType),
 		HasFocus:             true,
 		State:                "",
 		RepCount:             0,
@@ -134,8 +130,8 @@ func Open(
 		Frame:                frame,
 		View:                 view.View{Line: 1, Column: 1, Height: 1, Width: 1},
 		Highlighter:          hl,
-		UndoStack:            undo.NewStack(config.UndoSize),
-		RedoStack:            undo.NewStack(config.UndoSize),
+		UndoStack:            undo.NewStack(cfg.Cfg.UndoSize),
+		RedoStack:            undo.NewStack(cfg.Cfg.UndoSize),
 		UndoCount:            0,
 		RedoCount:            0,
 		Prev:                 nil,
@@ -144,7 +140,6 @@ func Open(
 }
 
 func FromString(
-	config *cfg.Config,
 	keys *cfg.Keybindings,
 	frame *frame.Frame,
 	str string,
@@ -157,12 +152,11 @@ func FromString(
 	curs[0] = c
 
 	return &Tab{
-		Config:               config,
 		Keys:                 keys,
 		Path:                 path,
 		Newline:              "\n",
 		FileType:             "None",
-		Indent:               config.GetIndent(""),
+		Indent:               cfg.Cfg.GetIndent(""),
 		HasFocus:             true,
 		State:                "",
 		RepCount:             0,
@@ -178,8 +172,8 @@ func FromString(
 		Frame:                frame,
 		View:                 view.View{Line: 1, Column: 1, Height: 1, Width: 1},
 		Highlighter:          lang.DefaultHighlighter(),
-		UndoStack:            undo.NewStack(config.UndoSize),
-		RedoStack:            undo.NewStack(config.UndoSize),
+		UndoStack:            undo.NewStack(cfg.Cfg.UndoSize),
+		RedoStack:            undo.NewStack(cfg.Cfg.UndoSize),
 		UndoCount:            0,
 		RedoCount:            0,
 		Prev:                 nil,

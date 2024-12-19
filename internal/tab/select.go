@@ -173,5 +173,5 @@ func (tab *Tab) SelToTab(path string) *Tab {
 
 	str := sel.ToString(tab.Selections)
 
-	return FromString(tab.Config, tab.Keys, tab.Frame, str, path)
+	return FromString(tab.Keys, tab.Frame, str, path)
 }

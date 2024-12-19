@@ -25,8 +25,7 @@ const (
 
 // Prompt represents command line prompt.
 type Prompt struct {
-	Config *cfg.Config
-	Keys   *cfg.Keybindings
+	Keys *cfg.Keybindings
 
 	Screen tcell.Screen
 	Frame  frame.Frame
@@ -126,7 +125,7 @@ func (p *Prompt) Render() {
 		p.View = p.View.MinAdjust(p.Cursor.View())
 	}
 
-	p.Line.Render(p.Config, 1, p.Frame.Line(1, 0), p.View, nil, nil)
+	p.Line.Render(1, p.Frame.Line(1, 0), p.View, nil, nil)
 
 	if len(p.ShadowText) > 0 {
 		for i, r := range p.ShadowText {
@@ -440,7 +439,7 @@ func (p *Prompt) Exec() TcellEventReceiver {
 		case "redo":
 			err = exec.Redo(c.Args, tab)
 		case "save":
-			info, err = exec.Save(c.Args, tab, p.Config.TrimOnSave)
+			info, err = exec.Save(c.Args, tab, cfg.Cfg.TrimOnSave)
 		case "search":
 			err = exec.Search(c.Args, tab)
 		case "sel-count":
