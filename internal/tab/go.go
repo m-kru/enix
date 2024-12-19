@@ -47,14 +47,7 @@ func (tab *Tab) Go(lineNum int, col int) {
 		return
 	}
 
-	// Center the screen if possible.
-	lineNum = cur.LineNum - tab.Frame.Height/2
-	if lineNum < 1 {
-		lineNum = 1
-	}
-	tab.View.Line = lineNum
-
-	// TODO: Should column be adjusted here as well?
+	tab.ViewCenter()
 }
 
 func (tab *Tab) GoMark(name string) error {

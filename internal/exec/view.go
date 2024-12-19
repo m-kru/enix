@@ -6,6 +6,16 @@ import (
 	"github.com/m-kru/enix/internal/tab"
 )
 
+func ViewCenter(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf("view-center: expected 0 args, provided %d", len(args))
+	}
+
+	tab.ViewCenter()
+
+	return nil
+}
+
 func ViewDown(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf("view-down: expected 0 args, provided %d", len(args))

@@ -1,5 +1,26 @@
 package tab
 
+import (
+	"github.com/m-kru/enix/internal/cursor"
+)
+
+func (tab *Tab) ViewCenter() {
+	var cur *cursor.Cursor
+	if len(tab.Cursors) > 0 {
+		cur = tab.Cursors[len(tab.Cursors)-1]
+	} else {
+		cur = tab.Selections[len(tab.Selections)-1].GetCursor()
+	}
+
+	lineNum := cur.LineNum - tab.Frame.Height/2
+	if lineNum < 1 {
+		lineNum = 1
+	}
+	tab.View.Line = lineNum
+
+	// TODO: Should column be adjusted here as well?
+}
+
 func (tab *Tab) ViewDown() {
 	if tab.View.LastLine() >= tab.Lines.Count() {
 		return

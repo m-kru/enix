@@ -273,6 +273,8 @@ to be the current tab.`,
 
 	"view": "view line-number column # Sets view start at provided line number and column.",
 
+	"view-center": "view-center # Centers view.",
+
 	"view-down": "view-down # Scrolls view down by one line.",
 
 	"view-left": "view-left # Scrolls view left by one column.",
