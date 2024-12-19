@@ -6,7 +6,7 @@
 		"Name": "Line Comment",
 		"Style": "Comment",
 		"Start": {
-			"Regex": "#"
+			"Regex": "^#"
 		},
 		"End": {
 			"Regex": "$"
