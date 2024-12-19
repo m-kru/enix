@@ -397,7 +397,7 @@ func (w *Window) OpenArgFiles() {
 		}
 
 		t.Go(arg.Line, arg.Column)
-		t.UpdateView()
+		t.ViewCenter()
 	}
 
 	if len(errMsg) > 0 {
