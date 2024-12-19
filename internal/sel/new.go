@@ -429,3 +429,74 @@ func fromCursorPrevWordStart(c *cursor.Cursor) *Selection {
 
 	return first
 }
+
+// FromTo creates a selection spanning from the start cursor to the end cursor.
+func FromTo(startC, endC *cursor.Cursor) *Selection {
+	cursorOnLeft := true
+	if startC.LineNum < endC.LineNum || (startC.LineNum == endC.LineNum && startC.RuneIdx < endC.RuneIdx) {
+		cursorOnLeft = false
+	}
+
+	if cursorOnLeft {
+		tmpC := startC
+		startC = endC
+		endC = tmpC
+	}
+
+	first := &Selection{
+		Line:         startC.Line,
+		LineNum:      startC.LineNum,
+		StartRuneIdx: startC.RuneIdx,
+		EndRuneIdx:   0,
+		Cursor:       nil,
+		Prev:         nil,
+		Next:         nil,
+	}
+
+	if startC.LineNum == endC.LineNum {
+		first.EndRuneIdx = endC.RuneIdx
+		c := endC
+		if cursorOnLeft {
+			c = startC
+		}
+		first.Cursor = c.Clone()
+		return first
+	}
+
+	first.EndRuneIdx = startC.Line.RuneCount()
+
+	line := startC.Line.Next
+	lineNum := startC.LineNum + 1
+	prevS := first
+	for {
+		s := &Selection{
+			Line:         line,
+			LineNum:      lineNum,
+			StartRuneIdx: 0,
+			EndRuneIdx:   0,
+			Cursor:       nil,
+			Prev:         prevS,
+			Next:         nil,
+		}
+
+		prevS.Next = s
+		prevS = s
+
+		if lineNum == endC.LineNum {
+			s.EndRuneIdx = endC.RuneIdx
+			break
+		} else {
+			s.EndRuneIdx = s.Line.RuneCount()
+			line = line.Next
+			lineNum++
+		}
+	}
+
+	if cursorOnLeft {
+		first.Cursor = startC.Clone()
+	} else {
+		prevS.Cursor = endC.Clone()
+	}
+
+	return first
+}
