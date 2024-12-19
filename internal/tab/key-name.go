@@ -4,10 +4,12 @@ import (
 	enixTcell "github.com/m-kru/enix/internal/tcell"
 
 	"github.com/gdamore/tcell/v2"
+
+	"github.com/m-kru/enix/internal/cfg"
 )
 
 func (tab *Tab) RxEventKeyKeyName(ev *tcell.EventKey) {
-	cmd, _ := tab.Keys.ToCmd(ev)
+	cmd, _ := cfg.InsertKeys.ToCmd(ev)
 	switch cmd.Name {
 	case "esc":
 		tab.State = "" // Go back to normal mode

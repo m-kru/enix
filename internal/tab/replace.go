@@ -2,6 +2,7 @@ package tab
 
 import (
 	"github.com/m-kru/enix/internal/action"
+	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/sel"
 
@@ -9,7 +10,7 @@ import (
 )
 
 func (tab *Tab) RxEventKeyReplace(ev *tcell.EventKey) {
-	c, _ := tab.Keys.ToCmd(ev)
+	c, _ := cfg.InsertKeys.ToCmd(ev)
 	switch c.Name {
 	case "esc":
 		tab.State = "" // Go back to normal mode

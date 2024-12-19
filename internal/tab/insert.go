@@ -7,6 +7,7 @@ import (
 	"github.com/gdamore/tcell/v2"
 
 	"github.com/m-kru/enix/internal/action"
+	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/sel"
 )
@@ -183,7 +184,7 @@ func (tab *Tab) RxEventKeyInsert(ev *tcell.EventKey) {
 	case tcell.KeyEnter:
 		act = tab.insertNewline()
 	default:
-		c, _ := tab.Keys.ToCmd(ev)
+		c, _ := cfg.InsertKeys.ToCmd(ev)
 		switch c.Name {
 		case "esc":
 			// Trim spaces from empty lines.

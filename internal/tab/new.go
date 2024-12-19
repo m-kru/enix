@@ -19,7 +19,6 @@ import (
 )
 
 func Empty(
-	keys *cfg.Keybindings,
 	frame *frame.Frame,
 ) *Tab {
 	lines := line.Empty()
@@ -29,7 +28,6 @@ func Empty(
 	curs[0] = c
 
 	return &Tab{
-		Keys:                 keys,
 		Path:                 "No Name",
 		Newline:              "\n",
 		FileType:             "None",
@@ -63,12 +61,11 @@ func Empty(
 //
 // TODO: Allow opening without highlighter, useful for script mode.
 func Open(
-	keys *cfg.Keybindings,
 	frame *frame.Frame,
 	path string,
 ) (*Tab, error) {
 	if path == "" {
-		return Empty(keys, frame), nil
+		return Empty(frame), nil
 	}
 
 	// Check existence of backup file. If exists, return an error.
@@ -110,7 +107,6 @@ func Open(
 	hl, err := lang.NewHighlighter(fileType)
 
 	return &Tab{
-		Keys:                 keys,
 		Path:                 path,
 		Newline:              "\n",
 		FileType:             fileType,
@@ -140,7 +136,6 @@ func Open(
 }
 
 func FromString(
-	keys *cfg.Keybindings,
 	frame *frame.Frame,
 	str string,
 	path string,
@@ -152,7 +147,6 @@ func FromString(
 	curs[0] = c
 
 	return &Tab{
-		Keys:                 keys,
 		Path:                 path,
 		Newline:              "\n",
 		FileType:             "None",

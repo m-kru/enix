@@ -52,7 +52,7 @@ func Exec() error {
 	}
 
 	for _, file := range arg.Files {
-		tab, err := tab.Open(nil, nil, file)
+		tab, err := tab.Open(nil, file)
 		if err != nil {
 			return err
 		}

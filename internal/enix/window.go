@@ -18,8 +18,7 @@ import (
 )
 
 type Window struct {
-	Keys       *cfg.Keybindings
-	InsertKeys *cfg.Keybindings // Insert mode keybindings
+	Keys *cfg.Keybindings
 
 	Mouse  mouse.Mouse
 	TabBar tabbar.TabBar
@@ -379,7 +378,7 @@ func (w *Window) OpenArgFiles() {
 	errMsg := ""
 
 	for _, file := range arg.Files {
-		t, err := tab.Open(w.InsertKeys, &w.TabFrame, file)
+		t, err := tab.Open(&w.TabFrame, file)
 		if t != nil {
 			if w.Tabs == nil {
 				w.Tabs = t
@@ -399,7 +398,7 @@ func (w *Window) OpenArgFiles() {
 	}
 
 	if len(errMsg) > 0 {
-		errTab := tab.FromString(w.InsertKeys, &w.TabFrame, errMsg, "enix-error")
+		errTab := tab.FromString(&w.TabFrame, errMsg, "enix-error")
 		if w.Tabs == nil {
 			w.Tabs = errTab
 		} else {
@@ -411,7 +410,6 @@ func (w *Window) OpenArgFiles() {
 
 func Start(
 	keys *cfg.Keybindings,
-	insertKeys *cfg.Keybindings,
 ) {
 	screen, err := tcell.NewScreen()
 	if err != nil {
@@ -441,7 +439,6 @@ func Start(
 
 	w := Window{
 		Keys:        keys,
-		InsertKeys:  insertKeys,
 		Mouse:       mouse.Mouse{},
 		TabBar:      tabbar.TabBar{View: view.Zero()},
 		Screen:      screen,
@@ -476,7 +473,7 @@ func Start(
 	w.Prompt = &p
 
 	if len(arg.Files) == 0 {
-		w.Tabs = tab.FromString(insertKeys, &w.TabFrame, "", "no-name")
+		w.Tabs = tab.FromString(&w.TabFrame, "", "no-name")
 		w.CurrentTab = w.Tabs
 	} else {
 		w.OpenArgFiles()

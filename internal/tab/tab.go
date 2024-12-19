@@ -2,7 +2,6 @@ package tab
 
 import (
 	"github.com/m-kru/enix/internal/action"
-	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/lang"
@@ -18,8 +17,6 @@ import (
 )
 
 type Tab struct {
-	Keys *cfg.Keybindings
-
 	Path     string // File path
 	Newline  string // Newline encoding
 	FileType string

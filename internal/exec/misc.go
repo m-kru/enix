@@ -100,7 +100,7 @@ func KeyName(args []string, t *tab.Tab) (*tab.Tab, error) {
 	}
 
 	newT := tab.FromString(
-		t.Keys, t.Frame,
+		t.Frame,
 		"insert a single key or key combo, press esc to exit\n", path,
 	)
 	c := newT.Cursors[0]
