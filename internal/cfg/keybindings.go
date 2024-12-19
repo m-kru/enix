@@ -7,6 +7,7 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
+var Keys Keybindings
 var PromptKeys Keybindings
 var InsertKeys Keybindings
 

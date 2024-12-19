@@ -18,8 +18,6 @@ import (
 )
 
 type Window struct {
-	Keys *cfg.Keybindings
-
 	Mouse  mouse.Mouse
 	TabBar tabbar.TabBar
 
@@ -99,7 +97,7 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		}
 	}
 
-	c, err := w.Keys.ToCmd(ev)
+	c, err := cfg.Keys.ToCmd(ev)
 	if err != nil {
 		w.Prompt.ShowError(fmt.Sprintf("%v", err))
 		return w
@@ -408,9 +406,7 @@ func (w *Window) OpenArgFiles() {
 	}
 }
 
-func Start(
-	keys *cfg.Keybindings,
-) {
+func Start() {
 	screen, err := tcell.NewScreen()
 	if err != nil {
 		log.Fatalf("%v", err)
@@ -438,7 +434,6 @@ func Start(
 	width, height := screen.Size()
 
 	w := Window{
-		Keys:        keys,
 		Mouse:       mouse.Mouse{},
 		TabBar:      tabbar.TabBar{View: view.Zero()},
 		Screen:      screen,

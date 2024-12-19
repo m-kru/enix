@@ -34,10 +34,10 @@ func init() {
 }
 
 // Function Init initializes and returns various configurations at the program start.
-func Init() (Keybindings, error) {
+func Init() error {
 	Cfg = DefaultConfig()
 	Colors = DefaultColorscheme()
-	keys := DefaultKeybindings()
+	Keys = DefaultKeybindings()
 	PromptKeys = DefaultPromptKeybindings()
 	InsertKeys = DefaultInsertKeybindings()
 
@@ -58,7 +58,7 @@ func Init() (Keybindings, error) {
 	}
 
 exit:
-	return keys, err
+	return err
 }
 
 func configFromFile(path string) (Config, error) {

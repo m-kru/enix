@@ -18,7 +18,7 @@ func main() {
 
 	arg.Parse()
 
-	keys, err := cfg.Init()
+	err := cfg.Init()
 	if err != nil {
 		log.Fatalf("%v", err)
 	}
@@ -32,7 +32,7 @@ func main() {
 	}
 
 	if arg.DumpKeys {
-		data, err := json.MarshalIndent(keys, "", "\t")
+		data, err := json.MarshalIndent(cfg.Keys, "", "\t")
 		if err != nil {
 			log.Fatalf("%v", err)
 		}
@@ -70,5 +70,5 @@ func main() {
 		os.Exit(0)
 	}
 
-	enix.Start(&keys)
+	enix.Start()
 }
