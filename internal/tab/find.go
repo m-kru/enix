@@ -103,6 +103,10 @@ func (tab *Tab) Find(next bool) {
 		tab.Cursors = nil
 	}
 	tab.Selections = []*sel.Selection{s}
+
+	if !tab.View.IsVisible(s.View()) {
+		tab.ViewCenter()
+	}
 }
 
 // next is true for find-sel-next and false for find-sel-prev.
@@ -147,4 +151,8 @@ func (tab *Tab) FindSel(next bool) {
 
 	tab.Selections = append(tab.Selections, s)
 	tab.Selections = sel.Prune(tab.Selections)
+
+	if !tab.View.IsVisible(s.View()) {
+		tab.ViewCenter()
+	}
 }
