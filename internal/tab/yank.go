@@ -1,20 +1,21 @@
 package tab
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/m-kru/enix/internal/clip"
 )
 
-func (tab *Tab) Yank() {
+func (tab *Tab) Yank() string {
 	if len(tab.Cursors) > 0 {
-		tab.yankCursors()
+		return tab.yankCursors()
 	} else {
-		tab.yankSelections()
+		return tab.yankSelections()
 	}
 }
 
-func (tab *Tab) yankCursors() {
+func (tab *Tab) yankCursors() string {
 	b := strings.Builder{}
 
 	for _, c := range tab.Cursors {
@@ -23,9 +24,15 @@ func (tab *Tab) yankCursors() {
 	}
 
 	clip.Write(b.String())
+
+	if len(tab.Cursors) == 1 {
+		return "yanked line"
+	} else {
+		return fmt.Sprintf("yanked %d lines", len(tab.Cursors))
+	}
 }
 
-func (tab *Tab) yankSelections() {
+func (tab *Tab) yankSelections() string {
 	b := strings.Builder{}
 
 	for i, s := range tab.Selections {
@@ -36,4 +43,10 @@ func (tab *Tab) yankSelections() {
 	}
 
 	clip.Write(b.String())
+
+	if len(tab.Selections) == 1 {
+		return "yanked selection"
+	} else {
+		return fmt.Sprintf("yanked %d selections", len(tab.Selections))
+	}
 }

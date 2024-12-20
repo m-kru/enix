@@ -280,7 +280,7 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		case "word-start":
 			err = exec.WordStart(c.Args, tab)
 		case "yank":
-			err = exec.Yank(c.Args, tab)
+			info, err = exec.Yank(c.Args, tab)
 		case "prev-word-start":
 			err = exec.PrevWordStart(c.Args, tab)
 		default:
@@ -304,6 +304,8 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		w.Prompt.ShowError(fmt.Sprintf("%v", err))
 	} else if info != "" {
 		w.Prompt.ShowInfo(info)
+	} else {
+		w.Prompt.Clear()
 	}
 
 	return w

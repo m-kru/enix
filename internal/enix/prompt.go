@@ -503,7 +503,7 @@ func (p *Prompt) Exec() TcellEventReceiver {
 		case "word-start":
 			err = exec.WordStart(c.Args, tab)
 		case "yank":
-			err = exec.Yank(c.Args, tab)
+			info, err = exec.Yank(c.Args, tab)
 		default:
 			p.ShowError(
 				fmt.Sprintf(
