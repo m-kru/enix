@@ -131,13 +131,14 @@ func FromCursorsLine(curs []*cursor.Cursor) []*Selection {
 }
 
 func fromCursorLine(c *cursor.Cursor) *Selection {
-	lineRC := c.Line.RuneCount()
-	c.RuneIdx = lineRC
+	// Call LineEnd two times, because there might be spaces at the line end.
+	c.LineEnd()
+	c.LineEnd()
 	return &Selection{
 		Line:         c.Line,
 		LineNum:      c.LineNum,
 		StartRuneIdx: 0,
-		EndRuneIdx:   lineRC,
+		EndRuneIdx:   c.RuneIdx,
 		Cursor:       c,
 		Prev:         nil,
 		Next:         nil,
