@@ -39,7 +39,7 @@ func (tab *Tab) deleteCursors(backspace bool) action.Actions {
 		var act action.Action
 		if backspace {
 			if c.WithinIndent() {
-				n := utf8.RuneCountInString(tab.Indent)
+				n := utf8.RuneCountInString(tab.IndentStr)
 				as := make(action.Actions, 0, n)
 				if c.RuneIdx == 0 {
 					n = 1

@@ -163,6 +163,8 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			tab.HasFocus = false
 			w.Prompt.Activate("help ", "")
 			return w.Prompt
+		case "indent":
+			tab.Indent()
 		case "insert":
 			tab.Insert()
 		case "insert-line-above":

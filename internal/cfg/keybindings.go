@@ -86,6 +86,7 @@ func DefaultKeybindings() Keybindings {
 		"Rune[x]": "cut",
 		"Rune[y]": "yank",
 		"Rune[ ]": "space",
+		"Rune[>]": "indent",
 		"Tab":     "tab",
 		// Selection
 		"Rune[v]": "sel-line",

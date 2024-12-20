@@ -26,6 +26,10 @@ func (c *Cursor) Inform(act action.Action) {
 		c.informRuneDelete(a)
 	case *action.RuneInsert:
 		c.informRuneInsert(a)
+	case *action.StringDelete:
+		c.informStringDelete(a)
+	case *action.StringInsert:
+		c.informStringInsert(a)
 	}
 }
 
@@ -111,4 +115,30 @@ func (c *Cursor) informRuneInsert(ri *action.RuneInsert) {
 		return
 	}
 	c.RuneIdx++
+}
+
+func (c *Cursor) informStringDelete(sd *action.StringDelete) {
+	if c.Line != sd.Line {
+		return
+	}
+
+	if c.RuneIdx < sd.StartRuneIdx {
+		return
+	}
+
+	c.RuneIdx -= sd.RuneCount
+	c.colIdx = c.Line.ColumnIdx(c.RuneIdx)
+}
+
+func (c *Cursor) informStringInsert(si *action.StringInsert) {
+	if c.Line != si.Line {
+		return
+	}
+
+	if c.RuneIdx < si.StartRuneIdx {
+		return
+	}
+
+	c.RuneIdx += si.RuneCount
+	c.colIdx = c.Line.ColumnIdx(c.RuneIdx)
 }

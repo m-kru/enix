@@ -265,7 +265,7 @@ func (tab *Tab) insertRuneCursors(r rune) action.Action {
 	for _, c := range tab.Cursors {
 		var act action.Action
 		if r == '\t' && c.WithinIndent() {
-			act = c.InsertString(tab.Indent)
+			act = c.InsertString(tab.IndentStr)
 		} else {
 			act = c.InsertRune(r)
 		}

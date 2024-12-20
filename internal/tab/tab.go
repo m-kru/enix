@@ -17,10 +17,10 @@ import (
 )
 
 type Tab struct {
-	Path     string // File path
-	Newline  string // Newline encoding
-	FileType string
-	Indent   string
+	Path      string // File path
+	Newline   string // Newline encoding
+	FileType  string
+	IndentStr string
 
 	HasFocus bool
 	State    string // Valid states: "" - normal mode, "insert", "replace", "key-name".
