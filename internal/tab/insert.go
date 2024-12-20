@@ -310,7 +310,7 @@ func (tab *Tab) insertNewlineCursors() action.Action {
 	actions := make(action.Actions, 0, len(tab.Cursors))
 
 	for _, c := range tab.Cursors {
-		act := c.InsertNewline()
+		act := c.InsertNewline(true)
 		actions = append(actions, act)
 		tab.handleAction(act)
 

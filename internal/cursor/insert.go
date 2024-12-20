@@ -7,12 +7,12 @@ import (
 	"github.com/m-kru/enix/internal/line"
 )
 
-func (c *Cursor) InsertNewline() action.Actions {
+func (c *Cursor) InsertNewline(indent bool) action.Actions {
 
 	rIdx := c.RuneIdx
 	lineNum := c.LineNum
 	line := c.Line
-	indent := line.Indent()
+	indentStr := line.Indent()
 	newLine1, newLine2 := c.Line.InsertNewline(c.RuneIdx)
 
 	c.Line = newLine2
@@ -29,11 +29,11 @@ func (c *Cursor) InsertNewline() action.Actions {
 		NewLine2: newLine2,
 	}
 
-	if indent == "" {
+	if indentStr == "" || !indent {
 		return actions
 	}
 
-	si := c.InsertString(indent)
+	si := c.InsertString(indentStr)
 	actions = append(actions, si)
 
 	return actions

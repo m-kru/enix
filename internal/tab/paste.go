@@ -94,7 +94,7 @@ func (tab *Tab) pasteCursors(text string) action.Actions {
 	if strings.HasSuffix(text, "\n") {
 		actions = tab.pasteCursorsLineBased(text)
 	} else {
-		return nil
+		actions = tab.pasteCursorsRegular(text)
 	}
 
 	return actions
@@ -104,6 +104,66 @@ func (tab *Tab) pasteCursorsLineBased(text string) action.Actions {
 	curs := cursor.Uniques(tab.Cursors, true)
 
 	return tab.pasteLineBased(text, curs)
+}
+
+func (tab *Tab) pasteCursorsRegular(text string) action.Actions {
+	lines, lineCount := line.FromString(text)
+
+	actions := make(action.Actions, 0, len(tab.Cursors))
+	newSels := make([]*sel.Selection, 0, len(tab.Cursors))
+
+	for curIdx, cur := range tab.Cursors {
+		cur.Right()
+		startRuneIdx := cur.RuneIdx
+		startCur := cur.Clone()
+
+		acts := make(action.Actions, 0, 2*lineCount)
+
+		line := lines
+		for i := range lineCount {
+			str := line.String()
+			if str != "" {
+				act := cur.InsertString(str)
+				acts = append(acts, act)
+				tab.handleAction(act)
+			}
+
+			if line.Next != nil {
+				act := cur.InsertNewline(false)
+				acts = append(acts, act)
+				tab.handleAction(act)
+
+				if i == 0 {
+					ni := act[0].(*action.NewlineInsert)
+					startCur = cursor.New(ni.NewLine1, cur.LineNum-1, startRuneIdx)
+				}
+			}
+
+			line = line.Next
+		}
+
+		for _, cur2 := range tab.Cursors[curIdx+1:] {
+			cur2.Inform(acts)
+		}
+
+		for _, m := range tab.Marks {
+			m.Inform(acts)
+		}
+
+		for _, s := range newSels {
+			s.Inform(acts)
+		}
+
+		actions = append(actions, acts)
+
+		cur.Left()
+		newSels = append(newSels, sel.FromTo(startCur, cur))
+	}
+
+	tab.Cursors = nil
+	tab.Selections = newSels
+
+	return actions
 }
 
 func (tab *Tab) pasteSelections(text string) action.Actions {

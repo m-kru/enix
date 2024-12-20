@@ -36,13 +36,15 @@ func (s *Selection) inform(act action.Action) {
 	case *action.NewlineDelete:
 		s.informNewlineDelete(a)
 	case *action.NewlineInsert:
-		//s.informNewlineInsert(a)
+		s.informNewlineInsert(a)
 	case *action.RuneDelete:
 		s.informRuneDelete(a)
 	case *action.RuneInsert:
 		//s.informRuneInsert(a)
 	case *action.StringDelete:
 		s.informStringDelete(a)
+	case *action.StringInsert:
+		s.informStringInsert(a)
 	}
 }
 
@@ -79,6 +81,30 @@ func (s *Selection) informNewlineDelete(nd *action.NewlineDelete) {
 	s.LineNum--
 }
 
+func (s *Selection) informNewlineInsert(ni *action.NewlineInsert) {
+	if s.LineNum < ni.LineNum {
+		return
+	}
+
+	// Assume newline insert didn't split the selection.
+	// This should not be possible because of the way cursors
+	// and selections work.
+	// Newline insert can split selection marks. However, in such
+	// a case, the mark shall be destroyed.
+	if s.Line == ni.Line {
+		if s.EndRuneIdx < ni.RuneIdx {
+			s.Line = ni.NewLine1
+			return
+		} else {
+			s.Line = ni.NewLine2
+			s.StartRuneIdx -= ni.RuneIdx
+			s.EndRuneIdx -= ni.RuneIdx
+		}
+	}
+
+	s.LineNum++
+}
+
 func (s *Selection) informRuneDelete(rd *action.RuneDelete) {
 	if s.Line == rd.Line && rd.RuneIdx < s.StartRuneIdx {
 		s.StartRuneIdx--
@@ -90,5 +116,12 @@ func (s *Selection) informStringDelete(sd *action.StringDelete) {
 	if s.Line == sd.Line && sd.StartRuneIdx < s.StartRuneIdx {
 		s.StartRuneIdx -= sd.RuneCount
 		s.EndRuneIdx -= sd.RuneCount
+	}
+}
+
+func (s *Selection) informStringInsert(si *action.StringInsert) {
+	if s.Line == si.Line && si.StartRuneIdx < s.StartRuneIdx {
+		s.StartRuneIdx += si.RuneCount
+		s.EndRuneIdx += si.RuneCount
 	}
 }
