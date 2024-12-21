@@ -225,6 +225,11 @@ For example, by executing commands 'sel-right' and 'sel-left.`,
 
 	// Selection
 
+	"sel": `sel regex # Selects all finds of regex pattern within selections.
+If there are no selections within the tab, then the whole tab is searched.`,
+
+	"sel-all": `sel-all # Selets all tab content.`,
+
 	"sel-count": `sel-count # Prints the number of selections in the current tab.`,
 
 	"sel-left": `sel-left # Extends/shrinks selection one rune left.`,
