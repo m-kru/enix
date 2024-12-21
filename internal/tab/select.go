@@ -175,3 +175,13 @@ func (tab *Tab) SelToTab(path string) *Tab {
 
 	return FromString(tab.Frame, str, path)
 }
+
+func (tab *Tab) SelSwitchCursor() {
+	if len(tab.Cursors) > 0 {
+		return
+	}
+
+	for _, s := range tab.Selections {
+		s.SwitchCursor()
+	}
+}

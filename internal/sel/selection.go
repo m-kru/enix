@@ -163,3 +163,23 @@ func (s *Selection) SpawnCursorOnRight() *cursor.Cursor {
 	s = s.Last()
 	return cursor.New(s.Line, s.LineNum, s.EndRuneIdx)
 }
+
+func (s *Selection) SwitchCursor() {
+	last := s.Last()
+
+	if s == last {
+		if s.EndRuneIdx == s.Cursor.RuneIdx {
+			s.Cursor = cursor.New(s.Line, s.LineNum, s.StartRuneIdx)
+		} else {
+			s.Cursor = cursor.New(s.Line, s.LineNum, s.EndRuneIdx)
+		}
+	} else {
+		if s.Cursor != nil {
+			s.Cursor = nil
+			last.Cursor = cursor.New(last.Line, last.LineNum, last.EndRuneIdx)
+		} else {
+			last.Cursor = nil
+			s.Cursor = cursor.New(s.Line, s.LineNum, s.StartRuneIdx)
+		}
+	}
+}

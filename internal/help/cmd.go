@@ -211,6 +211,9 @@ Forced version of the quit command. It quits the tab even if there are unsaved c
 The command first deletes rune under the cursor, or runes under selection, and then
 enters the insert moode for a single insertion.`,
 
+	"suspend": `suspend # Stops process and gives control to shell.
+This command has been so far tested only on Linux.`,
+
 	"undo": `undo # Undos last action modifying the tab content.`,
 
 	"yank": `yank # Copies selected text.
@@ -242,8 +245,7 @@ If cursors is not placed on a whitespace character, nothing is selected.`,
 
 	"sel-word-end": `sel-word-end # Selects or extends selection to the end of next word.`,
 
-	"suspend": `suspend # Stops process and gives control to shell.
-This command has been so far tested only on Linux.`,
+	"sel-switch-cursor": `sel-switch-cursor # Changes position of the cursor within selection.`,
 
 	// Tab
 

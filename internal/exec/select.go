@@ -65,6 +65,18 @@ func SelRight(args []string, tab *tab.Tab) error {
 	return nil
 }
 
+func SelSwitchCursor(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf(
+			"sel-switch-cursor: provided %d args, expected 0", len(args),
+		)
+	}
+
+	tab.SelSwitchCursor()
+
+	return nil
+}
+
 func SelToTab(args []string, tab *tab.Tab) (*tab.Tab, error) {
 	if len(args) > 1 {
 		return tab, fmt.Errorf(

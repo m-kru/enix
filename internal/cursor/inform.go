@@ -122,7 +122,7 @@ func (c *Cursor) informStringDelete(sd *action.StringDelete) {
 		return
 	}
 
-	if c.RuneIdx < sd.StartRuneIdx {
+	if c.RuneIdx <= sd.StartRuneIdx {
 		return
 	}
 
