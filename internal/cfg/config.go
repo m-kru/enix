@@ -38,6 +38,7 @@ func DefaultConfig() Config {
 		Indent: map[string]string{
 			"python": "    ",
 			"rust":   "    ",
+			"tcl":    "    ",
 			"vhdl":   "  ",
 		},
 	}

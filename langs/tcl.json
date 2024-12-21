@@ -1,0 +1,55 @@
+[
+	{
+		"Name": "Default",
+		"Keyword": "\\b(break|catch|continue|default|else|elseif|error|exit|for|foreach|if|namespace|proc|return|switch|while)\\b",
+		"Number": "\\b(0(b|B|o|O|x|X)?)?\\d+(\\.\\d+)?((e|E)-?\\d+)?",
+		"Value": "\\$(\\w|:)+",
+		"Operator": "\\[|\\]"
+	},
+	{
+		"Name": "Line Comment",
+		"Style": "Comment",
+		"Start": {
+			"Regex": "#"
+		},
+		"End": {
+			"Regex": "$"
+		},
+		"ToDo": "(?i)(todo|note|xxx):"
+	},
+	{
+		"Name": "String",
+		"Style": "String",
+		"Start": {
+			"Regex": "\""
+		},
+		"End": {
+			"Regex": "\"",
+			"NegativeLookBehind": "(?:[^\\\\])\\\\"
+		},
+		"Value": "\\$(\\w|:)+"
+	},
+	{
+		"Name": "Flag",
+		"Style": "Attribute",
+		"Start": {
+			"Regex": "-",
+			"PositiveLookBehind": "\\s",
+			"PositiveLookAhead": "\\w"
+		},
+		"End": {
+			"Regex": "\\s"
+		}
+	},
+	{
+		"Name": "Procedure",
+		"Style": "Function",
+		"Start": {
+			"Regex": "\\s+",
+			"PositiveLookBehind": "proc"
+		},
+		"End": {
+			"Regex": "\\s"
+		}
+	}
+]
