@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
@@ -101,7 +102,16 @@ func Open(
 	curs := make([]*cursor.Cursor, 1, 16)
 	curs[0] = c
 
-	fileType := util.FileNameToType(filepath.Base(path))
+	base := filepath.Base(path)
+	fileType := util.FileNameToType(base)
+	if fileType == "" {
+		ss := strings.Split(base, ".")
+		fileExt := ""
+		if len(ss) > 1 {
+			fileExt = ss[1]
+		}
+		fileType = cfg.Cfg.GetFileType(fileExt)
+	}
 
 	// Highlighter initialization
 	hl, err := lang.NewHighlighter(fileType)

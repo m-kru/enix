@@ -22,7 +22,8 @@ type Config struct {
 
 	UndoSize int // Undo and Redo stack size
 
-	Indent map[string]string
+	Indent     map[string]string
+	Extensions map[string]string
 }
 
 func DefaultConfig() Config {
@@ -41,12 +42,20 @@ func DefaultConfig() Config {
 			"tcl":    "    ",
 			"vhdl":   "  ",
 		},
+		Extensions: map[string]string{},
 	}
 }
 
-func (cfg Config) GetIndent(lang string) string {
-	if indent, ok := cfg.Indent[lang]; ok {
+func (cfg Config) GetIndent(fileType string) string {
+	if indent, ok := cfg.Indent[fileType]; ok {
 		return indent
 	}
 	return "\t"
+}
+
+func (cfg Config) GetFileType(fileExt string) string {
+	if fileType, ok := cfg.Extensions[fileExt]; ok {
+		return fileType
+	}
+	return ""
 }
