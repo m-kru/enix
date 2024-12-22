@@ -225,6 +225,8 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			tab.HasFocus = false
 			w.Prompt.Activate("search ", tab.GetWord())
 			return w.Prompt
+		case "sel-all":
+			err = exec.SelAll(c.Args, tab)
 		case "sel-down":
 			err = exec.SelDown(c.Args, tab)
 		case "sel-left":

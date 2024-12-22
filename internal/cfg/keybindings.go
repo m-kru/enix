@@ -89,6 +89,7 @@ func DefaultKeybindings() Keybindings {
 		"Rune[>]": "indent",
 		"Tab":     "tab",
 		// Selection
+		"Rune[%]": "sel-all",
 		"Rune[v]": "sel-line",
 		"Rune[V]": "sel-prev-line",
 		"Rune[B]": "sel-prev-word-start",

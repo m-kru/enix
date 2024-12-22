@@ -440,6 +440,8 @@ func (p *Prompt) Exec() TcellEventReceiver {
 			info, err = exec.Save(c.Args, tab, cfg.Cfg.TrimOnSave)
 		case "search":
 			err = exec.Search(c.Args, tab)
+		case "sel-all":
+			err = exec.SelAll(c.Args, tab)
 		case "sel-count":
 			p.ShowInfo(fmt.Sprintf("%d", len(tab.Selections)))
 			return p.Window

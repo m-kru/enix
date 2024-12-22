@@ -4,6 +4,11 @@ import (
 	"github.com/m-kru/enix/internal/sel"
 )
 
+func (tab *Tab) SelAll() {
+	tab.Cursors = nil
+	tab.Selections = []*sel.Selection{sel.SelToTheEnd(tab.Lines, 1, 0)}
+}
+
 func (tab *Tab) SelDown() {
 	if len(tab.Cursors) > 0 {
 		tab.selDownCursors()

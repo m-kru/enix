@@ -2,6 +2,7 @@ package sel
 
 import (
 	"github.com/m-kru/enix/internal/cursor"
+	"github.com/m-kru/enix/internal/line"
 )
 
 func FromCursorsDown(curs []*cursor.Cursor) []*Selection {
@@ -498,6 +499,46 @@ func FromTo(startC, endC *cursor.Cursor) *Selection {
 	} else {
 		prevS.Cursor = endC.Clone()
 	}
+
+	return first
+}
+
+// SelToTheEnd selects everything starting from the line and runeIdx to the end.
+func SelToTheEnd(line *line.Line, lineNum int, runeIdx int) *Selection {
+	first := &Selection{
+		Line:         line,
+		LineNum:      lineNum,
+		StartRuneIdx: runeIdx,
+		EndRuneIdx:   line.RuneCount(),
+		Cursor:       nil,
+		Prev:         nil,
+		Next:         nil,
+	}
+
+	prevS := first
+	for {
+		if line.Next != nil {
+			line = line.Next
+			lineNum++
+		} else {
+			break
+		}
+
+		s := &Selection{
+			Line:         line,
+			LineNum:      lineNum,
+			StartRuneIdx: 0,
+			EndRuneIdx:   line.RuneCount(),
+			Cursor:       nil,
+			Prev:         prevS,
+			Next:         nil,
+		}
+
+		prevS.Next = s
+		prevS = s
+	}
+
+	prevS.Cursor = cursor.New(line, lineNum, prevS.EndRuneIdx)
 
 	return first
 }
