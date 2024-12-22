@@ -2,6 +2,7 @@ package tab
 
 import (
 	"bytes"
+	"fmt"
 	"os/exec"
 
 	"github.com/m-kru/enix/internal/cursor"
@@ -30,7 +31,7 @@ func (tab *Tab) shCursors(addIndent bool, cmdName string, args []string) error {
 	cmd.Stderr = &stderr
 	err := cmd.Run()
 	if err != nil {
-		return err
+		return fmt.Errorf("%v: %s", err, stderr.String())
 	}
 
 	// Paste stdout
