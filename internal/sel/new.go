@@ -146,6 +146,53 @@ func fromCursorLine(c *cursor.Cursor) *Selection {
 	}
 }
 
+func FromCursorsLineEnd(curs []*cursor.Cursor) []*Selection {
+	sels := make([]*Selection, 0, len(curs))
+
+	for _, c := range curs {
+		sels = append(sels, fromCursorLineEnd(c))
+	}
+
+	sels = Prune(sels)
+
+	return sels
+}
+
+func fromCursorLineEnd(c *cursor.Cursor) *Selection {
+	first := &Selection{
+		Line:         c.Line,
+		LineNum:      c.LineNum,
+		StartRuneIdx: c.RuneIdx,
+		EndRuneIdx:   c.RuneIdx,
+		Cursor:       nil,
+		Prev:         nil,
+		Next:         nil,
+	}
+
+	if c.RuneIdx < c.Line.RuneCount() {
+		c.LineEnd()
+		first.EndRuneIdx = c.RuneIdx
+		first.Cursor = c
+		return first
+	}
+
+	c.Right()
+	c.LineEnd()
+	second := &Selection{
+		Line:         c.Line,
+		LineNum:      c.LineNum,
+		StartRuneIdx: 0,
+		EndRuneIdx:   c.RuneIdx,
+		Cursor:       c,
+		Prev:         first,
+		Next:         nil,
+	}
+
+	first.Next = second
+
+	return first
+}
+
 func FromCursorsRight(curs []*cursor.Cursor) []*Selection {
 	sels := make([]*Selection, 0, len(curs))
 

@@ -451,6 +451,8 @@ func (p *Prompt) Exec() TcellEventReceiver {
 			err = exec.SelLeft(c.Args, tab)
 		case "sel-line":
 			err = exec.SelLine(c.Args, tab)
+		case "sel-line-end":
+			err = exec.SelLineEnd(c.Args, tab)
 		case "sel-prev-word-start":
 			err = exec.SelPrevWordStart(c.Args, tab)
 		case "sel-right":

@@ -91,6 +91,7 @@ func DefaultKeybindings() Keybindings {
 		// Selection
 		"Rune[%]": "sel-all",
 		"Rune[v]": "sel-line",
+		"Rune[F]": "sel-line-end",
 		"Rune[V]": "sel-prev-line",
 		"Rune[B]": "sel-prev-word-start",
 		"Rune[J]": "sel-down",

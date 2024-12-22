@@ -265,6 +265,15 @@ func (s *Selection) nextLineCursorOnRight() *Selection {
 	return first
 }
 
+func (s *Selection) LineEnd() *Selection {
+	c := s.GetCursor().Clone()
+	if c.RuneIdx == c.Line.RuneCount() {
+		c.Right()
+	}
+	c.LineEnd()
+	return s.adjust(c)
+}
+
 func (s *Selection) PrevWordStart() *Selection {
 	c := s.GetCursor().Clone()
 	c.PrevWordStart()
