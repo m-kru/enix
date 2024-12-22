@@ -211,6 +211,25 @@ Forced version of the quit command. It quits the tab even if there are unsaved c
 The command first deletes rune under the cursor, or runes under selection, and then
 enters the insert moode for a single insertion.`,
 
+	"sh": `sh cmd [arg] # Executes command cmd in the shell.
+The text directed by the command to the stdout gets pasted into the tab.
+If the text ends with the newline character, then the line-based paste is used.
+Otherwise, the regular paste is used.
+
+In the case of cursors, nothing is feed into the stdin.
+The command is executed only once and the text from stdout is pasted for every cursor.
+
+In the case of selections, the command is executed once per each selection.
+For each selection, the selection text is used as the stdin for the command.
+
+Stderr can be used to execute arbitrary enix commands.
+In such a case, a line with an enix command must start with the 'enix:' label.
+A care must be taken, as those commands are executed as in the script mode.
+This means that in the case of multiple selections commands are executed multiple times.
+
+The sh command can be used for various purposes and is the only official plug-in system for enix.
+For example, the sh command can be used with https://github.com/m-kru/tmpl for template inserting.`,
+
 	"suspend": `suspend # Stops process and gives control to shell.
 This command has been so far tested only on Linux.`,
 
