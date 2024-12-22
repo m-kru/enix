@@ -69,6 +69,10 @@ func (c *Cursor) DeleteLine() action.Action {
 	newLine := c.Line.Delete()
 	if newLine != nil {
 		c.Line = newLine
+		// Check if last line was deleted
+		if newLine == delLine.Prev {
+			c.LineNum--
+		}
 		c.RuneIdx = 0
 		c.colIdx = c.Line.ColumnIdx(0)
 		return &action.LineDelete{
