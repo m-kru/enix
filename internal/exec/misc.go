@@ -198,6 +198,36 @@ func Search(args []string, tab *tab.Tab) error {
 	return tab.Search(args[0])
 }
 
+func Sh(args []string, tab *tab.Tab) error {
+	if len(args) == 0 {
+		return fmt.Errorf(
+			"sh: expected at least 1 arg, provided %d", len(args),
+		)
+	}
+
+	indent := args[0] == "-i"
+	if indent && len(args) == 1 {
+		return fmt.Errorf("sh: missing command name")
+	}
+
+	var cmd string
+	var cmdArgs []string
+	if indent {
+		cmd = args[1]
+		cmdArgs = args[2:]
+	} else {
+		cmd = args[0]
+		cmdArgs = args[1:]
+	}
+
+	err := tab.Sh(indent, cmd, cmdArgs)
+	if err != nil {
+		return fmt.Errorf("sh: %v", err)
+	}
+
+	return nil
+}
+
 func Undo(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf(

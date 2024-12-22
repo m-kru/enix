@@ -8,6 +8,7 @@ import (
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/sel"
+	"github.com/m-kru/enix/internal/util"
 )
 
 func (tab *Tab) Paste() {
@@ -21,7 +22,7 @@ func (tab *Tab) Paste() {
 
 	var actions action.Actions
 	if len(tab.Cursors) > 0 {
-		actions = tab.pasteCursors(text)
+		actions = tab.pasteCursors(text, false)
 	} else {
 		actions = tab.pasteSelections(text)
 	}
@@ -31,13 +32,18 @@ func (tab *Tab) Paste() {
 	}
 }
 
-func (tab *Tab) pasteLineBased(text string, curs []*cursor.Cursor) action.Actions {
-	lines, lineCount := line.FromString(text[0 : len(text)-1])
-
+func (tab *Tab) pasteLineBased(text string, addIndent bool, curs []*cursor.Cursor) action.Actions {
 	newSels := make([]*sel.Selection, 0, len(curs))
 	actions := make(action.Actions, 0, len(curs))
 
+	var lines *line.Line
+	var lineCount int
 	for _, cur := range curs {
+		if lines == nil || addIndent {
+			t := util.AddIndent(text, cur.Line.Indent())
+			lines, lineCount = line.FromString(t[0 : len(t)-1])
+		}
+
 		var startCur *cursor.Cursor
 
 		// Move cursor to the first column.
@@ -89,10 +95,10 @@ func (tab *Tab) pasteLineBased(text string, curs []*cursor.Cursor) action.Action
 	return actions
 }
 
-func (tab *Tab) pasteCursors(text string) action.Actions {
+func (tab *Tab) pasteCursors(text string, addIndent bool) action.Actions {
 	var actions action.Actions
 	if strings.HasSuffix(text, "\n") {
-		actions = tab.pasteCursorsLineBased(text)
+		actions = tab.pasteCursorsLineBased(text, addIndent)
 	} else {
 		actions = tab.pasteCursorsRegular(text)
 	}
@@ -100,10 +106,10 @@ func (tab *Tab) pasteCursors(text string) action.Actions {
 	return actions
 }
 
-func (tab *Tab) pasteCursorsLineBased(text string) action.Actions {
+func (tab *Tab) pasteCursorsLineBased(text string, addIndent bool) action.Actions {
 	curs := cursor.Uniques(tab.Cursors, true)
 
-	return tab.pasteLineBased(text, curs)
+	return tab.pasteLineBased(text, addIndent, curs)
 }
 
 func (tab *Tab) pasteCursorsRegular(text string) action.Actions {
@@ -185,5 +191,5 @@ func (tab *Tab) pasteSelectionsLineBased(text string) action.Actions {
 
 	curs := cursor.Uniques(selCurs, true)
 
-	return tab.pasteLineBased(text, curs)
+	return tab.pasteLineBased(text, false, curs)
 }

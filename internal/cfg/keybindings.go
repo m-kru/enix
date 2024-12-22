@@ -46,6 +46,7 @@ func DefaultKeybindings() Keybindings {
 		"Ctrl+K":  "spawn-up",
 		"Rune[a]": "line-start",
 		"Rune[f]": "line-end",
+		"Rune[t]": "sh -i tmpl",
 		// Deletion
 		"Backspace":  "backspace",
 		"Backspace2": "backspace",

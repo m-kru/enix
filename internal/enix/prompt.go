@@ -469,6 +469,8 @@ func (p *Prompt) Exec() TcellEventReceiver {
 			err = exec.SelWordEnd(c.Args, tab)
 		case "space":
 			err = exec.Space(c.Args, tab)
+		case "sh":
+			err = exec.Sh(c.Args, tab)
 		case "spawn-down":
 			err = exec.SpawnDown(c.Args, tab)
 		case "spawn-up":

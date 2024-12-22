@@ -249,6 +249,10 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			err = exec.SelWord(c.Args, tab)
 		case "sel-word-end":
 			err = exec.SelWordEnd(c.Args, tab)
+		case "sh":
+			tab.HasFocus = false
+			w.Prompt.Activate(c.String(), "")
+			return w.Prompt
 		case "space":
 			err = exec.Space(c.Args, tab)
 		case "spawn-down":

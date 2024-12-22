@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 	"unicode"
@@ -10,6 +11,22 @@ type Command struct {
 	RepCount int
 	Name     string
 	Args     []string
+}
+
+func (cmd Command) String() string {
+	b := strings.Builder{}
+
+	if cmd.RepCount > 1 {
+		b.WriteString(fmt.Sprintf("%d ", cmd.RepCount))
+	}
+	b.WriteString(cmd.Name)
+	b.WriteRune(' ')
+	for _, a := range cmd.Args {
+		b.WriteString(a)
+		b.WriteRune(' ')
+	}
+
+	return b.String()
 }
 
 // Parse parses command line string and returns a command.
