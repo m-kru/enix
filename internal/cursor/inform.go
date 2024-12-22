@@ -40,7 +40,7 @@ func (c *Cursor) informLineDelete(ld *action.LineDelete) {
 }
 
 func (c *Cursor) informLineInsert(li *action.LineInsert) {
-	if li.LineNum < c.LineNum {
+	if li.LineNum <= c.LineNum {
 		c.LineNum++
 	}
 }

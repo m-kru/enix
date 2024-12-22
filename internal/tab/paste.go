@@ -40,20 +40,22 @@ func (tab *Tab) pasteLineBased(text string, addIndent bool, curs []*cursor.Curso
 	var lineCount int
 	for _, cur := range curs {
 		if lines == nil || addIndent {
-			indent := ""
+			t := text
 			if addIndent {
-				indent = cur.Line.Indent()
+				indent := cur.Line.Indent()
+				t = util.AddIndent(text, indent)
 			}
-			t := util.AddIndent(text, indent)
 			lines, lineCount = line.FromString(t[0 : len(t)-1])
 		}
 
 		var startCur *cursor.Cursor
 
 		// Move cursor to the first column.
-		// LineStart is called 2 times, because there might be spaces at the line start.
 		cur.LineStart()
-		cur.LineStart()
+		// There might be spaces at the line start.
+		if cur.RuneIdx != 0 {
+			cur.LineStart()
+		}
 
 		acts := make(action.Actions, 0, lineCount)
 
