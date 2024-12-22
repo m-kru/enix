@@ -489,6 +489,8 @@ func Start() {
 	go screen.ChannelEvents(tcellEventChan, nil)
 
 	for {
+		render := false
+
 		select {
 		case ev := <-tcellEventChan:
 			switch ev := ev.(type) {
@@ -496,6 +498,7 @@ func Start() {
 				mEv := w.Mouse.RxTcellEventMouse(ev)
 				if mEv != nil {
 					w.RxMouseEvent(mEv)
+					render = true
 				} else {
 					// Don't render the whole window, as nothing happened.
 					// Don't waste CPU.
@@ -505,6 +508,7 @@ func Start() {
 				tcellEvRcvr = tcellEvRcvr.RxTcellEvent(ev)
 				if tcellEvRcvr == &w {
 					w.CurrentTab.HasFocus = true
+					render = true
 				} else if tcellEvRcvr == nil {
 					return
 				}
@@ -513,7 +517,7 @@ func Start() {
 
 		// Do not rerender if focus is on the prompt.
 		// This reduces responsiveness in the case of large files.
-		if tcellEvRcvr == &w {
+		if render {
 			w.Render()
 		}
 	}
