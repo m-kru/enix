@@ -40,7 +40,11 @@ func (tab *Tab) pasteLineBased(text string, addIndent bool, curs []*cursor.Curso
 	var lineCount int
 	for _, cur := range curs {
 		if lines == nil || addIndent {
-			t := util.AddIndent(text, cur.Line.Indent())
+			indent := ""
+			if addIndent {
+				indent = cur.Line.Indent()
+			}
+			t := util.AddIndent(text, indent)
 			lines, lineCount = line.FromString(t[0 : len(t)-1])
 		}
 
