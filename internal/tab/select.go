@@ -89,6 +89,26 @@ func (tab *Tab) selLineEndSelections() {
 	tab.Selections = sel.Prune(tab.Selections)
 }
 
+func (tab *Tab) SelLineStart() {
+	if len(tab.Cursors) > 0 {
+		tab.selLineStartCursors()
+	} else {
+		tab.selLineStartSelections()
+	}
+}
+
+func (tab *Tab) selLineStartCursors() {
+	tab.Selections = sel.FromCursorsLineStart(tab.Cursors)
+	tab.Cursors = nil
+}
+
+func (tab *Tab) selLineStartSelections() {
+	for i, s := range tab.Selections {
+		tab.Selections[i] = s.LineStart()
+	}
+	tab.Selections = sel.Prune(tab.Selections)
+}
+
 func (tab *Tab) SelPrevWordStart() {
 	if len(tab.Cursors) > 0 {
 		tab.selPrevWordStartCursors()

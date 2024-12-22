@@ -274,6 +274,15 @@ func (s *Selection) LineEnd() *Selection {
 	return s.adjust(c)
 }
 
+func (s *Selection) LineStart() *Selection {
+	c := s.GetCursor().Clone()
+	if c.RuneIdx == 0 {
+		c.Left()
+	}
+	c.LineStart()
+	return s.adjust(c)
+}
+
 func (s *Selection) PrevWordStart() *Selection {
 	c := s.GetCursor().Clone()
 	c.PrevWordStart()
