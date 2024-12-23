@@ -86,7 +86,11 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 	tab := w.CurrentTab
 
 	if tab.State != "" {
-		tab.RxEventKey(ev)
+		cmd := tab.RxEventKey(ev)
+		if cmd != "" {
+			Prompt.Activate(cmd, "")
+			return &Prompt
+		}
 		return w
 	}
 
@@ -135,7 +139,6 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		case "change":
 			err = exec.Change(c.Args, tab)
 		case "cmd":
-			tab.HasFocus = false
 			Prompt.Activate("", "")
 			return &Prompt
 		case "config-dir":
@@ -160,7 +163,6 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		case "g", "go":
 			err = exec.Go(c.Args, tab)
 		case "h", "help":
-			tab.HasFocus = false
 			Prompt.Activate("help ", "")
 			return &Prompt
 		case "indent":
@@ -188,7 +190,6 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		case "newline":
 			err = exec.Newline(c.Args, tab)
 		case "o", "open":
-			tab.HasFocus = false
 			Prompt.Activate("open ", "")
 			return &Prompt
 		case "paste":
@@ -222,7 +223,6 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		case "save":
 			info, err = exec.Save(c.Args, tab, cfg.Cfg.TrimOnSave)
 		case "search":
-			tab.HasFocus = false
 			Prompt.Activate("search ", tab.GetWord())
 			return &Prompt
 		case "sel-all":
@@ -250,7 +250,6 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		case "sel-word-end":
 			err = exec.SelWordEnd(c.Args, tab)
 		case "sh":
-			tab.HasFocus = false
 			Prompt.Activate(c.String(), "")
 			return &Prompt
 		case "space":
@@ -509,7 +508,6 @@ func Start() {
 			default:
 				tcellEvRcvr = tcellEvRcvr.RxTcellEvent(ev)
 				if tcellEvRcvr == &Window {
-					Window.CurrentTab.HasFocus = true
 					render = true
 				} else if tcellEvRcvr == nil {
 					return

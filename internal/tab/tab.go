@@ -22,7 +22,6 @@ type Tab struct {
 	FileType  string
 	IndentStr string
 
-	HasFocus bool
 	State    string // Valid states: "" - normal mode, "insert", "replace", "key-name".
 	RepCount int    // Command repetition count in normal mode
 
@@ -195,15 +194,17 @@ func (tab *Tab) LastColumnIdx() int {
 	return idx
 }
 
-func (tab *Tab) RxEventKey(ev *tcell.EventKey) {
+func (tab *Tab) RxEventKey(ev *tcell.EventKey) string {
 	switch tab.State {
 	case "insert":
-		tab.RxEventKeyInsert(ev)
+		return tab.RxEventKeyInsert(ev)
 	case "key-name":
 		tab.RxEventKeyKeyName(ev)
 	case "replace":
 		tab.RxEventKeyReplace(ev)
 	}
+
+	return ""
 }
 
 // GetWord returns word under last cursor or selection.

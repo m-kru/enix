@@ -168,7 +168,7 @@ func shouldInsertUndo(actions action.Action) bool {
 	return false
 }
 
-func (tab *Tab) RxEventKeyInsert(ev *tcell.EventKey) {
+func (tab *Tab) RxEventKeyInsert(ev *tcell.EventKey) string {
 	var act action.Action = nil
 	updateView := true
 
@@ -187,17 +187,15 @@ func (tab *Tab) RxEventKeyInsert(ev *tcell.EventKey) {
 		c, _ := cfg.InsertKeys.ToCmd(ev)
 		switch c.Name {
 		case "esc":
-			/*
-				// Trim spaces from empty lines.
-				curs := cursor.Uniques(tab.Cursors, true)
-				for _, c := range curs {
-					if c.Line.HasOnlySpaces() {
-						c.Line.Clear()
-						c.LineStart()
-					}
+			// Trim spaces from empty lines.
+			curs := cursor.Uniques(tab.Cursors, true)
+			for _, c := range curs {
+				if c.Line.HasOnlySpaces() {
+					c.Line.Clear()
+					c.LineStart()
 				}
-				tab.Cursors = curs
-			*/
+			}
+			tab.Cursors = curs
 
 			tab.State = "" // Go back to normal mode
 			updateView = false
@@ -213,6 +211,8 @@ func (tab *Tab) RxEventKeyInsert(ev *tcell.EventKey) {
 		case "view-up":
 			tab.ViewUp()
 			updateView = false
+		case "sh":
+			return c.String()
 		}
 	}
 
@@ -235,6 +235,8 @@ func (tab *Tab) RxEventKeyInsert(ev *tcell.EventKey) {
 	if updateView {
 		tab.UpdateView()
 	}
+
+	return ""
 }
 
 func (tab *Tab) InsertRune(r rune) {

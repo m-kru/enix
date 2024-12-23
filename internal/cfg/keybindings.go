@@ -139,6 +139,7 @@ func DefaultInsertKeybindings() Keybindings {
 		"Ctrl+Left":  "prev-word-start",
 		"Ctrl+Right": "word-end",
 		"Ctrl+A":     "line-start",
+		"Ctrl+T":     "sh -i tmpl",
 		"Backspace":  "backspace",
 		"Backspace2": "backspace",
 		"Delete":     "del",

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"os/exec"
+	"strings"
 
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/sel"
@@ -34,11 +35,16 @@ func (tab *Tab) shCursors(addIndent bool, cmdName string, args []string) error {
 		return fmt.Errorf("%v: %s", err, stderr.String())
 	}
 
-	// Paste stdout
-	for _, c := range tab.Cursors {
-		c.Left()
+	// Move cursor left for regular paste.
+	stdoutStr := stdout.String()
+	if !strings.HasSuffix(stdoutStr, "\n") {
+		for _, c := range tab.Cursors {
+			c.Left()
+		}
 	}
-	actions := tab.pasteCursors(stdout.String(), addIndent)
+
+	// Paste stdout
+	actions := tab.pasteCursors(stdoutStr, addIndent)
 	if len(actions) > 0 {
 		tab.undoPush(actions.Reverse(), prevCurs, prevSels)
 	}

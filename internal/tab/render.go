@@ -252,12 +252,6 @@ func (tab *Tab) Render() {
 	if linesFrame.Screen != nil {
 		tab.RenderLines(line, lineNum, linesFrame)
 
-		// This is required for view commands, as the primary cursors is
-		// rendered by the tcell all the time.
-		if tab.HasFocus {
-			frame.HideCursor()
-		}
-
 		if len(tab.Cursors) > 0 {
 			tab.RenderCursors(linesFrame)
 		} else {
