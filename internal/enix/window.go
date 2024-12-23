@@ -17,7 +17,9 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
-type Window struct {
+var Window window
+
+type window struct {
 	Mouse  mouse.Mouse
 	TabBar tabbar.TabBar
 
@@ -32,7 +34,7 @@ type Window struct {
 	CurrentTab *tab.Tab
 }
 
-func (w *Window) RxMouseEvent(ev mouse.Event) {
+func (w *window) RxMouseEvent(ev mouse.Event) {
 	if !w.TabFrame.Within(ev.X(), ev.Y()) {
 		// Currently only mouse events within tab frame are handled.
 		return
@@ -66,7 +68,7 @@ func (w *Window) RxMouseEvent(ev mouse.Event) {
 	}
 }
 
-func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
+func (w *window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 	switch ev := ev.(type) {
 	case *tcell.EventResize:
 		w.Resize()
@@ -77,7 +79,7 @@ func (w *Window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 	return w
 }
 
-func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
+func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 	var err error
 	var info string
 	updateView := true
@@ -321,7 +323,7 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 	return w
 }
 
-func (w *Window) RxDigit(digit rune) TcellEventReceiver {
+func (w *window) RxDigit(digit rune) TcellEventReceiver {
 	d := int(digit - '0')
 
 	t := w.CurrentTab
@@ -334,7 +336,7 @@ func (w *Window) RxDigit(digit rune) TcellEventReceiver {
 }
 
 // Resize handles all the required logic when screen is resized.
-func (w *Window) Resize() {
+func (w *window) Resize() {
 	w.Screen.Fill(' ', cfg.Colors.Default)
 	w.Screen.Sync()
 
@@ -352,7 +354,7 @@ func (w *Window) Resize() {
 	}
 }
 
-func (w *Window) Render() {
+func (w *window) Render() {
 	w.TabBarFrame = nil
 	w.TabFrame = frame.Frame{
 		Screen: w.Screen,
@@ -384,7 +386,7 @@ func (w *Window) Render() {
 	w.Screen.Show()
 }
 
-func (w *Window) OpenArgFiles() {
+func (w *window) OpenArgFiles() {
 	errMsg := ""
 
 	for _, file := range arg.Files {
@@ -445,7 +447,7 @@ func Start() {
 
 	width, height := screen.Size()
 
-	w := Window{
+	Window = window{
 		Mouse:       mouse.Mouse{},
 		TabBar:      tabbar.TabBar{View: view.Zero()},
 		Screen:      screen,
@@ -468,7 +470,6 @@ func Start() {
 		},
 		History:    make([]string, 0, 64),
 		HistoryIdx: 0,
-		Window:     &w,
 		Line:       nil,
 		Cursor:     nil,
 		View:       view.Zero(),
@@ -477,15 +478,15 @@ func Start() {
 	}
 
 	if len(arg.Files) == 0 {
-		w.Tabs = tab.FromString(&w.TabFrame, "", "no-name")
-		w.CurrentTab = w.Tabs
+		Window.Tabs = tab.FromString(&Window.TabFrame, "", "no-name")
+		Window.CurrentTab = Window.Tabs
 	} else {
-		w.OpenArgFiles()
+		Window.OpenArgFiles()
 	}
 
-	w.Render()
+	Window.Render()
 
-	var tcellEvRcvr TcellEventReceiver = &w
+	var tcellEvRcvr TcellEventReceiver = &Window
 	tcellEventChan := make(chan tcell.Event)
 	go screen.ChannelEvents(tcellEventChan, nil)
 
@@ -496,9 +497,9 @@ func Start() {
 		case ev := <-tcellEventChan:
 			switch ev := ev.(type) {
 			case *tcell.EventMouse:
-				mEv := w.Mouse.RxTcellEventMouse(ev)
+				mEv := Window.Mouse.RxTcellEventMouse(ev)
 				if mEv != nil {
-					w.RxMouseEvent(mEv)
+					Window.RxMouseEvent(mEv)
 					render = true
 				} else {
 					// Don't render the whole window, as nothing happened.
@@ -507,8 +508,8 @@ func Start() {
 				}
 			default:
 				tcellEvRcvr = tcellEvRcvr.RxTcellEvent(ev)
-				if tcellEvRcvr == &w {
-					w.CurrentTab.HasFocus = true
+				if tcellEvRcvr == &Window {
+					Window.CurrentTab.HasFocus = true
 					render = true
 				} else if tcellEvRcvr == nil {
 					return
@@ -519,7 +520,7 @@ func Start() {
 		// Do not rerender if focus is on the prompt.
 		// This reduces responsiveness in the case of large files.
 		if render {
-			w.Render()
+			Window.Render()
 		}
 	}
 }

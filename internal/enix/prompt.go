@@ -34,8 +34,6 @@ type prompt struct {
 	History    []string
 	HistoryIdx int
 
-	Window *Window
-
 	Line   *line.Line
 	Cursor *cursor.Cursor
 	View   view.View
@@ -269,13 +267,13 @@ func (p *prompt) HandleRune(r rune) {
 func (p *prompt) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 	switch ev := ev.(type) {
 	case *tcell.EventResize:
-		p.Window.Resize()
-		p.Window.Render()
+		Window.Resize()
+		Window.Render()
 	case *tcell.EventKey:
 		cmd, err := cfg.PromptKeys.ToCmd(ev)
 		if err != nil {
 			p.ShowError(fmt.Sprintf("%v", err))
-			return p.Window
+			return &Window
 		}
 
 		switch cmd.Name {
@@ -289,7 +287,7 @@ func (p *prompt) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 			return p.Enter()
 		case "esc", "quit":
 			p.Clear()
-			return p.Window
+			return &Window
 		case "left":
 			p.Left()
 		case "line-start":
@@ -320,11 +318,11 @@ func (p *prompt) Exec() TcellEventReceiver {
 	c, err := cmd.Parse(strings.TrimSpace(p.Line.String()))
 	if err != nil {
 		p.ShowError(fmt.Sprintf("%v", err))
-		return p.Window
+		return &Window
 	}
 
 	var info string
-	tab := p.Window.CurrentTab
+	tab := Window.CurrentTab
 	updateView := true
 
 	for range c.RepCount {
@@ -342,17 +340,17 @@ func (p *prompt) Exec() TcellEventReceiver {
 			return p
 		case "exec-error":
 			p.ShowError(strings.Join(c.Args, " "))
-			return p.Window
+			return &Window
 		case "exec-info":
 			p.ShowInfo(strings.Join(c.Args, " "))
-			return p.Window
+			return &Window
 		case "change":
 			err = exec.Change(c.Args, tab)
 		case "config-dir":
 			info, err = exec.ConfigDir(c.Args)
 		case "cursor-count":
 			p.ShowInfo(fmt.Sprintf("%d", len(tab.Cursors)))
-			return p.Window
+			return &Window
 		case "cut":
 			err = exec.Cut(c.Args, tab)
 		case "del":
@@ -376,7 +374,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 		case "h", "help":
 			tab, err = exec.Help(c.Args, tab)
 			if err == nil {
-				p.Window.CurrentTab = tab
+				Window.CurrentTab = tab
 			}
 			updateView = false
 		case "insert-line-above":
@@ -388,7 +386,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 		case "key-name":
 			knTab, err := exec.KeyName(c.Args, tab)
 			if err == nil {
-				p.Window.CurrentTab = knTab
+				Window.CurrentTab = knTab
 			}
 		case "left":
 			err = exec.Left(c.Args, tab)
@@ -407,7 +405,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 		case "o", "open":
 			tab, err = exec.Open(c.Args, tab)
 			if err == nil {
-				p.Window.CurrentTab = tab
+				Window.CurrentTab = tab
 			}
 			updateView = false
 		case "pwd":
@@ -423,8 +421,8 @@ func (p *prompt) Exec() TcellEventReceiver {
 			if err == nil && tab == nil {
 				return nil
 			} else if tab != nil {
-				p.Window.Tabs = tab.First()
-				p.Window.CurrentTab = tab
+				Window.Tabs = tab.First()
+				Window.CurrentTab = tab
 			}
 			updateView = false
 		case "quit!", "q!":
@@ -432,8 +430,8 @@ func (p *prompt) Exec() TcellEventReceiver {
 			if tab == nil {
 				return nil
 			} else {
-				p.Window.Tabs = tab.First()
-				p.Window.CurrentTab = tab
+				Window.Tabs = tab.First()
+				Window.CurrentTab = tab
 			}
 			updateView = false
 		case "redo":
@@ -446,7 +444,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 			err = exec.SelAll(c.Args, tab)
 		case "sel-count":
 			p.ShowInfo(fmt.Sprintf("%d", len(tab.Selections)))
-			return p.Window
+			return &Window
 		case "sel-down":
 			err = exec.SelDown(c.Args, tab)
 		case "sel-left":
@@ -462,7 +460,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 		case "sel-right":
 			err = exec.SelRight(c.Args, tab)
 		case "sel-to-tab":
-			p.Window.CurrentTab, err = exec.SelToTab(c.Args, tab)
+			Window.CurrentTab, err = exec.SelToTab(c.Args, tab)
 		case "sel-switch-cursor":
 			err = exec.SelSwitchCursor(c.Args, tab)
 		case "sel-up":
@@ -478,16 +476,16 @@ func (p *prompt) Exec() TcellEventReceiver {
 		case "spawn-up":
 			err = exec.SpawnUp(c.Args, tab)
 		case "suspend":
-			err = exec.Suspend(c.Args, p.Window.Screen)
+			err = exec.Suspend(c.Args, Window.Screen)
 		case "tab":
 			err = exec.Tab(c.Args, tab)
 		case "tab-count":
-			p.ShowInfo(fmt.Sprintf("%d", p.Window.Tabs.Count()))
-			return p.Window
+			p.ShowInfo(fmt.Sprintf("%d", Window.Tabs.Count()))
+			return &Window
 		case "tn", "tab-next":
-			p.Window.CurrentTab, err = exec.TabNext(c.Args, tab)
+			Window.CurrentTab, err = exec.TabNext(c.Args, tab)
 		case "tp", "tab-prev":
-			p.Window.CurrentTab, err = exec.TabPrev(c.Args, tab)
+			Window.CurrentTab, err = exec.TabPrev(c.Args, tab)
 		case "trim":
 			err = exec.Trim(c.Args, tab)
 		case "undo":
@@ -523,7 +521,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 					c.Name,
 				),
 			)
-			return p.Window
+			return &Window
 		}
 
 		if err != nil {
@@ -533,7 +531,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 
 	if err != nil {
 		p.ShowError(fmt.Sprintf("%v", err))
-		return p.Window
+		return &Window
 	}
 
 	if updateView {
@@ -546,5 +544,5 @@ func (p *prompt) Exec() TcellEventReceiver {
 		p.Clear()
 	}
 
-	return p.Window
+	return &Window
 }
