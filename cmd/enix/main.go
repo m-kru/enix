@@ -63,7 +63,7 @@ func main() {
 	}
 
 	if arg.Script != "" {
-		err := script.Exec()
+		err := script.ExecOnFiles()
 		if err != nil {
 			log.Fatalf("%v", err)
 		}

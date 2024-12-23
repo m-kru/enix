@@ -3,6 +3,7 @@ package script
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 
@@ -12,14 +13,18 @@ import (
 	"github.com/m-kru/enix/internal/tab"
 )
 
-func parseScript() ([]cmd.Command, error) {
-	var cmds []cmd.Command
-
+func parseScriptFile() ([]cmd.Command, error) {
 	script, err := os.Open(arg.Script)
 	if err != nil {
 		return nil, err
 	}
 	defer script.Close()
+
+	return parseScript(script)
+}
+
+func parseScript(script io.Reader) ([]cmd.Command, error) {
+	var cmds []cmd.Command
 
 	scanner := bufio.NewScanner(script)
 	for scanner.Scan() {
@@ -45,8 +50,8 @@ func parseScript() ([]cmd.Command, error) {
 	return cmds, nil
 }
 
-func Exec() error {
-	cmds, err := parseScript()
+func ExecOnFiles() error {
+	cmds, err := parseScriptFile()
 	if err != nil {
 		return err
 	}
@@ -56,11 +61,20 @@ func Exec() error {
 		if err != nil {
 			return err
 		}
-		for _, cmd := range cmds {
-			err := execCmd(cmd, tab)
-			if err != nil {
-				return err
-			}
+		err = Exec(tab, cmds)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func Exec(tab *tab.Tab, cmds []cmd.Command) error {
+	for _, cmd := range cmds {
+		err := execCmd(cmd, tab)
+		if err != nil {
+			return err
 		}
 	}
 
