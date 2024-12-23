@@ -187,15 +187,17 @@ func (tab *Tab) RxEventKeyInsert(ev *tcell.EventKey) {
 		c, _ := cfg.InsertKeys.ToCmd(ev)
 		switch c.Name {
 		case "esc":
-			// Trim spaces from empty lines.
-			curs := cursor.Uniques(tab.Cursors, true)
-			for _, c := range curs {
-				if c.Line.HasOnlySpaces() {
-					c.Line.Clear()
-					c.LineStart()
+			/*
+				// Trim spaces from empty lines.
+				curs := cursor.Uniques(tab.Cursors, true)
+				for _, c := range curs {
+					if c.Line.HasOnlySpaces() {
+						c.Line.Clear()
+						c.LineStart()
+					}
 				}
-			}
-			tab.Cursors = curs
+				tab.Cursors = curs
+			*/
 
 			tab.State = "" // Go back to normal mode
 			updateView = false

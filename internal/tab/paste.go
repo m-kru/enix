@@ -43,7 +43,7 @@ func (tab *Tab) pasteLineBased(text string, addIndent bool, curs []*cursor.Curso
 			t := text
 			if addIndent {
 				indent := cur.Line.Indent()
-				t = util.AddIndent(text, indent)
+				t = util.AddIndent(text, indent, true)
 			}
 			lines, lineCount = line.FromString(t[0 : len(t)-1])
 		}
@@ -106,7 +106,7 @@ func (tab *Tab) pasteCursors(text string, addIndent bool) action.Actions {
 	if strings.HasSuffix(text, "\n") {
 		actions = tab.pasteCursorsLineBased(text, addIndent)
 	} else {
-		actions = tab.pasteCursorsRegular(text)
+		actions = tab.pasteCursorsRegular(text, addIndent)
 	}
 
 	return actions
@@ -118,13 +118,22 @@ func (tab *Tab) pasteCursorsLineBased(text string, addIndent bool) action.Action
 	return tab.pasteLineBased(text, addIndent, curs)
 }
 
-func (tab *Tab) pasteCursorsRegular(text string) action.Actions {
-	lines, lineCount := line.FromString(text)
-
+func (tab *Tab) pasteCursorsRegular(text string, addIndent bool) action.Actions {
 	actions := make(action.Actions, 0, len(tab.Cursors))
 	newSels := make([]*sel.Selection, 0, len(tab.Cursors))
 
+	var lines *line.Line
+	var lineCount int
 	for curIdx, cur := range tab.Cursors {
+		if lines == nil || addIndent {
+			t := text
+			if addIndent {
+				indent := cur.Line.Indent()
+				t = util.AddIndent(text, indent, false)
+			}
+			lines, lineCount = line.FromString(t[0:len(t)])
+		}
+
 		cur.Right()
 		startRuneIdx := cur.RuneIdx
 		startCur := cur.Clone()

@@ -35,6 +35,9 @@ func (tab *Tab) shCursors(addIndent bool, cmdName string, args []string) error {
 	}
 
 	// Paste stdout
+	for _, c := range tab.Cursors {
+		c.Left()
+	}
 	actions := tab.pasteCursors(stdout.String(), addIndent)
 	if len(actions) > 0 {
 		tab.undoPush(actions.Reverse(), prevCurs, prevSels)

@@ -4,10 +4,10 @@ import (
 	"strings"
 )
 
-func AddIndent(str string, indent string) string {
+func AddIndent(str string, indent string, indentFirstLine bool) string {
 	b := strings.Builder{}
 
-	addIndent := true
+	addIndent := indentFirstLine
 
 	for _, r := range str {
 		if addIndent {
