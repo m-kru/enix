@@ -30,8 +30,6 @@ type Window struct {
 
 	Tabs       *tab.Tab // First tab
 	CurrentTab *tab.Tab
-
-	Prompt *Prompt
 }
 
 func (w *Window) RxMouseEvent(ev mouse.Event) {
@@ -99,7 +97,7 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 
 	c, err := cfg.Keys.ToCmd(ev)
 	if err != nil {
-		w.Prompt.ShowError(fmt.Sprintf("%v", err))
+		Prompt.ShowError(fmt.Sprintf("%v", err))
 		return w
 	}
 
@@ -136,8 +134,8 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			err = exec.Change(c.Args, tab)
 		case "cmd":
 			tab.HasFocus = false
-			w.Prompt.Activate("", "")
-			return w.Prompt
+			Prompt.Activate("", "")
+			return &Prompt
 		case "config-dir":
 			info, err = exec.ConfigDir(c.Args)
 		case "cut":
@@ -148,7 +146,7 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			err = exec.Down(c.Args, tab)
 		case "esc":
 			err = exec.Esc(c.Args, tab)
-			w.Prompt.Clear()
+			Prompt.Clear()
 		case "find-next":
 			err = exec.FindNext(c.Args, tab)
 		case "find-prev":
@@ -161,8 +159,8 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			err = exec.Go(c.Args, tab)
 		case "h", "help":
 			tab.HasFocus = false
-			w.Prompt.Activate("help ", "")
-			return w.Prompt
+			Prompt.Activate("help ", "")
+			return &Prompt
 		case "indent":
 			tab.Indent()
 		case "insert":
@@ -189,8 +187,8 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			err = exec.Newline(c.Args, tab)
 		case "o", "open":
 			tab.HasFocus = false
-			w.Prompt.Activate("open ", "")
-			return w.Prompt
+			Prompt.Activate("open ", "")
+			return &Prompt
 		case "paste":
 			err = exec.Paste(c.Args, tab)
 		case "pwd":
@@ -223,8 +221,8 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			info, err = exec.Save(c.Args, tab, cfg.Cfg.TrimOnSave)
 		case "search":
 			tab.HasFocus = false
-			w.Prompt.Activate("search ", tab.GetWord())
-			return w.Prompt
+			Prompt.Activate("search ", tab.GetWord())
+			return &Prompt
 		case "sel-all":
 			err = exec.SelAll(c.Args, tab)
 		case "sel-down":
@@ -251,8 +249,8 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			err = exec.SelWordEnd(c.Args, tab)
 		case "sh":
 			tab.HasFocus = false
-			w.Prompt.Activate(c.String(), "")
-			return w.Prompt
+			Prompt.Activate(c.String(), "")
+			return &Prompt
 		case "space":
 			err = exec.Space(c.Args, tab)
 		case "spawn-down":
@@ -313,11 +311,11 @@ func (w *Window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 	}
 
 	if err != nil {
-		w.Prompt.ShowError(fmt.Sprintf("%v", err))
+		Prompt.ShowError(fmt.Sprintf("%v", err))
 	} else if info != "" {
-		w.Prompt.ShowInfo(info)
+		Prompt.ShowInfo(info)
 	} else {
-		w.Prompt.Clear()
+		Prompt.Clear()
 	}
 
 	return w
@@ -345,7 +343,7 @@ func (w *Window) Resize() {
 	w.Width = width
 	w.Height = height - 1
 
-	w.Prompt.Frame = frame.Frame{
+	Prompt.Frame = frame.Frame{
 		Screen: w.Screen,
 		X:      0,
 		Y:      height - 1,
@@ -457,10 +455,9 @@ func Start() {
 		TabFrame:    frame.Frame{Screen: screen, X: 0, Y: 0, Width: width, Height: height},
 		Tabs:        nil,
 		CurrentTab:  nil,
-		Prompt:      nil,
 	}
 
-	p := Prompt{
+	Prompt = prompt{
 		Screen: screen,
 		Frame: frame.Frame{
 			Screen: screen,
@@ -478,8 +475,6 @@ func Start() {
 		ShadowText: "",
 		State:      InText,
 	}
-
-	w.Prompt = &p
 
 	if len(arg.Files) == 0 {
 		w.Tabs = tab.FromString(&w.TabFrame, "", "no-name")

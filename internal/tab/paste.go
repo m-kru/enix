@@ -131,7 +131,7 @@ func (tab *Tab) pasteCursorsRegular(text string, addIndent bool) action.Actions 
 				indent := cur.Line.Indent()
 				t = util.AddIndent(text, indent, false)
 			}
-			lines, lineCount = line.FromString(t[0:len(t)])
+			lines, lineCount = line.FromString(t[0:])
 		}
 
 		cur.Right()

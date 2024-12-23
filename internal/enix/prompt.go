@@ -23,8 +23,10 @@ const (
 	InError
 )
 
+var Prompt prompt
+
 // Prompt represents command line prompt.
-type Prompt struct {
+type prompt struct {
 	Screen tcell.Screen
 	Frame  frame.Frame
 
@@ -43,7 +45,7 @@ type Prompt struct {
 	State PromptState
 }
 
-func (p *Prompt) Clear() {
+func (p *prompt) Clear() {
 	for x := range p.Frame.Width {
 		p.Frame.SetContent(x, 0, ' ', cfg.Colors.Default)
 	}
@@ -51,7 +53,7 @@ func (p *Prompt) Clear() {
 	p.Screen.Show()
 }
 
-func (p *Prompt) ShowError(msg string) {
+func (p *prompt) ShowError(msg string) {
 	x := 0
 	for _, r := range msg {
 		if x == p.Frame.Width {
@@ -71,7 +73,7 @@ func (p *Prompt) ShowError(msg string) {
 	p.State = InError
 }
 
-func (p *Prompt) ShowInfo(msg string) {
+func (p *prompt) ShowInfo(msg string) {
 	x := 0
 	for _, r := range msg {
 		p.Frame.SetContent(x, 0, r, cfg.Colors.Default)
@@ -89,7 +91,7 @@ func (p *Prompt) ShowInfo(msg string) {
 }
 
 // Currently assume text + shadow text always fits screen width.
-func (p *Prompt) Activate(text, shadowText string) {
+func (p *prompt) Activate(text, shadowText string) {
 	p.HistoryIdx = len(p.History)
 
 	if text == "" && shadowText == "" && len(p.History) > 0 {
@@ -116,7 +118,7 @@ func (p *Prompt) Activate(text, shadowText string) {
 	p.Render()
 }
 
-func (p *Prompt) Render() {
+func (p *prompt) Render() {
 	p.Frame.SetContent(0, 0, ':', cfg.Colors.Prompt)
 
 	if !p.View.IsVisible(p.Cursor.View()) {
@@ -136,7 +138,7 @@ func (p *Prompt) Render() {
 	p.Screen.Show()
 }
 
-func (p *Prompt) Backspace() {
+func (p *prompt) Backspace() {
 	switch p.State {
 	case InShadow:
 		p.ShadowText = ""
@@ -146,7 +148,7 @@ func (p *Prompt) Backspace() {
 	}
 }
 
-func (p *Prompt) Delete() {
+func (p *prompt) Delete() {
 	switch p.State {
 	case InShadow:
 		p.ShadowText = ""
@@ -156,7 +158,7 @@ func (p *Prompt) Delete() {
 	}
 }
 
-func (p *Prompt) Down() {
+func (p *prompt) Down() {
 	if p.HistoryIdx == len(p.History) {
 		return
 	}
@@ -168,7 +170,7 @@ func (p *Prompt) Down() {
 	p.Cursor.RuneIdx = 0
 }
 
-func (p *Prompt) Up() {
+func (p *prompt) Up() {
 	if p.HistoryIdx == 0 {
 		return
 	}
@@ -180,7 +182,7 @@ func (p *Prompt) Up() {
 	p.Cursor.RuneIdx = 0
 }
 
-func (p *Prompt) Left() {
+func (p *prompt) Left() {
 	switch p.State {
 	case InShadow:
 		p.Line.Append([]byte(p.ShadowText))
@@ -191,7 +193,7 @@ func (p *Prompt) Left() {
 	}
 }
 
-func (p *Prompt) Right() {
+func (p *prompt) Right() {
 	switch p.State {
 	case InShadow:
 		p.Line.Append([]byte(p.ShadowText))
@@ -204,7 +206,7 @@ func (p *Prompt) Right() {
 	}
 }
 
-func (p *Prompt) PrevWordStart() {
+func (p *prompt) PrevWordStart() {
 	switch p.State {
 	case InShadow:
 		p.ShadowText = ""
@@ -215,7 +217,7 @@ func (p *Prompt) PrevWordStart() {
 	}
 }
 
-func (p *Prompt) WordEnd() {
+func (p *prompt) WordEnd() {
 	switch p.State {
 	case InShadow:
 		p.Line.Append([]byte(p.ShadowText))
@@ -227,7 +229,7 @@ func (p *Prompt) WordEnd() {
 	}
 }
 
-func (p *Prompt) LineStart() {
+func (p *prompt) LineStart() {
 	switch p.State {
 	case InShadow:
 		p.ShadowText = ""
@@ -238,7 +240,7 @@ func (p *Prompt) LineStart() {
 	}
 }
 
-func (p *Prompt) Enter() TcellEventReceiver {
+func (p *prompt) Enter() TcellEventReceiver {
 	if p.State == InShadow {
 		p.Line.Append([]byte(p.ShadowText))
 		p.ShadowText = ""
@@ -253,7 +255,7 @@ func (p *Prompt) Enter() TcellEventReceiver {
 	return p.Exec()
 }
 
-func (p *Prompt) HandleRune(r rune) {
+func (p *prompt) HandleRune(r rune) {
 	switch p.State {
 	case InShadow:
 		p.ShadowText = ""
@@ -264,7 +266,7 @@ func (p *Prompt) HandleRune(r rune) {
 	}
 }
 
-func (p *Prompt) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
+func (p *prompt) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 	switch ev := ev.(type) {
 	case *tcell.EventResize:
 		p.Window.Resize()
@@ -314,7 +316,7 @@ func (p *Prompt) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 }
 
 // Exec executes command.
-func (p *Prompt) Exec() TcellEventReceiver {
+func (p *prompt) Exec() TcellEventReceiver {
 	c, err := cmd.Parse(strings.TrimSpace(p.Line.String()))
 	if err != nil {
 		p.ShowError(fmt.Sprintf("%v", err))
