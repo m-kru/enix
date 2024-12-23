@@ -46,7 +46,7 @@ func DefaultKeybindings() Keybindings {
 		"Ctrl+K":  "spawn-up",
 		"Rune[a]": "line-start",
 		"Rune[f]": "line-end",
-		"Rune[t]": "sh -i tmpl",
+		"Rune[t]": "sh -i tmpl -enix",
 		// Deletion
 		"Backspace":  "backspace",
 		"Backspace2": "backspace",
@@ -139,7 +139,7 @@ func DefaultInsertKeybindings() Keybindings {
 		"Ctrl+Left":  "prev-word-start",
 		"Ctrl+Right": "word-end",
 		"Ctrl+A":     "line-start",
-		"Ctrl+T":     "sh -i tmpl",
+		"Ctrl+T":     "sh -i tmpl -enix",
 		"Backspace":  "backspace",
 		"Backspace2": "backspace",
 		"Delete":     "del",

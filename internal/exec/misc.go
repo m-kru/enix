@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/m-kru/enix/internal/cmd"
 	"github.com/m-kru/enix/internal/tab"
 )
 
@@ -210,19 +211,31 @@ func Sh(args []string, tab *tab.Tab) error {
 		return fmt.Errorf("sh: missing command name")
 	}
 
-	var cmd string
+	var shCmd string
 	var cmdArgs []string
 	if indent {
-		cmd = args[1]
+		shCmd = args[1]
 		cmdArgs = args[2:]
 	} else {
-		cmd = args[0]
+		shCmd = args[0]
 		cmdArgs = args[1:]
 	}
 
-	err := tab.Sh(indent, cmd, cmdArgs)
+	script, err := tab.Sh(indent, shCmd, cmdArgs)
 	if err != nil {
 		return fmt.Errorf("sh: %v", err)
+	}
+
+	cmds, err := cmd.ParseScript(script)
+	if err != nil {
+		return fmt.Errorf("sh: %v", err)
+	}
+
+	for _, cmd := range cmds {
+		err := Exec(cmd, tab)
+		if err != nil {
+			return fmt.Errorf("sh: %v", err)
+		}
 	}
 
 	return nil
