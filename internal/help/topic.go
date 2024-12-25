@@ -14,38 +14,50 @@ This is achieved using the 'sh' command (not yet implemented).
 Enter 'help sh' command for more details.
 `,
 
-	"keybindings": `enix tries to offer sane default keybindings so that the user doesn't have to
+	"keybindings": `There are three independent keybinding sets.
+Each of them is used in a different context:
+1. keys - keybindings for a tab in the normal mode,
+2. insert keys - keybindings for a tab in the insert mode,
+3. prompt keys - keybindings for the prompt.
+
+Enix tries to offer sane default keybindings so that the user doesn't have to
 configure much out of the box and can use the editor straight after installation
 on various machines.
 
-The default keybindings follows the following rules (with some exceptions):
+To get currently set keybindings, call enix with one of the following flags:
+'-dump-keys', '-dump-insert-keys', or '-dump-prompt-keys'.
+
+The default keybindings try to follow the following rules (with some exceptions):
+- The most common commands are under primary keys so that the actions associated
+  with them can be executed with a single keystroke.
 - Keybindings with the Ctrl modifier are used to control things. For example,
-  control cursor position, spawn new cursors, open or save file, open or close
-  tabs, text selections.
-- Keybindings with the Alt modifier are used to alternate the text buffer.
-  For example, move lines up or down, increase or decrease the indent.
-- Keybindings with the Shift modifier are used to extend or shirnk selections.
+  spawn new cursors, scroll view, create or iterate tabs.
+- Keybindings with the Alt modifier are used to alternate the text.
+  For example, join or move lines up or down.
+- Keybindings with the Shift modifier are used to extend or shrink selections.
 
-However, some keybindings with the Ctrl modifier are so omnipresent and have
-unified behavior that enix follows them and has a few exceptions from its
-default keybinding rules.
-- Ctrl+V - paste text into the text buffer,
-- Ctrl+X - cut selections/line.
+Setting custom keybindings
 
-The following default Ctrl keybindings also follow common conventions.
-However, they are not exceptions as they don't alternate the text buffer:
-- Ctrl+A - select whole text buffer,
-- Ctrl+C - copy text,
-- Ctrl+F - find text,
-- Ctrl+O - open file,
-- Ctrl+Q - quit tab/enix,
-- Ctrl+S - save file,
-- Ctrl+T - open new tab.
+The user can overwrite default keybindings or define new custom ones.
+To do so, one has to provide the following files in the enix configuration directory:
+1. keys.json - custom keybindings for the tab normal mode,
+2. insert-keys.json - custom keybindings for the tab insert mode,
+3. prompt-keys.json - custom keybindings for the prompt.
+
+These files shall contain a single JSON object representing a keybinding map.
+A single key is a command name, and a single value is a key combination name.
+A good starting point for defining custom keybindings might be dumping keys first.
+
+Getting key names
+
+Getting some key names might not be obvious.
+For such cases, enix provides the 'key-name' command.
+To get more details, open enix and execute the 'help key-name' command.
 
 Risky keybindings
 
-enix receives key events sent from a terminal emulator, not from the keyboard.
-As terminal emulators are weird and non-uniform applications they eat or
+Enix receives key events from a terminal emulator, not from the keyboard.
+As terminal emulators are weird and non-uniform applications, they eat or
 replace some key events. This is why some keybindings with the Ctrl modifier
 never reach enix.
 
@@ -60,7 +72,6 @@ The following Ctrl keybindings are considered risky and are advised to be avoide
 - Ctrl+Enter - Enter,
 - Ctrl+[1|2|3|4|5|6|7|8|9|0] - runes and control sequences.
 
-Please note, that all window manager or custom terminal emulator keybindings
-also won't reach enix, as they are simply consumed by your window manager or
-terminal emulator.`,
+Please note that all window manager or custom terminal emulator keybindings also won't reach enix, as your window manager or
+terminal emulator consumes them.`,
 }
