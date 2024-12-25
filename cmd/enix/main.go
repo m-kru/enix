@@ -39,6 +39,14 @@ func main() {
 		fmt.Printf("%s\n", string(data))
 	}
 
+	if arg.DumpInsertKeys {
+		data, err := json.MarshalIndent(cfg.InsertKeys, "", "\t")
+		if err != nil {
+			log.Fatalf("%v", err)
+		}
+		fmt.Printf("%s\n", string(data))
+	}
+
 	if arg.DumpPromptKeys {
 		data, err := json.MarshalIndent(cfg.PromptKeys, "", "\t")
 		if err != nil {
@@ -47,7 +55,7 @@ func main() {
 		fmt.Printf("%s\n", string(data))
 	}
 
-	if arg.DumpConfig || arg.DumpKeys || arg.DumpPromptKeys {
+	if arg.DumpConfig || arg.DumpKeys || arg.DumpInsertKeys || arg.DumpPromptKeys {
 		os.Exit(0)
 	}
 
