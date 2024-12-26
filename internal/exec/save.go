@@ -7,6 +7,7 @@ import (
 
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/tab"
+	"github.com/m-kru/enix/internal/util"
 )
 
 func Save(args []string, tab *tab.Tab, trim bool) (string, error) {
@@ -23,11 +24,20 @@ func Save(args []string, tab *tab.Tab, trim bool) (string, error) {
 		tab.Trim()
 	}
 
+	tab.ModMutex.Lock()
+	defer tab.ModMutex.Unlock()
+
+	var info string
+	var err error
 	if cfg.Cfg.SafeFileSave {
-		return safeSave(tab, path)
+		info, err = safeSave(tab, path)
 	} else {
-		return save(tab, path)
+		info, err = save(tab, path)
 	}
+
+	tab.ModTime = util.FileModTime(tab.Path)
+
+	return info, err
 }
 
 func save(tab *tab.Tab, path string) (string, error) {

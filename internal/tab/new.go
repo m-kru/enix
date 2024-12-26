@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
@@ -51,6 +52,8 @@ func Empty(
 		RedoStack:            undo.NewStack(cfg.Cfg.UndoSize),
 		UndoCount:            0,
 		RedoCount:            0,
+		ModMutex:             sync.Mutex{},
+		ModTime:              util.FileModTime(""),
 		Prev:                 nil,
 		Next:                 nil,
 	}
@@ -138,6 +141,8 @@ func Open(
 		RedoStack:            undo.NewStack(cfg.Cfg.UndoSize),
 		UndoCount:            0,
 		RedoCount:            0,
+		ModMutex:             sync.Mutex{},
+		ModTime:              util.FileModTime(path),
 		Prev:                 nil,
 		Next:                 nil,
 	}, err
@@ -177,6 +182,8 @@ func FromString(
 		RedoStack:            undo.NewStack(cfg.Cfg.UndoSize),
 		UndoCount:            0,
 		RedoCount:            0,
+		ModMutex:             sync.Mutex{},
+		ModTime:              util.FileModTime(path),
 		Prev:                 nil,
 		Next:                 nil,
 	}

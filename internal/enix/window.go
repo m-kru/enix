@@ -3,6 +3,7 @@ package enix
 import (
 	"fmt"
 	"log"
+	"time"
 	"unicode"
 
 	"github.com/m-kru/enix/internal/arg"
@@ -12,6 +13,7 @@ import (
 	"github.com/m-kru/enix/internal/mouse"
 	"github.com/m-kru/enix/internal/tab"
 	"github.com/m-kru/enix/internal/tabbar"
+	"github.com/m-kru/enix/internal/util"
 	"github.com/m-kru/enix/internal/view"
 
 	"github.com/gdamore/tcell/v2"
@@ -485,6 +487,8 @@ func Start() {
 
 	Window.Render()
 
+	changeWatcher := time.NewTicker(500 * time.Millisecond)
+
 	var tcellEvRcvr TcellEventReceiver = &Window
 	tcellEventChan := make(chan tcell.Event)
 	go screen.ChannelEvents(tcellEventChan, nil)
@@ -512,6 +516,12 @@ func Start() {
 				} else if tcellEvRcvr == nil {
 					return
 				}
+			}
+		case <-changeWatcher.C:
+			tab := Window.CurrentTab
+			if tab.ModTime.Compare(util.FileModTime(tab.Path)) < 0 {
+				Prompt.AskTabReload()
+				tcellEvRcvr = &Prompt
 			}
 		}
 

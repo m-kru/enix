@@ -19,7 +19,8 @@ type Colorscheme struct {
 	Default tcell.Style
 
 	// Error displaying
-	Error tcell.Style
+	Error   tcell.Style
+	Warning tcell.Style
 
 	TabBar     tcell.Style
 	CurrentTab tcell.Style
@@ -134,7 +135,8 @@ func DefaultColorscheme() Colorscheme {
 	return Colorscheme{
 		Default: tcell.StyleDefault,
 
-		Error: tcell.StyleDefault.Foreground(tcell.ColorMaroon),
+		Error:   tcell.StyleDefault.Foreground(tcell.ColorMaroon),
+		Warning: tcell.StyleDefault.Foreground(tcell.ColorOlive),
 
 		TabBar:     tcell.StyleDefault.Background(tcell.ColorBlack),
 		CurrentTab: tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorOlive),

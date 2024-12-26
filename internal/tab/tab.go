@@ -1,6 +1,9 @@
 package tab
 
 import (
+	"sync"
+	"time"
+
 	"github.com/m-kru/enix/internal/action"
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/frame"
@@ -49,6 +52,9 @@ type Tab struct {
 
 	UndoCount int // Undo stack count to track if tab has unsaved changes.
 	RedoCount int // Redo stack count to track if tab has unsaved changes.
+
+	ModMutex sync.Mutex
+	ModTime  time.Time // Modification time of the corresponding file in the file system.
 
 	Prev *Tab
 	Next *Tab

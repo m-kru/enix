@@ -10,6 +10,7 @@ import (
 	"github.com/m-kru/enix/internal/exec"
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/line"
+	"github.com/m-kru/enix/internal/util"
 	"github.com/m-kru/enix/internal/view"
 
 	"github.com/gdamore/tcell/v2"
@@ -21,6 +22,7 @@ const (
 	InText PromptState = iota
 	InShadow
 	InError
+	TabReloadQuestion
 )
 
 var Prompt prompt
@@ -114,6 +116,31 @@ func (p *prompt) Activate(text, shadowText string) {
 	p.View.Height = 1
 
 	p.Render()
+}
+
+func (p *prompt) AskTabReload() {
+	p.State = TabReloadQuestion
+	str := "file was modified externally, reload y/n?"
+	x := 0
+	for _, r := range str {
+		p.Frame.SetContent(x, 0, r, cfg.Colors.Warning)
+		x++
+	}
+
+	p.Frame.SetContent(x, 0, ' ', cfg.Colors.Warning)
+	x++
+	p.Frame.SetContent(x, 0, ' ', cfg.Colors.Warning.Reverse(true))
+	x++
+
+	for {
+		if x == p.Frame.Width {
+			break
+		}
+		p.Frame.SetContent(x, 0, ' ', cfg.Colors.Warning)
+		x++
+	}
+
+	p.Screen.Show()
 }
 
 func (p *prompt) Render() {
@@ -265,6 +292,10 @@ func (p *prompt) HandleRune(r rune) {
 }
 
 func (p *prompt) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
+	if p.State == TabReloadQuestion {
+		return p.rxTcellEventTabReloadQuestion(ev)
+	}
+
 	switch ev := ev.(type) {
 	case *tcell.EventResize:
 		Window.Resize()
@@ -311,6 +342,41 @@ func (p *prompt) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 	p.Render()
 
 	return p
+}
+
+func (p *prompt) rxTcellEventTabReloadQuestion(ev tcell.Event) TcellEventReceiver {
+	var r rune
+
+	switch ev := ev.(type) {
+	case *tcell.EventResize:
+		Window.Resize()
+		Window.Render()
+	case *tcell.EventKey:
+		switch ev.Key() {
+		case tcell.KeyRune:
+			r = ev.Rune()
+		}
+	}
+
+	if r != 'n' && r != 'y' {
+		return p
+	}
+
+	var err error
+	tab := Window.CurrentTab
+	if r == 'y' {
+		err = tab.Reload()
+	}
+
+	tab.ModTime = util.FileModTime(tab.Path)
+	p.State = InText
+	p.Clear()
+
+	if err != nil {
+		p.ShowError(err.Error())
+	}
+
+	return &Window
 }
 
 // Exec executes command.
