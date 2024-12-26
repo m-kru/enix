@@ -351,6 +351,7 @@ func (p *prompt) rxTcellEventTabReloadQuestion(ev tcell.Event) TcellEventReceive
 	case *tcell.EventResize:
 		Window.Resize()
 		Window.Render()
+		p.AskTabReload()
 	case *tcell.EventKey:
 		switch ev.Key() {
 		case tcell.KeyRune:
