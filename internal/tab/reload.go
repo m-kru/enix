@@ -1,8 +1,11 @@
 package tab
 
 import (
+	"os"
+
 	"github.com/m-kru/enix/internal/action"
 	"github.com/m-kru/enix/internal/cursor"
+	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/sel"
 )
 
@@ -19,20 +22,45 @@ func (tab *Tab) Reload() error {
 
 	var actions action.Actions
 
-	if len(actions) > 0 {
-		tab.undoPush(actions.Reverse(), prevCurs, prevSels)
+	bytes, err := os.ReadFile(tab.Path)
+	if err != nil {
+		return err
 	}
 
-	// TODO: Delete all lines
+	// Delete all lines
+	cur := cursor.New(tab.Lines, 1, 0)
+	for range tab.LineCount {
+		act := cur.DeleteLine()
+		actions = append(actions, act)
+		tab.handleAction(act)
 
-	// TODO: Insert new lines
+		for _, m := range tab.Marks {
+			m.Inform(act)
+		}
+	}
+
+	// Insert new lines
+	line, lineCount := line.FromString(string(bytes))
+	for range lineCount {
+		act := cur.InsertLineBelow(line.String())
+		actions = append(actions, act)
+		tab.handleAction(act)
+		cur.Down()
+		line = line.Next
+	}
+
+	// Remove first extra line
+	cur = cursor.New(tab.Lines, 1, 0)
+	act := cur.DeleteLine()
+	actions = append(actions, act)
+	tab.handleAction(act)
 
 	// Create new cursor
 	lineNum := lastCur.LineNum
 	if lineNum > tab.LineCount {
 		lineNum = tab.LineCount
 	}
-	line := tab.Lines.Get(lineNum)
+	line = tab.Lines.Get(lineNum)
 
 	rIdx := lastCur.RuneIdx
 	lineRC := line.RuneCount()
@@ -42,6 +70,10 @@ func (tab *Tab) Reload() error {
 
 	newCur := cursor.New(line, lineNum, rIdx)
 	tab.Cursors = []*cursor.Cursor{newCur}
+
+	if len(actions) > 0 {
+		tab.undoPush(actions.Reverse(), prevCurs, prevSels)
+	}
 
 	return nil
 }

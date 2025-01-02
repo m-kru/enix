@@ -55,7 +55,6 @@ func (tab *Tab) undo(act *undo.Action) {
 	}
 
 	tab.undoActions(as)
-	tab.handleAction(as)
 
 	tab.Cursors = act.Cursors
 	tab.Selections = act.Selections
@@ -92,6 +91,10 @@ func (tab *Tab) undoActions(acts action.Actions) {
 			a.Line.InsertString(a.Str, a.StartRuneIdx)
 		case *action.StringDelete:
 			a.Line.DeleteString(a.StartRuneIdx, a.StartRuneIdx+a.RuneCount-1)
+		}
+
+		if _, ok := act.(action.Actions); !ok {
+			tab.handleAction(act)
 		}
 	}
 }
