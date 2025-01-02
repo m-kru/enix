@@ -251,16 +251,16 @@ func (tab *Tab) InsertRune(r rune) {
 }
 
 func (tab *Tab) insertRune(r rune) action.Action {
-	var a action.Action
+	var act action.Action
 
 	if tab.Cursors != nil {
-		a = tab.insertRuneCursors(r)
+		act = tab.insertRuneCursors(r)
 	} else {
-		a = nil
+		act = nil
 		// insert rune for selections unimplemented
 	}
 
-	return a
+	return act
 }
 
 func (tab *Tab) insertRuneCursors(r rune) action.Action {

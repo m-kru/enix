@@ -5,6 +5,8 @@ import (
 
 	"github.com/m-kru/enix/internal/action"
 	"github.com/m-kru/enix/internal/line"
+
+	"github.com/mattn/go-runewidth"
 )
 
 func (c *Cursor) InsertNewline(indent bool) action.Actions {
@@ -42,6 +44,7 @@ func (c *Cursor) InsertNewline(indent bool) action.Actions {
 func (c *Cursor) InsertRune(r rune) *action.RuneInsert {
 	c.Line.InsertRune(r, c.RuneIdx)
 	c.RuneIdx++
+	c.colIdx += runewidth.RuneWidth(r)
 	return &action.RuneInsert{Line: c.Line, Rune: r, RuneIdx: c.RuneIdx - 1}
 }
 
