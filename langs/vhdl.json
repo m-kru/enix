@@ -40,7 +40,8 @@
 			"PositiveLookAhead": "[a-zA-Z]"
 		},
 		"End": {
-			"Regex": "\\s"
+			"Regex": "\\w",
+			"PositiveLookAhead": "\\W"
 		}
 	},
 	{
