@@ -41,7 +41,7 @@
 		},
 		"End": {
 			"Regex": "\\w",
-			"PositiveLookAhead": "\\W"
+			"PositiveLookAhead": "\\W|$"
 		}
 	},
 	{
