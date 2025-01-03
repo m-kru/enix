@@ -35,16 +35,16 @@ func Change(args []string, tab *tab.Tab) error {
 	return nil
 }
 
-func Cut(args []string, tab *tab.Tab) error {
+func Cut(args []string, tab *tab.Tab) (string, error) {
 	if len(args) > 0 {
-		return fmt.Errorf(
+		return "", fmt.Errorf(
 			"cut: expected 0 args, provided %d", len(args),
 		)
 	}
 
-	tab.Cut()
+	info := tab.Cut()
 
-	return nil
+	return info, nil
 }
 
 func Esc(args []string, tab *tab.Tab) error {

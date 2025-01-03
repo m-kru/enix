@@ -419,7 +419,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 			p.ShowInfo(fmt.Sprintf("%d", len(tab.Cursors)))
 			return &Window
 		case "cut":
-			err = exec.Cut(c.Args, tab)
+			info, err = exec.Cut(c.Args, tab)
 		case "del":
 			err = exec.Del(c.Args, tab)
 		case "down":

@@ -1,6 +1,7 @@
 package tab
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/m-kru/enix/internal/action"
@@ -10,18 +11,20 @@ import (
 	"github.com/m-kru/enix/internal/sel"
 )
 
-func (tab *Tab) Cut() {
+func (tab *Tab) Cut() string {
 	prevCurs := cursor.Clone(tab.Cursors)
 	prevSels := sel.Clone(tab.Selections)
 
-	actions := tab.cut()
+	info, actions := tab.cut()
 
 	if len(actions) > 0 {
 		tab.undoPush(actions.Reverse(), prevCurs, prevSels)
 	}
+
+	return info
 }
 
-func (tab *Tab) cut() action.Actions {
+func (tab *Tab) cut() (string, action.Actions) {
 	if len(tab.Cursors) > 0 {
 		return tab.cutCursors()
 	} else {
@@ -29,7 +32,7 @@ func (tab *Tab) cut() action.Actions {
 	}
 }
 
-func (tab *Tab) cutCursors() action.Actions {
+func (tab *Tab) cutCursors() (string, action.Actions) {
 	curs := cursor.Uniques(tab.Cursors, true)
 
 	// Copy lines to the clipboard.
@@ -82,10 +85,24 @@ func (tab *Tab) cutCursors() action.Actions {
 
 	tab.Cursors = newCurs
 
-	return actions
+	info := "cut line"
+	if len(curs) > 1 {
+		info = fmt.Sprintf("cut %d lines", len(curs))
+	}
+
+	return info, actions
 }
 
-func (tab *Tab) cutSelections() action.Actions {
+func (tab *Tab) cutSelections() (string, action.Actions) {
+	selCount := len(tab.Selections)
+
 	tab.yankSelections()
-	return tab.deleteSelections()
+	acts := tab.deleteSelections()
+
+	info := "cut selection"
+	if selCount > 1 {
+		info = fmt.Sprintf("cut %d selections", selCount)
+	}
+
+	return info, acts
 }
