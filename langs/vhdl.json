@@ -36,7 +36,7 @@
 		"Style": "Attribute",
 		"Start": {
 			"Regex": "'",
-			"PositiveLookBehind": "\\w",
+			"PositiveLookBehind": "\\w|\\)",
 			"PositiveLookAhead": "[a-zA-Z]"
 		},
 		"End": {
