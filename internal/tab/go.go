@@ -46,7 +46,6 @@ func (tab *Tab) Go(lineNum int, col int) {
 	if tab.View.IsVisible(cur.View()) {
 		return
 	}
-
 	tab.ViewCenter()
 }
 
@@ -61,7 +60,25 @@ func (tab *Tab) GoMark(name string) error {
 		tab.Cursors = cursor.Clone(m.Cursors)
 	default:
 		// Going to selection mark unimplemented
+		return nil
 	}
+
+	// Don't change the view if running in running in script mode.
+	if arg.Script != "" {
+		return nil
+	}
+
+	var cur *cursor.Cursor
+	if len(tab.Cursors) > 0 {
+		cur = tab.Cursors[len(tab.Cursors)-1]
+	} else {
+		cur = tab.Selections[len(tab.Selections)-1].GetCursor()
+	}
+
+	if tab.View.IsVisible(cur.View()) {
+		return nil
+	}
+	tab.ViewCenter()
 
 	return nil
 }
