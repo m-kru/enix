@@ -71,12 +71,12 @@ func (tab *Tab) joinSelections() action.Actions {
 
 		// Selections are going to be changed, inform only unprocessed selections.
 		for _, s2 := range tab.Selections[i+1:] {
-			s2.Inform(act)
+			s2.Inform(act, true)
 		}
 
 		// Inform new selections
 		for _, s2 := range sels {
-			s2.Inform(act)
+			s2.Inform(act, true)
 		}
 
 		for _, m := range tab.Marks {
@@ -157,12 +157,12 @@ func (tab *Tab) lineDownSelections() action.Actions {
 
 		// Selections are going to be changed, inform only unprocessed selections.
 		for _, s2 := range tab.Selections[i+1:] {
-			s2.Inform(act)
+			s2.Inform(act, true)
 		}
 
 		// Inform new selections
 		for _, s2 := range sels {
-			s2.Inform(act)
+			s2.Inform(act, true)
 		}
 
 		for _, m := range tab.Marks {
@@ -247,12 +247,12 @@ func (tab *Tab) lineUpSelections() action.Actions {
 
 		// Selections are going to be changed, inform only unprocessed selections.
 		for _, s2 := range tab.Selections[i+1:] {
-			s2.Inform(act)
+			s2.Inform(act, true)
 		}
 
 		// Inform new selections
 		for _, s2 := range sels {
-			s2.Inform(act)
+			s2.Inform(act, true)
 		}
 
 		for _, m := range tab.Marks {

@@ -245,25 +245,24 @@ func (tab *Tab) InsertRune(r rune) {
 
 	actions := tab.insertRune(r)
 
-	if actions != nil {
+	if len(actions) > 0 {
 		tab.undoPush(actions.Reverse(), prevCurs, prevSels)
 	}
 }
 
-func (tab *Tab) insertRune(r rune) action.Action {
-	var act action.Action
+func (tab *Tab) insertRune(r rune) action.Actions {
+	var acts action.Actions
 
-	if tab.Cursors != nil {
-		act = tab.insertRuneCursors(r)
+	if len(tab.Cursors) > 0 {
+		acts = tab.insertRuneCursors(r)
 	} else {
-		act = nil
-		// insert rune for selections unimplemented
+		acts = tab.insertRuneSelections(r)
 	}
 
-	return act
+	return acts
 }
 
-func (tab *Tab) insertRuneCursors(r rune) action.Action {
+func (tab *Tab) insertRuneCursors(r rune) action.Actions {
 	actions := make(action.Actions, 0, len(tab.Cursors))
 
 	for _, c := range tab.Cursors {
@@ -280,6 +279,34 @@ func (tab *Tab) insertRuneCursors(r rune) action.Action {
 			if c2 != c {
 				c2.Inform(act)
 			}
+		}
+
+		for _, m := range tab.Marks {
+			m.Inform(act)
+		}
+	}
+
+	return actions
+}
+
+func (tab *Tab) insertRuneSelections(r rune) action.Actions {
+	actions := make(action.Actions, 0, len(tab.Selections))
+
+	for _, s := range tab.Selections {
+		var act action.Action
+
+		c := s.GetCursor()
+
+		if r == '\t' && c.WithinIndent() {
+			act = c.InsertString(tab.IndentStr)
+		} else {
+			act = c.InsertRune(r)
+		}
+
+		actions = append(actions, act)
+
+		for _, s2 := range tab.Selections {
+			s2.Inform(act, s2 != s)
 		}
 
 		for _, m := range tab.Marks {

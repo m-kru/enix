@@ -172,7 +172,7 @@ func (tab *Tab) pasteCursorsRegular(text string, addIndent bool) action.Actions 
 		}
 
 		for _, s := range newSels {
-			s.Inform(acts)
+			s.Inform(acts, true)
 		}
 
 		actions = append(actions, acts)

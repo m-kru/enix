@@ -4,14 +4,14 @@ import (
 	"github.com/m-kru/enix/internal/action"
 )
 
-func (s *Selection) Inform(act action.Action) {
+func (s *Selection) Inform(act action.Action, informCursor bool) {
 	for {
 		if s == nil {
 			break
 		}
 
 		s.inform(act)
-		if s.Cursor != nil {
+		if s.Cursor != nil && informCursor {
 			s.Cursor.Inform(act)
 		}
 
@@ -40,7 +40,7 @@ func (s *Selection) inform(act action.Action) {
 	case *action.RuneDelete:
 		s.informRuneDelete(a)
 	case *action.RuneInsert:
-		//s.informRuneInsert(a)
+		s.informRuneInsert(a)
 	case *action.StringDelete:
 		s.informStringDelete(a)
 	case *action.StringInsert:
@@ -109,6 +109,21 @@ func (s *Selection) informRuneDelete(rd *action.RuneDelete) {
 	if s.Line == rd.Line && rd.RuneIdx < s.StartRuneIdx {
 		s.StartRuneIdx--
 		s.EndRuneIdx--
+	}
+}
+
+func (s *Selection) informRuneInsert(ri *action.RuneInsert) {
+	if s.Line != ri.Line {
+		return
+	}
+
+	if ri.RuneIdx <= s.StartRuneIdx {
+		s.StartRuneIdx++
+		s.EndRuneIdx++
+	}
+
+	if ri.RuneIdx == s.EndRuneIdx {
+		s.EndRuneIdx++
 	}
 }
 

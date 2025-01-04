@@ -105,7 +105,7 @@ func (tab *Tab) deleteSelections() action.Actions {
 		// Selections are going to be destroyed anyway, so inform only
 		// unprocessed selections.
 		for _, s2 := range tab.Selections[i+1:] {
-			s2.Inform(act)
+			s2.Inform(act, true)
 		}
 
 		for _, m := range tab.Marks {
