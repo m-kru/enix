@@ -251,15 +251,11 @@ func (tab *Tab) InsertRune(r rune) {
 }
 
 func (tab *Tab) insertRune(r rune) action.Actions {
-	var acts action.Actions
-
 	if len(tab.Cursors) > 0 {
-		acts = tab.insertRuneCursors(r)
+		return tab.insertRuneCursors(r)
 	} else {
-		acts = tab.insertRuneSelections(r)
+		return tab.insertRuneSelections(r)
 	}
-
-	return acts
 }
 
 func (tab *Tab) insertRuneCursors(r rune) action.Actions {
@@ -323,21 +319,20 @@ func (tab *Tab) InsertNewline() {
 
 	actions := tab.insertNewline()
 
-	if actions != nil {
+	if len(actions) > 0 {
 		tab.undoPush(actions.Reverse(), prevCurs, prevSels)
 	}
 }
 
-func (tab *Tab) insertNewline() action.Action {
-	if tab.Cursors != nil {
+func (tab *Tab) insertNewline() action.Actions {
+	if len(tab.Cursors) > 0 {
 		return tab.insertNewlineCursors()
 	} else {
-		// insert newline for selections unimplemented
-		return nil
+		return tab.insertNewlineSelections()
 	}
 }
 
-func (tab *Tab) insertNewlineCursors() action.Action {
+func (tab *Tab) insertNewlineCursors() action.Actions {
 	actions := make(action.Actions, 0, len(tab.Cursors))
 
 	for _, c := range tab.Cursors {
@@ -349,6 +344,42 @@ func (tab *Tab) insertNewlineCursors() action.Action {
 			if c2 != c {
 				c2.Inform(act)
 			}
+		}
+
+		for _, m := range tab.Marks {
+			m.Inform(act)
+		}
+
+		// Remove spaces from "empty" lines.
+		ni := act[0].(*action.NewlineInsert)
+		skip := false
+		for _, c2 := range tab.Cursors {
+			if c2.Line == ni.NewLine1 {
+				skip = true
+				break
+			}
+		}
+		if skip || !ni.NewLine1.HasOnlySpaces() {
+			continue
+		}
+		ni.NewLine1.Clear()
+	}
+
+	return actions
+}
+
+func (tab *Tab) insertNewlineSelections() action.Actions {
+	actions := make(action.Actions, 0, len(tab.Selections))
+
+	for _, s := range tab.Selections {
+		c := s.GetCursor()
+
+		act := c.InsertNewline(true)
+		actions = append(actions, act)
+		tab.handleAction(act)
+
+		for _, s2 := range tab.Selections {
+			s2.Inform(act, s2 != s)
 		}
 
 		for _, m := range tab.Marks {

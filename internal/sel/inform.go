@@ -5,10 +5,17 @@ import (
 )
 
 func (s *Selection) Inform(act action.Action, informCursor bool) {
+	// There is a one peculiar case, when inserting a newline at the end of selection
+	// creates a new subselection at the end. Such a subselection shall not be informed
+	// about actions. This is why the last variable is required to track if the previous
+	// subselection is the last one that shall be informed about actions.
+	last := false
 	for {
-		if s == nil {
+		if last {
 			break
 		}
+
+		last = s.Next == nil
 
 		s.inform(act)
 		if s.Cursor != nil && informCursor {
@@ -86,23 +93,38 @@ func (s *Selection) informNewlineInsert(ni *action.NewlineInsert) {
 		return
 	}
 
+	if s.LineNum > ni.LineNum {
+		s.LineNum++
+	}
+
 	// Assume newline insert didn't split the selection.
 	// This should not be possible because of the way cursors
 	// and selections work.
 	// Newline insert can split selection marks. However, in such
 	// a case, the mark shall be destroyed.
-	if s.Line == ni.Line {
-		if s.EndRuneIdx < ni.RuneIdx {
-			s.Line = ni.NewLine1
-			return
-		} else {
-			s.Line = ni.NewLine2
-			s.StartRuneIdx -= ni.RuneIdx
-			s.EndRuneIdx -= ni.RuneIdx
+	if s.EndRuneIdx < ni.RuneIdx {
+		s.Line = ni.NewLine1
+	} else if s.EndRuneIdx == ni.RuneIdx {
+		// This is possbile only if this is the last subselection.
+		s.Line = ni.NewLine1
+		c := s.Cursor
+		s.Cursor = nil
+		newS := &Selection{
+			Line:         ni.NewLine2,
+			LineNum:      c.LineNum,
+			StartRuneIdx: 0,
+			EndRuneIdx:   c.RuneIdx,
+			Cursor:       c,
+			Prev:         s,
+			Next:         nil,
 		}
+		s.Next = newS
+	} else {
+		s.Line = ni.NewLine2
+		s.StartRuneIdx -= ni.RuneIdx
+		s.EndRuneIdx -= ni.RuneIdx
+		s.LineNum++
 	}
-
-	s.LineNum++
 }
 
 func (s *Selection) informRuneDelete(rd *action.RuneDelete) {
@@ -135,7 +157,7 @@ func (s *Selection) informStringDelete(sd *action.StringDelete) {
 }
 
 func (s *Selection) informStringInsert(si *action.StringInsert) {
-	if s.Line == si.Line && si.StartRuneIdx < s.StartRuneIdx {
+	if s.Line == si.Line && si.StartRuneIdx <= s.StartRuneIdx {
 		s.StartRuneIdx += si.RuneCount
 		s.EndRuneIdx += si.RuneCount
 	}
