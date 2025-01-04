@@ -395,10 +395,10 @@ func (p *prompt) Exec() TcellEventReceiver {
 	for range c.RepCount {
 		switch c.Name {
 		case "":
+			// Do nothing
 		case "add-cursor":
 			err = exec.AddCursor(c.Args, tab)
-			// Do nothing
-		case "align":
+		case "a", "align":
 			err = exec.Align(c.Args, tab)
 		case "backspace":
 			err = exec.Backspace(c.Args, tab)

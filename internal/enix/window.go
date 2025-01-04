@@ -134,7 +134,7 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		switch c.Name {
 		case "add-cursor":
 			err = exec.AddCursor(c.Args, tab)
-		case "align":
+		case "a", "align":
 			err = exec.Align(c.Args, tab)
 		case "backspace":
 			err = exec.Backspace(c.Args, tab)

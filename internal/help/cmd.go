@@ -151,6 +151,8 @@ selection starts/ends in the middle of a line.`,
 
 	// Miscellaneous
 
+	"a": `a # An alias to the align command.`,
+
 	"align": `align # Aligns columns of cursors.`,
 
 	"cut": `cut # Cuts selected text.
