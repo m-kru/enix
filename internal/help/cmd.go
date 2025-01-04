@@ -214,11 +214,14 @@ The command first deletes rune under the cursor, or runes under selection, and t
 enters the insert moode for a single insertion.`,
 
 	"sh": `sh [-i] cmd [arg] ... # Executes command cmd in the shell.
+The sh command obtains a shell via the $SHELL environment variable.
+If this variable is not set, then the command returns an error.
+
 The text directed by the command to the stdout gets pasted into the tab.
 If the text ends with the newline character, then the line-based paste is used.
 Otherwise, the regular paste is used.
 
-In the case of cursors, nothing is feed into the stdin.
+In the case of cursors, nothing is fed into the stdin.
 The command is executed only once and the text from stdout is pasted for every cursor.
 However, the paste behaves slightly different than the paste command.
 The paste starts at the cursors position, instead of one position to the right.
@@ -236,7 +239,13 @@ For cursors, current indent is the indent of a line with the cursors.
 For selections, current indent is the indent of the first line of the selection.
 
 The sh command can be used for various purposes and is the only official plug-in system for enix.
-For example, the sh command can be used with https://github.com/m-kru/tmpl for template inserting.`,
+For example, the sh command can be used with https://github.com/m-kru/tmpl for template inserting.
+
+Before executing the command, enix sets the following environment variables.
+  - ENIX_FILEPATH - absolute path to the current tab file,
+  - ENIX_FILETYPE - file type of the current tab.
+These variables can be used not only within the executed program, but also within the enix sh command.
+As these are environment variables, they will be expanded by the shell.`,
 
 	"suspend": `suspend # Stops process and gives control to shell.
 This command has been so far tested only on Linux.`,
