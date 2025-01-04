@@ -1,0 +1,96 @@
+[
+	{
+		"Name": "Default"
+	},
+	{
+		"Name": "Heading",
+		"Style": "Heading",
+		"Start": {
+			"Regex": "="
+		},
+		"End": {
+			"Regex": "$"
+		}
+	},
+	{
+		"Name": "Bold",
+		"Style": "Bold",
+		"Start": {
+			"Regex": "\\*"
+		},
+		"End": {
+			"Regex": "\\*"
+		}
+	},
+	{
+		"Name": "Bold",
+		"Style": "Italic",
+		"Start": {
+			"Regex": "_"
+		},
+		"End": {
+			"Regex": "_"
+		}
+	},
+	{
+		"Name": "Code",
+		"Style": "Code",
+		"Start": {
+			"Regex": "`",
+			"NegativeLookBehind": "`",
+			"NegativeLookAhead": "`"
+		},
+		"End": {
+			"Regex": "`",
+			"NegativeLookBehind": "`",
+			"NegativeLookAhead": "`"
+		}
+	},
+	{
+		"Name": "Code Block 3",
+		"Style": "Code",
+		"Start": {
+			"Regex": "```",
+			"NegativeLookBehind": "`",
+			"NegativeLookAhead": "`"
+		},
+		"End": {
+			"Regex": "```",
+			"NegativeLookBehind": "`",
+			"NegativeLookAhead": "`"
+		}
+	},
+	{
+		"Name": "Code Block 4",
+		"Style": "Code",
+		"Start": {
+			"Regex": "````"
+		},
+		"End": {
+			"Regex": "````"
+		}
+	},
+	{
+		"Name": "Line Comment",
+		"Style": "Comment",
+		"Start": {
+			"Regex": "//"
+		},
+		"End": {
+			"Regex": "$"
+		},
+		"ToDo": "(?i)(todo|note|xxx):"
+	},
+	{
+		"Name": "String",
+		"Style": "String",
+		"Start": {
+			"Regex": "\""
+		},
+		"End": {
+			"Regex": "\"",
+			"NegativeLookBehind": "(?:[^\\\\])\\\\"
+		},
+		"EscapeSequence": "\\\\(n|r|t|u|\"|\\\\)"
+	}
+]
