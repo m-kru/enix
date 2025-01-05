@@ -74,7 +74,7 @@ func (l *Line) Render(
 			color := cfg.Colors.Default
 			if hls != nil {
 				for {
-					// TODO: We shouldn't need this check, ss there some bug?
+					// TODO: We shouldn't need this check, is there some bug?
 					if currentHl >= len(hls) {
 						break
 					}

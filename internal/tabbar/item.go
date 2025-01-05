@@ -13,8 +13,20 @@ var items []item
 type item struct {
 	Tab      *tab.Tab
 	Name     string
-	StartIdx int // Start column idx
-	EndIdx   int // End column idx
+	StartIdx int // Start rune idx
+	EndIdx   int // End rune idx
+}
+
+func getCurrentItem(currentTab *tab.Tab) *item {
+	for x := range items {
+		if items[x].Tab == currentTab {
+			return &items[x]
+		}
+	}
+
+	// If the code gets here, then there is a bug.
+	// However, to avoid panics return first item.
+	return &items[0]
 }
 
 func createItems(tabs *tab.Tab) []item {

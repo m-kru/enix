@@ -1,49 +1,39 @@
 package tabbar
 
 import (
-	"strings"
-
 	"github.com/m-kru/enix/internal/cfg"
+	"github.com/m-kru/enix/internal/highlight"
 	"github.com/m-kru/enix/internal/tab"
 )
 
 func Render(currentTab *tab.Tab) {
-	b := strings.Builder{}
+	currentItem := getCurrentItem(currentTab)
 
-	cTabStartIdx := 0
-	cTabEndIdx := 0
-
-	for x := range items {
-		t := items[x].Tab
-
-		items[x].StartIdx = b.Len()
-		if t == currentTab {
-			cTabStartIdx = b.Len()
-		}
-
-		b.WriteRune(' ')
-		if t.HasChanges() {
-			b.WriteRune('*')
-		}
-		b.WriteString(items[x].Name)
-		b.WriteRune(' ')
-
-		items[x].EndIdx = b.Len()
-		if t == currentTab {
-			cTabEndIdx = b.Len()
-		}
+	hls := []highlight.Highlight{
+		highlight.Highlight{
+			LineNum:      1,
+			StartRuneIdx: 0,
+			EndRuneIdx:   currentItem.StartIdx,
+			Style:        cfg.Colors.TabBar,
+		},
+		highlight.Highlight{
+			LineNum:      1,
+			StartRuneIdx: currentItem.StartIdx,
+			EndRuneIdx:   currentItem.EndIdx + 1,
+			Style:        cfg.Colors.CurrentTab,
+		},
+		highlight.Highlight{
+			LineNum:      1,
+			StartRuneIdx: currentItem.EndIdx + 1,
+			EndRuneIdx:   line.RuneCount(),
+			Style:        cfg.Colors.TabBar,
+		},
 	}
 
-	for i, r := range b.String() {
-		style := cfg.Colors.TabBar
-		if cTabStartIdx <= i && i < cTabEndIdx {
-			style = cfg.Colors.CurrentTab
-		}
-		iFrame.SetContent(i, 0, r, style)
-	}
+	line.Render(1, iFrame, view, hls, nil)
 
-	// Clear remaining cells
-	for x := b.Len(); x < iFrame.Width; x++ {
+	// Fill missing space
+	for x := line.Columns(); x < iFrame.Width; x++ {
 		iFrame.SetContent(x, 0, ' ', cfg.Colors.TabBar)
 	}
 
