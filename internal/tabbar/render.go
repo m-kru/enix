@@ -42,11 +42,19 @@ func Render(currentTab *tab.Tab) {
 }
 
 func renderLeftArrow() {
-	lFrame.SetContent(0, 0, ' ', cfg.Colors.TabBar)
+	r := ' '
+	if view.Column > 1 {
+		r = '<'
+	}
+	lFrame.SetContent(0, 0, r, cfg.Colors.TabBar)
 	lFrame.SetContent(1, 0, ' ', cfg.Colors.TabBar)
 }
 
 func renderRightArrow() {
 	rFrame.SetContent(0, 0, ' ', cfg.Colors.TabBar)
-	rFrame.SetContent(1, 0, ' ', cfg.Colors.TabBar)
+	r := ' '
+	if view.LastColumn() < line.Columns() {
+		r = '>'
+	}
+	rFrame.SetContent(1, 0, r, cfg.Colors.TabBar)
 }
