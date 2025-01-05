@@ -16,6 +16,10 @@ func nilFrame() Frame {
 	return Frame{Screen: nil, X: 0, Y: 0, Width: 0, Height: 0}
 }
 
+func (f Frame) LastX() int {
+	return f.X + f.Width - 1
+}
+
 func (f Frame) HideCursor() { f.Screen.HideCursor() }
 
 func (f Frame) GetContent(x int, y int) rune {
@@ -80,11 +84,16 @@ func (f Frame) LastLine() Frame {
 	return f
 }
 
-func (f Frame) Column(x int, width int) Frame {
-	if x >= f.Width {
+// ColumnSubframe create a new frame based on f.
+// The subframe starts at the same Y coordinate and has the same height as f.
+// The subframe X coordinate must be within frame f.
+// The subframe must not exceed frame f.
+// If any of the above conditions is not met, then nil frame is returned.
+func (f Frame) ColumnSubframe(x int, width int) Frame {
+	if x < f.X || f.X+f.Width <= x {
 		return nilFrame()
 	}
-	if x+width > f.Width {
+	if x+width > f.X+f.Width {
 		return nilFrame()
 	}
 

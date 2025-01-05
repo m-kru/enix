@@ -242,13 +242,13 @@ func (tab *Tab) Render() {
 	line := tab.Lines.Get(lineNum)
 
 	// Render line numbers
-	lineNumFrame := frame.Column(0, lineNumWidth+1)
+	lineNumFrame := frame.ColumnSubframe(0, lineNumWidth+1)
 	if lineNumFrame.Screen != nil {
 		tab.RenderLineNums(line, lineNum, lineNumFrame)
 	}
 
 	// Render lines and cursors
-	linesFrame := frame.Column(lineNumWidth+1, frame.Width-lineNumWidth-1)
+	linesFrame := frame.ColumnSubframe(lineNumWidth+1, frame.Width-lineNumWidth-1)
 	if linesFrame.Screen != nil {
 		tab.RenderLines(line, lineNum, linesFrame)
 
