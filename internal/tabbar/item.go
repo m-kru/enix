@@ -8,11 +8,13 @@ import (
 	"github.com/m-kru/enix/internal/tab"
 )
 
+var items []item
+
 type item struct {
 	Tab      *tab.Tab
 	Name     string
-	StartIdx int
-	EndIdx   int
+	StartIdx int // Start column idx
+	EndIdx   int // End column idx
 }
 
 func createItems(tabs *tab.Tab) []item {

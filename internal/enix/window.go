@@ -22,15 +22,13 @@ import (
 var Window window
 
 type window struct {
-	Mouse  mouse.Mouse
-	TabBar tabbar.TabBar
+	Mouse mouse.Mouse
 
 	Screen tcell.Screen
 	Width  int
 	Height int
 
-	TabBarFrame *frame.Frame
-	TabFrame    frame.Frame
+	TabFrame frame.Frame
 
 	Tabs       *tab.Tab // First tab
 	CurrentTab *tab.Tab
@@ -358,7 +356,6 @@ func (w *window) Resize() {
 }
 
 func (w *window) Render() {
-	w.TabBarFrame = nil
 	w.TabFrame = frame.Frame{
 		Screen: w.Screen,
 		X:      0,
@@ -367,21 +364,20 @@ func (w *window) Render() {
 		Height: w.Height,
 	}
 
+	// Tab bar
 	if w.Tabs.Count() > 1 {
 		w.TabFrame.Y++
 		w.TabFrame.Height--
-
-		w.TabBarFrame = &frame.Frame{
+		f := frame.Frame{
 			Screen: w.Screen,
 			X:      0,
 			Y:      0,
 			Width:  w.Width,
 			Height: 1,
 		}
-	}
-
-	if w.TabBarFrame != nil {
-		w.TabBar.Render(w.Tabs, w.CurrentTab, *w.TabBarFrame)
+		tabbar.SetFrame(f)
+		tabbar.Update(w.Tabs, w.CurrentTab)
+		tabbar.Render(w.CurrentTab)
 	}
 
 	w.CurrentTab.Render()
@@ -451,15 +447,13 @@ func Start() {
 	width, height := screen.Size()
 
 	Window = window{
-		Mouse:       mouse.Mouse{},
-		TabBar:      tabbar.TabBar{View: view.Zero()},
-		Screen:      screen,
-		Width:       width,
-		Height:      height - 1, // One line for prompt
-		TabBarFrame: &frame.Frame{Screen: screen, X: 0, Y: 0, Width: width, Height: height},
-		TabFrame:    frame.Frame{Screen: screen, X: 0, Y: 0, Width: width, Height: height},
-		Tabs:        nil,
-		CurrentTab:  nil,
+		Mouse:      mouse.Mouse{},
+		Screen:     screen,
+		Width:      width,
+		Height:     height - 1, // One line for prompt
+		TabFrame:   frame.Frame{Screen: screen, X: 0, Y: 0, Width: width, Height: height},
+		Tabs:       nil,
+		CurrentTab: nil,
 	}
 
 	Prompt = prompt{

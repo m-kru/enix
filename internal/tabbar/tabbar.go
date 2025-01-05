@@ -1,62 +1,23 @@
 package tabbar
 
 import (
-	"strings"
-
-	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/tab"
-	"github.com/m-kru/enix/internal/view"
+	vw "github.com/m-kru/enix/internal/view"
 )
 
-type TabBar struct {
-	View  view.View
-	items []item
+var lFrame frame.Frame // Left arrow frame
+var iFrame frame.Frame // Items frame
+var rFrame frame.Frame // Right arrow frame
+
+var view vw.View
+
+func SetFrame(f frame.Frame) {
+	lFrame = f.ColumnSubframe(f.X, 2)
+	iFrame = f.ColumnSubframe(f.X+2, f.Width-4)
+	rFrame = f.ColumnSubframe(f.LastX()-1, 2)
 }
 
-func (tb TabBar) Render(
-	tabs *tab.Tab,
-	currentTab *tab.Tab,
-	frame frame.Frame,
-) {
-	tb.items = createItems(tabs)
-
-	b := strings.Builder{}
-
-	cTabStartIdx := 0
-	cTabEndIdx := 0
-
-	for x := range tb.items {
-		t := tb.items[x].Tab
-
-		tb.items[x].StartIdx = b.Len()
-		if t == currentTab {
-			cTabStartIdx = b.Len()
-		}
-
-		b.WriteRune(' ')
-		if t.HasChanges() {
-			b.WriteRune('*')
-		}
-		b.WriteString(tb.items[x].Name)
-		b.WriteRune(' ')
-
-		tb.items[x].EndIdx = b.Len()
-		if t == currentTab {
-			cTabEndIdx = b.Len()
-		}
-	}
-
-	for i, r := range b.String() {
-		style := cfg.Colors.TabBar
-		if cTabStartIdx <= i && i < cTabEndIdx {
-			style = cfg.Colors.CurrentTab
-		}
-		frame.SetContent(i, 0, r, style)
-	}
-
-	// Clear remaining cells
-	for x := b.Len(); x < frame.Width; x++ {
-		frame.SetContent(x, 0, ' ', cfg.Colors.TabBar)
-	}
+func Update(tabs *tab.Tab, currentTab *tab.Tab) {
+	items = createItems(tabs)
 }
