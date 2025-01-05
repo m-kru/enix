@@ -3,7 +3,9 @@ package exec
 import (
 	"fmt"
 	"os"
+	"strconv"
 
+	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cmd"
 	"github.com/m-kru/enix/internal/tab"
 )
@@ -81,6 +83,27 @@ func Trim(args []string, tab *tab.Tab) error {
 	tab.Trim()
 
 	return nil
+}
+
+func TrimOnSave(args []string) (string, error) {
+	if len(args) > 1 {
+		return "", fmt.Errorf(
+			"trim-on-save: expected at most 1 arg, provided %d", len(args),
+		)
+	}
+
+	if len(args) == 0 {
+		return fmt.Sprintf("%t", cfg.Cfg.TrimOnSave), nil
+	}
+
+	val, err := strconv.Atoi(args[0])
+	if err != nil {
+		return "", fmt.Errorf("trim-on-save: %v", err)
+	}
+
+	cfg.Cfg.TrimOnSave = val != 0
+
+	return "", nil
 }
 
 func Join(args []string, tab *tab.Tab) error {

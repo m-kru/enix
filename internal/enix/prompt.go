@@ -555,6 +555,8 @@ func (p *prompt) Exec() TcellEventReceiver {
 			Window.CurrentTab, err = exec.TabPrev(c.Args, tab)
 		case "trim":
 			err = exec.Trim(c.Args, tab)
+		case "trim-on-save":
+			info, err = exec.TrimOnSave(c.Args)
 		case "undo":
 			err = exec.Undo(c.Args, tab)
 		case "up":

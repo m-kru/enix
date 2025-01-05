@@ -270,6 +270,8 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			w.CurrentTab, err = exec.TabPrev(c.Args, tab)
 		case "trim":
 			err = exec.Trim(c.Args, tab)
+		case "trim-on-save":
+			info, err = exec.TrimOnSave(c.Args)
 		case "undo":
 			err = exec.Undo(c.Args, tab)
 		case "up":

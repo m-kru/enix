@@ -250,6 +250,10 @@ As these are environment variables, they will be expanded by the shell.`,
 	"suspend": `suspend # Stops process and gives control to shell.
 This command has been so far tested only on Linux.`,
 
+	"trim-on-save": `trim-on-save [value] # Sets the TrimOnSave config.
+Possible values are 0 for false, and ony other integer value for true.
+If value is not present, then the command returns current value.`,
+
 	"undo": `undo # Undos last action modifying the tab content.`,
 
 	"yank": `yank # Copies selected text.
