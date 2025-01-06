@@ -22,8 +22,6 @@ import (
 var Window window
 
 type window struct {
-	Mouse mouse.Mouse
-
 	Screen tcell.Screen
 	Width  int
 	Height int
@@ -458,7 +456,6 @@ func Start() {
 	width, height := screen.Size()
 
 	Window = window{
-		Mouse:       mouse.Mouse{},
 		Screen:      screen,
 		Width:       width,
 		Height:      height - 1, // One line for prompt
@@ -508,7 +505,7 @@ func Start() {
 		case ev := <-tcellEventChan:
 			switch ev := ev.(type) {
 			case *tcell.EventMouse:
-				mEv := Window.Mouse.RxTcellEventMouse(ev)
+				mEv := mouse.RxTcellEventMouse(ev)
 				if mEv != nil {
 					Window.RxMouseEvent(mEv)
 					render = true

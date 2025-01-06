@@ -14,34 +14,32 @@ const (
 	primaryClickCtrl
 )
 
-type Mouse struct {
-	state  State
-	prevEv *tcell.EventMouse
-}
+var state State
+var prevEv *tcell.EventMouse
 
-func (m *Mouse) RxTcellEventMouse(ev *tcell.EventMouse) Event {
-	if m.prevEv != nil {
-		if ev.When().UnixMilli()-m.prevEv.When().UnixMilli() > 500 {
-			m.state = idle
+func RxTcellEventMouse(ev *tcell.EventMouse) Event {
+	if prevEv != nil {
+		if ev.When().UnixMilli()-prevEv.When().UnixMilli() > 500 {
+			state = idle
 		}
 	}
 
-	switch m.state {
+	switch state {
 	case idle:
-		return m.rxEventIdle(ev)
+		return rxEventIdle(ev)
 	case primaryClick:
-		return m.rxEventPrimaryClick(ev)
+		return rxEventPrimaryClick(ev)
 	case doublePrimaryClick:
-		return m.rxEventDoublePrimaryClick(ev)
+		return rxEventDoublePrimaryClick(ev)
 	case primaryClickCtrl:
-		return m.rxEventPrimaryClickCtrl(ev)
+		return rxEventPrimaryClickCtrl(ev)
 	}
 
 	return nil
 }
 
-func (m *Mouse) rxEventIdle(ev *tcell.EventMouse) Event {
-	m.prevEv = ev
+func rxEventIdle(ev *tcell.EventMouse) Event {
+	prevEv = ev
 	x, y := ev.Position()
 
 	switch ev.Buttons() {
@@ -49,14 +47,14 @@ func (m *Mouse) rxEventIdle(ev *tcell.EventMouse) Event {
 		// Do nothing, just mouse movement.
 	case tcell.Button1:
 		if ev.Modifiers()&tcell.ModCtrl != 0 {
-			m.state = primaryClickCtrl
+			state = primaryClickCtrl
 			return PrimaryClickCtrl{x, y}
 		} else {
-			m.state = primaryClick
+			state = primaryClick
 			return PrimaryClick{x, y}
 		}
 	case tcell.WheelDown, tcell.WheelUp:
-		return m.rxScrollEvent(ev)
+		return rxScrollEvent(ev)
 	default:
 		// Do nothing, other mouse event
 	}
@@ -64,22 +62,22 @@ func (m *Mouse) rxEventIdle(ev *tcell.EventMouse) Event {
 	return nil
 }
 
-func (m *Mouse) rxEventPrimaryClick(ev *tcell.EventMouse) Event {
+func rxEventPrimaryClick(ev *tcell.EventMouse) Event {
 	switch ev.Buttons() {
 	case tcell.ButtonNone:
 		// Do nothing, just mouse movement.
 	case tcell.Button1:
-		x, y := m.prevEv.Position()
+		x, y := prevEv.Position()
 		x2, y2 := ev.Position()
-		m.prevEv = ev
+		prevEv = ev
 		if x == x2 && y == y2 {
-			m.state = doublePrimaryClick
+			state = doublePrimaryClick
 			return DoublePrimaryClick{x, y}
 		} else {
 			return PrimaryClick{x2, y2}
 		}
 	case tcell.WheelDown, tcell.WheelUp:
-		return m.rxScrollEvent(ev)
+		return rxScrollEvent(ev)
 	default:
 		// Do nothing, other mouse event
 	}
@@ -87,25 +85,25 @@ func (m *Mouse) rxEventPrimaryClick(ev *tcell.EventMouse) Event {
 	return nil
 }
 
-func (m *Mouse) rxEventDoublePrimaryClick(ev *tcell.EventMouse) Event {
+func rxEventDoublePrimaryClick(ev *tcell.EventMouse) Event {
 	switch ev.Buttons() {
 	case tcell.ButtonNone:
 		// Do nothing, just mouse movement.
 	case tcell.Button1:
-		x, y := m.prevEv.Position()
+		x, y := prevEv.Position()
 		x2, y2 := ev.Position()
-		m.prevEv = ev
+		prevEv = ev
 		if x == x2 && y == y2 {
 			// Go back to idle state.
 			// Triple primary click is a terminal event.
-			m.state = idle
+			state = idle
 			return TriplePrimaryClick{x, y}
 		} else {
 			return PrimaryClick{x2, y2}
 		}
 		// Implement TriplePrimaryClick event handling here.
 	case tcell.WheelDown, tcell.WheelUp:
-		return m.rxScrollEvent(ev)
+		return rxScrollEvent(ev)
 	default:
 		// Do nothing, other mouse event
 	}
@@ -113,19 +111,19 @@ func (m *Mouse) rxEventDoublePrimaryClick(ev *tcell.EventMouse) Event {
 	return nil
 }
 
-func (m *Mouse) rxEventPrimaryClickCtrl(ev *tcell.EventMouse) Event {
+func rxEventPrimaryClickCtrl(ev *tcell.EventMouse) Event {
 	switch ev.Buttons() {
 	case tcell.ButtonNone:
 		// Do nothing, just mouse movement.
 	case tcell.Button1:
-		m.prevEv = ev
+		prevEv = ev
 		x, y := ev.Position()
 
 		if ev.Modifiers()&tcell.ModCtrl != 0 {
-			m.state = primaryClickCtrl
+			state = primaryClickCtrl
 			return PrimaryClickCtrl{x, y}
 		} else {
-			m.state = primaryClick
+			state = primaryClick
 			return PrimaryClick{x, y}
 		}
 	default:
@@ -136,19 +134,19 @@ func (m *Mouse) rxEventPrimaryClickCtrl(ev *tcell.EventMouse) Event {
 }
 
 // Scrolls events are handled in the same way in all states.
-func (m *Mouse) rxScrollEvent(ev *tcell.EventMouse) Event {
+func rxScrollEvent(ev *tcell.EventMouse) Event {
 	x, y := ev.Position()
 
 	switch ev.Buttons() {
 	case tcell.WheelDown:
-		m.state = idle
+		state = idle
 		if ev.Modifiers()&tcell.ModShift != 0 {
 			return WheelRight{x, y}
 		} else {
 			return WheelDown{x, y}
 		}
 	case tcell.WheelUp:
-		m.state = idle
+		state = idle
 		if ev.Modifiers()&tcell.ModShift != 0 {
 			return WheelLeft{x, y}
 		} else {
