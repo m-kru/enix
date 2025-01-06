@@ -64,3 +64,14 @@ func Update(tabs *tab.Tab, currentTab *tab.Tab) {
 		items[x].EndIdx = rIdx
 	}
 }
+
+func viewLeft() {
+	view = view.Left()
+}
+
+func viewRight() {
+	if view.LastColumn() >= line.Columns() {
+		return
+	}
+	view = view.Right()
+}

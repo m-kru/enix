@@ -28,15 +28,20 @@ type window struct {
 	Width  int
 	Height int
 
-	TabFrame frame.Frame
+	TabBarFrame frame.Frame
+	TabFrame    frame.Frame
 
 	Tabs       *tab.Tab // First tab
 	CurrentTab *tab.Tab
 }
 
 func (w *window) RxMouseEvent(ev mouse.Event) {
+	if w.TabBarFrame.Within(ev.X(), ev.Y()) {
+		tabbar.RxMouseEvent(ev)
+		return
+	}
+
 	if !w.TabFrame.Within(ev.X(), ev.Y()) {
-		// Currently only mouse events within tab frame are handled.
 		return
 	}
 
@@ -378,6 +383,7 @@ func (w *window) Render() {
 		tabbar.SetFrame(f)
 		tabbar.Update(w.Tabs, w.CurrentTab)
 		tabbar.Render(w.CurrentTab)
+		w.TabBarFrame = f
 	}
 
 	w.CurrentTab.Render()
@@ -447,13 +453,14 @@ func Start() {
 	width, height := screen.Size()
 
 	Window = window{
-		Mouse:      mouse.Mouse{},
-		Screen:     screen,
-		Width:      width,
-		Height:     height - 1, // One line for prompt
-		TabFrame:   frame.Frame{Screen: screen, X: 0, Y: 0, Width: width, Height: height},
-		Tabs:       nil,
-		CurrentTab: nil,
+		Mouse:       mouse.Mouse{},
+		Screen:      screen,
+		Width:       width,
+		Height:      height - 1, // One line for prompt
+		TabBarFrame: frame.Frame{Screen: screen, X: 0, Y: 0, Width: width, Height: 1},
+		TabFrame:    frame.Frame{Screen: screen, X: 0, Y: 0, Width: width, Height: height},
+		Tabs:        nil,
+		CurrentTab:  nil,
 	}
 
 	Prompt = prompt{
