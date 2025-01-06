@@ -199,6 +199,8 @@ Marks allow to record current cursor or selection position.
 Mark name must not start with a digit or '-' rune.
 To restore marks one has to use the 'go' command providing as an argument the name of a mark.`,
 
+	"line-count": `line-count # Prints the number of lines in the current tab.`,
+
 	"pwd": `pwd # Prints working directory.`,
 
 	"q": `q # An alias for the 'quit' command.`,

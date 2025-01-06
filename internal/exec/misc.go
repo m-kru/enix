@@ -73,6 +73,16 @@ func Indent(args []string, tab *tab.Tab) error {
 	return nil
 }
 
+func LineCount(args []string, tab *tab.Tab) (string, error) {
+	if len(args) > 0 {
+		return "", fmt.Errorf(
+			"line-count: expected 0 args, provided %d", len(args),
+		)
+	}
+
+	return fmt.Sprintf("%d", tab.LineCount), nil
+}
+
 func Trim(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf(
