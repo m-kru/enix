@@ -457,7 +457,7 @@ func Start() {
 		Screen:      screen,
 		Width:       width,
 		Height:      height - 1, // One line for prompt
-		TabBarFrame: frame.Frame{Screen: screen, X: 0, Y: 0, Width: width, Height: 1},
+		TabBarFrame: frame.Frame{Screen: screen, X: 0, Y: 0, Width: 0, Height: 0},
 		TabFrame:    frame.Frame{Screen: screen, X: 0, Y: 0, Width: width, Height: height},
 		Tabs:        nil,
 		CurrentTab:  nil,

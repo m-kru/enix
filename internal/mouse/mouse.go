@@ -102,6 +102,17 @@ func (m *Mouse) rxEventDoublePrimaryClick(ev *tcell.EventMouse) Event {
 	case tcell.ButtonNone:
 		// Do nothing, just mouse movement.
 	case tcell.Button1:
+		x, y := m.prevEv.Position()
+		x2, y2 := ev.Position()
+		m.prevEv = ev
+		if x == x2 && y == y2 {
+			// Go back to idle state.
+			// Triple primary click is a terminal event.
+			m.state = idle
+			return TriplePrimaryClick{x, y}
+		} else {
+			return PrimaryClick{x2, y2}
+		}
 		// Implement TriplePrimaryClick event handling here.
 	default:
 		// Do nothing, other mouse event

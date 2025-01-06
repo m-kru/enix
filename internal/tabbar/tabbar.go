@@ -66,12 +66,17 @@ func Update(tabs *tab.Tab, currentTab *tab.Tab) {
 }
 
 func viewLeft() {
-	view = view.Left()
+	for range 2 {
+		view = view.Left()
+	}
 }
 
 func viewRight() {
-	if view.LastColumn() >= line.Columns() {
-		return
+	lineCols := line.Columns()
+	for range 2 {
+		if view.LastColumn() >= lineCols {
+			return
+		}
+		view = view.Right()
 	}
-	view = view.Right()
 }
