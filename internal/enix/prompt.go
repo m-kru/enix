@@ -426,6 +426,12 @@ func (p *prompt) Exec() TcellEventReceiver {
 			err = exec.Down(c.Args, tab)
 		case "dump-cursor":
 			info, err = exec.DumpCursor(c.Args, tab)
+		case "e", "edit":
+			tab, err = exec.Open(c.Args, tab)
+			if err == nil {
+				Window.CurrentTab = tab
+			}
+			updateView = false
 		case "esc":
 			err = exec.Esc(c.Args, tab)
 		case "find-next":
@@ -469,12 +475,6 @@ func (p *prompt) Exec() TcellEventReceiver {
 			err = exec.Newline(c.Args, tab)
 		case "m", "mark":
 			info, err = exec.Mark(c.Args, tab)
-		case "o", "open":
-			tab, err = exec.Open(c.Args, tab)
-			if err == nil {
-				Window.CurrentTab = tab
-			}
-			updateView = false
 		case "pwd":
 			info, err = exec.Pwd(c.Args)
 		case "paste":

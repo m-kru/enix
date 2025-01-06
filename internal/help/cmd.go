@@ -95,10 +95,16 @@ If cursor is in the fisrt line, nothing happens.`,
 
 	// File
 
-	"open": `open path/to/file ... # Opens file in a new tab.
-If path to file is not provided, then it opens a new empty tab.`,
+	"edit": `edit path/to/file ... # Opens a file in a new tab.
+If path to file is not provided, then it opens a new empty tab.
 
-	"o": `o # An alias to the open command.`,
+The command is named 'edit' instead of 'open' for the following reason.
+If you have an alias for the enix in a shell, then the alias is probably 'e'.
+The edit command has an alias 'e' inside the enix.
+This means that opening a file in a shell and the enix has the same syntax when using aliases.
+`,
+
+	"e": `o # An alias to the open command.`,
 
 	"save": `save [path/to/file] # Saves file using the provided path to file.
 If path to file is not provided, then it uses the current file path.`,

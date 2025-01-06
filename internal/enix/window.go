@@ -157,6 +157,9 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			err = exec.Del(c.Args, tab)
 		case "down":
 			err = exec.Down(c.Args, tab)
+		case "e", "edit":
+			Prompt.Activate("edit ", "")
+			return &Prompt
 		case "esc":
 			err = exec.Esc(c.Args, tab)
 			Prompt.Clear()
@@ -197,9 +200,6 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			info, err = exec.Mark(c.Args, tab)
 		case "newline":
 			err = exec.Newline(c.Args, tab)
-		case "o", "open":
-			Prompt.Activate("open ", "")
-			return &Prompt
 		case "paste":
 			err = exec.Paste(c.Args, tab)
 		case "pwd":
