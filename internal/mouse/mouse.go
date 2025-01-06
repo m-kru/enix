@@ -55,20 +55,8 @@ func (m *Mouse) rxEventIdle(ev *tcell.EventMouse) Event {
 			m.state = primaryClick
 			return PrimaryClick{x, y}
 		}
-	case tcell.WheelDown:
-		m.state = idle
-		if ev.Modifiers()&tcell.ModShift != 0 {
-			return WheelRight{x, y}
-		} else {
-			return WheelDown{x, y}
-		}
-	case tcell.WheelUp:
-		m.state = idle
-		if ev.Modifiers()&tcell.ModShift != 0 {
-			return WheelLeft{x, y}
-		} else {
-			return WheelUp{x, y}
-		}
+	case tcell.WheelDown, tcell.WheelUp:
+		return m.rxScrollEvent(ev)
 	default:
 		// Do nothing, other mouse event
 	}
@@ -90,6 +78,8 @@ func (m *Mouse) rxEventPrimaryClick(ev *tcell.EventMouse) Event {
 		} else {
 			return PrimaryClick{x2, y2}
 		}
+	case tcell.WheelDown, tcell.WheelUp:
+		return m.rxScrollEvent(ev)
 	default:
 		// Do nothing, other mouse event
 	}
@@ -114,6 +104,8 @@ func (m *Mouse) rxEventDoublePrimaryClick(ev *tcell.EventMouse) Event {
 			return PrimaryClick{x2, y2}
 		}
 		// Implement TriplePrimaryClick event handling here.
+	case tcell.WheelDown, tcell.WheelUp:
+		return m.rxScrollEvent(ev)
 	default:
 		// Do nothing, other mouse event
 	}
@@ -135,6 +127,32 @@ func (m *Mouse) rxEventPrimaryClickCtrl(ev *tcell.EventMouse) Event {
 		} else {
 			m.state = primaryClick
 			return PrimaryClick{x, y}
+		}
+	default:
+		// Do nothing, other mouse event
+	}
+
+	return nil
+}
+
+// Scrolls events are handled in the same way in all states.
+func (m *Mouse) rxScrollEvent(ev *tcell.EventMouse) Event {
+	x, y := ev.Position()
+
+	switch ev.Buttons() {
+	case tcell.WheelDown:
+		m.state = idle
+		if ev.Modifiers()&tcell.ModShift != 0 {
+			return WheelRight{x, y}
+		} else {
+			return WheelDown{x, y}
+		}
+	case tcell.WheelUp:
+		m.state = idle
+		if ev.Modifiers()&tcell.ModShift != 0 {
+			return WheelLeft{x, y}
+		} else {
+			return WheelUp{x, y}
 		}
 	default:
 		// Do nothing, other mouse event

@@ -37,7 +37,10 @@ type window struct {
 
 func (w *window) RxMouseEvent(ev mouse.Event) {
 	if w.TabBarFrame.Within(ev.X(), ev.Y()) {
-		tabbar.RxMouseEvent(ev)
+		newCurrentTab := tabbar.RxMouseEvent(ev)
+		if newCurrentTab != nil {
+			Window.CurrentTab = newCurrentTab
+		}
 		return
 	}
 
