@@ -427,7 +427,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 		case "dump-cursor":
 			info, err = exec.DumpCursor(c.Args, tab)
 		case "e", "edit":
-			tab, err = exec.Open(c.Args, tab)
+			tab, err = exec.Edit(c.Args, tab)
 			if err == nil {
 				Window.CurrentTab = tab
 			}

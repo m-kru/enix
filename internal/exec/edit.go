@@ -5,7 +5,7 @@ import (
 	"github.com/m-kru/enix/internal/tab"
 )
 
-func Open(args []string, t *tab.Tab) (*tab.Tab, error) {
+func Edit(args []string, t *tab.Tab) (*tab.Tab, error) {
 	if len(args) == 0 {
 		return nil, fmt.Errorf("open: expected at least 1 arg, provided 0")
 	}
