@@ -37,6 +37,7 @@ func DefaultConfig() Config {
 		TabPadRune:          '·',
 		UndoSize:            1024,
 		Indent: map[string]string{
+			"fbdl":   "  ",
 			"python": "    ",
 			"rust":   "    ",
 			"tcl":    "    ",

@@ -1,0 +1,29 @@
+[
+	{
+		"Name": "Default",
+		"Keyword": "\\b(const|import|type)\\b",
+		"Type": "\\b(blackbox|block|bus|config|irq|mask|memory|param|proc|return|status|stream|static)\\b",
+		"Value": "\\b(false|true)\\b"
+	},
+	{
+		"Name": "Line Comment",
+		"Style": "Comment",
+		"Start": {
+			"Regex": "#"
+		},
+		"End": {
+			"Regex": "$"
+		},
+		"ToDo": "(?i)(todo|note|xxx):"
+	},
+	{
+		"Name": "String",
+		"Style": "String",
+		"Start": {
+			"Regex": "\""
+		},
+		"End": {
+			"Regex": "\""
+		}
+	}
+]

@@ -9,6 +9,7 @@ var fileExtToType = map[string]string{
 	"c": "c", "h": "c",
 	"css":  "css",
 	"elm":  "elm",
+	"fbd":  "fbdl",
 	"go":   "go",
 	"html": "html",
 	"java": "java",
