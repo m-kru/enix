@@ -183,3 +183,48 @@ func (s *Selection) SwitchCursor() {
 		}
 	}
 }
+
+// Lines returns a list of all lines spanned by the selection.
+func (s *Selection) Lines() []*line.Line {
+	lines := make([]*line.Line, 0, 16)
+
+	for {
+		if s == nil {
+			break
+		}
+
+		lines = append(lines, s.Line)
+
+		s = s.Next
+	}
+
+	return lines
+}
+
+// Lines returns a list of all lines spannded by selections.
+// Lines might be placed in an arbitrary order.
+// However, each line appears only once in the returned list.
+func Lines(sels []*Selection) []*line.Line {
+	lines := make([]*line.Line, 0, len(sels))
+
+	for _, s := range sels {
+		ls := s.Lines()
+		for _, l := range ls {
+			found := false
+
+			for _, l2 := range lines {
+				if l2 == l {
+					found = true
+					break
+				}
+			}
+
+			if found {
+				continue
+			}
+			lines = append(lines, l)
+		}
+	}
+
+	return lines
+}

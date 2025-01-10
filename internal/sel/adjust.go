@@ -24,6 +24,7 @@ func (s *Selection) adjust(c *cursor.Cursor) *Selection {
 			Next:         nil,
 		}
 
+		s.Prev = newFirst
 		s := newFirst
 
 		line := c.Line

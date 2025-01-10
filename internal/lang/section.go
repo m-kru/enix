@@ -176,7 +176,7 @@ func insertHighlight(hls *[]highlight.Highlight, hl highlight.Highlight) {
 			}
 		}
 
-		for j :=range newHls {
+		for j := range newHls {
 			(*hls)[i+j] = newHls[j]
 		}
 

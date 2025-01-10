@@ -157,8 +157,17 @@ func (s *Selection) informStringDelete(sd *action.StringDelete) {
 }
 
 func (s *Selection) informStringInsert(si *action.StringInsert) {
-	if s.Line == si.Line && si.StartRuneIdx <= s.StartRuneIdx {
+	if s.Line != si.Line {
+		return
+	}
+
+	if si.StartRuneIdx < s.StartRuneIdx {
 		s.StartRuneIdx += si.RuneCount
+		s.EndRuneIdx += si.RuneCount
+	} else if si.StartRuneIdx == s.StartRuneIdx {
+		if s.Prev == nil {
+			s.StartRuneIdx += si.RuneCount
+		}
 		s.EndRuneIdx += si.RuneCount
 	}
 }
