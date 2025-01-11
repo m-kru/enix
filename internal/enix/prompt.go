@@ -509,6 +509,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 			info, err = exec.Save(c.Args, tab, cfg.Cfg.TrimOnSave)
 		case "search":
 			err = exec.Search(c.Args, tab)
+			updateView = false
 		case "sel-all":
 			err = exec.SelAll(c.Args, tab)
 		case "sel-count":
