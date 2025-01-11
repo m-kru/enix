@@ -18,20 +18,8 @@ type RegionJSON struct {
 	Name  string
 	Style string
 
-	Start struct {
-		Regex              string
-		NegativeLookBehind string
-		PositiveLookBehind string
-		NegativeLookAhead  string
-		PositiveLookAhead  string
-	}
-	End struct {
-		Regex              string
-		NegativeLookBehind string
-		PositiveLookBehind string
-		NegativeLookAhead  string
-		PositiveLookAhead  string
-	}
+	Start regex.RegexJSON
+	End   regex.RegexJSON
 
 	Attribute       string
 	Builtin         string
@@ -61,84 +49,16 @@ type RegionJSON struct {
 func (rj RegionJSON) ToRegion() (*Region, error) {
 	var err error
 
-	var sre *regexp.Regexp
-	if rj.Start.Regex != "" {
-		sre, err = regexp.Compile(rj.Start.Regex)
-		if err != nil {
-			return nil, fmt.Errorf("can't compile start regex: %v", err)
-		}
+	var start regex.Regex
+	start, err = rj.Start.ToRegex()
+	if err != nil {
+		return nil, fmt.Errorf("can't compile start regex: %v", err)
 	}
 
-	var snlb *regexp.Regexp
-	if rj.Start.NegativeLookBehind != "" {
-		snlb, err = regexp.Compile(rj.Start.NegativeLookBehind)
-		if err != nil {
-			return nil, fmt.Errorf("can't compile start regex negative lookbehind: %v", err)
-		}
-	}
-
-	var splb *regexp.Regexp
-	if rj.Start.PositiveLookBehind != "" {
-		splb, err = regexp.Compile(rj.Start.PositiveLookBehind)
-		if err != nil {
-			return nil, fmt.Errorf("can't compile start regex positive lookbehind: %v", err)
-		}
-	}
-
-	var snla *regexp.Regexp
-	if rj.Start.NegativeLookAhead != "" {
-		snla, err = regexp.Compile(rj.Start.NegativeLookAhead)
-		if err != nil {
-			return nil, fmt.Errorf("can't compile start regex negative lookahead: %v", err)
-		}
-	}
-
-	var spla *regexp.Regexp
-	if rj.Start.PositiveLookAhead != "" {
-		spla, err = regexp.Compile(rj.Start.PositiveLookAhead)
-		if err != nil {
-			return nil, fmt.Errorf("can't compile start regex positive lookahead: %v", err)
-		}
-	}
-
-	var ere *regexp.Regexp
-	if rj.End.Regex != "" {
-		ere, err = regexp.Compile(rj.End.Regex)
-		if err != nil {
-			return nil, fmt.Errorf("can't compile end regex: %v", err)
-		}
-	}
-
-	var enlb *regexp.Regexp
-	if rj.End.NegativeLookBehind != "" {
-		enlb, err = regexp.Compile(rj.End.NegativeLookBehind)
-		if err != nil {
-			return nil, fmt.Errorf("can't compile edn regex negative lookbehind: %v", err)
-		}
-	}
-
-	var eplb *regexp.Regexp
-	if rj.End.PositiveLookBehind != "" {
-		eplb, err = regexp.Compile(rj.End.PositiveLookBehind)
-		if err != nil {
-			return nil, fmt.Errorf("can't compile edn regex positive lookbehind: %v", err)
-		}
-	}
-
-	var enla *regexp.Regexp
-	if rj.End.NegativeLookAhead != "" {
-		enla, err = regexp.Compile(rj.End.NegativeLookAhead)
-		if err != nil {
-			return nil, fmt.Errorf("can't compile edn regex negative lookahead: %v", err)
-		}
-	}
-
-	var epla *regexp.Regexp
-	if rj.End.PositiveLookAhead != "" {
-		epla, err = regexp.Compile(rj.End.PositiveLookAhead)
-		if err != nil {
-			return nil, fmt.Errorf("can't compile edn regex positive lookahead: %v", err)
-		}
+	var end regex.Regex
+	end, err = rj.End.ToRegex()
+	if err != nil {
+		return nil, fmt.Errorf("can't compile end regex: %v", err)
 	}
 
 	var attr *regexp.Regexp
@@ -326,22 +246,10 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 	}
 
 	return &Region{
-		Name:  rj.Name,
-		Style: rj.Style,
-		Start: regex.Regex{
-			Regex:              sre,
-			NegativeLookBehind: snlb,
-			PositiveLookBehind: splb,
-			NegativeLookAhead:  snla,
-			PositiveLookAhead:  spla,
-		},
-		End: regex.Regex{
-			Regex:              ere,
-			NegativeLookBehind: enlb,
-			PositiveLookBehind: eplb,
-			NegativeLookAhead:  enla,
-			PositiveLookAhead:  epla,
-		},
+		Name:            rj.Name,
+		Style:           rj.Style,
+		Start:           start,
+		End:             end,
 		CursorWord:      nil,
 		Attribute:       attr,
 		Builtin:         builtin,

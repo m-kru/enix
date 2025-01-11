@@ -4,11 +4,6 @@ import (
 	"regexp"
 )
 
-type Match struct {
-	Start int
-	End   int
-}
-
 type Regex struct {
 	Regex              *regexp.Regexp
 	NegativeLookBehind *regexp.Regexp
