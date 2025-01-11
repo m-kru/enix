@@ -136,8 +136,6 @@ func DefaultPromptKeybindings() Keybindings {
 // DefaultInsertKeybindings returns default keybindings for tab insert mode.
 func DefaultInsertKeybindings() Keybindings {
 	return map[string]string{
-		"Ctrl+Left":  "prev-word-start",
-		"Ctrl+Right": "word-end",
 		"Ctrl+A":     "line-start",
 		"Ctrl+T":     "sh -i tmpl -enix $ENIX_FILETYPE",
 		"Backspace":  "backspace",
@@ -146,9 +144,14 @@ func DefaultInsertKeybindings() Keybindings {
 		"Enter":      "enter",
 		"Esc":        "esc",
 		// View
-		"Down":  "view-down",
-		"Right": "view-right",
-		"Up":    "view-up",
-		"Left":  "view-left",
+		"Ctrl+W":     "view-center",
+		"Down":       "view-down",
+		"Ctrl+Down":  "5 view-down",
+		"Right":      "view-right",
+		"Ctrl+Right": "5 view-right",
+		"Up":         "view-up",
+		"Ctrl+Up":    "5 view-up",
+		"Left":       "view-left",
+		"Ctrl+Left":  "5 view-left",
 	}
 }
