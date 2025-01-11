@@ -11,6 +11,7 @@ import (
 
 	"github.com/m-kru/enix/internal/arg"
 	"github.com/m-kru/enix/internal/cfg"
+	"github.com/m-kru/enix/internal/regex"
 )
 
 type RegionJSON struct {
@@ -327,14 +328,14 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 	return &Region{
 		Name:  rj.Name,
 		Style: rj.Style,
-		Start: Regex{
+		Start: regex.Regex{
 			Regex:              sre,
 			NegativeLookBehind: snlb,
 			PositiveLookBehind: splb,
 			NegativeLookAhead:  snla,
 			PositiveLookAhead:  spla,
 		},
-		End: Regex{
+		End: regex.Regex{
 			Regex:              ere,
 			NegativeLookBehind: enlb,
 			PositiveLookBehind: eplb,

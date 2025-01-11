@@ -1,12 +1,12 @@
-package lang
+package regex
 
 import (
 	"regexp"
 )
 
 type Match struct {
-	start int
-	end   int
+	Start int
+	End   int
 }
 
 type Regex struct {
@@ -15,6 +15,16 @@ type Regex struct {
 	NegativeLookAhead  *regexp.Regexp
 	PositiveLookAhead  *regexp.Regexp
 	PositiveLookBehind *regexp.Regexp
+}
+
+func NilRegex() Regex {
+	return Regex{
+		Regex:              nil,
+		NegativeLookBehind: nil,
+		PositiveLookBehind: nil,
+		NegativeLookAhead:  nil,
+		PositiveLookAhead:  nil,
+	}
 }
 
 func (r Regex) FindAll(buf []byte) []Match {
@@ -88,7 +98,7 @@ func (r Regex) FindAll(buf []byte) []Match {
 		}
 
 		if behindOk && aheadOk {
-			matches = append(matches, Match{start: f[0], end: f[1]})
+			matches = append(matches, Match{Start: f[0], End: f[1]})
 		}
 	}
 

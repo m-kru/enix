@@ -141,8 +141,8 @@ func tokenizeLine(regions []*Region, line []byte) []RegionToken {
 		tok.Start = true
 		finds := r.Start.FindAll(line)
 		for _, f := range finds {
-			tok.StartIdx = f.start
-			tok.EndIdx = f.end
+			tok.StartIdx = f.Start
+			tok.EndIdx = f.End
 			toks = append(toks, tok)
 		}
 
@@ -150,8 +150,8 @@ func tokenizeLine(regions []*Region, line []byte) []RegionToken {
 		tok.Start = false
 		finds = r.End.FindAll(line)
 		for _, f := range finds {
-			tok.StartIdx = f.start
-			tok.EndIdx = f.end
+			tok.StartIdx = f.Start
+			tok.EndIdx = f.End
 			toks = append(toks, tok)
 		}
 

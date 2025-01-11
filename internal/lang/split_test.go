@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/m-kru/enix/internal/line"
+	"github.com/m-kru/enix/internal/regex"
 )
 
 var regions = []*Region{
@@ -14,37 +15,37 @@ var regions = []*Region{
 	},
 	&Region{
 		Name: "Line comment",
-		Start: Regex{
+		Start: regex.Regex{
 			Regex: regexp.MustCompile(`//`),
 		},
-		End: Regex{
+		End: regex.Regex{
 			Regex: regexp.MustCompile(`$`),
 		},
 	},
 	&Region{
 		Name: "Block comment",
-		Start: Regex{
+		Start: regex.Regex{
 			Regex: regexp.MustCompile(`/\*`),
 		},
-		End: Regex{
+		End: regex.Regex{
 			Regex: regexp.MustCompile(`\*/`),
 		},
 	},
 	&Region{
 		Name: "String",
-		Start: Regex{
+		Start: regex.Regex{
 			Regex: regexp.MustCompile(`"`),
 		},
-		End: Regex{
+		End: regex.Regex{
 			Regex: regexp.MustCompile(`"`),
 		},
 	},
 	&Region{
 		Name: "Meta",
-		Start: Regex{
+		Start: regex.Regex{
 			Regex: regexp.MustCompile(`#`),
 		},
-		End: Regex{
+		End: regex.Regex{
 			Regex: regexp.MustCompile(`\s|$`),
 		},
 	},

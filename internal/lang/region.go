@@ -4,6 +4,7 @@ import (
 	"regexp"
 
 	"github.com/m-kru/enix/internal/line"
+	"github.com/m-kru/enix/internal/regex"
 	"github.com/m-kru/enix/internal/util"
 )
 
@@ -11,8 +12,8 @@ type Region struct {
 	Name  string
 	Style string // Region default style
 
-	Start Regex
-	End   Regex
+	Start regex.Regex
+	End   regex.Regex
 
 	CursorWord *regexp.Regexp
 
@@ -43,22 +44,10 @@ type Region struct {
 
 func DefaultRegion() *Region {
 	return &Region{
-		Name:  "Default",
-		Style: "",
-		Start: Regex{
-			Regex:              nil,
-			NegativeLookBehind: nil,
-			PositiveLookBehind: nil,
-			NegativeLookAhead:  nil,
-			PositiveLookAhead:  nil,
-		},
-		End: Regex{
-			Regex:              nil,
-			NegativeLookBehind: nil,
-			PositiveLookBehind: nil,
-			NegativeLookAhead:  nil,
-			PositiveLookAhead:  nil,
-		},
+		Name:            "Default",
+		Style:           "",
+		Start:           regex.NilRegex(),
+		End:             regex.NilRegex(),
 		CursorWord:      nil,
 		Attribute:       nil,
 		Builtin:         nil,
