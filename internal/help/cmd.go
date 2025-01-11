@@ -326,6 +326,8 @@ If the second is absent, it is assumed to be the current tab.`,
 
 	"view": "view line-number column # Sets the view start at provided line number and column.",
 
+	"vc": "vc # An alias for the 'view-center' command.",
+
 	"view-center": "view-center # Centers the view.",
 
 	"view-down": "view-down # Scrolls the view down by one line.",
