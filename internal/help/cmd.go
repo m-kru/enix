@@ -218,6 +218,14 @@ The command quits the tab even if there are unsaved changes.`,
 	"replace": `replace # Replaces rune under cursor or runes under selection.
 The command first deletes runes under the cursor or selection, and then enters the insert moode for a single insertion.`,
 
+	"search": `search regex # Searches for patterns matching given regex.
+The regex can include space ' ' runes.
+However, the first space after the 'search' command name is not included in the regex.
+
+The command does not automatically jump to the first find.
+Such a behavior helps to avoid unexpected tab view changes.
+The user has to explicitly execute 'find-' commands to navigate between finds.`,
+
 	"sh": `sh [-i] cmd [arg] ... # Executes command cmd in the shell.
 The command obtains a shell via the $SHELL environment variable.
 If this variable is not set, the command returns an error.

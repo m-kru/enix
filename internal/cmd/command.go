@@ -66,6 +66,13 @@ func Parse(line string) (Command, error) {
 		}
 	}
 
+	// The argument for the 'search' command requires special handling
+	// to support regex with spaces.
+	if cmd.Name == "search" {
+		_, after, _ := strings.Cut(line, "search")
+		cmd.Args = []string{after[1:]} // Trim first space
+	}
+
 	return cmd, nil
 }
 
