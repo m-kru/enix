@@ -13,7 +13,6 @@ type matches struct {
 	Bolds            []match
 	Codes            []match
 	Comments         []match
-	Documentations   []match
 	EscapeSequences  []match
 	FormatSpecifiers []match
 	Functions        []match
@@ -27,7 +26,6 @@ type matches struct {
 	Operators        []match
 	Strings          []match
 	ToDos            []match
-	Titles           []match
 	Types            []match
 	Values           []match
 	Variables        []match
@@ -41,7 +39,6 @@ func defaultMatches() matches {
 		Bolds:            nil,
 		Codes:            nil,
 		Comments:         nil,
-		Documentations:   nil,
 		EscapeSequences:  nil,
 		FormatSpecifiers: nil,
 		Functions:        nil,
@@ -55,7 +52,6 @@ func defaultMatches() matches {
 		Operators:        nil,
 		Strings:          nil,
 		ToDos:            nil,
-		Titles:           nil,
 		Types:            nil,
 		Values:           nil,
 		Variables:        nil,

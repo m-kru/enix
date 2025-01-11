@@ -26,7 +26,6 @@ type RegionJSON struct {
 	Bold            string
 	Code            string
 	Comment         string
-	Documentation   string
 	EscapeSequence  string
 	FormatSpecifier string
 	Function        string
@@ -40,7 +39,6 @@ type RegionJSON struct {
 	Operator        string
 	String          string
 	ToDo            string
-	Title           string
 	Type            string
 	Value           string
 	Variable        string
@@ -93,14 +91,6 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 		comment, err = regexp.Compile(rj.Comment)
 		if err != nil {
 			return nil, fmt.Errorf("can't compile comment: %v", err)
-		}
-	}
-
-	var doc *regexp.Regexp
-	if rj.Documentation != "" {
-		doc, err = regexp.Compile(rj.Documentation)
-		if err != nil {
-			return nil, fmt.Errorf("can't compile documentation: %v", err)
 		}
 	}
 
@@ -208,14 +198,6 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 		}
 	}
 
-	var title *regexp.Regexp
-	if rj.Title != "" {
-		title, err = regexp.Compile(rj.Title)
-		if err != nil {
-			return nil, fmt.Errorf("can't compile title: %v", err)
-		}
-	}
-
 	var typ *regexp.Regexp
 	if rj.Type != "" {
 		typ, err = regexp.Compile(rj.Type)
@@ -251,7 +233,6 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 		Bold:            bold,
 		Code:            code,
 		Comment:         comment,
-		Documentation:   doc,
 		EscapeSequence:  escSeq,
 		FormatSpecifier: fmtSpec,
 		Function:        fun,
@@ -265,7 +246,6 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 		Operator:        operator,
 		String:          str,
 		ToDo:            todo,
-		Title:           title,
 		Type:            typ,
 		Value:           val,
 		Variable:        variable,

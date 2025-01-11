@@ -50,7 +50,6 @@ type Colorscheme struct {
 	Builtin         tcell.Style
 	Code            tcell.Style
 	Comment         tcell.Style
-	Documentation   tcell.Style
 	EscapeSequence  tcell.Style
 	FormatSpecifier tcell.Style
 	Function        tcell.Style
@@ -64,7 +63,6 @@ type Colorscheme struct {
 	Operator        tcell.Style
 	String          tcell.Style
 	ToDo            tcell.Style
-	Title           tcell.Style
 	Type            tcell.Style
 	Value           tcell.Style
 	Variable        tcell.Style
@@ -84,8 +82,6 @@ func (cs *Colorscheme) Style(name string) tcell.Style {
 		return cs.Code
 	case "Comment":
 		return cs.Comment
-	case "Documentation":
-		return cs.Documentation
 	case "EscapeSequence":
 		return cs.EscapeSequence
 	case "FormatSpecifier":
@@ -112,8 +108,6 @@ func (cs *Colorscheme) Style(name string) tcell.Style {
 		return cs.String
 	case "ToDo":
 		return cs.ToDo
-	case "Title":
-		return cs.Title
 	case "Type":
 		return cs.Type
 	case "Value":
@@ -164,7 +158,6 @@ func DefaultColorscheme() Colorscheme {
 		Builtin:         tcell.StyleDefault.Bold(true),
 		Code:            tcell.StyleDefault.Foreground(tcell.ColorPurple),
 		Comment:         tcell.StyleDefault.Foreground(tcell.ColorGray),
-		Documentation:   tcell.StyleDefault.Foreground(tcell.ColorGray),
 		EscapeSequence:  tcell.StyleDefault.Foreground(tcell.ColorOlive),
 		FormatSpecifier: tcell.StyleDefault.Foreground(tcell.ColorMaroon),
 		Function:        tcell.StyleDefault.Foreground(tcell.ColorTeal),
@@ -178,7 +171,6 @@ func DefaultColorscheme() Colorscheme {
 		Operator:        tcell.StyleDefault.Foreground(tcell.ColorOlive),
 		String:          tcell.StyleDefault.Foreground(tcell.ColorGreen),
 		ToDo:            tcell.StyleDefault.Bold(true),
-		Title:           tcell.StyleDefault.Foreground(tcell.ColorTeal),
 		Type:            tcell.StyleDefault.Foreground(tcell.ColorOlive),
 		Value:           tcell.StyleDefault.Foreground(tcell.ColorMaroon),
 		Variable:        tcell.StyleDefault.Foreground(tcell.ColorMaroon),

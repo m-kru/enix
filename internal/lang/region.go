@@ -22,7 +22,6 @@ type Region struct {
 	Bold            *regexp.Regexp
 	Code            *regexp.Regexp
 	Comment         *regexp.Regexp
-	Documentation   *regexp.Regexp
 	EscapeSequence  *regexp.Regexp
 	FormatSpecifier *regexp.Regexp
 	Function        *regexp.Regexp
@@ -36,7 +35,6 @@ type Region struct {
 	Operator        *regexp.Regexp
 	String          *regexp.Regexp
 	ToDo            *regexp.Regexp
-	Title           *regexp.Regexp
 	Type            *regexp.Regexp
 	Value           *regexp.Regexp
 	Variable        *regexp.Regexp
@@ -54,7 +52,6 @@ func DefaultRegion() *Region {
 		Bold:            nil,
 		Code:            nil,
 		Comment:         nil,
-		Documentation:   nil,
 		EscapeSequence:  nil,
 		FormatSpecifier: nil,
 		Function:        nil,
@@ -68,7 +65,6 @@ func DefaultRegion() *Region {
 		Operator:        nil,
 		String:          nil,
 		ToDo:            nil,
-		Title:           nil,
 		Type:            nil,
 		Value:           nil,
 		Variable:        nil,
