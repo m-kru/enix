@@ -12,16 +12,6 @@ type Regex struct {
 	PositiveLookBehind *regexp.Regexp
 }
 
-func NilRegex() Regex {
-	return Regex{
-		Regex:              nil,
-		NegativeLookBehind: nil,
-		PositiveLookBehind: nil,
-		NegativeLookAhead:  nil,
-		PositiveLookAhead:  nil,
-	}
-}
-
 func (r Regex) FindAll(buf []byte) []Match {
 	matches := make([]Match, 0, 8)
 	var negLookBeh [][]int

@@ -1,6 +1,11 @@
 [
 	{
 		"Name": "Default",
+		"Attribute": {
+			"Regex": "-\\w+",
+			"PositiveLookBehind": "\\s+",
+			"PositiveLookAhead": "(\\b)"
+		},
 		"Keyword": "\\b(break|catch|continue|default|else|elseif|error|exit|for|foreach|if|namespace|proc|return|switch|while)\\b",
 		"Number": "\\b(0(b|B|o|O|x|X)?)?\\d+(\\.\\d+)?((e|E)-?\\d+)?",
 		"Value": "\\$(\\w|:)+",
@@ -28,18 +33,6 @@
 			"NegativeLookBehind": "(?:[^\\\\])\\\\"
 		},
 		"Value": "\\$(\\w|:)+"
-	},
-	{
-		"Name": "Flag",
-		"Style": "Attribute",
-		"Start": {
-			"Regex": "-",
-			"PositiveLookBehind": "\\s",
-			"PositiveLookAhead": "\\w"
-		},
-		"End": {
-			"Regex": "\\s"
-		}
 	},
 	{
 		"Name": "Procedure",

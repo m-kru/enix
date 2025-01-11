@@ -13,22 +13,24 @@ type RegexJSON struct {
 	PositiveLookAhead  string
 }
 
-func (rj RegexJSON) ToRegex() (Regex, error) {
-	var re *regexp.Regexp
+func (rj RegexJSON) ToRegex() (*Regex, error) {
+	if rj.Regex == "" {
+		return nil, nil
+	}
+
 	var err error
 
-	if rj.Regex != "" {
-		re, err = regexp.Compile(rj.Regex)
-		if err != nil {
-			return NilRegex(), fmt.Errorf("can't compile regex: %v", err)
-		}
+	var re *regexp.Regexp
+	re, err = regexp.Compile(rj.Regex)
+	if err != nil {
+		return nil, fmt.Errorf("can't compile regex: %v", err)
 	}
 
 	var nlb *regexp.Regexp
 	if rj.NegativeLookBehind != "" {
 		nlb, err = regexp.Compile(rj.NegativeLookBehind)
 		if err != nil {
-			return NilRegex(), fmt.Errorf("can't compile negative lookbehind: %v", err)
+			return nil, fmt.Errorf("can't compile negative lookbehind: %v", err)
 		}
 	}
 
@@ -36,7 +38,7 @@ func (rj RegexJSON) ToRegex() (Regex, error) {
 	if rj.PositiveLookBehind != "" {
 		plb, err = regexp.Compile(rj.PositiveLookBehind)
 		if err != nil {
-			return NilRegex(), fmt.Errorf("can't compile positive lookbehind: %v", err)
+			return nil, fmt.Errorf("can't compile positive lookbehind: %v", err)
 		}
 	}
 
@@ -44,7 +46,7 @@ func (rj RegexJSON) ToRegex() (Regex, error) {
 	if rj.NegativeLookAhead != "" {
 		nla, err = regexp.Compile(rj.NegativeLookAhead)
 		if err != nil {
-			return NilRegex(), fmt.Errorf("can't compile negative lookahead: %v", err)
+			return nil, fmt.Errorf("can't compile negative lookahead: %v", err)
 		}
 	}
 
@@ -52,11 +54,11 @@ func (rj RegexJSON) ToRegex() (Regex, error) {
 	if rj.PositiveLookAhead != "" {
 		pla, err = regexp.Compile(rj.PositiveLookAhead)
 		if err != nil {
-			return NilRegex(), fmt.Errorf("can't compile positive lookahead: %v", err)
+			return nil, fmt.Errorf("can't compile positive lookahead: %v", err)
 		}
 	}
 
-	return Regex{
+	return &Regex{
 		Regex:              re,
 		NegativeLookBehind: nlb,
 		PositiveLookBehind: plb,

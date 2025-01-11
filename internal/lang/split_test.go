@@ -15,37 +15,37 @@ var regions = []*Region{
 	},
 	&Region{
 		Name: "Line comment",
-		Start: regex.Regex{
+		Start: &regex.Regex{
 			Regex: regexp.MustCompile(`//`),
 		},
-		End: regex.Regex{
+		End: &regex.Regex{
 			Regex: regexp.MustCompile(`$`),
 		},
 	},
 	&Region{
 		Name: "Block comment",
-		Start: regex.Regex{
+		Start: &regex.Regex{
 			Regex: regexp.MustCompile(`/\*`),
 		},
-		End: regex.Regex{
+		End: &regex.Regex{
 			Regex: regexp.MustCompile(`\*/`),
 		},
 	},
 	&Region{
 		Name: "String",
-		Start: regex.Regex{
+		Start: &regex.Regex{
 			Regex: regexp.MustCompile(`"`),
 		},
-		End: regex.Regex{
+		End: &regex.Regex{
 			Regex: regexp.MustCompile(`"`),
 		},
 	},
 	&Region{
 		Name: "Meta",
-		Start: regex.Regex{
+		Start: &regex.Regex{
 			Regex: regexp.MustCompile(`#`),
 		},
-		End: regex.Regex{
+		End: &regex.Regex{
 			Regex: regexp.MustCompile(`\s|$`),
 		},
 	},

@@ -12,12 +12,12 @@ type Region struct {
 	Name  string
 	Style string // Region default style
 
-	Start regex.Regex
-	End   regex.Regex
+	Start *regex.Regex
+	End   *regex.Regex
 
 	CursorWord *regexp.Regexp
 
-	Attribute       *regexp.Regexp
+	Attribute       *regex.Regex
 	Builtin         *regexp.Regexp
 	Bold            *regexp.Regexp
 	Code            *regexp.Regexp
@@ -46,8 +46,8 @@ func DefaultRegion() *Region {
 	return &Region{
 		Name:            "Default",
 		Style:           "",
-		Start:           regex.NilRegex(),
-		End:             regex.NilRegex(),
+		Start:           nil,
+		End:             nil,
 		CursorWord:      nil,
 		Attribute:       nil,
 		Builtin:         nil,
@@ -92,12 +92,12 @@ func (reg Region) match(line *line.Line, startIdx int, endIdx int) matches {
 	}
 
 	if reg.Attribute != nil {
-		attrs := reg.Attribute.FindAllIndex(buf, -1)
+		attrs := reg.Attribute.FindAll(buf)
 		if len(attrs) > 0 {
 			matches.Attributes = make([]match, len(attrs))
 			for i, a := range attrs {
-				matches.Attributes[i].start = util.ByteIdxToRuneIdx(buf, a[0]) + startIdx
-				matches.Attributes[i].end = util.ByteIdxToRuneIdx(buf, a[1]) + startIdx
+				matches.Attributes[i].start = util.ByteIdxToRuneIdx(buf, a.Start) + startIdx
+				matches.Attributes[i].end = util.ByteIdxToRuneIdx(buf, a.End) + startIdx
 			}
 		}
 	}

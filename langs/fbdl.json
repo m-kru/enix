@@ -1,6 +1,11 @@
 [
 	{
 		"Name": "Default",
+		"Attribute": {
+			"Regex": "\\b(access|add-enable|atomic|byte-write-enable|clear|delay|enable-init-value|enable-reset-value|groups|init-value|in-trigger|masters|out-trigger|range|read-latency|read-value|reset|reset-value|size|width)\\b",
+			"PositiveLookBehind": "(^|;)\\s*",
+			"PositiveLookAhead": "\\s*="
+		},
 		"Keyword": "\\b(const|import|type)\\b",
 		"Number": "(?i)\\b(0b[01_]+)|(0o[0-7_]+)|(0x[\\da-f_]+)|(\\d+(\\.\\d+)?(e[+-]?\\d+)?)\\b",
 		"Type": "\\b(blackbox|block|bus|config|irq|mask|memory|param|proc|return|status|stream|static)\\b",
