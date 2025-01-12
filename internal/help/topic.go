@@ -35,7 +35,11 @@ In the case of escaping from multiple cursors by executing the 'esc' command, it
 
 Use region instead of regex with lookarounds when at least one of the following conditions is met:
 1. Highlighted text might span more than one line.
-2. Highlighted text might have inner highlights with different style.`,
+2. Highlighted text might have inner highlights with different style.
+
+Regex with lookarounds is also better than the region in terms of performance.
+This is because correctly splitting a tab into regions requires analyzing the whole tab content.
+Whereas regex with lookarounds is analyzed only for currently visible lines.`,
 
 	"keybindings": `There are three independent keybinding sets.
 Each of them is used in a different context:
