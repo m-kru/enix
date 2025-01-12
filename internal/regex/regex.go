@@ -41,7 +41,7 @@ func (r Regex) FindAll(buf []byte) []Match {
 	}
 
 	if !hasLookarounds {
-		matches := make([]Match, len(finds), len(finds))
+		matches := make([]Match, len(finds))
 		for i, f := range finds {
 			matches[i].Start = f[0]
 			matches[i].End = f[1]
