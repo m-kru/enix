@@ -7,7 +7,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"regexp"
 
 	"github.com/m-kru/enix/internal/arg"
 	"github.com/m-kru/enix/internal/cfg"
@@ -40,7 +39,7 @@ type RegionJSON struct {
 	ToDo            regex.RegexJSON
 	Type            regex.RegexJSON
 	Value           regex.RegexJSON
-	Variable        string
+	Variable        regex.RegexJSON
 }
 
 func (rj RegionJSON) ToRegion() (*Region, error) {
@@ -151,12 +150,9 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 		return nil, fmt.Errorf("can't compile Value: %v", err)
 	}
 
-	var variable *regexp.Regexp
-	if rj.Variable != "" {
-		variable, err = regexp.Compile(rj.Variable)
-		if err != nil {
-			return nil, fmt.Errorf("can't compile variable: %v", err)
-		}
+	variable, err := rj.Variable.ToRegex()
+	if err != nil {
+		return nil, fmt.Errorf("can't compile Variable: %v", err)
 	}
 
 	return &Region{
