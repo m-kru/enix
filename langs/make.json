@@ -1,7 +1,9 @@
 [
 	{
 		"Name": "Default",
-		"Keyword": "^\\w*:",
+		"Keyword": {
+			"Regex": "^\\w*:"
+		},
 		"Value": "\\$\\(\\w+\\)"
 	},
 	{

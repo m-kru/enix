@@ -4,7 +4,9 @@
 		"Builtin": {
 			"Regex": "\\b(append|cap|copy|len|make|panic)\\b"
 		},
-		"Keyword": "\\b(break|case|chan|const|continue|default|defer|else|fallthrough|for|func|go|goto|if|import|package|range|return|select|switch|type|var)\\b",
+		"Keyword": {
+			"Regex": "\\b(break|case|chan|const|continue|default|defer|else|fallthrough|for|func|go|goto|if|import|package|range|return|select|switch|type|var)\\b"
+		},
 		"Number": "\\b-?(0[bBoOxX][0-9a-fA-F]+|\\d+)([uU][lL]{0,2}|[lL]{1,2}[uU]?|[fFdDiI]|([eE][-+]?\\d+))?|'((\\\\.)?|[^'\\\\])'",
 		"Operator": "=|:=|!=|<|>|\\+|-|\\*|/|%|&|!|\\^|\\|",
 		"Type": "\\b(any|bool|byte|complex64|complex128|error|float32|float64|int|int8|int16|int32|int64|interface|map|rune|string|struct|uint|uint8|uint16|uint32|uint64|uintptr)\\b",
