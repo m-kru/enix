@@ -81,6 +81,9 @@
 		"Meta": {
 			"Regex": "#|\\b(define|defined|else|endif|if|ifdef|ifndef|include|undef)\\b"
 		},
+		"Number": {
+			"Regex": "\\b-?(0[xX][0-9a-fA-F]+|\\d+)([uU][lL]{0,2}|[lL]{1,2}[uU]?|[fFdDiI]|([eE][-+]?\\d+))?"
+		},
 		"Operator": {
 			"Regex": "=|\\+|-|>|<|\\*|/|&|%|!|\\||~|\\b(sizeof|typeof)\\b"
 		},
