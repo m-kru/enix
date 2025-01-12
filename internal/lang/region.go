@@ -33,7 +33,6 @@ type Region struct {
 	Number          *regex.Regex
 	Operator        *regex.Regex
 	String          *regex.Regex
-	ToDo            *regex.Regex
 	Type            *regex.Regex
 	Value           *regex.Regex
 	Variable        *regex.Regex
@@ -62,7 +61,6 @@ func DefaultRegion() *Region {
 		Number:          nil,
 		Operator:        nil,
 		String:          nil,
-		ToDo:            nil,
 		Type:            nil,
 		Value:           nil,
 		Variable:        nil,
@@ -257,17 +255,6 @@ func (reg Region) match(line *line.Line, startIdx int, endIdx int) matches {
 			for i, s := range strs {
 				matches.Strings[i].start = util.ByteIdxToRuneIdx(buf, s.Start) + startIdx
 				matches.Strings[i].end = util.ByteIdxToRuneIdx(buf, s.End) + startIdx
-			}
-		}
-	}
-
-	if reg.ToDo != nil {
-		todos := reg.ToDo.FindAll(buf)
-		if len(todos) > 0 {
-			matches.ToDos = make([]match, len(todos))
-			for i, t := range todos {
-				matches.ToDos[i].start = util.ByteIdxToRuneIdx(buf, t.Start) + startIdx
-				matches.ToDos[i].end = util.ByteIdxToRuneIdx(buf, t.End) + startIdx
 			}
 		}
 	}

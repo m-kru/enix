@@ -28,7 +28,7 @@
 		"End": {
 			"Regex": "$"
 		},
-		"ToDo": {
+		"Bold": {
 			"Regex": "(?i)(todo|note|xxx):"
 		}
 	},

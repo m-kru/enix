@@ -24,7 +24,6 @@ type matches struct {
 	Numbers          []match
 	Operators        []match
 	Strings          []match
-	ToDos            []match
 	Types            []match
 	Values           []match
 	Variables        []match
@@ -49,7 +48,6 @@ func defaultMatches() matches {
 		Numbers:          nil,
 		Operators:        nil,
 		Strings:          nil,
-		ToDos:            nil,
 		Types:            nil,
 		Values:           nil,
 		Variables:        nil,

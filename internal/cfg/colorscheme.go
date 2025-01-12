@@ -61,7 +61,6 @@ type Colorscheme struct {
 	Number          tcell.Style
 	Operator        tcell.Style
 	String          tcell.Style
-	ToDo            tcell.Style
 	Type            tcell.Style
 	Value           tcell.Style
 	Variable        tcell.Style
@@ -103,8 +102,6 @@ func (cs *Colorscheme) Style(name string) tcell.Style {
 		return cs.Operator
 	case "String":
 		return cs.String
-	case "ToDo":
-		return cs.ToDo
 	case "Type":
 		return cs.Type
 	case "Value":
@@ -166,7 +163,6 @@ func DefaultColorscheme() Colorscheme {
 		Number:          tcell.StyleDefault.Foreground(tcell.ColorMaroon),
 		Operator:        tcell.StyleDefault.Foreground(tcell.ColorOlive),
 		String:          tcell.StyleDefault.Foreground(tcell.ColorGreen),
-		ToDo:            tcell.StyleDefault.Bold(true),
 		Type:            tcell.StyleDefault.Foreground(tcell.ColorOlive),
 		Value:           tcell.StyleDefault.Foreground(tcell.ColorMaroon),
 		Variable:        tcell.StyleDefault.Foreground(tcell.ColorMaroon),
