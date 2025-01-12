@@ -10,7 +10,9 @@
 		"Keyword": {
 			"Regex": "\\b(and|as|assert|break|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|nonlocal|not|or|pass|raise|return|try|while|with|yield)\\b"
 		},
-		"Number": "(?i)\\b(0b[01_]+)|(0o[0-7_]+)|(0x[\\da-f_]+)|(\\d+(\\.\\d+)?(e[+-]?\\d+)?)\\b",
+		"Number": {
+			"Regex": "(?i)\\b(0b[01_]+)|(0o[0-7_]+)|(0x[\\da-f_]+)|(\\d+(\\.\\d+)?(e[+-]?\\d+)?)\\b"
+		},
 		"Operator": "=|<|>|!|\\||\\^|&|\\+|-|\\*|\\?|%|~",
 		"Type": "\\b(str|int|float|complex|list|tuple|range|dict|set|frozenset|bool|bytes|bytearray|memoryview|)\\b",
 		"Value": "\\b(False|True|None|self)\\b"

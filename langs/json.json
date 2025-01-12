@@ -1,7 +1,9 @@
 [
 	{
 		"Name": "Default",
-		"Number": "\\d+(?:\\.\\d+)?(?:[eE][+-]?\\d*)?",
+		"Number": {
+			"Regex": "\\d+(?:\\.\\d+)?(?:[eE][+-]?\\d*)?"
+		},
 		"Value": "\\b(false|true|null)\\b"
 	},
 	{

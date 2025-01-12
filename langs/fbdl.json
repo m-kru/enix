@@ -9,7 +9,9 @@
 		"Keyword": {
 			"Regex": "\\b(const|import|type)\\b"
 		},
-		"Number": "(?i)\\b(0b[01_]+)|(0o[0-7_]+)|(0x[\\da-f_]+)|(\\d+(\\.\\d+)?(e[+-]?\\d+)?)\\b",
+		"Number": {
+			"Regex": "(?i)\\b(0b[01_]+)|(0o[0-7_]+)|(0x[\\da-f_]+)|(\\d+(\\.\\d+)?(e[+-]?\\d+)?)\\b"
+		},
 		"Type": "\\b(blackbox|block|bus|config|irq|mask|memory|param|proc|return|status|stream|static)\\b",
 		"Value": "\\b(false|true)\\b"
 	},

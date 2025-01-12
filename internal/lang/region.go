@@ -30,7 +30,7 @@ type Region struct {
 	Link            *regex.Regex
 	Meta            *regex.Regex
 	Mono            *regex.Regex
-	Number          *regexp.Regexp
+	Number          *regex.Regex
 	Operator        *regexp.Regexp
 	String          *regexp.Regexp
 	ToDo            *regexp.Regexp
@@ -229,12 +229,12 @@ func (reg Region) match(line *line.Line, startIdx int, endIdx int) matches {
 	}
 
 	if reg.Number != nil {
-		nums := reg.Number.FindAllIndex(buf, -1)
+		nums := reg.Number.FindAll(buf)
 		if len(nums) > 0 {
 			matches.Numbers = make([]match, len(nums))
 			for i, n := range nums {
-				matches.Numbers[i].start = util.ByteIdxToRuneIdx(buf, n[0]) + startIdx
-				matches.Numbers[i].end = util.ByteIdxToRuneIdx(buf, n[1]) + startIdx
+				matches.Numbers[i].start = util.ByteIdxToRuneIdx(buf, n.Start) + startIdx
+				matches.Numbers[i].end = util.ByteIdxToRuneIdx(buf, n.End) + startIdx
 			}
 		}
 	}
