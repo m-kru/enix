@@ -25,7 +25,7 @@ type Region struct {
 	EscapeSequence  *regex.Regex
 	FormatSpecifier *regex.Regex
 	Function        *regex.Regex
-	Heading         *regexp.Regexp
+	Heading         *regex.Regex
 	Italic          *regexp.Regexp
 	Keyword         *regexp.Regexp
 	Link            *regexp.Regexp
@@ -171,6 +171,17 @@ func (reg Region) match(line *line.Line, startIdx int, endIdx int) matches {
 			for i, f := range funcs {
 				matches.Functions[i].start = util.ByteIdxToRuneIdx(buf, f.Start) + startIdx
 				matches.Functions[i].end = util.ByteIdxToRuneIdx(buf, f.End) + startIdx
+			}
+		}
+	}
+
+	if reg.Heading != nil {
+		headings := reg.Heading.FindAll(buf)
+		if len(headings) > 0 {
+			matches.Headings = make([]match, len(headings))
+			for i, h := range headings {
+				matches.Headings[i].start = util.ByteIdxToRuneIdx(buf, h.Start) + startIdx
+				matches.Headings[i].end = util.ByteIdxToRuneIdx(buf, h.End) + startIdx
 			}
 		}
 	}

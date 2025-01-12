@@ -29,7 +29,7 @@ type RegionJSON struct {
 	EscapeSequence  regex.RegexJSON
 	FormatSpecifier regex.RegexJSON
 	Function        regex.RegexJSON
-	Heading         string
+	Heading         regex.RegexJSON
 	Italic          string
 	Keyword         string
 	Link            string
@@ -97,12 +97,9 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 		return nil, fmt.Errorf("can't compile Function: %v", err)
 	}
 
-	var heading *regexp.Regexp
-	if rj.Heading != "" {
-		heading, err = regexp.Compile(rj.Heading)
-		if err != nil {
-			return nil, fmt.Errorf("can't compile heading: %v", err)
-		}
+	heading, err := rj.Heading.ToRegex()
+	if err != nil {
+		return nil, fmt.Errorf("can't compile Heading: %v", err)
 	}
 
 	var italic *regexp.Regexp

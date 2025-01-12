@@ -1,15 +1,8 @@
 [
 	{
-		"Name": "Default"
-	},
-	{
-		"Name": "Heading",
-		"Style": "Heading",
-		"Start": {
-			"Regex": "#"
-		},
-		"End": {
-			"Regex": "$"
+		"Name": "Default",
+		"Heading": {
+			"Regex": "^\\s*#.*$"
 		}
 	},
 	{
