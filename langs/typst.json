@@ -27,7 +27,7 @@
 	},
 	{
 		"Name": "Code",
-		"Style": "Code",
+		"Style": "Mono",
 		"Start": {
 			"Regex": "`",
 			"NegativeLookBehind": "`",
@@ -41,7 +41,7 @@
 	},
 	{
 		"Name": "Code Block 3",
-		"Style": "Code",
+		"Style": "Mono",
 		"Start": {
 			"Regex": "```",
 			"NegativeLookBehind": "`",
@@ -55,7 +55,7 @@
 	},
 	{
 		"Name": "Code Block 4",
-		"Style": "Code",
+		"Style": "Mono",
 		"Start": {
 			"Regex": "````"
 		},

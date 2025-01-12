@@ -20,7 +20,6 @@ type Region struct {
 	Attribute       *regex.Regex
 	Builtin         *regex.Regex
 	Bold            *regex.Regex
-	Code            *regex.Regex
 	Comment         *regex.Regex
 	EscapeSequence  *regex.Regex
 	FormatSpecifier *regex.Regex
@@ -50,7 +49,6 @@ func DefaultRegion() *Region {
 		Attribute:       nil,
 		Builtin:         nil,
 		Bold:            nil,
-		Code:            nil,
 		Comment:         nil,
 		EscapeSequence:  nil,
 		FormatSpecifier: nil,
@@ -116,17 +114,6 @@ func (reg Region) match(line *line.Line, startIdx int, endIdx int) matches {
 			for i, b := range bolds {
 				matches.Bolds[i].start = util.ByteIdxToRuneIdx(buf, b.Start) + startIdx
 				matches.Bolds[i].end = util.ByteIdxToRuneIdx(buf, b.End) + startIdx
-			}
-		}
-	}
-
-	if reg.Code != nil {
-		codes := reg.Code.FindAll(buf)
-		if len(codes) > 0 {
-			matches.Codes = make([]match, len(codes))
-			for i, c := range codes {
-				matches.Codes[i].start = util.ByteIdxToRuneIdx(buf, c.Start) + startIdx
-				matches.Codes[i].end = util.ByteIdxToRuneIdx(buf, c.End) + startIdx
 			}
 		}
 	}
