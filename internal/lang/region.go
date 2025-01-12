@@ -29,7 +29,7 @@ type Region struct {
 	Italic          *regex.Regex
 	Keyword         *regex.Regex
 	Link            *regex.Regex
-	Meta            *regexp.Regexp
+	Meta            *regex.Regex
 	Mono            *regexp.Regexp
 	Number          *regexp.Regexp
 	Operator        *regexp.Regexp
@@ -220,12 +220,12 @@ func (reg Region) match(line *line.Line, startIdx int, endIdx int) matches {
 	}
 
 	if reg.Meta != nil {
-		metas := reg.Meta.FindAllIndex(buf, -1)
+		metas := reg.Meta.FindAll(buf)
 		if len(metas) > 0 {
 			matches.Metas = make([]match, len(metas))
-			for i, x := range metas {
-				matches.Metas[i].start = util.ByteIdxToRuneIdx(buf, x[0]) + startIdx
-				matches.Metas[i].end = util.ByteIdxToRuneIdx(buf, x[1]) + startIdx
+			for i, m := range metas {
+				matches.Metas[i].start = util.ByteIdxToRuneIdx(buf, m.Start) + startIdx
+				matches.Metas[i].end = util.ByteIdxToRuneIdx(buf, m.End) + startIdx
 			}
 		}
 	}
