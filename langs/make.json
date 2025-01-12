@@ -2,9 +2,9 @@
 	{
 		"Name": "Default",
 		"Keyword": {
-			"Regex": "^\\w*:"
+			"Regex": "^(\\w|-)*:"
 		},
-		"Value": {
+		"Variable": {
 			"Regex": "\\$\\(\\w+\\)"
 		}
 	},
@@ -28,7 +28,7 @@
 			"Regex": "\"",
 			"NegativeLookBehind": "(?:[^\\\\])\\\\"
 		},
-		"Value": {
+		"Variable": {
 			"Regex": "\\$\\(\\w+\\)"
 		}
 	}
