@@ -36,7 +36,7 @@ type RegionJSON struct {
 	Mono            regex.RegexJSON
 	Number          regex.RegexJSON
 	Operator        regex.RegexJSON
-	String          string
+	String          regex.RegexJSON
 	ToDo            string
 	Type            string
 	Value           string
@@ -131,12 +131,9 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 		return nil, fmt.Errorf("can't compile Operator: %v", err)
 	}
 
-	var str *regexp.Regexp
-	if rj.String != "" {
-		str, err = regexp.Compile(rj.String)
-		if err != nil {
-			return nil, fmt.Errorf("can't compile string: %v", err)
-		}
+	str, err := rj.String.ToRegex()
+	if err != nil {
+		return nil, fmt.Errorf("can't compile String: %v", err)
 	}
 
 	var todo *regexp.Regexp
