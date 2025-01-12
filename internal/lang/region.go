@@ -34,7 +34,7 @@ type Region struct {
 	Operator        *regex.Regex
 	String          *regex.Regex
 	ToDo            *regex.Regex
-	Type            *regexp.Regexp
+	Type            *regex.Regex
 	Value           *regexp.Regexp
 	Variable        *regexp.Regexp
 }
@@ -273,12 +273,12 @@ func (reg Region) match(line *line.Line, startIdx int, endIdx int) matches {
 	}
 
 	if reg.Type != nil {
-		types := reg.Type.FindAllIndex(buf, -1)
+		types := reg.Type.FindAll(buf)
 		if len(types) > 0 {
 			matches.Types = make([]match, len(types))
 			for i, t := range types {
-				matches.Types[i].start = util.ByteIdxToRuneIdx(buf, t[0]) + startIdx
-				matches.Types[i].end = util.ByteIdxToRuneIdx(buf, t[1]) + startIdx
+				matches.Types[i].start = util.ByteIdxToRuneIdx(buf, t.Start) + startIdx
+				matches.Types[i].end = util.ByteIdxToRuneIdx(buf, t.End) + startIdx
 			}
 		}
 	}
