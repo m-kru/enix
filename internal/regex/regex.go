@@ -13,28 +13,43 @@ type Regex struct {
 }
 
 func (r Regex) FindAll(buf []byte) []Match {
-	matches := make([]Match, 0, 8)
+	finds := r.Regex.FindAllIndex(buf, -1)
+
 	var negLookBeh [][]int
 	var negLookAhead [][]int
 	var posLookAhead [][]int
 	var posLookBeh [][]int
-
-	finds := r.Regex.FindAllIndex(buf, -1)
+	hasLookarounds := false
 
 	if len(finds) > 0 {
 		if r.NegativeLookBehind != nil {
 			negLookBeh = r.NegativeLookBehind.FindAllIndex(buf, -1)
+			hasLookarounds = true
 		}
 		if r.NegativeLookAhead != nil {
 			negLookAhead = r.NegativeLookAhead.FindAllIndex(buf, -1)
+			hasLookarounds = true
 		}
 		if r.PositiveLookAhead != nil {
 			posLookAhead = r.PositiveLookAhead.FindAllIndex(buf, -1)
+			hasLookarounds = true
 		}
 		if r.PositiveLookBehind != nil {
 			posLookBeh = r.PositiveLookBehind.FindAllIndex(buf, -1)
+			hasLookarounds = true
 		}
 	}
+
+	if !hasLookarounds {
+		matches := make([]Match, len(finds), len(finds))
+		for i, f := range finds {
+			matches[i].Start = f[0]
+			matches[i].End = f[1]
+		}
+		return matches
+	}
+
+	matches := make([]Match, 0, len(finds))
 
 	// Note: Below code can be optimized.
 	// If i'th find consumed j'th lookaround,
