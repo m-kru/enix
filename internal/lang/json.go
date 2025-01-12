@@ -24,7 +24,7 @@ type RegionJSON struct {
 	Attribute       regex.RegexJSON
 	Builtin         regex.RegexJSON
 	Bold            regex.RegexJSON
-	Code            string
+	Code            regex.RegexJSON
 	Comment         string
 	EscapeSequence  string
 	FormatSpecifier string
@@ -49,35 +49,32 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 
 	start, err := rj.Start.ToRegex()
 	if err != nil {
-		return nil, fmt.Errorf("can't compile start regex: %v", err)
+		return nil, fmt.Errorf("can't compile Start: %v", err)
 	}
 
 	end, err := rj.End.ToRegex()
 	if err != nil {
-		return nil, fmt.Errorf("can't compile end regex: %v", err)
+		return nil, fmt.Errorf("can't compile End: %v", err)
 	}
 
 	attr, err := rj.Attribute.ToRegex()
 	if err != nil {
-		return nil, fmt.Errorf("can't compile attribute: %v", err)
+		return nil, fmt.Errorf("can't compile Attribute: %v", err)
 	}
 
 	builtin, err := rj.Builtin.ToRegex()
 	if err != nil {
-		return nil, fmt.Errorf("can't compile builtin: %v", err)
+		return nil, fmt.Errorf("can't compile Builtin: %v", err)
 	}
 
 	bold, err := rj.Builtin.ToRegex()
 	if err != nil {
-		return nil, fmt.Errorf("can't compile bold: %v", err)
+		return nil, fmt.Errorf("can't compile Bold: %v", err)
 	}
 
-	var code *regexp.Regexp
-	if rj.Code != "" {
-		code, err = regexp.Compile(rj.Code)
-		if err != nil {
-			return nil, fmt.Errorf("can't compile code: %v", err)
-		}
+	code, err := rj.Builtin.ToRegex()
+	if err != nil {
+		return nil, fmt.Errorf("can't compile Code: %v", err)
 	}
 
 	var comment *regexp.Regexp
