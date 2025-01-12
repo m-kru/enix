@@ -26,7 +26,7 @@ type Region struct {
 	FormatSpecifier *regex.Regex
 	Function        *regex.Regex
 	Heading         *regex.Regex
-	Italic          *regexp.Regexp
+	Italic          *regex.Regex
 	Keyword         *regexp.Regexp
 	Link            *regexp.Regexp
 	Meta            *regexp.Regexp
@@ -182,6 +182,17 @@ func (reg Region) match(line *line.Line, startIdx int, endIdx int) matches {
 			for i, h := range headings {
 				matches.Headings[i].start = util.ByteIdxToRuneIdx(buf, h.Start) + startIdx
 				matches.Headings[i].end = util.ByteIdxToRuneIdx(buf, h.End) + startIdx
+			}
+		}
+	}
+
+	if reg.Italic != nil {
+		italics := reg.Italic.FindAll(buf)
+		if len(italics) > 0 {
+			matches.Italics = make([]match, len(italics))
+			for i, it := range italics {
+				matches.Italics[i].start = util.ByteIdxToRuneIdx(buf, it.Start) + startIdx
+				matches.Italics[i].end = util.ByteIdxToRuneIdx(buf, it.End) + startIdx
 			}
 		}
 	}
