@@ -19,7 +19,7 @@ type Region struct {
 
 	Attribute       *regex.Regex
 	Builtin         *regex.Regex
-	Bold            *regexp.Regexp
+	Bold            *regex.Regex
 	Code            *regexp.Regexp
 	Comment         *regexp.Regexp
 	EscapeSequence  *regexp.Regexp
@@ -105,6 +105,17 @@ func (reg Region) match(line *line.Line, startIdx int, endIdx int) matches {
 			for i, b := range builtins {
 				matches.Builtins[i].start = util.ByteIdxToRuneIdx(buf, b.Start) + startIdx
 				matches.Builtins[i].end = util.ByteIdxToRuneIdx(buf, b.End) + startIdx
+			}
+		}
+	}
+
+	if reg.Bold != nil {
+		bolds := reg.Bold.FindAll(buf)
+		if len(bolds) > 0 {
+			matches.Bolds = make([]match, len(bolds))
+			for i, b := range bolds {
+				matches.Bolds[i].start = util.ByteIdxToRuneIdx(buf, b.Start) + startIdx
+				matches.Bolds[i].end = util.ByteIdxToRuneIdx(buf, b.End) + startIdx
 			}
 		}
 	}
