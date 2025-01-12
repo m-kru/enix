@@ -77,7 +77,7 @@
 		"Meta": {
 			"Regex": "\\\\(a|b|e|f|n|r|t|v|\"|\\\\)"
 		},
-		"FormatSpecifier": {
+		"Variable": {
 			"Regex": "%(c|d|f|p|s|u|x)"
 		}
 	}

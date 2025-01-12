@@ -80,13 +80,6 @@ func (sec Section) Analyze(line *line.Line, startLineIdx int) ([]highlight.Highl
 			insertHighlight(&hls, hl)
 		}
 
-		for _, m := range matches.FormatSpecifiers {
-			hl := highlight.Highlight{
-				LineNum: lineIdx, StartRuneIdx: m.start, EndRuneIdx: m.end, Style: cfg.Colors.FormatSpecifier,
-			}
-			insertHighlight(&hls, hl)
-		}
-
 		for _, m := range matches.Functions {
 			hl := highlight.Highlight{
 				LineNum: lineIdx, StartRuneIdx: m.start, EndRuneIdx: m.end, Style: cfg.Colors.Function,

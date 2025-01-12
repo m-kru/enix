@@ -20,24 +20,23 @@ type RegionJSON struct {
 	Start regex.RegexJSON
 	End   regex.RegexJSON
 
-	Attribute       regex.RegexJSON
-	Builtin         regex.RegexJSON
-	Bold            regex.RegexJSON
-	Comment         regex.RegexJSON
-	FormatSpecifier regex.RegexJSON
-	Function        regex.RegexJSON
-	Heading         regex.RegexJSON
-	Italic          regex.RegexJSON
-	Keyword         regex.RegexJSON
-	Link            regex.RegexJSON
-	Meta            regex.RegexJSON
-	Mono            regex.RegexJSON
-	Number          regex.RegexJSON
-	Operator        regex.RegexJSON
-	String          regex.RegexJSON
-	Type            regex.RegexJSON
-	Value           regex.RegexJSON
-	Variable        regex.RegexJSON
+	Attribute regex.RegexJSON
+	Builtin   regex.RegexJSON
+	Bold      regex.RegexJSON
+	Comment   regex.RegexJSON
+	Function  regex.RegexJSON
+	Heading   regex.RegexJSON
+	Italic    regex.RegexJSON
+	Keyword   regex.RegexJSON
+	Link      regex.RegexJSON
+	Meta      regex.RegexJSON
+	Mono      regex.RegexJSON
+	Number    regex.RegexJSON
+	Operator  regex.RegexJSON
+	String    regex.RegexJSON
+	Type      regex.RegexJSON
+	Value     regex.RegexJSON
+	Variable  regex.RegexJSON
 }
 
 func (rj RegionJSON) ToRegion() (*Region, error) {
@@ -71,11 +70,6 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 	comment, err := rj.Comment.ToRegex()
 	if err != nil {
 		return nil, fmt.Errorf("can't compile Comment: %v", err)
-	}
-
-	fmtSpec, err := rj.FormatSpecifier.ToRegex()
-	if err != nil {
-		return nil, fmt.Errorf("can't compile FormatSpecifier: %v", err)
 	}
 
 	fun, err := rj.Function.ToRegex()
@@ -144,29 +138,28 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 	}
 
 	return &Region{
-		Name:            rj.Name,
-		Style:           rj.Style,
-		Start:           start,
-		End:             end,
-		CursorWord:      nil,
-		Attribute:       attr,
-		Builtin:         builtin,
-		Bold:            bold,
-		Comment:         comment,
-		FormatSpecifier: fmtSpec,
-		Function:        fun,
-		Heading:         heading,
-		Italic:          italic,
-		Keyword:         keyword,
-		Link:            link,
-		Meta:            meta,
-		Mono:            mono,
-		Number:          number,
-		Operator:        operator,
-		String:          str,
-		Type:            typ,
-		Value:           val,
-		Variable:        variable,
+		Name:       rj.Name,
+		Style:      rj.Style,
+		Start:      start,
+		End:        end,
+		CursorWord: nil,
+		Attribute:  attr,
+		Builtin:    builtin,
+		Bold:       bold,
+		Comment:    comment,
+		Function:   fun,
+		Heading:    heading,
+		Italic:     italic,
+		Keyword:    keyword,
+		Link:       link,
+		Meta:       meta,
+		Mono:       mono,
+		Number:     number,
+		Operator:   operator,
+		String:     str,
+		Type:       typ,
+		Value:      val,
+		Variable:   variable,
 	}, nil
 }
 

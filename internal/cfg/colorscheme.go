@@ -45,24 +45,23 @@ type Colorscheme struct {
 	PromptShadow tcell.Style
 
 	// Syntax highlighting
-	Attribute       tcell.Style
-	Bold            tcell.Style
-	Builtin         tcell.Style
-	Comment         tcell.Style
-	FormatSpecifier tcell.Style
-	Function        tcell.Style
-	Heading         tcell.Style
-	Italic          tcell.Style
-	Keyword         tcell.Style
-	Link            tcell.Style
-	Meta            tcell.Style
-	Mono            tcell.Style
-	Number          tcell.Style
-	Operator        tcell.Style
-	String          tcell.Style
-	Type            tcell.Style
-	Value           tcell.Style
-	Variable        tcell.Style
+	Attribute tcell.Style
+	Bold      tcell.Style
+	Builtin   tcell.Style
+	Comment   tcell.Style
+	Function  tcell.Style
+	Heading   tcell.Style
+	Italic    tcell.Style
+	Keyword   tcell.Style
+	Link      tcell.Style
+	Meta      tcell.Style
+	Mono      tcell.Style
+	Number    tcell.Style
+	Operator  tcell.Style
+	String    tcell.Style
+	Type      tcell.Style
+	Value     tcell.Style
+	Variable  tcell.Style
 }
 
 func (cs *Colorscheme) Style(name string) tcell.Style {
@@ -77,8 +76,6 @@ func (cs *Colorscheme) Style(name string) tcell.Style {
 		return cs.Builtin
 	case "Comment":
 		return cs.Comment
-	case "FormatSpecifier":
-		return cs.FormatSpecifier
 	case "Function":
 		return cs.Function
 	case "Heading":
@@ -144,24 +141,23 @@ func DefaultColorscheme() Colorscheme {
 		Prompt:       tcell.StyleDefault.Foreground(tcell.ColorWhite),
 		PromptShadow: tcell.StyleDefault.Foreground(tcell.ColorGray),
 
-		Attribute:       tcell.StyleDefault.Foreground(tcell.ColorTeal),
-		Bold:            tcell.StyleDefault.Bold(true),
-		Builtin:         tcell.StyleDefault.Bold(true),
-		Comment:         tcell.StyleDefault.Foreground(tcell.ColorGray),
-		FormatSpecifier: tcell.StyleDefault.Foreground(tcell.ColorMaroon),
-		Function:        tcell.StyleDefault.Foreground(tcell.ColorTeal),
-		Heading:         tcell.StyleDefault.Foreground(tcell.ColorTeal),
-		Italic:          tcell.StyleDefault.Italic(true),
-		Keyword:         tcell.StyleDefault.Foreground(tcell.ColorNavy),
-		Link:            tcell.StyleDefault.Bold(true),
-		Meta:            tcell.StyleDefault.Foreground(tcell.ColorPurple),
-		Mono:            tcell.StyleDefault.Foreground(tcell.ColorPurple),
-		Number:          tcell.StyleDefault.Foreground(tcell.ColorMaroon),
-		Operator:        tcell.StyleDefault.Foreground(tcell.ColorOlive),
-		String:          tcell.StyleDefault.Foreground(tcell.ColorGreen),
-		Type:            tcell.StyleDefault.Foreground(tcell.ColorOlive),
-		Value:           tcell.StyleDefault.Foreground(tcell.ColorMaroon),
-		Variable:        tcell.StyleDefault.Foreground(tcell.ColorMaroon),
+		Attribute: tcell.StyleDefault.Foreground(tcell.ColorTeal),
+		Bold:      tcell.StyleDefault.Bold(true),
+		Builtin:   tcell.StyleDefault.Bold(true),
+		Comment:   tcell.StyleDefault.Foreground(tcell.ColorGray),
+		Function:  tcell.StyleDefault.Foreground(tcell.ColorTeal),
+		Heading:   tcell.StyleDefault.Foreground(tcell.ColorTeal),
+		Italic:    tcell.StyleDefault.Italic(true),
+		Keyword:   tcell.StyleDefault.Foreground(tcell.ColorNavy),
+		Link:      tcell.StyleDefault.Bold(true),
+		Meta:      tcell.StyleDefault.Foreground(tcell.ColorPurple),
+		Mono:      tcell.StyleDefault.Foreground(tcell.ColorPurple),
+		Number:    tcell.StyleDefault.Foreground(tcell.ColorMaroon),
+		Operator:  tcell.StyleDefault.Foreground(tcell.ColorOlive),
+		String:    tcell.StyleDefault.Foreground(tcell.ColorGreen),
+		Type:      tcell.StyleDefault.Foreground(tcell.ColorOlive),
+		Value:     tcell.StyleDefault.Foreground(tcell.ColorMaroon),
+		Variable:  tcell.StyleDefault.Foreground(tcell.ColorMaroon),
 	}
 }
 

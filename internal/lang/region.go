@@ -17,51 +17,49 @@ type Region struct {
 
 	CursorWord *regexp.Regexp
 
-	Attribute       *regex.Regex
-	Builtin         *regex.Regex
-	Bold            *regex.Regex
-	Comment         *regex.Regex
-	FormatSpecifier *regex.Regex
-	Function        *regex.Regex
-	Heading         *regex.Regex
-	Italic          *regex.Regex
-	Keyword         *regex.Regex
-	Link            *regex.Regex
-	Meta            *regex.Regex
-	Mono            *regex.Regex
-	Number          *regex.Regex
-	Operator        *regex.Regex
-	String          *regex.Regex
-	Type            *regex.Regex
-	Value           *regex.Regex
-	Variable        *regex.Regex
+	Attribute *regex.Regex
+	Builtin   *regex.Regex
+	Bold      *regex.Regex
+	Comment   *regex.Regex
+	Function  *regex.Regex
+	Heading   *regex.Regex
+	Italic    *regex.Regex
+	Keyword   *regex.Regex
+	Link      *regex.Regex
+	Meta      *regex.Regex
+	Mono      *regex.Regex
+	Number    *regex.Regex
+	Operator  *regex.Regex
+	String    *regex.Regex
+	Type      *regex.Regex
+	Value     *regex.Regex
+	Variable  *regex.Regex
 }
 
 func DefaultRegion() *Region {
 	return &Region{
-		Name:            "Default",
-		Style:           "",
-		Start:           nil,
-		End:             nil,
-		CursorWord:      nil,
-		Attribute:       nil,
-		Builtin:         nil,
-		Bold:            nil,
-		Comment:         nil,
-		FormatSpecifier: nil,
-		Function:        nil,
-		Heading:         nil,
-		Italic:          nil,
-		Keyword:         nil,
-		Link:            nil,
-		Meta:            nil,
-		Mono:            nil,
-		Number:          nil,
-		Operator:        nil,
-		String:          nil,
-		Type:            nil,
-		Value:           nil,
-		Variable:        nil,
+		Name:       "Default",
+		Style:      "",
+		Start:      nil,
+		End:        nil,
+		CursorWord: nil,
+		Attribute:  nil,
+		Builtin:    nil,
+		Bold:       nil,
+		Comment:    nil,
+		Function:   nil,
+		Heading:    nil,
+		Italic:     nil,
+		Keyword:    nil,
+		Link:       nil,
+		Meta:       nil,
+		Mono:       nil,
+		Number:     nil,
+		Operator:   nil,
+		String:     nil,
+		Type:       nil,
+		Value:      nil,
+		Variable:   nil,
 	}
 }
 
@@ -121,17 +119,6 @@ func (reg Region) match(line *line.Line, startIdx int, endIdx int) matches {
 			for i, c := range comments {
 				matches.Comments[i].start = util.ByteIdxToRuneIdx(buf, c.Start) + startIdx
 				matches.Comments[i].end = util.ByteIdxToRuneIdx(buf, c.End) + startIdx
-			}
-		}
-	}
-
-	if reg.FormatSpecifier != nil {
-		fmts := reg.FormatSpecifier.FindAll(buf)
-		if len(fmts) > 0 {
-			matches.FormatSpecifiers = make([]match, len(fmts))
-			for i, f := range fmts {
-				matches.FormatSpecifiers[i].start = util.ByteIdxToRuneIdx(buf, f.Start) + startIdx
-				matches.FormatSpecifiers[i].end = util.ByteIdxToRuneIdx(buf, f.End) + startIdx
 			}
 		}
 	}
