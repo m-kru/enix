@@ -30,7 +30,7 @@ type Region struct {
 	Keyword         *regex.Regex
 	Link            *regex.Regex
 	Meta            *regex.Regex
-	Mono            *regexp.Regexp
+	Mono            *regex.Regex
 	Number          *regexp.Regexp
 	Operator        *regexp.Regexp
 	String          *regexp.Regexp
@@ -224,6 +224,17 @@ func (reg Region) match(line *line.Line, startIdx int, endIdx int) matches {
 		if len(metas) > 0 {
 			matches.Metas = make([]match, len(metas))
 			for i, m := range metas {
+				matches.Metas[i].start = util.ByteIdxToRuneIdx(buf, m.Start) + startIdx
+				matches.Metas[i].end = util.ByteIdxToRuneIdx(buf, m.End) + startIdx
+			}
+		}
+	}
+
+	if reg.Mono != nil {
+		monos := reg.Mono.FindAll(buf)
+		if len(monos) > 0 {
+			matches.Monos = make([]match, len(monos))
+			for i, m := range monos {
 				matches.Metas[i].start = util.ByteIdxToRuneIdx(buf, m.Start) + startIdx
 				matches.Metas[i].end = util.ByteIdxToRuneIdx(buf, m.End) + startIdx
 			}
