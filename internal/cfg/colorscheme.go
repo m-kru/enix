@@ -51,7 +51,6 @@ type Colorscheme struct {
 	Heading   tcell.Style
 	Italic    tcell.Style
 	Keyword   tcell.Style
-	Link      tcell.Style
 	Meta      tcell.Style
 	Mono      tcell.Style
 	Number    tcell.Style
@@ -78,8 +77,6 @@ func (cs *Colorscheme) Style(name string) tcell.Style {
 		return cs.Italic
 	case "Keyword":
 		return cs.Keyword
-	case "Link":
-		return cs.Link
 	case "Meta":
 		return cs.Meta
 	case "Mono":
@@ -141,7 +138,6 @@ func DefaultColorscheme() Colorscheme {
 		Heading:   tcell.StyleDefault.Foreground(tcell.ColorTeal),
 		Italic:    tcell.StyleDefault.Italic(true),
 		Keyword:   tcell.StyleDefault.Foreground(tcell.ColorNavy),
-		Link:      tcell.StyleDefault.Bold(true),
 		Meta:      tcell.StyleDefault.Foreground(tcell.ColorPurple),
 		Mono:      tcell.StyleDefault.Foreground(tcell.ColorPurple),
 		Number:    tcell.StyleDefault.Foreground(tcell.ColorMaroon),

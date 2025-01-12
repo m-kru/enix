@@ -23,7 +23,6 @@ type Region struct {
 	Heading   *regex.Regex
 	Italic    *regex.Regex
 	Keyword   *regex.Regex
-	Link      *regex.Regex
 	Meta      *regex.Regex
 	Mono      *regex.Regex
 	Number    *regex.Regex
@@ -47,7 +46,6 @@ func DefaultRegion() *Region {
 		Heading:    nil,
 		Italic:     nil,
 		Keyword:    nil,
-		Link:       nil,
 		Meta:       nil,
 		Mono:       nil,
 		Number:     nil,
@@ -137,17 +135,6 @@ func (reg Region) match(line *line.Line, startIdx int, endIdx int) matches {
 			for i, k := range keywords {
 				matches.Keywords[i].start = util.ByteIdxToRuneIdx(buf, k.Start) + startIdx
 				matches.Keywords[i].end = util.ByteIdxToRuneIdx(buf, k.End) + startIdx
-			}
-		}
-	}
-
-	if reg.Link != nil {
-		links := reg.Link.FindAll(buf)
-		if len(links) > 0 {
-			matches.Links = make([]match, len(links))
-			for i, l := range links {
-				matches.Links[i].start = util.ByteIdxToRuneIdx(buf, l.Start) + startIdx
-				matches.Links[i].end = util.ByteIdxToRuneIdx(buf, l.End) + startIdx
 			}
 		}
 	}
