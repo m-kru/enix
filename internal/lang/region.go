@@ -21,7 +21,6 @@ type Region struct {
 	Builtin         *regex.Regex
 	Bold            *regex.Regex
 	Comment         *regex.Regex
-	EscapeSequence  *regex.Regex
 	FormatSpecifier *regex.Regex
 	Function        *regex.Regex
 	Heading         *regex.Regex
@@ -49,7 +48,6 @@ func DefaultRegion() *Region {
 		Builtin:         nil,
 		Bold:            nil,
 		Comment:         nil,
-		EscapeSequence:  nil,
 		FormatSpecifier: nil,
 		Function:        nil,
 		Heading:         nil,
@@ -123,17 +121,6 @@ func (reg Region) match(line *line.Line, startIdx int, endIdx int) matches {
 			for i, c := range comments {
 				matches.Comments[i].start = util.ByteIdxToRuneIdx(buf, c.Start) + startIdx
 				matches.Comments[i].end = util.ByteIdxToRuneIdx(buf, c.End) + startIdx
-			}
-		}
-	}
-
-	if reg.EscapeSequence != nil {
-		seqs := reg.EscapeSequence.FindAll(buf)
-		if len(seqs) > 0 {
-			matches.EscapeSequences = make([]match, len(seqs))
-			for i, s := range seqs {
-				matches.EscapeSequences[i].start = util.ByteIdxToRuneIdx(buf, s.Start) + startIdx
-				matches.EscapeSequences[i].end = util.ByteIdxToRuneIdx(buf, s.End) + startIdx
 			}
 		}
 	}

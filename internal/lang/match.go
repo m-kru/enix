@@ -12,7 +12,6 @@ type matches struct {
 	Builtins         []match
 	Bolds            []match
 	Comments         []match
-	EscapeSequences  []match
 	FormatSpecifiers []match
 	Functions        []match
 	Headings         []match
@@ -36,7 +35,6 @@ func defaultMatches() matches {
 		Builtins:         nil,
 		Bolds:            nil,
 		Comments:         nil,
-		EscapeSequences:  nil,
 		FormatSpecifiers: nil,
 		Functions:        nil,
 		Headings:         nil,

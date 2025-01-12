@@ -46,7 +46,7 @@
 			"Regex": "\"",
 			"NegativeLookBehind": "(?:[^\\\\])\\\\"
 		},
-		"EscapeSequence": {
+		"Meta": {
 			"Regex": "\\\\(b|f|n|r|t|\"|\\\\)"
 		},
 		"FormatSpecifier": {
@@ -63,7 +63,7 @@
 			"Regex": "'",
 			"NegativeLookBehind": "(?:[^\\\\])\\\\"
 		},
-		"EscapeSequence": {
+		"Meta": {
 			"Regex": "\\\\(b|f|n|r|t|'|\\\\)"
 		},
 		"FormatSpecifier": {
