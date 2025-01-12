@@ -30,7 +30,9 @@
 		"End": {
 			"Regex": "\\*/"
 		},
-		"ToDo": "(?i)(todo|note|xxx):"
+		"ToDo": {
+			"Regex": "(?i)(todo|note|xxx):"
+		}
 
 	},
 	{
@@ -42,7 +44,9 @@
 		"End": {
 			"Regex": "$"
 		},
-		"ToDo": "(?i)(todo|note|xxx):"
+		"ToDo": {
+			"Regex": "(?i)(todo|note|xxx):"
+		}
 	},
 	{
 		"Name": "Logic Value",

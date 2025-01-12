@@ -28,7 +28,9 @@
 		"End": {
 			"Regex": "$"
 		},
-		"ToDo": "(?i)(todo|note|xxx):"
+		"ToDo": {
+			"Regex": "(?i)(todo|note|xxx):"
+		}
 	},
 	{
 		"Name": "Double Quote String",
