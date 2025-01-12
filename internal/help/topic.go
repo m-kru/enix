@@ -31,6 +31,12 @@ It is not necessarily cursor with the greatest line number or column position.
 
 In the case of escaping from multiple cursors by executing the 'esc' command, it is only the last cursor that survives.`,
 
+	"highlighting": `
+
+Use region instead of regex with lookarounds when at least one of the following conditions is met:
+1. Highlighted text might span more than one line.
+2. Highlighted text might have inner highlights with different style.`,
+
 	"keybindings": `There are three independent keybinding sets.
 Each of them is used in a different context:
 1. keys - keybindings for a tab in the normal mode,

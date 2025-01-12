@@ -181,6 +181,7 @@ Valid topics are:
   - commands - list of available commands with their synopsys,
   - config - general description of enix configuration,
   - cursors - what they are and how they work,
+  - highlighting - synax highlighting,
   - enix - general overview of the enix editor,
   - keybindings - how to set, and what to watch out for,
   - selections - what they are and how they work.`,
