@@ -21,7 +21,7 @@ type Region struct {
 	Builtin         *regex.Regex
 	Bold            *regex.Regex
 	Code            *regex.Regex
-	Comment         *regexp.Regexp
+	Comment         *regex.Regex
 	EscapeSequence  *regexp.Regexp
 	FormatSpecifier *regexp.Regexp
 	Function        *regexp.Regexp
@@ -127,6 +127,17 @@ func (reg Region) match(line *line.Line, startIdx int, endIdx int) matches {
 			for i, c := range codes {
 				matches.Codes[i].start = util.ByteIdxToRuneIdx(buf, c.Start) + startIdx
 				matches.Codes[i].end = util.ByteIdxToRuneIdx(buf, c.End) + startIdx
+			}
+		}
+	}
+
+	if reg.Comment != nil {
+		comments := reg.Comment.FindAll(buf)
+		if len(comments) > 0 {
+			matches.Comments = make([]match, len(comments))
+			for i, c := range comments {
+				matches.Comments[i].start = util.ByteIdxToRuneIdx(buf, c.Start) + startIdx
+				matches.Comments[i].end = util.ByteIdxToRuneIdx(buf, c.End) + startIdx
 			}
 		}
 	}

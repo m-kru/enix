@@ -77,12 +77,9 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 		return nil, fmt.Errorf("can't compile Code: %v", err)
 	}
 
-	var comment *regexp.Regexp
-	if rj.Comment != "" {
-		comment, err = regexp.Compile(rj.Comment)
-		if err != nil {
-			return nil, fmt.Errorf("can't compile comment: %v", err)
-		}
+	comment, err := rj.Builtin.ToRegex()
+	if err != nil {
+		return nil, fmt.Errorf("can't compile Comment: %v", err)
 	}
 
 	var escSeq *regexp.Regexp
