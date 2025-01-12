@@ -15,7 +15,9 @@
 		"Number": {
 			"Regex": "\\b\\d+(\\.\\d+)?((e|E)-?\\d+)?"
 		},
-		"Operator": "\\?|=|:=|<|>|\\+|-|/|&|\\*",
+		"Operator": {
+			"Regex": "\\?|=|:=|<|>|\\+|-|/|&|\\*"
+		},
 		"Type": "\\b(bit|bit_vector|boolean|boolean_vector|character|file_open_state|file_origin_kind|integer|integer_vector|natural|positive|line|line_vector|real|real_vector|std_logic|std_logic_vector|std_ulogic|std_ulogic_vector|side|signed|string|text|time|time_vector|unsigned)\\b",
 		"Value": "(?i)\\b(true|false|note|warning|error|failure|nul)\\b"
 	},

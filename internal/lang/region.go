@@ -31,7 +31,7 @@ type Region struct {
 	Meta            *regex.Regex
 	Mono            *regex.Regex
 	Number          *regex.Regex
-	Operator        *regexp.Regexp
+	Operator        *regex.Regex
 	String          *regexp.Regexp
 	ToDo            *regexp.Regexp
 	Type            *regexp.Regexp
@@ -240,12 +240,12 @@ func (reg Region) match(line *line.Line, startIdx int, endIdx int) matches {
 	}
 
 	if reg.Operator != nil {
-		ops := reg.Operator.FindAllIndex(buf, -1)
+		ops := reg.Operator.FindAll(buf)
 		if len(ops) > 0 {
 			matches.Operators = make([]match, len(ops))
 			for i, o := range ops {
-				matches.Operators[i].start = util.ByteIdxToRuneIdx(buf, o[0]) + startIdx
-				matches.Operators[i].end = util.ByteIdxToRuneIdx(buf, o[1]) + startIdx
+				matches.Operators[i].start = util.ByteIdxToRuneIdx(buf, o.Start) + startIdx
+				matches.Operators[i].end = util.ByteIdxToRuneIdx(buf, o.End) + startIdx
 			}
 		}
 	}

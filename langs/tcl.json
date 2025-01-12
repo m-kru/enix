@@ -13,7 +13,9 @@
 			"Regex": "\\b(0(b|B|o|O|x|X)?)?\\d+(\\.\\d+)?((e|E)-?\\d+)?"
 		},
 		"Value": "\\$(\\w|:)+",
-		"Operator": "\\[|\\]"
+		"Operator": {
+			"Regex": "\\[|\\]"
+		}
 	},
 	{
 		"Name": "Line Comment",
