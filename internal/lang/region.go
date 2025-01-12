@@ -22,7 +22,7 @@ type Region struct {
 	Bold            *regex.Regex
 	Code            *regex.Regex
 	Comment         *regex.Regex
-	EscapeSequence  *regexp.Regexp
+	EscapeSequence  *regex.Regex
 	FormatSpecifier *regexp.Regexp
 	Function        *regexp.Regexp
 	Heading         *regexp.Regexp
@@ -143,12 +143,12 @@ func (reg Region) match(line *line.Line, startIdx int, endIdx int) matches {
 	}
 
 	if reg.EscapeSequence != nil {
-		seqs := reg.EscapeSequence.FindAllIndex(buf, -1)
+		seqs := reg.EscapeSequence.FindAll(buf)
 		if len(seqs) > 0 {
 			matches.EscapeSequences = make([]match, len(seqs))
 			for i, s := range seqs {
-				matches.EscapeSequences[i].start = util.ByteIdxToRuneIdx(buf, s[0]) + startIdx
-				matches.EscapeSequences[i].end = util.ByteIdxToRuneIdx(buf, s[1]) + startIdx
+				matches.EscapeSequences[i].start = util.ByteIdxToRuneIdx(buf, s.Start) + startIdx
+				matches.EscapeSequences[i].end = util.ByteIdxToRuneIdx(buf, s.End) + startIdx
 			}
 		}
 	}

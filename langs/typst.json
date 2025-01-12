@@ -91,6 +91,8 @@
 			"Regex": "\"",
 			"NegativeLookBehind": "(?:[^\\\\])\\\\"
 		},
-		"EscapeSequence": "\\\\(n|r|t|u|\"|\\\\)"
+		"EscapeSequence": {
+			"Regex": "\\\\(n|r|t|u|\"|\\\\)"
+		}
 	}
 ]

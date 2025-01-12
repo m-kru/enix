@@ -25,8 +25,8 @@ type RegionJSON struct {
 	Builtin         regex.RegexJSON
 	Bold            regex.RegexJSON
 	Code            regex.RegexJSON
-	Comment         string
-	EscapeSequence  string
+	Comment         regex.RegexJSON
+	EscapeSequence  regex.RegexJSON
 	FormatSpecifier string
 	Function        string
 	Heading         string
@@ -67,27 +67,24 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 		return nil, fmt.Errorf("can't compile Builtin: %v", err)
 	}
 
-	bold, err := rj.Builtin.ToRegex()
+	bold, err := rj.Bold.ToRegex()
 	if err != nil {
 		return nil, fmt.Errorf("can't compile Bold: %v", err)
 	}
 
-	code, err := rj.Builtin.ToRegex()
+	code, err := rj.Code.ToRegex()
 	if err != nil {
 		return nil, fmt.Errorf("can't compile Code: %v", err)
 	}
 
-	comment, err := rj.Builtin.ToRegex()
+	comment, err := rj.Comment.ToRegex()
 	if err != nil {
 		return nil, fmt.Errorf("can't compile Comment: %v", err)
 	}
 
-	var escSeq *regexp.Regexp
-	if rj.EscapeSequence != "" {
-		escSeq, err = regexp.Compile(rj.EscapeSequence)
-		if err != nil {
-			return nil, fmt.Errorf("can't compile escape sequence: %v", err)
-		}
+	escSeq, err := rj.EscapeSequence.ToRegex()
+	if err != nil {
+		return nil, fmt.Errorf("can't compile EscapeSequence: %v", err)
 	}
 
 	var fmtSpec *regexp.Regexp

@@ -68,7 +68,9 @@
 			"Regex": "\"",
 			"NegativeLookBehind": "(?:[^\\\\])\\\\"
 		},
-		"EscapeSequence": "\\\\(a|b|e|f|n|r|t|v|\"|\\\\)",
+		"EscapeSequence": {
+			"Regex": "\\\\(a|b|e|f|n|r|t|v|\"|\\\\)"
+		},
 		"FormatSpecifier": "%(c|d|f|p|s|u|x)"
 	}
 ]

@@ -14,6 +14,8 @@
 			"Regex": "\"",
 			"NegativeLookBehind": "(?:[^\\\\])\\\\"
 		},
-		"EscapeSequence": "\\\\(b|f|n|r|t|\"|\\\\)"
+		"EscapeSequence": {
+			"Regex": "\\\\(b|f|n|r|t|\"|\\\\)"
+		}
 	}
 ]
