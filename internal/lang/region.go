@@ -24,7 +24,7 @@ type Region struct {
 	Comment         *regex.Regex
 	EscapeSequence  *regex.Regex
 	FormatSpecifier *regex.Regex
-	Function        *regexp.Regexp
+	Function        *regex.Regex
 	Heading         *regexp.Regexp
 	Italic          *regexp.Regexp
 	Keyword         *regexp.Regexp
@@ -165,12 +165,12 @@ func (reg Region) match(line *line.Line, startIdx int, endIdx int) matches {
 	}
 
 	if reg.Function != nil {
-		funcs := reg.Function.FindAllIndex(buf, -1)
+		funcs := reg.Function.FindAll(buf)
 		if len(funcs) > 0 {
 			matches.Functions = make([]match, len(funcs))
 			for i, f := range funcs {
-				matches.Functions[i].start = util.ByteIdxToRuneIdx(buf, f[0]) + startIdx
-				matches.Functions[i].end = util.ByteIdxToRuneIdx(buf, f[1]) + startIdx
+				matches.Functions[i].start = util.ByteIdxToRuneIdx(buf, f.Start) + startIdx
+				matches.Functions[i].end = util.ByteIdxToRuneIdx(buf, f.End) + startIdx
 			}
 		}
 	}
