@@ -47,7 +47,6 @@ type Colorscheme struct {
 	// Syntax highlighting
 	Attribute tcell.Style
 	Bold      tcell.Style
-	Builtin   tcell.Style
 	Comment   tcell.Style
 	Function  tcell.Style
 	Heading   tcell.Style
@@ -72,8 +71,6 @@ func (cs *Colorscheme) Style(name string) tcell.Style {
 		return cs.Attribute
 	case "Bold":
 		return cs.Bold
-	case "Builtin":
-		return cs.Builtin
 	case "Comment":
 		return cs.Comment
 	case "Function":
@@ -143,7 +140,6 @@ func DefaultColorscheme() Colorscheme {
 
 		Attribute: tcell.StyleDefault.Foreground(tcell.ColorTeal),
 		Bold:      tcell.StyleDefault.Bold(true),
-		Builtin:   tcell.StyleDefault.Bold(true),
 		Comment:   tcell.StyleDefault.Foreground(tcell.ColorGray),
 		Function:  tcell.StyleDefault.Foreground(tcell.ColorTeal),
 		Heading:   tcell.StyleDefault.Foreground(tcell.ColorTeal),

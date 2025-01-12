@@ -18,7 +18,6 @@ type Region struct {
 	CursorWord *regexp.Regexp
 
 	Attribute *regex.Regex
-	Builtin   *regex.Regex
 	Bold      *regex.Regex
 	Comment   *regex.Regex
 	Function  *regex.Regex
@@ -44,7 +43,6 @@ func DefaultRegion() *Region {
 		End:        nil,
 		CursorWord: nil,
 		Attribute:  nil,
-		Builtin:    nil,
 		Bold:       nil,
 		Comment:    nil,
 		Function:   nil,
@@ -86,17 +84,6 @@ func (reg Region) match(line *line.Line, startIdx int, endIdx int) matches {
 			for i, a := range attrs {
 				matches.Attributes[i].start = util.ByteIdxToRuneIdx(buf, a.Start) + startIdx
 				matches.Attributes[i].end = util.ByteIdxToRuneIdx(buf, a.End) + startIdx
-			}
-		}
-	}
-
-	if reg.Builtin != nil {
-		builtins := reg.Builtin.FindAll(buf)
-		if len(builtins) > 0 {
-			matches.Builtins = make([]match, len(builtins))
-			for i, b := range builtins {
-				matches.Builtins[i].start = util.ByteIdxToRuneIdx(buf, b.Start) + startIdx
-				matches.Builtins[i].end = util.ByteIdxToRuneIdx(buf, b.End) + startIdx
 			}
 		}
 	}

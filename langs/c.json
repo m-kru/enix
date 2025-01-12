@@ -4,7 +4,7 @@
 		"Attribute": {
 			"Regex": "\\b(auto|const|constexpr|extern|register|restrict|static|thread_local|volatile)\\b"
 		},
-		"Builtin": {
+		"Bold": {
 			"Regex": "\\b(__DATE__|__FILE__|__LINE__|__TIME__|__VA_ARGS__)\\b"
 		},
 		"Keyword": {

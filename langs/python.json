@@ -4,7 +4,7 @@
 		"Attribute": {
 			"Regex": "@[\\w\\.]+"
 		},
-		"Builtin": {
+		"Bold": {
 			"Regex": "\\b(abs|any|ascii|bin|breakpoint|callable|chr|classmethod|compile|delattr|dir|divmod|enumerate|eval|exec|filter|format|getattr|globals|hasattr|hash|help|hex|id|__import__|input|isinstance|issubclass|iter|len|locals|map|max|min|next|oct|open|ord|pow|print|repr|reversed|round|setattr|slice|sorted|staticmethod|sum|super|type|vars|zip)\\b"
 		},
 		"Keyword": {

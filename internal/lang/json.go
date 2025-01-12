@@ -21,7 +21,6 @@ type RegionJSON struct {
 	End   regex.RegexJSON
 
 	Attribute regex.RegexJSON
-	Builtin   regex.RegexJSON
 	Bold      regex.RegexJSON
 	Comment   regex.RegexJSON
 	Function  regex.RegexJSON
@@ -55,11 +54,6 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 	attr, err := rj.Attribute.ToRegex()
 	if err != nil {
 		return nil, fmt.Errorf("can't compile Attribute: %v", err)
-	}
-
-	builtin, err := rj.Builtin.ToRegex()
-	if err != nil {
-		return nil, fmt.Errorf("can't compile Builtin: %v", err)
 	}
 
 	bold, err := rj.Bold.ToRegex()
@@ -144,7 +138,6 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 		End:        end,
 		CursorWord: nil,
 		Attribute:  attr,
-		Builtin:    builtin,
 		Bold:       bold,
 		Comment:    comment,
 		Function:   fun,

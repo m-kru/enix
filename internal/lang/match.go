@@ -9,7 +9,6 @@ type matches struct {
 	CursorWords []match
 
 	Attributes []match
-	Builtins   []match
 	Bolds      []match
 	Comments   []match
 	Functions  []match
@@ -31,7 +30,6 @@ func defaultMatches() matches {
 	return matches{
 		CursorWords: nil,
 		Attributes:  nil,
-		Builtins:    nil,
 		Bolds:       nil,
 		Comments:    nil,
 		Functions:   nil,
