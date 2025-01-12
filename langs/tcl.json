@@ -12,7 +12,9 @@
 		"Number": {
 			"Regex": "\\b(0(b|B|o|O|x|X)?)?\\d+(\\.\\d+)?((e|E)-?\\d+)?"
 		},
-		"Value": "\\$(\\w|:)+",
+		"Value": {
+			"Regex": "\\$(\\w|:)+"
+		},
 		"Operator": {
 			"Regex": "\\[|\\]"
 		}
@@ -40,7 +42,9 @@
 			"Regex": "\"",
 			"NegativeLookBehind": "(?:[^\\\\])\\\\"
 		},
-		"Value": "\\$(\\w|:)+"
+		"Value": {
+			"Regex": "\\$(\\w|:)+"
+		}
 	},
 	{
 		"Name": "Procedure",

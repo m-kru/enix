@@ -39,7 +39,7 @@ type RegionJSON struct {
 	String          regex.RegexJSON
 	ToDo            regex.RegexJSON
 	Type            regex.RegexJSON
-	Value           string
+	Value           regex.RegexJSON
 	Variable        string
 }
 
@@ -146,12 +146,9 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 		return nil, fmt.Errorf("can't compile Type: %v", err)
 	}
 
-	var val *regexp.Regexp
-	if rj.Value != "" {
-		val, err = regexp.Compile(rj.Value)
-		if err != nil {
-			return nil, fmt.Errorf("can't compile value: %v", err)
-		}
+	val, err := rj.Value.ToRegex()
+	if err != nil {
+		return nil, fmt.Errorf("can't compile Value: %v", err)
 	}
 
 	var variable *regexp.Regexp

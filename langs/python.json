@@ -19,7 +19,9 @@
 		"Type": {
 			"Regex": "\\b(str|int|float|complex|list|tuple|range|dict|set|frozenset|bool|bytes|bytearray|memoryview|)\\b"
 		},
-		"Value": "\\b(False|True|None|self)\\b"
+		"Value": {
+			"Regex": "\\b(False|True|None|self)\\b"
+		}
 	},
 	{
 		"Name": "Line Comment",

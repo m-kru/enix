@@ -4,7 +4,9 @@
 		"Keyword": {
 			"Regex": "^\\w*:"
 		},
-		"Value": "\\$\\(\\w+\\)"
+		"Value": {
+			"Regex": "\\$\\(\\w+\\)"
+		}
 	},
 	{
 		"Name": "Line Comment",
@@ -26,6 +28,8 @@
 			"Regex": "\"",
 			"NegativeLookBehind": "(?:[^\\\\])\\\\"
 		},
-		"Value": "\\$\\(\\w+\\)"
+		"Value": {
+			"Regex": "\\$\\(\\w+\\)"
+		}
 	}
 ]

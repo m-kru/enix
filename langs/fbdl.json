@@ -15,7 +15,9 @@
 		"Type": {
 			"Regex": "\\b(blackbox|block|bus|config|irq|mask|memory|param|proc|return|status|stream|static)\\b"
 		},
-		"Value": "\\b(false|true)\\b"
+		"Value": {
+			"Regex": "\\b(false|true)\\b"
+		}
 	},
 	{
 		"Name": "Line Comment",

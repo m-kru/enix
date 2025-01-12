@@ -4,7 +4,9 @@
 		"Number": {
 			"Regex": "\\d+(?:\\.\\d+)?(?:[eE][+-]?\\d*)?"
 		},
-		"Value": "\\b(false|true|null)\\b"
+		"Value": {
+			"Regex": "\\b(false|true|null)\\b"
+		}
 	},
 	{
 		"Name": "String",
