@@ -11,7 +11,6 @@ type matches struct {
 	Attributes []match
 	Bolds      []match
 	Comments   []match
-	Functions  []match
 	Headings   []match
 	Italics    []match
 	Keywords   []match
@@ -32,7 +31,6 @@ func defaultMatches() matches {
 		Attributes:  nil,
 		Bolds:       nil,
 		Comments:    nil,
-		Functions:   nil,
 		Headings:    nil,
 		Italics:     nil,
 		Keywords:    nil,

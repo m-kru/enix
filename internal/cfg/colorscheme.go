@@ -48,7 +48,6 @@ type Colorscheme struct {
 	Attribute tcell.Style
 	Bold      tcell.Style
 	Comment   tcell.Style
-	Function  tcell.Style
 	Heading   tcell.Style
 	Italic    tcell.Style
 	Keyword   tcell.Style
@@ -73,8 +72,6 @@ func (cs *Colorscheme) Style(name string) tcell.Style {
 		return cs.Bold
 	case "Comment":
 		return cs.Comment
-	case "Function":
-		return cs.Function
 	case "Heading":
 		return cs.Heading
 	case "Italic":
@@ -141,7 +138,6 @@ func DefaultColorscheme() Colorscheme {
 		Attribute: tcell.StyleDefault.Foreground(tcell.ColorTeal),
 		Bold:      tcell.StyleDefault.Bold(true),
 		Comment:   tcell.StyleDefault.Foreground(tcell.ColorGray),
-		Function:  tcell.StyleDefault.Foreground(tcell.ColorTeal),
 		Heading:   tcell.StyleDefault.Foreground(tcell.ColorTeal),
 		Italic:    tcell.StyleDefault.Italic(true),
 		Keyword:   tcell.StyleDefault.Foreground(tcell.ColorNavy),

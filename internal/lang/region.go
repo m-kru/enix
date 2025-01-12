@@ -20,7 +20,6 @@ type Region struct {
 	Attribute *regex.Regex
 	Bold      *regex.Regex
 	Comment   *regex.Regex
-	Function  *regex.Regex
 	Heading   *regex.Regex
 	Italic    *regex.Regex
 	Keyword   *regex.Regex
@@ -45,7 +44,6 @@ func DefaultRegion() *Region {
 		Attribute:  nil,
 		Bold:       nil,
 		Comment:    nil,
-		Function:   nil,
 		Heading:    nil,
 		Italic:     nil,
 		Keyword:    nil,
@@ -106,17 +104,6 @@ func (reg Region) match(line *line.Line, startIdx int, endIdx int) matches {
 			for i, c := range comments {
 				matches.Comments[i].start = util.ByteIdxToRuneIdx(buf, c.Start) + startIdx
 				matches.Comments[i].end = util.ByteIdxToRuneIdx(buf, c.End) + startIdx
-			}
-		}
-	}
-
-	if reg.Function != nil {
-		funcs := reg.Function.FindAll(buf)
-		if len(funcs) > 0 {
-			matches.Functions = make([]match, len(funcs))
-			for i, f := range funcs {
-				matches.Functions[i].start = util.ByteIdxToRuneIdx(buf, f.Start) + startIdx
-				matches.Functions[i].end = util.ByteIdxToRuneIdx(buf, f.End) + startIdx
 			}
 		}
 	}

@@ -45,16 +45,5 @@
 		"Variable": {
 			"Regex": "\\$(\\w|:)+"
 		}
-	},
-	{
-		"Name": "Procedure",
-		"Style": "Function",
-		"Start": {
-			"Regex": "\\s+",
-			"PositiveLookBehind": "proc"
-		},
-		"End": {
-			"Regex": "\\s"
-		}
 	}
 ]
