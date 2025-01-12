@@ -32,7 +32,7 @@ type RegionJSON struct {
 	Heading         regex.RegexJSON
 	Italic          regex.RegexJSON
 	Keyword         regex.RegexJSON
-	Link            string
+	Link            regex.RegexJSON
 	Meta            string
 	Mono            string
 	Number          string
@@ -112,12 +112,9 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 		return nil, fmt.Errorf("can't compile Keyword: %v", err)
 	}
 
-	var link *regexp.Regexp
-	if rj.Link != "" {
-		link, err = regexp.Compile(rj.Link)
-		if err != nil {
-			return nil, fmt.Errorf("can't compile link: %v", err)
-		}
+	link, err := rj.Link.ToRegex()
+	if err != nil {
+		return nil, fmt.Errorf("can't compile Link: %v", err)
 	}
 
 	var meta *regexp.Regexp
