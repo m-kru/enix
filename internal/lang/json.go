@@ -22,7 +22,7 @@ type RegionJSON struct {
 	End   regex.RegexJSON
 
 	Attribute       regex.RegexJSON
-	Builtin         string
+	Builtin         regex.RegexJSON
 	Bold            string
 	Code            string
 	Comment         string
@@ -62,12 +62,9 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 		return nil, fmt.Errorf("can't compile attribute: %v", err)
 	}
 
-	var builtin *regexp.Regexp
-	if rj.Builtin != "" {
-		builtin, err = regexp.Compile(rj.Builtin)
-		if err != nil {
-			return nil, fmt.Errorf("can't compile builtin: %v", err)
-		}
+	builtin, err := rj.Builtin.ToRegex()
+	if err != nil {
+		return nil, fmt.Errorf("can't compile attribute: %v", err)
 	}
 
 	var bold *regexp.Regexp

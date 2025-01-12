@@ -18,7 +18,7 @@ type Region struct {
 	CursorWord *regexp.Regexp
 
 	Attribute       *regex.Regex
-	Builtin         *regexp.Regexp
+	Builtin         *regex.Regex
 	Bold            *regexp.Regexp
 	Code            *regexp.Regexp
 	Comment         *regexp.Regexp
@@ -99,12 +99,12 @@ func (reg Region) match(line *line.Line, startIdx int, endIdx int) matches {
 	}
 
 	if reg.Builtin != nil {
-		builtins := reg.Builtin.FindAllIndex(buf, -1)
+		builtins := reg.Builtin.FindAll(buf)
 		if len(builtins) > 0 {
 			matches.Builtins = make([]match, len(builtins))
 			for i, b := range builtins {
-				matches.Builtins[i].start = util.ByteIdxToRuneIdx(buf, b[0]) + startIdx
-				matches.Builtins[i].end = util.ByteIdxToRuneIdx(buf, b[1]) + startIdx
+				matches.Builtins[i].start = util.ByteIdxToRuneIdx(buf, b.Start) + startIdx
+				matches.Builtins[i].end = util.ByteIdxToRuneIdx(buf, b.End) + startIdx
 			}
 		}
 	}
