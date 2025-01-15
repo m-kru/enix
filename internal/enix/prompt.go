@@ -507,6 +507,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 			err = exec.Redo(c.Args, tab)
 		case "save":
 			info, err = exec.Save(c.Args, tab, cfg.Cfg.TrimOnSave)
+			updateView = false
 		case "search":
 			err = exec.Search(c.Args, tab)
 			updateView = false

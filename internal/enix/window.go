@@ -230,6 +230,7 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			err = exec.Right(c.Args, tab)
 		case "save":
 			info, err = exec.Save(c.Args, tab, cfg.Cfg.TrimOnSave)
+			updateView = false
 		case "search":
 			Prompt.Activate("search ", tab.GetWord())
 			return &Prompt
