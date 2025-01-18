@@ -70,6 +70,8 @@ func DefaultKeybindings() Keybindings {
 		"Esc":     "esc",
 		"Rune[,]": "align",
 		"Rune[-]": "go -1",
+		"Home":    "go 1",
+		"End":     "go -1",
 		"Rune[c]": "change",
 		"Rune[/]": "search",
 		"Rune[i]": "insert",
