@@ -15,9 +15,9 @@ func (l *Line) InsertRune(r rune, rIdx int) {
 		l.Buf = newBuf
 	}
 
-	l.Buf = l.Buf[:len(l.Buf)+1]
+	l.Buf = l.Buf[:len(l.Buf)+runeLen]
 
-	for i := len(l.Buf) - 1; i > bIdx; i-- {
+	for i := len(l.Buf) - 1; i >= bIdx+runeLen; i-- {
 		l.Buf[i] = l.Buf[i-runeLen]
 	}
 	utf8.EncodeRune(l.Buf[bIdx:], r)
