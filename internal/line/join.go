@@ -6,7 +6,7 @@ import (
 )
 
 // Join joins line l with the next line.
-// Trim indicates whether leading whiespaces from the next line shal be removed.
+// Trim indicates whether leading whiespaces from the next line shall be removed.
 // Returns pointer to the new line, or nil if there was nothing to join.
 // The second return is the number of trimmed runes.
 func (l *Line) Join(trim bool) (*Line, int) {
