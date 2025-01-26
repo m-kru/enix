@@ -39,7 +39,7 @@ func getPrevFind(finds []find.Find, c *cursor.Cursor) find.Find {
 
 	// First check wrap-around
 	if c.LineNum < firstFind.LineNum ||
-		(c.LineNum == firstFind.LineNum && c.RuneIdx <= lastFind.StartRuneIdx) ||
+		(c.LineNum == firstFind.LineNum && c.RuneIdx <= firstFind.StartRuneIdx) ||
 		(c.LineNum == lastFind.LineNum && c.RuneIdx > lastFind.StartRuneIdx) {
 		return lastFind
 	}
