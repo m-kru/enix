@@ -45,11 +45,7 @@ func (tab *Tab) ViewUpHalf() {
 }
 
 func (tab *Tab) ViewRight() {
-	// - 3 because of:
-	// 1. Space between line number and first line character.
-	// 2. End of line character,
-	// 3. One extra column, it simply looks better.
-	lastCol := tab.View.LastColumn() + tab.LineNumWidth() - 3
+	lastCol := tab.View.LastColumn() + tab.LineNumWidth() - tab.Frame.Width/2
 	if lastCol >= tab.LastColumnIdx() {
 		return
 	}
