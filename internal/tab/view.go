@@ -22,7 +22,7 @@ func (tab *Tab) ViewCenter() {
 }
 
 func (tab *Tab) ViewDown() {
-	if tab.View.LastLine() >= tab.Lines.Count() {
+	if tab.View.LastLine() >= tab.Lines.Count()+tab.Frame.Height/2 {
 		return
 	}
 	tab.View = tab.View.Down()
