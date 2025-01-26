@@ -15,20 +15,19 @@ func (c *Cursor) InsertNewline(indent bool) action.Actions {
 	lineNum := c.LineNum
 	line := c.Line
 	indentStr := line.Indent()
-	newLine1, newLine2 := c.Line.InsertNewline(c.RuneIdx)
+	newLine := c.Line.InsertNewline(c.RuneIdx)
 
-	c.Line = newLine2
+	c.Line = newLine.Next
 	c.LineNum++
 	c.RuneIdx = 0
 	c.colIdx = 1
 
 	actions := make(action.Actions, 1, 2)
 	actions[0] = &action.NewlineInsert{
-		Line:     line,
-		LineNum:  lineNum,
-		RuneIdx:  rIdx,
-		NewLine1: newLine1,
-		NewLine2: newLine2,
+		Line:    line,
+		LineNum: lineNum,
+		RuneIdx: rIdx,
+		NewLine: newLine,
 	}
 
 	if indentStr == "" || !indent {

@@ -356,15 +356,15 @@ func (tab *Tab) insertNewlineCursors() action.Actions {
 		ni := act[0].(*action.NewlineInsert)
 		skip := false
 		for _, c2 := range tab.Cursors {
-			if c2.Line == ni.NewLine1 {
+			if c2.Line == ni.NewLine {
 				skip = true
 				break
 			}
 		}
-		if skip || !ni.NewLine1.HasOnlySpaces() {
+		if skip || !ni.NewLine.HasOnlySpaces() {
 			continue
 		}
-		ni.NewLine1.Clear()
+		ni.NewLine.Clear()
 	}
 
 	return actions
@@ -392,15 +392,15 @@ func (tab *Tab) insertNewlineSelections() action.Actions {
 		ni := act[0].(*action.NewlineInsert)
 		skip := false
 		for _, c2 := range tab.Cursors {
-			if c2.Line == ni.NewLine1 {
+			if c2.Line == ni.NewLine {
 				skip = true
 				break
 			}
 		}
-		if skip || !ni.NewLine1.HasOnlySpaces() {
+		if skip || !ni.NewLine.HasOnlySpaces() {
 			continue
 		}
-		ni.NewLine1.Clear()
+		ni.NewLine.Clear()
 	}
 
 	return actions

@@ -86,7 +86,7 @@ func (c *Cursor) informNewlineInsert(ni *action.NewlineInsert) {
 	}
 
 	if c.LineNum == ni.LineNum && c.RuneIdx < ni.RuneIdx {
-		c.Line = ni.NewLine1
+		c.Line = ni.NewLine
 		return
 	}
 
@@ -95,7 +95,7 @@ func (c *Cursor) informNewlineInsert(ni *action.NewlineInsert) {
 		return
 	}
 
-	c.Line = ni.NewLine2
+	c.Line = ni.NewLine.Next
 	c.RuneIdx -= ni.RuneIdx
 	c.colIdx = c.Line.ColumnIdx(c.RuneIdx)
 }

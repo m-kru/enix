@@ -156,7 +156,7 @@ func (tab *Tab) pasteCursorsRegular(text string, addIndent bool) action.Actions 
 
 				if i == 0 {
 					ni := act[0].(*action.NewlineInsert)
-					startCur = cursor.New(ni.NewLine1, cur.LineNum-1, startRuneIdx)
+					startCur = cursor.New(ni.NewLine, cur.LineNum-1, startRuneIdx)
 				}
 			}
 

@@ -31,11 +31,10 @@ type (
 	}
 
 	NewlineInsert struct {
-		Line     *line.Line
-		LineNum  int
-		RuneIdx  int
-		NewLine1 *line.Line
-		NewLine2 *line.Line
+		Line    *line.Line
+		LineNum int
+		RuneIdx int
+		NewLine *line.Line
 	}
 )
 
@@ -64,17 +63,16 @@ func (lu *LineUp) Reverse() Action {
 
 func (nd *NewlineDelete) Reverse() Action {
 	return &NewlineInsert{
-		Line:     nd.NewLine,
-		LineNum:  nd.LineNum,
-		RuneIdx:  nd.RuneIdx,
-		NewLine1: nd.Line,
-		NewLine2: nd.Line.Next,
+		Line:    nd.NewLine,
+		LineNum: nd.LineNum,
+		RuneIdx: nd.RuneIdx,
+		NewLine: nd.Line,
 	}
 }
 
 func (ni *NewlineInsert) Reverse() Action {
 	return &NewlineDelete{
-		Line:         ni.NewLine1,
+		Line:         ni.NewLine,
 		LineNum:      ni.LineNum,
 		RuneIdx:      ni.RuneIdx,
 		TrimmedCount: 0,

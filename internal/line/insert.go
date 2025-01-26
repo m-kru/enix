@@ -23,8 +23,8 @@ func (l *Line) InsertRune(r rune, rIdx int) {
 	utf8.EncodeRune(l.Buf[bIdx:], r)
 }
 
-// InsertNewline inserts a newline at index idx and returns the new line.
-func (l *Line) InsertNewline(rIdx int) (*Line, *Line) {
+// InsertNewline inserts a newline at provided rune index and returns the new line.
+func (l *Line) InsertNewline(rIdx int) *Line {
 	bIdx := l.BufIdx(rIdx)
 
 	nl1, _ := FromString(string(l.Buf[0:bIdx]))
@@ -42,7 +42,7 @@ func (l *Line) InsertNewline(rIdx int) (*Line, *Line) {
 		l.Next.Prev = nl2
 	}
 
-	return nl1, nl2
+	return nl1
 }
 
 func (l *Line) InsertString(s string, rIdx int) {

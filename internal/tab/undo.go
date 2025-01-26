@@ -139,12 +139,12 @@ func (tab *Tab) undoNewlineDelete(nd *action.NewlineDelete) {
 
 func (tab *Tab) undoNewlineInsert(ni *action.NewlineInsert) {
 	if ni.Line.Prev != nil {
-		ni.Line.Prev.Next = ni.NewLine1
+		ni.Line.Prev.Next = ni.NewLine
 	} else {
-		tab.Lines = ni.NewLine1
+		tab.Lines = ni.NewLine
 	}
 
 	if ni.Line.Next != nil {
-		ni.Line.Next.Prev = ni.NewLine2
+		ni.Line.Next.Prev = ni.NewLine.Next
 	}
 }

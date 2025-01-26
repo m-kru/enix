@@ -103,14 +103,14 @@ func (s *Selection) informNewlineInsert(ni *action.NewlineInsert) {
 	// Newline insert can split selection marks. However, in such
 	// a case, the mark shall be destroyed.
 	if s.EndRuneIdx < ni.RuneIdx {
-		s.Line = ni.NewLine1
+		s.Line = ni.NewLine
 	} else if s.EndRuneIdx == ni.RuneIdx {
 		// This is possbile only if this is the last subselection.
-		s.Line = ni.NewLine1
+		s.Line = ni.NewLine
 		c := s.Cursor
 		s.Cursor = nil
 		newS := &Selection{
-			Line:         ni.NewLine2,
+			Line:         ni.NewLine.Next,
 			LineNum:      c.LineNum,
 			StartRuneIdx: 0,
 			EndRuneIdx:   c.RuneIdx,
@@ -120,7 +120,7 @@ func (s *Selection) informNewlineInsert(ni *action.NewlineInsert) {
 		}
 		s.Next = newS
 	} else {
-		s.Line = ni.NewLine2
+		s.Line = ni.NewLine.Next
 		s.StartRuneIdx -= ni.RuneIdx
 		s.EndRuneIdx -= ni.RuneIdx
 		s.LineNum++
