@@ -61,17 +61,17 @@ func (c *Cursor) informLineUp(lu *action.LineUp) {
 // If cursor was pointing the the joined line, then the
 // cursor Line pointer is set to point to the previous line.
 func (c *Cursor) informNewlineDelete(nd *action.NewlineDelete) {
-	if c.LineNum < nd.Line1Num {
+	if c.LineNum < nd.LineNum {
 		return
 	}
 
-	if c.LineNum == nd.Line1Num {
+	if c.LineNum == nd.LineNum {
 		c.Line = nd.NewLine
 		return
 	}
 
 	c.LineNum--
-	if c.LineNum > nd.Line1Num {
+	if c.LineNum > nd.LineNum {
 		return
 	}
 

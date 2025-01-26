@@ -14,8 +14,8 @@ func (s *Selection) Join() (action.Actions, *Selection) {
 }
 
 func (s *Selection) joinSingleLine() (action.Actions, *Selection) {
-	l1 := s.Line
-	l2 := l1.Next
+	l := s.Line
+	nl := l.Next
 	rc := s.Line.RuneCount()
 	newLine, trimmedCount := s.Line.Join(true)
 	if newLine == nil {
@@ -27,10 +27,10 @@ func (s *Selection) joinSingleLine() (action.Actions, *Selection) {
 
 	return action.Actions{
 		&action.NewlineDelete{
-			Line1:        l1,
-			Line1Num:     s.LineNum,
+			Line:         l,
+			LineNum:      s.LineNum,
 			RuneIdx:      rc,
-			Line2:        l2,
+			NextLine:     nl,
 			TrimmedCount: trimmedCount,
 			NewLine:      newLine,
 		},
@@ -47,9 +47,9 @@ func (s *Selection) joinMultiLine() (action.Actions, *Selection) {
 	var newLine *line.Line
 	trimmedCount := 0
 	for {
-		l1 := s.Line
-		l2 := l1.Next
-		l1rc := s.Line.RuneCount()
+		l := s.Line
+		nl := l.Next
+		lrc := s.Line.RuneCount()
 		newLine, trimmedCount = s.Line.Join(true)
 
 		// - 1 because we are in the middle of the selection,
@@ -59,10 +59,10 @@ func (s *Selection) joinMultiLine() (action.Actions, *Selection) {
 		actions = append(
 			actions,
 			&action.NewlineDelete{
-				Line1:        l1,
-				Line1Num:     s.LineNum,
-				RuneIdx:      l1rc,
-				Line2:        l2,
+				Line:         l,
+				LineNum:      s.LineNum,
+				RuneIdx:      lrc,
+				NextLine:     nl,
 				TrimmedCount: trimmedCount,
 				NewLine:      newLine,
 			},

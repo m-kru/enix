@@ -126,14 +126,14 @@ func (tab *Tab) undoLineUp(lu *action.LineUp) {
 }
 
 func (tab *Tab) undoNewlineDelete(nd *action.NewlineDelete) {
-	if nd.Line1.Prev != nil {
-		nd.Line1.Prev.Next = nd.NewLine
+	if nd.Line.Prev != nil {
+		nd.Line.Prev.Next = nd.NewLine
 	} else {
 		tab.Lines = nd.NewLine
 	}
 
-	if nd.Line2.Next != nil {
-		nd.Line2.Next.Prev = nd.NewLine
+	if nd.NextLine.Next != nil {
+		nd.NextLine.Next.Prev = nd.NewLine
 	}
 }
 

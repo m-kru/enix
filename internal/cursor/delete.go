@@ -7,8 +7,8 @@ import (
 )
 
 func (c *Cursor) Delete() action.Action {
-	l1 := c.Line
-	l2 := l1.Next
+	l := c.Line
+	nl := l.Next
 	rc := c.Line.RuneCount()
 	if c.RuneIdx == rc {
 		newLine, _ := c.Line.Join(false)
@@ -19,10 +19,10 @@ func (c *Cursor) Delete() action.Action {
 		c.Line = newLine
 
 		return &action.NewlineDelete{
-			Line1:        l1,
-			Line1Num:     c.LineNum,
+			Line:         l,
+			LineNum:      c.LineNum,
 			RuneIdx:      rc,
-			Line2:        l2,
+			NextLine:     nl,
 			TrimmedCount: 0,
 			NewLine:      newLine,
 		}
@@ -38,22 +38,22 @@ func (c *Cursor) Backspace() action.Action {
 			// Do nothing
 			return nil
 		} else {
-			l1 := c.Line.Prev
-			l2 := c.Line
-			l1Len := l1.RuneCount()
-			newLine, _ := l1.Join(false)
+			l := c.Line.Prev
+			nl := c.Line
+			lRC := l.RuneCount()
+			newLine, _ := l.Join(false)
 			// cursor is in the next line here, so Join must success
 
 			c.Line = newLine
 			c.LineNum--
-			c.RuneIdx = l1Len
+			c.RuneIdx = lRC
 			c.colIdx = c.Line.ColumnIdx(c.RuneIdx)
 
 			return &action.NewlineDelete{
-				Line1:        l1,
-				Line1Num:     c.LineNum,
-				RuneIdx:      l1Len,
-				Line2:        l2,
+				Line:         l,
+				LineNum:      c.LineNum,
+				RuneIdx:      lRC,
+				NextLine:     nl,
 				TrimmedCount: 0,
 				NewLine:      newLine,
 			}

@@ -30,7 +30,7 @@ func (tab *Tab) handleAction(act action.Action) {
 		}
 	case *action.NewlineDelete:
 		tab.LineCount--
-		if a.Line1 == tab.Lines {
+		if a.Line == tab.Lines {
 			tab.Lines = a.NewLine
 		}
 	case *action.NewlineInsert:

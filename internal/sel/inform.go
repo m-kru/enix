@@ -70,16 +70,16 @@ func (s *Selection) informLineInsert(li *action.LineInsert) {
 }
 
 func (s *Selection) informNewlineDelete(nd *action.NewlineDelete) {
-	if s.LineNum < nd.Line1Num {
+	if s.LineNum < nd.LineNum {
 		return
 	}
 
-	if s.Line == nd.Line1 {
+	if s.Line == nd.Line {
 		s.Line = nd.NewLine
 		return
 	}
 
-	if s.Line == nd.Line2 {
+	if s.Line == nd.NextLine {
 		s.Line = nd.NewLine
 		s.StartRuneIdx += nd.RuneIdx
 		s.EndRuneIdx += nd.RuneIdx
