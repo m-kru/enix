@@ -213,12 +213,18 @@ func (tab *Tab) RxEventKey(ev *tcell.EventKey) string {
 	return ""
 }
 
+// LastSel returns tab last selection.
+// It doesn't checket whether selections exist.
+func (tab *Tab) LastSel() *sel.Selection {
+	return tab.Selections[len(tab.Selections)-1]
+}
+
 // GetWord returns word under last cursor or selection.
 func (tab *Tab) GetWord() string {
 	if len(tab.Cursors) > 0 {
 		return tab.Cursors[len(tab.Cursors)-1].GetWord()
 	} else {
-		return tab.Selections[len(tab.Selections)-1].GetCursor().GetWord()
+		return tab.LastSel().GetCursor().GetWord()
 	}
 }
 

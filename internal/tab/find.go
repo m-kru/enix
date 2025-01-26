@@ -78,7 +78,7 @@ func (tab *Tab) Find(next bool) {
 	if len(tab.Cursors) > 0 {
 		c = tab.Cursors[len(tab.Cursors)-1]
 	} else {
-		c = tab.Selections[len(tab.Selections)-1].GetCursor()
+		c = tab.LastSel().GetCursor()
 	}
 
 	var f find.Find
@@ -129,7 +129,7 @@ func (tab *Tab) FindSel(next bool) {
 		return
 	}
 
-	c := tab.Selections[len(tab.Selections)-1].GetCursor()
+	c := tab.LastSel().GetCursor()
 
 	var f find.Find
 	if next {

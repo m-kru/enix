@@ -9,7 +9,7 @@ func (tab *Tab) ViewCenter() {
 	if len(tab.Cursors) > 0 {
 		cur = tab.Cursors[len(tab.Cursors)-1]
 	} else {
-		cur = tab.Selections[len(tab.Selections)-1].GetCursor()
+		cur = tab.LastSel().GetCursor()
 	}
 
 	lineNum := cur.LineNum - tab.Frame.Height/2

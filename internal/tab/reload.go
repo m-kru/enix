@@ -17,7 +17,7 @@ func (tab *Tab) Reload() error {
 	if len(tab.Cursors) > 0 {
 		lastCur = tab.Cursors[len(tab.Cursors)-1]
 	} else {
-		lastCur = tab.Selections[len(tab.Selections)-1].GetCursor()
+		lastCur = tab.LastSel().GetCursor()
 	}
 
 	var actions action.Actions

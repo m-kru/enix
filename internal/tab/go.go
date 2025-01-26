@@ -72,7 +72,7 @@ func (tab *Tab) GoMark(name string) error {
 	if len(tab.Cursors) > 0 {
 		cur = tab.Cursors[len(tab.Cursors)-1]
 	} else {
-		cur = tab.Selections[len(tab.Selections)-1].GetCursor()
+		cur = tab.LastSel().GetCursor()
 	}
 
 	if tab.View.IsVisible(cur.View()) {

@@ -19,7 +19,7 @@ func (tab *Tab) UpdateView() {
 	if len(tab.Cursors) > 0 {
 		v = tab.Cursors[len(tab.Cursors)-1].View()
 	} else {
-		v = tab.Selections[len(tab.Selections)-1].GetCursor().View()
+		v = tab.LastSel().GetCursor().View()
 	}
 
 	tab.View = tab.View.MinAdjust(v)
@@ -93,7 +93,7 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 	if len(tab.Cursors) > 0 {
 		c = tab.Cursors[len(tab.Cursors)-1]
 	} else {
-		c = tab.Selections[len(tab.Selections)-1].GetCursor()
+		c = tab.LastSel().GetCursor()
 		if len(tab.Selections) == 1 {
 			b.WriteString("1 sel ")
 		} else {
