@@ -108,10 +108,12 @@ func DefaultKeybindings() Keybindings {
 		// View
 		"Ctrl+W":     "view-center",
 		"Down":       "view-down",
+		"Ctrl+D":     "view-down-half",
 		"Ctrl+Down":  "5 view-down",
 		"Right":      "view-right",
 		"Ctrl+Right": "5 view-right",
 		"Up":         "view-up",
+		"Ctrl+U":     "view-up-half",
 		"Ctrl+Up":    "5 view-up",
 		"Left":       "view-left",
 		"Ctrl+Left":  "5 view-left",

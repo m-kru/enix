@@ -28,8 +28,20 @@ func (tab *Tab) ViewDown() {
 	tab.View = tab.View.Down()
 }
 
+func (tab *Tab) ViewDownHalf() {
+	for range tab.Frame.Height / 2 {
+		tab.ViewDown()
+	}
+}
+
 func (tab *Tab) ViewUp() {
 	tab.View = tab.View.Up()
+}
+
+func (tab *Tab) ViewUpHalf() {
+	for range tab.Frame.Height / 2 {
+		tab.ViewUp()
+	}
 }
 
 func (tab *Tab) ViewRight() {

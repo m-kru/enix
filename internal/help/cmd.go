@@ -341,9 +341,13 @@ If the second is absent, it is assumed to be the current tab.`,
 
 	"view-down": "view-down # Scrolls the view down by one line.",
 
+	"view-down-half": "view-down-half # Scrolls the view down by half of the screen height.",
+
 	"view-left": "view-left # Scrolls the view left by one column.",
 
 	"view-right": "view-right # Scrolls the view right by one column.",
 
 	"view-up": "view-up # Scrolls the view up by one line.",
+
+	"view-up-half": "view-up-half # Scrolls the view up by half of the screen height.",
 }

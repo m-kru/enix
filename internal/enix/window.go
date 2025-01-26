@@ -290,6 +290,9 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		case "view-down":
 			err = exec.ViewDown(c.Args, tab)
 			updateView = false
+		case "view-down-half":
+			err = exec.ViewDownHalf(c.Args, tab)
+			updateView = false
 		case "view-left":
 			err = exec.ViewLeft(c.Args, tab)
 			updateView = false
@@ -298,6 +301,9 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			updateView = false
 		case "view-up":
 			err = exec.ViewUp(c.Args, tab)
+			updateView = false
+		case "view-up-half":
+			err = exec.ViewUpHalf(c.Args, tab)
 			updateView = false
 		case "word-end":
 			err = exec.WordEnd(c.Args, tab)

@@ -26,12 +26,32 @@ func ViewDown(args []string, tab *tab.Tab) error {
 	return nil
 }
 
+func ViewDownHalf(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf("view-down-half: expected 0 args, provided %d", len(args))
+	}
+
+	tab.ViewDownHalf()
+
+	return nil
+}
+
 func ViewUp(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf("view-up: expected 0 args, provided %d", len(args))
 	}
 
 	tab.ViewUp()
+
+	return nil
+}
+
+func ViewUpHalf(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf("view-up-half: expected 0 args, provided %d", len(args))
+	}
+
+	tab.ViewUpHalf()
 
 	return nil
 }
