@@ -132,8 +132,8 @@ func (tab *Tab) undoNewlineDelete(nd *action.NewlineDelete) {
 		tab.Lines = nd.NewLine
 	}
 
-	if nd.NextLine.Next != nil {
-		nd.NextLine.Next.Prev = nd.NewLine
+	if nd.Line.Next.Next != nil {
+		nd.Line.Next.Next.Prev = nd.NewLine
 	}
 }
 

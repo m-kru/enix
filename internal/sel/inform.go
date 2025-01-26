@@ -79,7 +79,7 @@ func (s *Selection) informNewlineDelete(nd *action.NewlineDelete) {
 		return
 	}
 
-	if s.Line == nd.NextLine {
+	if s.Line == nd.Line.Next {
 		s.Line = nd.NewLine
 		s.StartRuneIdx += nd.RuneIdx
 		s.EndRuneIdx += nd.RuneIdx

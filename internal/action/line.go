@@ -26,7 +26,6 @@ type (
 		Line         *line.Line
 		LineNum      int
 		RuneIdx      int // Equals Line.RuneCount() before delete
-		NextLine     *line.Line
 		TrimmedCount int // Number of runes trimmed from the Line2
 		NewLine      *line.Line
 	}
@@ -69,7 +68,7 @@ func (nd *NewlineDelete) Reverse() Action {
 		LineNum:  nd.LineNum,
 		RuneIdx:  nd.RuneIdx,
 		NewLine1: nd.Line,
-		NewLine2: nd.NextLine,
+		NewLine2: nd.Line.Next,
 	}
 }
 
@@ -78,7 +77,6 @@ func (ni *NewlineInsert) Reverse() Action {
 		Line:         ni.NewLine1,
 		LineNum:      ni.LineNum,
 		RuneIdx:      ni.RuneIdx,
-		NextLine:     ni.NewLine2,
 		TrimmedCount: 0,
 		NewLine:      ni.Line,
 	}
