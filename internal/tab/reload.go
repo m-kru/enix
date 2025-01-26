@@ -75,5 +75,9 @@ func (tab *Tab) Reload() error {
 		tab.undoPush(actions.Reverse(), prevCurs, prevSels)
 	}
 
+	// Reset Undo and RedoCount
+	tab.UndoCount = 0
+	tab.RedoCount = 0
+
 	return nil
 }
