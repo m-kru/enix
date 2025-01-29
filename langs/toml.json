@@ -1,0 +1,51 @@
+[
+	{
+		"Name": "Default",
+		"Heading": {
+			"Regex": "^\\[.*\\]$"
+		},
+		"Number": {
+			"Regex": "\\b([0-9_]+(\\.[0-9_]+)?([eE][+-]?[0-9_]+)?|0b[01_]+|0o[0-7_]+|0x[0-9a-fA-F_]+)\\b"
+		},
+		"Value": {
+			"Regex": "\\b(false|true|nan|inf)\\b"
+		}
+	},
+	{
+		"Name": "Line Comment",
+		"Style": "Comment",
+		"Start": {
+			"Regex": "#"
+		},
+		"End": {
+			"Regex": "$"
+		},
+		"Bold": {
+			"Regex": "(?i)(todo|note|xxx):"
+		}
+	},
+	{
+		"Name": "Basic String",
+		"Style": "String",
+		"Start": {
+			"Regex": "\""
+		},
+		"End": {
+			"Regex": "\"",
+			"NegativeLookBehind": "(?:[^\\\\])\\\\"
+		},
+		"Meta": {
+			"Regex": "\\\\(b|f|n|r|t|\"|\\\\)"
+		}
+	},
+	{
+		"Name": "Literal String",
+		"Style": "String",
+		"Start": {
+			"Regex": "'"
+		},
+		"End": {
+			"Regex": "'"
+		}
+	}
+]
