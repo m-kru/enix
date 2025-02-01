@@ -1,0 +1,51 @@
+[
+	{
+		"Name": "Default"
+	},
+	{
+		"Name": "Line Comment",
+		"Style": "Comment",
+		"Start": {
+			"Regex": "%"
+		},
+		"End": {
+			"Regex": "$"
+		},
+		"Bold": {
+			"Regex": "(?i)(todo|note|xxx):"
+		}
+	},
+	{
+		"Name": "Command",
+		"Style": "Keyword",
+		"Start": {
+			"Regex": "\\\\\\w"
+		},
+		"End": {
+			"Regex": "\\w",
+			"PositiveLookAhead": " |$|,|\\[|{|}|\\*|\\\\"
+		},
+		"Heading": {
+			"Regex": "\\\\(chapter|section|(sub)+section)",
+			"PosiotiveLookAhead": "{"
+		},
+		"Type": {
+			"Regex": "\\\\ref",
+			"PosiotiveLookAhead": "{"
+		},
+		"String": {
+			"Regex": "\\\\cite",
+			"PosiotiveLookAhead": "{"
+		}
+	},
+	{
+		"Name": "Math",
+		"Style": "Number",
+		"Start": {
+			"Regex": "\\$"
+		},
+		"End": {
+			"Regex": "\\$"
+		}
+	}
+]
