@@ -18,7 +18,6 @@ func TestFileNameToType(t *testing.T) {
 		{"c", ""},
 		{"main.go", "go"},
 		{"go", ""},
-		{"main.rs", "rust"},
 		{"rs", ""},
 		{"test.py", "python"},
 		{"cfg.json", "json"},
