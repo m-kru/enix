@@ -78,6 +78,13 @@ func configFromFile(path string) (Config, error) {
 		)
 	}
 
+	if config.AutoSave < 0 {
+		return config, fmt.Errorf(
+			"reading config from file %s, AutoSave value must be natural, current value %d",
+			path, config.AutoSave,
+		)
+	}
+
 	rw := runewidth.RuneWidth(config.LineEndRune)
 	if rw != 1 {
 		return config, fmt.Errorf(

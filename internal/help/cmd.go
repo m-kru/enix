@@ -158,6 +158,17 @@ Even if the selection starts or ends in the middle of a line.`,
 
 	"align": `align # Aligns columns of cursors.`,
 
+	"autosave": `autosave n # Changes value for autosave period to n seconds.
+n must be natural.
+
+The value applies only to the current session.
+The AutoSave value in the config file is not changed.
+
+The tab is autosaved every n seconds, not n seconds after the last rune insert.
+Setting low n value on a constrained system may lead to performance drop.
+
+The tab is not autosaved if the corresponding file in the file system doesn't exist.`,
+
 	"cut": `cut # Cuts selected text.
 For cursors, the cut command cuts all lines containing cursors.
 This is because the user rarely wants to cut a single rune.

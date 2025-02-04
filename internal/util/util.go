@@ -10,13 +10,13 @@ var fileExtToType = map[string]string{
 	"fbd":  "fbdl",
 	"go":   "go",
 	"json": "json",
-	"tex":   "latex",
-	"md":    "markdown",
-	"py":    "python",
-	"tcl":   "tcl",
-	"toml":  "toml",
-	"typ":   "typst",
-	"vhd":   "vhdl", "vhdl": "vhdl",
+	"tex":  "latex",
+	"md":   "markdown",
+	"py":   "python",
+	"tcl":  "tcl",
+	"toml": "toml",
+	"typ":  "typst",
+	"vhd":  "vhdl", "vhdl": "vhdl",
 }
 
 // FileNameToType returns file type based on the file name.

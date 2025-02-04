@@ -8,6 +8,7 @@ var Cfg Config
 type Config struct {
 	Colorscheme string
 
+	AutoSave int
 	// Trim trailing whitespaces on save.
 	// It affects only saves explicitly called by the user.
 	// Neither automatic nor backup saves depend on this value.
@@ -29,6 +30,7 @@ type Config struct {
 func DefaultConfig() Config {
 	return Config{
 		Colorscheme:         "default",
+		AutoSave:            0,
 		TrimOnSave:          true,
 		SafeFileSave:        true,
 		HighlightCursorWord: true,

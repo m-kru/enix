@@ -21,6 +21,8 @@ import (
 
 var Window window
 
+var autoSaveTicker *time.Ticker
+
 type window struct {
 	Screen tcell.Screen
 	Width  int
@@ -503,6 +505,15 @@ func Start() {
 
 	changeWatcher := time.NewTicker(500 * time.Millisecond)
 
+	// Init autosave ticker and stop it if autosave is disabled.
+	// autoSaveTicker can't be nil, because of polling on channel in the select.
+	autoSaveTicker = time.NewTicker(time.Second)
+	if cfg.Cfg.AutoSave == 0 {
+		autoSaveTicker.Stop()
+	} else {
+		autoSaveTicker.Reset(time.Duration(cfg.Cfg.AutoSave) * time.Second)
+	}
+
 	var tcellEvRcvr TcellEventReceiver = &Window
 	tcellEventChan := make(chan tcell.Event)
 	go screen.ChannelEvents(tcellEventChan, nil)
@@ -537,6 +548,21 @@ func Start() {
 				Prompt.AskTabReload()
 				tcellEvRcvr = &Prompt
 			}
+		case <-autoSaveTicker.C:
+			if Prompt.State == TabReloadQuestion {
+				continue
+			}
+
+			tab := Window.CurrentTab.First()
+			for {
+				if tab == nil {
+					break
+				}
+				tab.AutoSave()
+				tab = tab.Next
+			}
+
+			render = true
 		}
 
 		// Do not rerender if focus is on the prompt.

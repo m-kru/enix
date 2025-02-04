@@ -236,3 +236,15 @@ func (tab *Tab) undoPush(actions action.Action, curs []*cursor.Cursor, sels []*s
 	tab.UndoCount++
 	tab.RedoStack.Clear()
 }
+
+func (tab *Tab) undoPushInInsert() {
+	tab.undoPush(
+		tab.InsertActions.Reverse(),
+		tab.PrevInsertCursors,
+		tab.PrevInsertSelections,
+	)
+
+	tab.InsertActions = make(action.Actions, 0, 16)
+	tab.PrevInsertCursors = cursor.Clone(tab.Cursors)
+	tab.PrevInsertSelections = sel.Clone(tab.Selections)
+}

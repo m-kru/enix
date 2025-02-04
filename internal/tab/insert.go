@@ -223,15 +223,7 @@ func (tab *Tab) RxEventKeyInsert(ev *tcell.EventKey) string {
 	}
 
 	if (shouldInsertUndo(act) || tab.State == "") && len(tab.InsertActions) > 0 {
-		tab.undoPush(
-			tab.InsertActions.Reverse(),
-			tab.PrevInsertCursors,
-			tab.PrevInsertSelections,
-		)
-
-		tab.InsertActions = make(action.Actions, 0, 16)
-		tab.PrevInsertCursors = cursor.Clone(tab.Cursors)
-		tab.PrevInsertSelections = sel.Clone(tab.Selections)
+		tab.undoPushInInsert()
 	}
 
 	if updateView {

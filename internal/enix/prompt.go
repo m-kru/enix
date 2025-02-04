@@ -2,7 +2,9 @@ package enix
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
+	"time"
 
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cmd"
@@ -396,6 +398,8 @@ func (p *prompt) Exec() TcellEventReceiver {
 		switch c.Name {
 		case "":
 			// Do nothing
+		case "autosave":
+			err = execAutosave(c.Args)
 		case "add-cursor":
 			err = exec.AddCursor(c.Args, tab)
 		case "a", "align":
@@ -618,4 +622,28 @@ func (p *prompt) Exec() TcellEventReceiver {
 	}
 
 	return &Window
+}
+
+// Auto save command modifies autoSaveTicker, and can't be executed by the exec package.
+func execAutosave(args []string) error {
+	if len(args) != 1 {
+		return fmt.Errorf("autosave: expected 1 arg, provided %d", len(args))
+	}
+
+	period, err := strconv.Atoi(args[0])
+	if err != nil {
+		return fmt.Errorf("autosave: %v", err)
+	}
+
+	if period < 0 {
+		return fmt.Errorf("autosave: period value must be natural, current value %d", period)
+	}
+
+	if period == 0 {
+		autoSaveTicker.Stop()
+	} else {
+		autoSaveTicker.Reset(time.Duration(period) * time.Second)
+	}
+
+	return nil
 }
