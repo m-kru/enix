@@ -33,6 +33,10 @@ func (cmd Command) String() string {
 func Parse(line string) (Command, error) {
 	cmd := Command{RepCount: 1, Name: "", Args: nil}
 
+	if len(line) == 0 {
+		return cmd, nil
+	}
+
 	// The command might be a short version of go command.
 	r0 := []rune(line)[0]
 	if unicode.IsDigit(r0) || r0 == '-' {
