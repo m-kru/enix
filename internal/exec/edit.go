@@ -62,13 +62,13 @@ func Edit(args []string, t *tab.Tab) (*tab.Tab, error) {
 	}
 
 	if len(errMsg) > 0 {
-		path := "enix-error"
+		path := "error.enix"
 		idx := 2
 		for {
 			if !t.Exists(path) {
 				break
 			}
-			path = fmt.Sprintf("enix-error-%d", idx)
+			path = fmt.Sprintf("error-%d.enix", idx)
 			idx++
 		}
 

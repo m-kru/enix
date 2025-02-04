@@ -419,17 +419,17 @@ func (w *window) OpenArgFiles() {
 			if w.CurrentTab == nil {
 				w.CurrentTab = t
 			}
+
+			t.Go(arg.Line, arg.Column)
+			t.ViewCenter()
 		}
 		if err != nil {
 			errMsg += err.Error() + "\n\n"
 		}
-
-		t.Go(arg.Line, arg.Column)
-		t.ViewCenter()
 	}
 
 	if len(errMsg) > 0 {
-		errTab := tab.FromString(&w.TabFrame, errMsg, "enix-error")
+		errTab := tab.FromString(&w.TabFrame, errMsg, "error.enix")
 		if w.Tabs == nil {
 			w.Tabs = errTab
 		} else {
