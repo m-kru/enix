@@ -33,7 +33,7 @@ func splitIntoSections(
 		for range endLineIdx - startLineIdx {
 			line = line.Next
 		}
-		sec.EndIdx = line.RuneCount()
+		sec.EndIdx = len(line.Buf)
 
 		secs = append(secs, sec)
 		return secs
@@ -86,7 +86,7 @@ func splitIntoSections(
 				}
 
 				// Check if this is the end of text
-				if tok.EndIdx == line.RuneCount() && line.Next == nil {
+				if tok.EndIdx == len(line.Buf) && line.Next == nil {
 					continue
 				}
 
@@ -121,7 +121,7 @@ func splitIntoSections(
 		sec.EndLine = lineIdx
 		sec.EndIdx = 0
 		if line.RuneCount() > 0 {
-			sec.EndIdx = line.RuneCount()
+			sec.EndIdx = len(line.Buf)
 		}
 		secs = append(secs, sec)
 	}

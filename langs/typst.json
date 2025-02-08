@@ -16,7 +16,7 @@
 		}
 	},
 	{
-		"Name": "Bold",
+		"Name": "Italic",
 		"Style": "Italic",
 		"Start": {
 			"Regex": "_"
@@ -89,6 +89,16 @@
 		},
 		"Meta": {
 			"Regex": "\\\\(n|r|t|u|\"|\\\\)"
+		}
+	},
+	{
+		"Name": "URL",
+		"Style": "Italic",
+		"Start": {
+			"Regex": "(ftp|https?):|www\\."
+		},
+		"End": {
+			"Regex": "\\s|$"
 		}
 	}
 ]

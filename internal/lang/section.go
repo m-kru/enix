@@ -29,7 +29,7 @@ func (sec Section) Analyze(line *line.Line, startLineIdx int) ([]highlight.Highl
 			startIdx = sec.StartIdx
 		}
 
-		endIdx := line.RuneCount()
+		endIdx := len(line.Buf)
 		if lineIdx == sec.EndLine {
 			endIdx = sec.EndIdx
 		}
