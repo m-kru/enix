@@ -356,6 +356,10 @@ If the second is absent, it is assumed to be the current tab.`,
 
 	"view-down-half": "view-down-half # Scrolls the view down by half of the screen height.",
 
+	"ve": "ve # An alias for the 'view-end' command.",
+
+	"view-end": "view-end # Scrolls the view to the tab end.",
+
 	"view-left": "view-left # Scrolls the view left by one column.",
 
 	"view-right": "view-right # Scrolls the view right by one column.",

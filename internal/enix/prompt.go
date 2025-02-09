@@ -576,6 +576,9 @@ func (p *prompt) Exec() TcellEventReceiver {
 		case "view-down":
 			err = exec.ViewDown(c.Args, tab)
 			updateView = false
+		case "ve", "view-end":
+			err = exec.ViewEnd(c.Args, tab)
+			updateView = false
 		case "view-left":
 			err = exec.ViewLeft(c.Args, tab)
 			updateView = false

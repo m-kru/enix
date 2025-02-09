@@ -36,6 +36,16 @@ func ViewDownHalf(args []string, tab *tab.Tab) error {
 	return nil
 }
 
+func ViewEnd(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf("view-end: expected 0 args, provided %d", len(args))
+	}
+
+	tab.ViewEnd()
+
+	return nil
+}
+
 func ViewUp(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf("view-up: expected 0 args, provided %d", len(args))
