@@ -6,10 +6,10 @@ type Find struct {
 	EndRuneIdx   int
 }
 
-func (f Find) CoversCell(lineNum int, idx int) bool {
-	return lineNum == f.LineNum && f.StartRuneIdx <= idx && idx < f.EndRuneIdx
+func (f Find) CoversRune(lineNum int, rIdx int) bool {
+	return lineNum == f.LineNum && f.StartRuneIdx <= rIdx && rIdx < f.EndRuneIdx
 }
 
-func (f Find) IsLastCell(lineNum int, idx int) bool {
-	return lineNum == f.LineNum && idx == f.EndRuneIdx-1
+func (f Find) IsLastRune(rIdx int) bool {
+	return rIdx == f.EndRuneIdx-1
 }

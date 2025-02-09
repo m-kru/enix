@@ -7,6 +7,7 @@ import (
 	"github.com/m-kru/enix/internal/highlight"
 	"github.com/m-kru/enix/internal/view"
 
+	"github.com/gdamore/tcell/v2"
 	"github.com/mattn/go-runewidth"
 )
 
@@ -17,30 +18,57 @@ func (l *Line) Render(
 	hls []highlight.Highlight,
 	finds []find.Find,
 ) ([]highlight.Highlight, []find.Find) {
-	currentHl := 0
-	currentFind := 0
-	frameX := 0
-	runeIdx, runeSubcol, ok := l.RuneIdx(view.Column)
+	hlIdx := 0   // Current highlight index
+	findIdx := 0 // Current find index
+	x := 0       // Frame x coordinate
+	rIdx, runeSubcol, ok := l.RuneIdx(view.Column)
 
 	var r rune
 
-	setTab := func(tabSubcol int) {
+	setTab := func(tabSubcol int, style tcell.Style) {
 		var colIdx int
 		if tabSubcol == 0 {
-			frame.SetContent(frameX, 0, cfg.Cfg.TabRune, cfg.Colors.Whitespace)
-			frameX++
-			colIdx = l.ColumnIdx(runeIdx) + 1
+			frame.SetContent(x, 0, cfg.Cfg.TabRune, style)
+			x++
+			colIdx = l.ColumnIdx(rIdx) + 1
 		} else {
-			colIdx = l.ColumnIdx(runeIdx) + tabSubcol
+			colIdx = l.ColumnIdx(rIdx) + tabSubcol
 		}
 
 		for {
-			if colIdx%8 == 1 || frameX >= frame.Width {
+			if colIdx%8 == 1 || x >= frame.Width {
 				break
 			}
-			frame.SetContent(frameX, 0, cfg.Cfg.TabPadRune, cfg.Colors.Whitespace)
-			frameX++
+			frame.SetContent(x, 0, cfg.Cfg.TabPadRune, style)
+			x++
 			colIdx++
+		}
+	}
+
+	style := cfg.Colors.Default
+	setStyle := func() {
+		style = cfg.Colors.Default
+		if hls != nil {
+			for {
+				// TODO: We shouldn't need this check, is there some bug?
+				if hlIdx >= len(hls) {
+					break
+				}
+
+				if hls[hlIdx].CoversCell(lineNum, rIdx) {
+					style = hls[hlIdx].Style
+					break
+				}
+				hlIdx++
+			}
+		}
+		if len(finds) > 0 && findIdx < len(finds) {
+			if finds[findIdx].CoversRune(lineNum, rIdx) {
+				style = cfg.Colors.Find
+				if finds[findIdx].IsLastRune(rIdx) {
+					findIdx++
+				}
+			}
 		}
 	}
 
@@ -48,69 +76,53 @@ func (l *Line) Render(
 		goto clear
 	}
 
+	setStyle()
+
 	// Handle first column in a little bit different way.
 	// The column might start at the second column of a rune.
-	r = l.Rune(runeIdx)
+	r = l.Rune(rIdx)
 	if r == '\t' {
-		setTab(runeSubcol)
-		runeIdx++
+		if style != cfg.Colors.Find {
+			style = cfg.Colors.Whitespace
+		}
+		setTab(runeSubcol, style)
+		rIdx++
 	} else if runeSubcol > 0 {
 		r = ' '
-		frame.SetContent(frameX, 0, r, cfg.Colors.Default)
-		frameX += runewidth.RuneWidth(r)
-		runeIdx++
+		frame.SetContent(x, 0, r, style)
+		x += runewidth.RuneWidth(r)
+		rIdx++
 	}
 
 	for {
-		if runeIdx == l.RuneCount() || frameX >= frame.Width {
+		if rIdx == l.RuneCount() || x >= frame.Width {
 			break
 		}
 
-		r = l.Rune(runeIdx)
+		r = l.Rune(rIdx)
+
+		setStyle()
 
 		if r == '\t' {
-			setTab(0)
+			if style != cfg.Colors.Find {
+				style = cfg.Colors.Whitespace
+			}
+			setTab(0, style)
 		} else {
-			color := cfg.Colors.Default
-			if hls != nil {
-				for {
-					// TODO: We shouldn't need this check, is there some bug?
-					if currentHl >= len(hls) {
-						break
-					}
-
-					if hls[currentHl].CoversCell(lineNum, runeIdx) {
-						color = hls[currentHl].Style
-						break
-					}
-					currentHl++
-				}
-			}
-
-			if len(finds) > 0 && currentFind < len(finds) {
-				if finds[currentFind].CoversCell(lineNum, runeIdx) {
-					color = cfg.Colors.Find
-				}
-
-				if finds[currentFind].IsLastCell(lineNum, runeIdx) {
-					currentFind++
-				}
-			}
-
-			frame.SetContent(frameX, 0, r, color)
-			frameX += runewidth.RuneWidth(r)
+			frame.SetContent(x, 0, r, style)
+			x += runewidth.RuneWidth(r)
 		}
-		runeIdx++
+		rIdx++
 	}
 
 clear:
-	frame.SetContent(frameX, 0, cfg.Cfg.LineEndRune, cfg.Colors.Whitespace)
-	frameX++
+	frame.SetContent(x, 0, cfg.Cfg.LineEndRune, cfg.Colors.Whitespace)
+	x++
 
-	for frameX < frame.Width {
-		frame.SetContent(frameX, 0, ' ', cfg.Colors.Default)
-		frameX++
+	for x < frame.Width {
+		frame.SetContent(x, 0, ' ', cfg.Colors.Default)
+		x++
 	}
 
-	return hls[currentHl:], finds[currentFind:]
+	return hls[hlIdx:], finds[findIdx:]
 }
