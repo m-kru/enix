@@ -105,3 +105,18 @@ func (c *Cursor) WordPosition() WordPosition {
 
 	return InWord
 }
+
+// TabEnd moves cursor to the tab end.
+func (c *Cursor) TabEnd() {
+	for {
+		if c.Line.Next == nil {
+			break
+		}
+
+		c.Line = c.Line.Next
+		c.LineNum++
+	}
+
+	c.RuneIdx = c.Line.RuneCount()
+	c.colIdx = c.Line.ColumnIdx(c.RuneIdx)
+}

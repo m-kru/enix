@@ -534,6 +534,8 @@ func (p *prompt) Exec() TcellEventReceiver {
 			err = exec.SelPrevWordStart(c.Args, tab)
 		case "sel-right":
 			err = exec.SelRight(c.Args, tab)
+		case "sel-tab-end":
+			err = exec.SelTabEnd(c.Args, tab)
 		case "sel-to-tab":
 			Window.CurrentTab, err = exec.SelToTab(c.Args, tab)
 		case "sel-switch-cursor":

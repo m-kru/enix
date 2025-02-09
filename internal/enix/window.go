@@ -254,6 +254,8 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			err = exec.SelRight(c.Args, tab)
 		case "sel-switch-cursor":
 			err = exec.SelSwitchCursor(c.Args, tab)
+		case "sel-tab-end":
+			err = exec.SelTabEnd(c.Args, tab)
 		case "sel-to-tab":
 			w.CurrentTab, err = exec.SelToTab(c.Args, tab)
 		case "sel-up":

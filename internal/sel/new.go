@@ -595,8 +595,8 @@ func FromTo(startC, endC *cursor.Cursor) *Selection {
 	return first
 }
 
-// SelToTheEnd selects everything starting from the line and runeIdx to the end.
-func SelToTheEnd(line *line.Line, lineNum int, runeIdx int) *Selection {
+// SelToTabEnd selects everything starting from the line and runeIdx to the end.
+func SelToTabEnd(line *line.Line, lineNum int, runeIdx int) *Selection {
 	first := &Selection{
 		Line:         line,
 		LineNum:      lineNum,
@@ -633,4 +633,16 @@ func SelToTheEnd(line *line.Line, lineNum int, runeIdx int) *Selection {
 	prevS.Cursor = cursor.New(line, lineNum, prevS.EndRuneIdx)
 
 	return first
+}
+
+func FromCursorsTabEnd(curs []*cursor.Cursor) []*Selection {
+	// Leave only the most upper cursor
+	cur := curs[0]
+	for _, c := range curs[1:] {
+		if c.LineNum < cur.LineNum || (c.LineNum == cur.LineNum && c.RuneIdx < cur.RuneIdx) {
+			cur = c
+		}
+	}
+
+	return []*Selection{SelToTabEnd(cur.Line, cur.LineNum, cur.RuneIdx)}
 }

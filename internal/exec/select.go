@@ -176,3 +176,15 @@ func SelWordEnd(args []string, tab *tab.Tab) error {
 
 	return nil
 }
+
+func SelTabEnd(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf(
+			"sel-tab-end: provided %d args, expected 0", len(args),
+		)
+	}
+
+	tab.SelTabEnd()
+
+	return nil
+}

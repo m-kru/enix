@@ -6,7 +6,7 @@ import (
 
 func (tab *Tab) SelAll() {
 	tab.Cursors = nil
-	tab.Selections = []*sel.Selection{sel.SelToTheEnd(tab.Lines, 1, 0)}
+	tab.Selections = []*sel.Selection{sel.SelToTabEnd(tab.Lines, 1, 0)}
 }
 
 func (tab *Tab) SelDown() {
@@ -167,6 +167,33 @@ func (tab *Tab) selUpSelections() {
 		tab.Selections[i] = s.Up()
 	}
 	tab.Selections = sel.Prune(tab.Selections)
+}
+
+func (tab *Tab) SelTabEnd() {
+	if len(tab.Cursors) > 0 {
+		tab.selTabEndCursors()
+	} else {
+		tab.selTabEndSelections()
+	}
+}
+
+func (tab *Tab) selTabEndCursors() {
+	tab.Selections = sel.FromCursorsTabEnd(tab.Cursors)
+	tab.Cursors = nil
+}
+
+func (tab *Tab) selTabEndSelections() {
+	// Leave only the most upper selection
+	s := tab.Selections[0]
+	for _, s2 := range tab.Selections[1:] {
+		if s2.LineNum < s.LineNum || (s2.LineNum == s.LineNum && s2.StartRuneIdx < s.StartRuneIdx) {
+			s = s2
+		}
+	}
+
+	s.TabEnd()
+
+	tab.Selections = []*sel.Selection{s}
 }
 
 func (tab *Tab) SelWord() {

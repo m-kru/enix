@@ -317,6 +317,8 @@ If cursors is not placed on a whitespace character, nothing is selected.`,
 
 	"sel-switch-cursor": `sel-switch-cursor # Changes position of the cursor within selection.`,
 
+	"sel-tab-end": `sel-tab-end # Selects or extends selection to the tab end.`,
+
 	// Tab
 
 	"tab-count": `tab-count # Prints the number of tabs.`,
