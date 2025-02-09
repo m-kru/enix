@@ -17,6 +17,7 @@ var fileExtToType = map[string]string{
 	"toml": "toml",
 	"typ":  "typst",
 	"vhd":  "vhdl", "vhdl": "vhdl",
+	"sh": "sh", "bash": "sh", "csh": "sh", "ksh": "sh", "mksh": "sh", "zsh": "sh",
 }
 
 // FileNameToType returns file type based on the file name.
@@ -28,6 +29,8 @@ func FileNameToType(name string) string {
 		return "make"
 	case "Dockerfile":
 		return "docker"
+	case ".bashrc", ".profile", "bspwmrc":
+		return "sh"
 	}
 
 	ss := strings.Split(name, ".")

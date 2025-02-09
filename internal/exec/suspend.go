@@ -18,8 +18,7 @@ func Suspend(args []string, screen tcell.Screen) error {
 		return fmt.Errorf("suspend: %v", err)
 	}
 
-	pid := syscall.Getpid()
-	err = syscall.Kill(pid, syscall.SIGSTOP)
+	err = syscall.Kill(syscall.Getpid(), syscall.SIGSTOP)
 	if err != nil {
 		return fmt.Errorf("suspend: %v", err)
 	}
