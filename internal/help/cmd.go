@@ -360,6 +360,10 @@ If the second is absent, it is assumed to be the current tab.`,
 
 	"view-right": "view-right # Scrolls the view right by one column.",
 
+	"vs": "vs # An alias for the 'view-start' command.",
+
+	"view-start": "view-start # Scrolls the view to the tab start.",
+
 	"view-up": "view-up # Scrolls the view up by one line.",
 
 	"view-up-half": "view-up-half # Scrolls the view up by half of the screen height.",

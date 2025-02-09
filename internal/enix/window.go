@@ -303,6 +303,9 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		case "view-right":
 			err = exec.ViewRight(c.Args, tab)
 			updateView = false
+		case "vs", "view-start":
+			err = exec.ViewStart(c.Args, tab)
+			updateView = false
 		case "view-up":
 			err = exec.ViewUp(c.Args, tab)
 			updateView = false

@@ -56,3 +56,8 @@ func (tab *Tab) ViewRight() {
 func (tab *Tab) ViewLeft() {
 	tab.View = tab.View.Left()
 }
+
+func (tab *Tab) ViewStart() {
+	tab.View.Line = 1
+	tab.View.Column = 1
+}

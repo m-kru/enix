@@ -66,6 +66,16 @@ func ViewRight(args []string, tab *tab.Tab) error {
 	return nil
 }
 
+func ViewStart(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf("view-start: expected 0 args, provided %d", len(args))
+	}
+
+	tab.ViewStart()
+
+	return nil
+}
+
 func ViewLeft(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf("view-right: expected 0 args, provided %d", len(args))
