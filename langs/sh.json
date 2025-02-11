@@ -1,0 +1,72 @@
+[
+	{
+		"Name": "Default",
+		"Attribute": {
+			"Regex": "--?\\w+",
+			"PositiveLookBehind": "\\s+",
+			"PositiveLookAhead": "(\\b)"
+		},
+		"Bold": {
+			"Regex": "\\b(alias|bg|bind|break|builtin|caller|cd|command|compgen|complete|compopt|continue|declare|dirs|disown|echo|enable|eval|exec|exit|export|false|fc|fg|getopts|hash|help|history|jobs|kill|let|local|logout|mapfile|popd|printf|pushd|pwd|read|readarray|readonly|return|set|shift|shopt|source|suspend|test|times|trap|true|type|typeset|ulimit|umask|unalias|unset|wait)\\b",
+			"NegativeLookBehind": "-"
+		},
+		"Keyword": {
+			"Regex": "\\b(if|then|else|elif|fi|case|esac|for|select|while|until|do|done|in|function|time|coproc)\\b",
+			"NegativeLookBehind": "-"
+		},
+		"Operator": {
+			"Regex": "[\\[\\]\\(\\)&|`<>\\*]"
+		},
+		"Variable": {
+			"Regex": "\\$(\\w+|#|@|\\$|!|-|\\*|\\?)"
+		}
+	},
+	{
+		"Name": "Line Comment",
+		"Style": "Comment",
+		"Start": {
+			"Regex": "#",
+			"NegativeLookBehind" : "\\$"
+		},
+		"End": {
+			"Regex": "$"
+		}
+	},
+	{
+		"Name": "Double Quotes",
+		"Style": "String",
+		"Start": {
+			"Regex": "\""
+		},
+		"End": {
+			"Regex": "\"",
+			"NegativeLookBehind": "(?:[^\\\\])\\\\"
+		},
+		"Variable": {
+			"Regex": "\\$(\\w+|#|@|\\$|!|-|\\*|\\?)"
+		}
+	},
+	{
+		"Name": "Single Quotes",
+		"Style": "String",
+		"Start": {
+			"Regex": "'"
+		},
+		"End": {
+			"Regex": "'"
+		}
+	},
+	{
+		"Name": "Variable Expansion",
+		"Style": "Variable",
+		"Start": {
+			"Regex": "\\${"
+		},
+		"End": {
+			"Regex": "}"
+		},
+		"Operator": {
+			"Regex": "[@:=#/%,^!?+\\-\\[\\]\\*]"
+		}
+	}
+]
