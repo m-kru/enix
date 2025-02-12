@@ -14,6 +14,39 @@ This is achieved using the 'sh' command.
 Enter 'help sh' command for more details.
 `,
 
+	"config": `While starting enix reads the following configuration files:
+1. 'config.json' - general configuration file,
+2. 'keys.json' - keybindings in the normal mode,
+3. 'keys-insert.json' - keybindings in the insert mode,
+4. 'keys-prompt.json' - keybidnings for the prompt,
+5. 'colors/<colors>.json' - colors definition,
+6. 'style/<style>.json' - style definition.
+
+The <colors> and <style> can be defined in the 'config.json' file using the "Colors" and "Style" keys.
+If they are not defined, then the default colors (termianl colors) and the default style (style built into binary) are used.
+
+During the runtime, enix also reads files containing definitions of the syntax highlighting for particular filetypes.
+This happens every time the user opens a new tab, or implicitly changes filetype of a given tab using the 'filetype' command.
+Filetype files are looked for under the following path, 'filetype/<filetype>.json'.
+How to define highlighting for a new filetype is described in the highlighting topic.
+Please check 'help highlighting'.
+
+Enix looks for configuration files in the following directories:
+1. A path defined in the 'ENIX_CONFIG_DIR' environment variable.
+2. 'enix' directory within the path defined in the 'XDG_CONFIG_HOME' environment variable.
+   Bear in mind, that if 'XDG_CONFIG_HOME' is not defined, then it defaults to the '$HOME/.config'.
+3. Enix default config installation path:
+   - '/usr/local/share/enix' for *nix-like systems.
+If the requested configuration file is not found in the searched directory, then enix proceeds to the next directory.
+If the requested configuration file is not found in any configuration directory, then enix uses the default configuration built into the binary.
+
+Colorscheme
+
+In enix, the colorscheme is composed of two independent logical elements: colors definition and style definition.
+Users can arbitrarily mix colors and styles.
+However, a particular style is usually defined to go in hand with a particular colors definition.
+Mixing arbitrarily colors and styles can lead to unreadable colorscheme.`,
+
 	"cursors": `A tab at any time has at least one cursor or selection.
 The number of cursors is unlimited.
 Each cursor points to a line and rune index or line end.
