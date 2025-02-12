@@ -61,15 +61,17 @@ func getPrevFind(finds []find.Find, c *cursor.Cursor) find.Find {
 
 // next is true for find-next and false for find-prev.
 func (tab *Tab) Find(next bool) {
+	finds := tab.SearchCtx.Finds
+
 	if tab.SearchCtx.Regexp == nil {
 		if tab.SearchCtx.PrevRegexp == nil {
 			return
 		}
 		tab.SearchCtx.Regexp = tab.SearchCtx.PrevRegexp
-		search.Search(tab.Lines, tab.View.Line, &tab.SearchCtx)
+		tab.SearchCtx.FirstVisLineNum = tab.View.Line
+		finds = search.Search(tab.Lines, &tab.SearchCtx)
 	}
 
-	finds := tab.SearchCtx.Finds
 	if len(finds) == 0 {
 		return
 	}
@@ -116,15 +118,17 @@ func (tab *Tab) FindSel(next bool) {
 		return
 	}
 
+	finds := tab.SearchCtx.Finds
+
 	if tab.SearchCtx.Regexp == nil {
 		if tab.SearchCtx.PrevRegexp == nil {
 			return
 		}
 		tab.SearchCtx.Regexp = tab.SearchCtx.PrevRegexp
-		search.Search(tab.Lines, tab.View.Line, &tab.SearchCtx)
+		tab.SearchCtx.FirstVisLineNum = tab.View.Line
+		finds = search.Search(tab.Lines, &tab.SearchCtx)
 	}
 
-	finds := tab.SearchCtx.Finds
 	if len(finds) == 0 {
 		return
 	}

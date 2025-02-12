@@ -29,6 +29,8 @@ func (tab *Tab) delete() action.Actions {
 		actions = tab.deleteSelections()
 	}
 
+	tab.SearchCtx.Modified = true
+
 	return actions
 }
 
@@ -142,6 +144,8 @@ func (tab *Tab) backspace() action.Actions {
 	} else {
 		a = tab.deleteSelections()
 	}
+
+	tab.SearchCtx.Modified = true
 
 	return a
 }

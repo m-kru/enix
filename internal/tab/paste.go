@@ -103,11 +103,14 @@ func (tab *Tab) pasteLineBased(text string, addIndent bool, curs []*cursor.Curso
 
 func (tab *Tab) pasteCursors(text string, addIndent bool) action.Actions {
 	var actions action.Actions
+
 	if strings.HasSuffix(text, "\n") {
 		actions = tab.pasteCursorsLineBased(text, addIndent)
 	} else {
 		actions = tab.pasteCursorsRegular(text, addIndent)
 	}
+
+	tab.SearchCtx.Modified = true
 
 	return actions
 }
@@ -189,11 +192,14 @@ func (tab *Tab) pasteCursorsRegular(text string, addIndent bool) action.Actions 
 
 func (tab *Tab) pasteSelections(text string) action.Actions {
 	var actions action.Actions
+
 	if strings.HasSuffix(text, "\n") {
 		actions = tab.pasteSelectionsLineBased(text)
 	} else {
 		return nil
 	}
+
+	tab.SearchCtx.Modified = true
 
 	return actions
 }

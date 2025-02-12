@@ -33,6 +33,7 @@ func (tab *Tab) InsertLineBelow() error {
 
 	if len(actions) > 0 {
 		tab.undoPush(actions.Reverse(), prevCurs, prevSels)
+		tab.SearchCtx.Modified = true
 	}
 
 	tab.Insert()
@@ -97,6 +98,7 @@ func (tab *Tab) InsertLineAbove() error {
 
 	if len(actions) > 0 {
 		tab.undoPush(actions.Reverse(), prevCurs, prevSels)
+		tab.SearchCtx.Modified = true
 	}
 
 	tab.Insert()
@@ -245,11 +247,17 @@ func (tab *Tab) InsertRune(r rune) {
 }
 
 func (tab *Tab) insertRune(r rune) action.Actions {
+	var actions action.Actions
+
 	if len(tab.Cursors) > 0 {
-		return tab.insertRuneCursors(r)
+		actions = tab.insertRuneCursors(r)
 	} else {
-		return tab.insertRuneSelections(r)
+		actions = tab.insertRuneSelections(r)
 	}
+
+	tab.SearchCtx.Modified = true
+
+	return actions
 }
 
 func (tab *Tab) insertRuneCursors(r rune) action.Actions {
@@ -319,11 +327,17 @@ func (tab *Tab) InsertNewline() {
 }
 
 func (tab *Tab) insertNewline() action.Actions {
+	var actions action.Actions
+
 	if len(tab.Cursors) > 0 {
-		return tab.insertNewlineCursors()
+		actions = tab.insertNewlineCursors()
 	} else {
-		return tab.insertNewlineSelections()
+		actions = tab.insertNewlineSelections()
 	}
+
+	tab.SearchCtx.Modified = true
+
+	return actions
 }
 
 func (tab *Tab) insertNewlineCursors() action.Actions {

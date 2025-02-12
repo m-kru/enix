@@ -80,7 +80,7 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 	stateEndIdx := b.Len()
 
 	findStartIdx := b.Len()
-	if len(tab.SearchCtx.Finds) != 0 {
+	if tab.SearchCtx.Regexp != nil {
 		if len(tab.SearchCtx.Finds) == 1 {
 			b.WriteString("1 find ")
 		} else {
@@ -169,7 +169,9 @@ func (tab *Tab) RenderLines(line *line.Line, lineNum int, frame frame.Frame) {
 	hls := tab.Highlighter.Analyze(
 		tab.Lines, line, lineNum, endLineIdx, cur,
 	)
-	search.Search(tab.Lines, lineNum, &tab.SearchCtx)
+
+	tab.SearchCtx.FirstVisLineNum = lineNum
+	search.Search(tab.Lines, &tab.SearchCtx)
 	finds := tab.SearchCtx.FindsFromVisible()
 
 	for {

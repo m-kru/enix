@@ -18,11 +18,19 @@ func (tab *Tab) Join() {
 }
 
 func (tab *Tab) join() action.Actions {
+	var actions action.Actions
+
 	if len(tab.Cursors) > 0 {
-		return tab.joinCursors()
+		actions = tab.joinCursors()
 	} else {
-		return tab.joinSelections()
+		actions = tab.joinSelections()
 	}
+
+	if len(actions) > 0 {
+		tab.SearchCtx.Modified = true
+	}
+
+	return actions
 }
 
 func (tab *Tab) joinCursors() action.Actions {
@@ -103,11 +111,19 @@ func (tab *Tab) LineDown() {
 }
 
 func (tab *Tab) lineDown() action.Actions {
+	var actions action.Actions
+
 	if len(tab.Cursors) > 0 {
-		return tab.lineDownCursors()
+		actions = tab.lineDownCursors()
 	} else {
-		return tab.lineDownSelections()
+		actions = tab.lineDownSelections()
 	}
+
+	if len(actions) > 0 {
+		tab.SearchCtx.Modified = true
+	}
+
+	return actions
 }
 
 func (tab *Tab) lineDownCursors() action.Actions {
@@ -189,11 +205,19 @@ func (tab *Tab) LineUp() {
 }
 
 func (tab *Tab) lineUp() action.Actions {
+	var actions action.Actions
+
 	if len(tab.Cursors) > 0 {
-		return tab.lineUpCursors()
+		actions = tab.lineUpCursors()
 	} else {
-		return tab.lineUpSelections()
+		actions = tab.lineUpSelections()
 	}
+
+	if len(actions) > 0 {
+		tab.SearchCtx.Modified = true
+	}
+
+	return actions
 }
 
 func (tab *Tab) lineUpCursors() action.Actions {

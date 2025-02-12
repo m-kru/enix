@@ -25,6 +25,8 @@ func (tab *Tab) Redo() {
 	}
 
 	tab.UndoStack.Push(action.Action.Reverse(), curs, sels)
+
+	tab.SearchCtx.Modified = true
 }
 
 func (tab *Tab) Undo() {
@@ -45,6 +47,8 @@ func (tab *Tab) Undo() {
 	}
 
 	tab.RedoStack.Push(action.Action.Reverse(), curs, sels)
+
+	tab.SearchCtx.Modified = true
 }
 
 func (tab *Tab) undo(act *undo.Action) {

@@ -9,6 +9,7 @@ func (tab *Tab) Search(expr string) error {
 	}
 
 	tab.SearchCtx.Regexp = re
+	tab.SearchCtx.Modified = true
 
 	return nil
 }

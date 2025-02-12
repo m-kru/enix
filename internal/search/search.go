@@ -11,14 +11,25 @@ import (
 // placed after the last visible line.
 //
 // line points to the first line of tab.
-// startLine is the index of the first visible line.
-func Search(line *line.Line, startLine int, ctx *Context) {
-	ctx.Finds = make([]find.Find, 0, 64)
-	ctx.StartIdx = -1
-
+func Search(line *line.Line, ctx *Context) []find.Find {
 	if ctx.Regexp == nil {
-		return
+		return nil
 	}
+
+	ctx.FirstVisFindIdx = -1
+
+	// There were no changes, just update start index.
+	if !ctx.Modified {
+		for i, f := range ctx.Finds {
+			if f.LineNum >= ctx.FirstVisLineNum {
+				ctx.FirstVisFindIdx = i
+				break
+			}
+		}
+		return ctx.Finds
+	}
+
+	ctx.Finds = make([]find.Find, 0, 64)
 
 	lineNum := 1
 	for {
@@ -33,8 +44,8 @@ func Search(line *line.Line, startLine int, ctx *Context) {
 			continue
 		}
 
-		if lineNum >= startLine && ctx.StartIdx == -1 {
-			ctx.StartIdx = len(ctx.Finds)
+		if ctx.FirstVisFindIdx == -1 && lineNum >= ctx.FirstVisLineNum {
+			ctx.FirstVisFindIdx = len(ctx.Finds)
 		}
 
 		for _, m := range matches {
@@ -49,4 +60,8 @@ func Search(line *line.Line, startLine int, ctx *Context) {
 		line = line.Next
 		lineNum++
 	}
+
+	ctx.Modified = false
+
+	return ctx.Finds
 }
