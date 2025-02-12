@@ -34,12 +34,18 @@
 
 # Glossary
 
+## Rune related
+
 - rune length - number of bytes required to store a rune.
 - rune width - number of screen cells required to display a rune.
+
+## Index related
 
 - buffer index - index of the byte in the line byte buffer.
 - column index - index of the column in the tab.
 - rune index - index of the rune in the line byte buffer.
+
+## Execution related
 
 - event - an external act caused by an implicit user activity, for example, mouse click or key press.
 - command - a procedure executed by the editor in response to an event, for example, tab save.
