@@ -25,6 +25,9 @@ Enter 'help sh' command for more details.
 The <colors> and <style> can be defined in the 'config.json' file using the "Colors" and "Style" keys.
 If they are not defined, then the default colors (termianl colors) and the default style (style built into binary) are used.
 
+How to set custom keybindings is described in the keybindings topic.
+Please check 'help keybindings'.
+
 During the runtime, enix also reads files containing definitions of the syntax highlighting for particular filetypes.
 This happens every time the user opens a new tab, or implicitly changes filetype of a given tab using the 'filetype' command.
 Filetype files are looked for under the following path, 'filetype/<filetype>.json'.
@@ -40,18 +43,40 @@ Enix looks for configuration files in the following directories:
 If the requested configuration file is not found in the searched directory, then enix proceeds to the next directory.
 If the requested configuration file is not found in any configuration directory, then enix uses the default configuration built into the binary.
 
+Colorscheme
+
+In enix, the colorscheme is composed of two independent logical elements: colors definition and style definition.
+Users can arbitrarily mix colors and styles.
+However, a particular style is usually defined to go in hand with a particular colors definition.
+Mixing arbitrarily colors and styles can lead to unreadable colorscheme.
+
 General configuration
 
 The general configuration can be defined in the 'config.json' file.
 To get all configuration settings with their current value call enix with the '-dump config' flag.
 This section tries to describe in detail all general configuration settings.
 
-Colorscheme
+Settings are described in the following format:
 
-In enix, the colorscheme is composed of two independent logical elements: colors definition and style definition.
-Users can arbitrarily mix colors and styles.
-However, a particular style is usually defined to go in hand with a particular colors definition.
-Mixing arbitrarily colors and styles can lead to unreadable colorscheme.`,
+name : type
+  description
+
+AutoSave : int
+  Autosave value in seconds.
+  The value must be natural.
+  If value equals 0, then the autosave feature is disabled.
+  The tab is autosaved every n seconds, not n seconds after the last rune insert.
+  Setting low n value on a constrained system may lead to performance drop.
+  The tab is not autosaved if the corresponding file in the file system doesn't exist.
+
+TrimOnSave : bool
+  Trim trailing whitespaces while saving the tab.
+  TrimOnSave doesn't apply for autosaves.
+
+UndoSize : int
+  Size of the undo and redo stacks.
+  The value must be natural.
+`,
 
 	"cursors": `A tab at any time has at least one cursor or selection.
 The number of cursors is unlimited.
