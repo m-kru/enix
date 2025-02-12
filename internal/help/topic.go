@@ -40,6 +40,12 @@ Enix looks for configuration files in the following directories:
 If the requested configuration file is not found in the searched directory, then enix proceeds to the next directory.
 If the requested configuration file is not found in any configuration directory, then enix uses the default configuration built into the binary.
 
+General configuration
+
+The general configuration can be defined in the 'config.json' file.
+To get all configuration settings with their current value call enix with the '-dump config' flag.
+This section tries to describe in detail all general configuration settings.
+
 Colorscheme
 
 In enix, the colorscheme is composed of two independent logical elements: colors definition and style definition.
