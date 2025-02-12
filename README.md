@@ -43,7 +43,7 @@
 
 - event - an external act caused by an implicit user activity, for example, mouse click or key press.
 - command - a procedure executed by the editor in response to an event, for example, tab save.
-- action - a change in the tab content made during command execution, for exmaple, rune insert or line deletion..
+- action - a change in the tab content made during command execution, for exmaple, rune insert or line deletion.
 
 A usual chain of flow is as follows.
 The user triggers an event, for example, by pressing a key on the keyboard.
