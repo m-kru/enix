@@ -41,6 +41,18 @@
 - column index - index of the column in the tab.
 - rune index - index of the rune in the line byte buffer.
 
+- event - an external act caused by an implicit user activity, for example, mouse click or key press.
+- command - a procedure executed by the editor in response to an event, for example, tab save.
+- action - a change in the tab content made during command execution, for exmaple, rune insert or line deletion..
+
+A usual chain of flow is as follows.
+The user triggers an event, for example, by pressing a key on the keyboard.
+The event is mapped to the specific command. 
+The command is executed, which leads to actions modifying the tab content.
+However, if an event is not mapped to any commands, then no command is executed.
+Moreover, not all commands lead to actions.
+For example, spawning a new cursor doesn't modify the tab content, so the command doesn't cause any actions.
+
 # Commands
 
 enix is build on the concept of built-in commands.
