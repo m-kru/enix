@@ -49,7 +49,7 @@ A usual chain of flow is as follows.
 The user triggers an event, for example, by pressing a key on the keyboard.
 The event is mapped to the specific command. 
 The command is executed, which leads to actions modifying the tab content.
-However, if an event is not mapped to any commands, then no command is executed.
+However, if an event is not mapped to any command, then no command is executed.
 Moreover, not all commands lead to actions.
 For example, spawning a new cursor doesn't modify the tab content, so the command doesn't cause any actions.
 
