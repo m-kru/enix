@@ -54,8 +54,8 @@ General configuration
 
 The general configuration can be defined in the 'config.json' file.
 To get all configuration settings with their current value call enix with the '-dump config' flag.
-This section tries to describe in detail all general configuration settings.
 
+This section tries to describe in detail all general configuration settings.
 Settings are described in the following format:
 
 name : type

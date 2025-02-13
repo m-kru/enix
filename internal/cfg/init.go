@@ -12,7 +12,6 @@ import (
 
 // Function Init initializes and returns various configurations at the program start.
 func Init() error {
-	Cfg = DefaultConfig()
 	Style = DefaultStyle()
 	Keys = DefaultKeybindings()
 	KeysInsert = DefaultInsertKeybindings()
@@ -20,11 +19,15 @@ func Init() error {
 
 	var err error
 
+	// Reading config from command line arguemnt takes precedence
+	// over default config initialization.
 	if arg.Config != "" {
-		Cfg, err = configFromFile(arg.Config)
-		if err != nil {
-			goto exit
-		}
+		err = initCfgFromFile(arg.Config)
+	} else {
+		err = initCfg()
+	}
+	if err != nil {
+		goto exit
 	}
 
 	if Cfg.Style != "default" {
@@ -38,31 +41,46 @@ exit:
 	return err
 }
 
-func configFromFile(path string) (Config, error) {
-	config := DefaultConfig()
+func initCfg() error {
+	Cfg = DefaultConfig()
 
-	file, err := os.ReadFile(path)
+	bytes, path, err := ReadConfigFile("config.json")
 	if err != nil {
-		return config, fmt.Errorf(
-			"reading config from %s: %v", path, err,
-		)
+		return fmt.Errorf("reading config.json: %v", err)
 	}
 
-	err = json.Unmarshal(file, &config)
+	err = json.Unmarshal(bytes, &Cfg)
 	if err != nil {
-		return config, fmt.Errorf(
-			"reading config from %s: %v", path, err,
-		)
+		return fmt.Errorf("reading config from %s: %v", path, err)
 	}
 
 	err = configSanityChecks()
 	if err != nil {
-		return config, fmt.Errorf(
-			"reading config from %s: %v", path, err,
-		)
+		return fmt.Errorf("reading config from %s: %v", path, err)
 	}
 
-	return config, nil
+	return nil
+}
+
+func initCfgFromFile(path string) error {
+	Cfg = DefaultConfig()
+
+	file, err := os.ReadFile(path)
+	if err != nil {
+		return fmt.Errorf("reading config from %s: %v", path, err)
+	}
+
+	err = json.Unmarshal(file, &Cfg)
+	if err != nil {
+		return fmt.Errorf("reading config from %s: %v", path, err)
+	}
+
+	err = configSanityChecks()
+	if err != nil {
+		return fmt.Errorf("reading config from %s: %v", path, err)
+	}
+
+	return nil
 }
 
 func configSanityChecks() error {
