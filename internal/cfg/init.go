@@ -3,35 +3,12 @@ package cfg
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"os"
-	"path/filepath"
 
 	"github.com/m-kru/enix/internal/arg"
 
-	homedir "github.com/mitchellh/go-homedir"
-
 	"github.com/mattn/go-runewidth"
 )
-
-func init() {
-	var err error
-
-	ConfigDir = os.Getenv("ENIX_CONFIG_DIR")
-	if ConfigDir == "" {
-		ConfigDir = os.Getenv("XDG_CONFIG_HOME")
-
-		if ConfigDir == "" {
-			ConfigDir, err = homedir.Dir()
-			if err != nil {
-				log.Fatalf("can't determine home directory: %v", err)
-			}
-			ConfigDir = filepath.Join(ConfigDir, ".config")
-		}
-
-		ConfigDir = filepath.Join(ConfigDir, "enix")
-	}
-}
 
 // Function Init initializes and returns various configurations at the program start.
 func Init() error {

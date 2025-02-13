@@ -3,9 +3,6 @@ package lang
 import (
 	"encoding/json"
 	"fmt"
-	"io"
-	"os"
-	"path"
 	"path/filepath"
 
 	"github.com/m-kru/enix/internal/cfg"
@@ -142,31 +139,19 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 }
 
 func readFiletypeDefFromJSON(lang string) ([]RegionJSON, error) {
-	filetypeDir := ""
-	if filetypeDir == "" {
-		filetypeDir = path.Join(os.Getenv("ENIX_RC_DIR"), "filetype")
-	}
-	if filetypeDir == "" {
-		filetypeDir = filepath.Join(cfg.ConfigDir, "filetype")
-	}
-
-	path := filepath.Join(filetypeDir, lang+".json")
-
-	file, err := os.Open(path)
+	data, path, err := cfg.ReadConfigFile(filepath.Join("filetype", lang+".json"))
 	if err != nil {
-		return nil, fmt.Errorf("opening language file: %v", err)
+		return nil, fmt.Errorf("reading filetype from %s: %v", path, err)
 	}
-	defer file.Close()
 
-	data, err := io.ReadAll(file)
-	if err != nil {
-		return nil, fmt.Errorf("reading language file: %v", err)
+	if path == "" {
+		return nil, nil
 	}
 
 	var langDef []RegionJSON
 	err = json.Unmarshal(data, &langDef)
 	if err != nil {
-		return nil, fmt.Errorf("unmarshalling json language file: %v", err)
+		return nil, fmt.Errorf("unmarshalling filetype json: %v", err)
 	}
 
 	return langDef, nil

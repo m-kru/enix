@@ -3,8 +3,6 @@ package cfg
 import (
 	"encoding/json"
 	"fmt"
-	"io"
-	"os"
 	"path/filepath"
 	"strconv"
 
@@ -149,17 +147,7 @@ func DefaultStyle() style {
 
 // styleFromJSON reads style from file named "style/<name>.json".
 func styleFromJSON(name string) (style, error) {
-	styleDir := filepath.Join(ConfigDir, "style")
-
-	path := filepath.Join(styleDir, name+".json")
-
-	file, err := os.Open(path)
-	if err != nil {
-		return DefaultStyle(), fmt.Errorf("opening style file: %v", err)
-	}
-	defer file.Close()
-
-	data, err := io.ReadAll(file)
+	data, path, err := ReadConfigFile(filepath.Join("style", name+".json"))
 	if err != nil {
 		return DefaultStyle(), fmt.Errorf("reading style file: %v", err)
 	}

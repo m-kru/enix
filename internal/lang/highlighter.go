@@ -23,6 +23,9 @@ func NewHighlighter(lang string) (*Highlighter, error) {
 		return DefaultHighlighter(),
 			fmt.Errorf("creating highlighter for %s filetype: %v", lang, err)
 	}
+	if langDef == nil {
+		return DefaultHighlighter(), nil
+	}
 
 	hl, err := langDefIntoHighlighter(langDef)
 	if err != nil {
