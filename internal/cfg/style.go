@@ -151,6 +151,9 @@ func styleFromJSON(name string) (style, error) {
 	if err != nil {
 		return DefaultStyle(), fmt.Errorf("reading style file: %v", err)
 	}
+	if path == "" {
+		return DefaultStyle(), nil
+	}
 
 	var styleMap map[string]any
 	err = json.Unmarshal(data, &styleMap)

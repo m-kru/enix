@@ -27,8 +27,8 @@ type Config struct {
 
 func DefaultConfig() Config {
 	return Config{
-		Colors:              "default",
-		Style:               "default",
+		Colors:              "",
+		Style:               "",
 		AutoSave:            0,
 		TrimOnSave:          true,
 		SafeFileSave:        true,
