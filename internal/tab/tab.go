@@ -1,6 +1,7 @@
 package tab
 
 import (
+	"fmt"
 	"sync"
 	"time"
 
@@ -22,7 +23,7 @@ import (
 type Tab struct {
 	Path      string // File path
 	Newline   string // Newline encoding
-	FileType  string
+	Filetype  string
 	IndentStr string
 
 	State    string // Valid states: "" - normal mode, "insert", "replace", "key-name".
@@ -247,4 +248,20 @@ func (tab *Tab) undoPushInInsert() {
 	tab.InsertActions = make(action.Actions, 0, 16)
 	tab.PrevInsertCursors = cursor.Clone(tab.Cursors)
 	tab.PrevInsertSelections = sel.Clone(tab.Selections)
+}
+
+// SetFiletype implicitly sets tab filetype.
+func (tab *Tab) SetFiletype(ft string) error {
+	if !util.IsValidFiletype(ft) {
+		return fmt.Errorf("invalid filetype '%s'", ft)
+	}
+
+	tab.Filetype = ft
+	hl, err := lang.NewHighlighter(ft)
+	if err != nil {
+		return err
+	}
+	tab.Highlighter = hl
+
+	return nil
 }

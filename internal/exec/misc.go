@@ -61,6 +61,16 @@ func Esc(args []string, tab *tab.Tab) error {
 	return nil
 }
 
+func Filetype(args []string, tab *tab.Tab) error {
+	if len(args) != 1 {
+		return fmt.Errorf(
+			"filetype: expected 1 arg, provided %d", len(args),
+		)
+	}
+
+	return tab.SetFiletype(args[0])
+}
+
 func Indent(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf(

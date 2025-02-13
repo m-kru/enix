@@ -49,16 +49,16 @@ func DefaultConfig() Config {
 	}
 }
 
-func (cfg Config) GetIndent(fileType string) string {
-	if indent, ok := cfg.Indent[fileType]; ok {
+func (cfg Config) GetIndent(filetype string) string {
+	if indent, ok := cfg.Indent[filetype]; ok {
 		return indent
 	}
 	return "\t"
 }
 
 func (cfg Config) GetFileType(fileExt string) string {
-	if fileType, ok := cfg.Extensions[fileExt]; ok {
-		return fileType
+	if filetype, ok := cfg.Extensions[fileExt]; ok {
+		return filetype
 	}
 	return ""
 }

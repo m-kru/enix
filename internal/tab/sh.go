@@ -41,7 +41,7 @@ func (tab *Tab) prepareExecCmd(
 
 	// Set environment variables
 	execCmd.Env = os.Environ()
-	execCmd.Env = append(execCmd.Env, fmt.Sprintf("ENIX_FILETYPE=%s", tab.FileType))
+	execCmd.Env = append(execCmd.Env, fmt.Sprintf("ENIX_FILETYPE=%s", tab.Filetype))
 	path := tab.Path
 	if !filepath.IsAbs(path) {
 		wd, err := os.Getwd()

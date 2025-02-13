@@ -5,6 +5,13 @@ import (
 	"unicode/utf8"
 )
 
+var fileNameToType = map[string]string{
+	"COMMIT_EDITMSG": "git-commit",
+	"Makefile":       "make", "makefile": "make",
+	"Dockerfile": "docker",
+	".bashrc":    "sh", ".profile": "sh", "bspwmrc": "sh",
+}
+
 var fileExtToType = map[string]string{
 	"c": "c", "h": "c",
 	"fbd":  "fbdl",
@@ -20,17 +27,26 @@ var fileExtToType = map[string]string{
 	"sh": "sh", "bash": "sh", "csh": "sh", "ksh": "sh", "mksh": "sh", "zsh": "sh",
 }
 
+func IsValidFiletype(ft string) bool {
+	for _, typ := range fileNameToType {
+		if ft == typ {
+			return true
+		}
+	}
+
+	for _, typ := range fileExtToType {
+		if ft == typ {
+			return true
+		}
+	}
+
+	return false
+}
+
 // FileNameToType returns file type based on the file name.
 func FileNameToType(name string) string {
-	switch name {
-	case "COMMIT_EDITMSG":
-		return "git-commit"
-	case "Makefile", "makefile":
-		return "make"
-	case "Dockerfile":
-		return "docker"
-	case ".bashrc", ".profile", "bspwmrc":
-		return "sh"
+	if typ, ok := fileNameToType[name]; ok {
+		return typ
 	}
 
 	ss := strings.Split(name, ".")

@@ -183,6 +183,10 @@ The actual action depends on the context.
 For example, if the focus is on the command prompt, then the command escapes the command prompt and allows user to continue tab editing.
 If the focus in on a tab editing and there is any selection, then the command clears all selections.`,
 
+	"ft": `ft ft # An alias for the 'filetype' command.`,
+
+	"filetype": `filetype ft # Changees filetype to ft.`,
+
 	"h": `h # An alias for the 'help' command.`,
 
 	"help": `help topic|command-name # Displays help message for a given topic or command in a new tab.

@@ -163,6 +163,8 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		case "esc":
 			err = exec.Esc(c.Args, tab)
 			Prompt.Clear()
+		case "ft", "filetype":
+			err = exec.Filetype(c.Args, tab)
 		case "find-next":
 			err = exec.FindNext(c.Args, tab)
 		case "find-prev":

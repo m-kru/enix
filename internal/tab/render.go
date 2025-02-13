@@ -102,7 +102,7 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 	}
 	b.WriteString(fmt.Sprintf("%d:%d | ", c.LineNum, c.RuneIdx+1))
 
-	b.WriteString(fmt.Sprintf("%s ", tab.FileType))
+	b.WriteString(fmt.Sprintf("%s ", tab.Filetype))
 	statusStr := b.String()
 
 	if len(statusStr) > frame.Width {

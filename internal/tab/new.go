@@ -32,7 +32,7 @@ func Empty(
 	return &Tab{
 		Path:                 "No Name",
 		Newline:              "\n",
-		FileType:             "None",
+		Filetype:             "None",
 		IndentStr:            cfg.Cfg.GetIndent(""),
 		State:                "",
 		RepCount:             0,
@@ -105,24 +105,24 @@ func Open(
 	curs[0] = c
 
 	base := filepath.Base(path)
-	fileType := util.FileNameToType(base)
-	if fileType == "" {
+	filetype := util.FileNameToType(base)
+	if filetype == "" {
 		ss := strings.Split(base, ".")
 		fileExt := ""
 		if len(ss) > 1 {
 			fileExt = ss[1]
 		}
-		fileType = cfg.Cfg.GetFileType(fileExt)
+		filetype = cfg.Cfg.GetFileType(fileExt)
 	}
 
 	// Highlighter initialization
-	hl, err := lang.NewHighlighter(fileType)
+	hl, err := lang.NewHighlighter(filetype)
 
 	return &Tab{
 		Path:                 path,
 		Newline:              "\n",
-		FileType:             fileType,
-		IndentStr:            cfg.Cfg.GetIndent(fileType),
+		Filetype:             filetype,
+		IndentStr:            cfg.Cfg.GetIndent(filetype),
 		State:                "",
 		RepCount:             0,
 		Lines:                lines,
@@ -162,7 +162,7 @@ func FromString(
 	return &Tab{
 		Path:                 path,
 		Newline:              "\n",
-		FileType:             "None",
+		Filetype:             "None",
 		IndentStr:            cfg.Cfg.GetIndent(""),
 		State:                "",
 		RepCount:             0,

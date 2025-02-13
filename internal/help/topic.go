@@ -70,7 +70,7 @@ AutoSave : int
   The tab is not autosaved if the corresponding file in the file system doesn't exist.
 
 HighlightCursorWord : bool
-  Highlight word under cursor and all occurence of the word in the view.
+  Highlight word under cursor and all occurrence of the word in the view.
 
 TrimOnSave : bool
   Trim trailing whitespaces while saving the tab.
