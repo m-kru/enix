@@ -8,8 +8,6 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"github.com/m-kru/enix/internal/arg"
-
 	"github.com/gdamore/tcell/v2"
 )
 
@@ -152,9 +150,6 @@ func DefaultColorscheme() Colorscheme {
 // readFromJSON reads colorscheme from file named "name.json".
 func colorschemeFromJSON(name string) (Colorscheme, error) {
 	colorsDir := filepath.Join(ConfigDir, "colors")
-	if arg.ColorsDir != "" {
-		colorsDir = arg.ColorsDir
-	}
 
 	path := filepath.Join(colorsDir, name+".json")
 

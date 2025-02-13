@@ -2,7 +2,6 @@ package arg
 
 var Config string // Path to the config file.
 var DumpConfig bool
-var ColorsDir string // Path to the colors directory.
 var LangsDir string  // Path to the languages syntaxes directory.
 var DumpKeys bool
 var DumpInsertKeys bool
@@ -33,7 +32,6 @@ func isValidFlag(f string) bool {
 func isValidParam(p string) bool {
 	params := map[string]bool{
 		"-config":     true,
-		"-colors-dir": true,
 		"-langs-dir":  true,
 		"-script":     true,
 	}

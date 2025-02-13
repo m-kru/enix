@@ -26,7 +26,6 @@ Flags:
 Parameters:
 
   -config      Read the configuration from the provided file.
-  -colors-dir  Set colors directory to the provided path.
   -langs-dir   Set languages syntaxes highlight directory to the provided path.
   -script      Instead of opening files in the interactive tui mode, execute
                commands from the script on each file. Each command in the script
