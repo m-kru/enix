@@ -67,20 +67,20 @@ func configFromFile(path string) (Config, error) {
 	file, err := os.ReadFile(path)
 	if err != nil {
 		return config, fmt.Errorf(
-			"reading config from file %s: %v", path, err,
+			"reading config from %s: %v", path, err,
 		)
 	}
 
 	err = json.Unmarshal(file, &config)
 	if err != nil {
 		return config, fmt.Errorf(
-			"reading config from file %s: %v", path, err,
+			"reading config from %s: %v", path, err,
 		)
 	}
 
 	if config.AutoSave < 0 {
 		return config, fmt.Errorf(
-			"reading config from file %s, AutoSave value must be natural, current value %d",
+			"reading config from %s, AutoSave must be natural, current value %d",
 			path, config.AutoSave,
 		)
 	}
@@ -88,8 +88,15 @@ func configFromFile(path string) (Config, error) {
 	rw := runewidth.RuneWidth(config.LineEndRune)
 	if rw != 1 {
 		return config, fmt.Errorf(
-			"reading config from file %s, width of line end rune must equal 1, width of '%c' equals %d",
+			"reading config from %s, width of line end rune must equal 1, width of '%c' equals %d",
 			path, config.LineEndRune, rw,
+		)
+	}
+
+	if config.UndoSize < 0 {
+		return config, fmt.Errorf(
+			"reading config from %s, UndoSize must be natural, current value %d",
+			path, config.UndoSize,
 		)
 	}
 

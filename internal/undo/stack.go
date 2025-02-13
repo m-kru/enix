@@ -37,6 +37,10 @@ func (s *Stack) Clear() {
 }
 
 func (s *Stack) Push(act action.Action, curs []*cursor.Cursor, sels []*sel.Selection) {
+	if s.cap == 0 {
+		return
+	}
+
 	if s.len == s.cap {
 		s.first = s.first.next
 		s.len--
