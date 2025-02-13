@@ -55,27 +55,32 @@ func configFromFile(path string) (Config, error) {
 		)
 	}
 
-	if config.AutoSave < 0 {
+	err = configSanityChecks()
+	if err != nil {
 		return config, fmt.Errorf(
-			"reading config from %s, AutoSave must be natural, current value %d",
-			path, config.AutoSave,
-		)
-	}
-
-	rw := runewidth.RuneWidth(config.LineEndRune)
-	if rw != 1 {
-		return config, fmt.Errorf(
-			"reading config from %s, width of line end rune must equal 1, width of '%c' equals %d",
-			path, config.LineEndRune, rw,
-		)
-	}
-
-	if config.UndoSize < 0 {
-		return config, fmt.Errorf(
-			"reading config from %s, UndoSize must be natural, current value %d",
-			path, config.UndoSize,
+			"reading config from %s: %v", path, err,
 		)
 	}
 
 	return config, nil
+}
+
+func configSanityChecks() error {
+	if Cfg.AutoSave < 0 {
+		return fmt.Errorf("AutoSave must be natural, current value %d", Cfg.AutoSave)
+	}
+
+	rw := runewidth.RuneWidth(Cfg.LineEndRune)
+	if rw != 1 {
+		return fmt.Errorf(
+			"width of LineEndRune must equal 1, width of '%c' equals %d",
+			Cfg.LineEndRune, rw,
+		)
+	}
+
+	if Cfg.UndoSize < 0 {
+		return fmt.Errorf("UndoSize must be natural, current value %d", Cfg.UndoSize)
+	}
+
+	return nil
 }
