@@ -116,8 +116,6 @@ func Parse() {
 			switch param {
 			case "-config":
 				Config = arg
-			case "-langs-dir":
-				LangsDir = arg
 			case "-script":
 				Script = arg
 			default:

@@ -8,7 +8,6 @@ import (
 	"path"
 	"path/filepath"
 
-	"github.com/m-kru/enix/internal/arg"
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/regex"
 )
@@ -144,9 +143,6 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 
 func readFiletypeDefFromJSON(lang string) ([]RegionJSON, error) {
 	filetypeDir := ""
-	if arg.LangsDir != "" {
-		filetypeDir = arg.LangsDir
-	}
 	if filetypeDir == "" {
 		filetypeDir = path.Join(os.Getenv("ENIX_RC_DIR"), "filetype")
 	}
