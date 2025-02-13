@@ -10,5 +10,5 @@ func (c *Cursor) Render(frame frame.Frame, view view.View) {
 	x := c.Line.ColumnIdx(c.RuneIdx) - view.Column
 
 	r := frame.GetContent(x, 0)
-	frame.SetContent(x, 0, r, cfg.Colors.Cursor)
+	frame.SetContent(x, 0, r, cfg.Style.Cursor)
 }

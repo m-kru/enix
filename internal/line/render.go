@@ -45,9 +45,9 @@ func (l *Line) Render(
 		}
 	}
 
-	style := cfg.Colors.Default
+	style := cfg.Style.Default
 	setStyle := func() {
-		style = cfg.Colors.Default
+		style = cfg.Style.Default
 		if hls != nil {
 			for {
 				// TODO: We shouldn't need this check, is there some bug?
@@ -64,7 +64,7 @@ func (l *Line) Render(
 		}
 		if len(finds) > 0 && findIdx < len(finds) {
 			if finds[findIdx].CoversRune(lineNum, rIdx) {
-				style = cfg.Colors.Find
+				style = cfg.Style.Find
 				if finds[findIdx].IsLastRune(rIdx) {
 					findIdx++
 				}
@@ -82,8 +82,8 @@ func (l *Line) Render(
 	// The column might start at the second column of a rune.
 	r = l.Rune(rIdx)
 	if r == '\t' {
-		if style != cfg.Colors.Find {
-			style = cfg.Colors.Whitespace
+		if style != cfg.Style.Find {
+			style = cfg.Style.Whitespace
 		}
 		setTab(runeSubcol, style)
 		rIdx++
@@ -104,8 +104,8 @@ func (l *Line) Render(
 		setStyle()
 
 		if r == '\t' {
-			if style != cfg.Colors.Find {
-				style = cfg.Colors.Whitespace
+			if style != cfg.Style.Find {
+				style = cfg.Style.Whitespace
 			}
 			setTab(0, style)
 		} else {
@@ -116,11 +116,11 @@ func (l *Line) Render(
 	}
 
 clear:
-	frame.SetContent(x, 0, cfg.Cfg.LineEndRune, cfg.Colors.Whitespace)
+	frame.SetContent(x, 0, cfg.Cfg.LineEndRune, cfg.Style.Whitespace)
 	x++
 
 	for x < frame.Width {
-		frame.SetContent(x, 0, ' ', cfg.Colors.Default)
+		frame.SetContent(x, 0, ' ', cfg.Style.Default)
 		x++
 	}
 

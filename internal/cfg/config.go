@@ -6,7 +6,7 @@ var ConfigDir string
 var Cfg Config
 
 type Config struct {
-	Colorscheme string
+	Style string
 
 	AutoSave int
 	// Trim trailing whitespaces on save.
@@ -29,7 +29,7 @@ type Config struct {
 
 func DefaultConfig() Config {
 	return Config{
-		Colorscheme:         "default",
+		Style:               "default",
 		AutoSave:            0,
 		TrimOnSave:          true,
 		SafeFileSave:        true,

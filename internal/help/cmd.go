@@ -172,8 +172,6 @@ On the other hand, cutting a single line is a very common action.
 Cutting a single rune is still possible by creating a selection of width 1.
 For example, by executing commands 'sel-right' and 'sel-left.`,
 
-	"dump-colors": `dump-colors # Dumps colorscheme configuration to JSON format.`,
-
 	"esc": `esc # Escapes the current context.
 The actual action depends on the context.
 For example, if the focus is on the command prompt, then the command escapes the command prompt and allows user to continue tab editing.

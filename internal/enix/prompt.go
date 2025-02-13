@@ -49,7 +49,7 @@ type prompt struct {
 
 func (p *prompt) Clear() {
 	for x := range p.Frame.Width {
-		p.Frame.SetContent(x, 0, ' ', cfg.Colors.Default)
+		p.Frame.SetContent(x, 0, ' ', cfg.Style.Default)
 	}
 	p.Screen.HideCursor()
 	p.Screen.Show()
@@ -61,14 +61,14 @@ func (p *prompt) ShowError(msg string) {
 		if x == p.Frame.Width {
 			break
 		}
-		p.Frame.SetContent(x, 0, r, cfg.Colors.Error)
+		p.Frame.SetContent(x, 0, r, cfg.Style.Error)
 		x++
 	}
 	for {
 		if x == p.Frame.Width {
 			break
 		}
-		p.Frame.SetContent(x, 0, ' ', cfg.Colors.Prompt)
+		p.Frame.SetContent(x, 0, ' ', cfg.Style.Prompt)
 		x++
 	}
 	p.Screen.Show()
@@ -78,14 +78,14 @@ func (p *prompt) ShowError(msg string) {
 func (p *prompt) ShowInfo(msg string) {
 	x := 0
 	for _, r := range msg {
-		p.Frame.SetContent(x, 0, r, cfg.Colors.Default)
+		p.Frame.SetContent(x, 0, r, cfg.Style.Default)
 		x++
 	}
 	for {
 		if x == p.Frame.Width {
 			break
 		}
-		p.Frame.SetContent(x, 0, ' ', cfg.Colors.Default)
+		p.Frame.SetContent(x, 0, ' ', cfg.Style.Default)
 		x++
 	}
 	p.Screen.Show()
@@ -125,20 +125,20 @@ func (p *prompt) AskTabReload() {
 	str := "file was modified externally, reload y/n?"
 	x := 0
 	for _, r := range str {
-		p.Frame.SetContent(x, 0, r, cfg.Colors.Warning)
+		p.Frame.SetContent(x, 0, r, cfg.Style.Warning)
 		x++
 	}
 
-	p.Frame.SetContent(x, 0, ' ', cfg.Colors.Warning)
+	p.Frame.SetContent(x, 0, ' ', cfg.Style.Warning)
 	x++
-	p.Frame.SetContent(x, 0, ' ', cfg.Colors.Warning.Reverse(true))
+	p.Frame.SetContent(x, 0, ' ', cfg.Style.Warning.Reverse(true))
 	x++
 
 	for {
 		if x == p.Frame.Width {
 			break
 		}
-		p.Frame.SetContent(x, 0, ' ', cfg.Colors.Warning)
+		p.Frame.SetContent(x, 0, ' ', cfg.Style.Warning)
 		x++
 	}
 
@@ -146,7 +146,7 @@ func (p *prompt) AskTabReload() {
 }
 
 func (p *prompt) Render() {
-	p.Frame.SetContent(0, 0, ':', cfg.Colors.Prompt)
+	p.Frame.SetContent(0, 0, ':', cfg.Style.Prompt)
 
 	if !p.View.IsVisible(p.Cursor.View()) {
 		p.View = p.View.MinAdjust(p.Cursor.View())
@@ -156,7 +156,7 @@ func (p *prompt) Render() {
 
 	if len(p.ShadowText) > 0 {
 		for i, r := range p.ShadowText {
-			p.Frame.SetContent(i+1+p.Line.RuneCount(), 0, r, cfg.Colors.PromptShadow)
+			p.Frame.SetContent(i+1+p.Line.RuneCount(), 0, r, cfg.Style.PromptShadow)
 		}
 	}
 

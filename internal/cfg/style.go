@@ -11,9 +11,9 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
-var Colors Colorscheme
+var Style style
 
-type Colorscheme struct {
+type style struct {
 	Default tcell.Style
 
 	// Error displaying
@@ -59,51 +59,51 @@ type Colorscheme struct {
 	Variable  tcell.Style
 }
 
-func (cs *Colorscheme) Style(name string) tcell.Style {
+func (s *style) Get(name string) tcell.Style {
 	switch name {
 	case "CursorWord":
-		return cs.CursorWord
+		return s.CursorWord
 	case "Attribute":
-		return cs.Attribute
+		return s.Attribute
 	case "Bold":
-		return cs.Bold
+		return s.Bold
 	case "Comment":
-		return cs.Comment
+		return s.Comment
 	case "Heading":
-		return cs.Heading
+		return s.Heading
 	case "Italic":
-		return cs.Italic
+		return s.Italic
 	case "Keyword":
-		return cs.Keyword
+		return s.Keyword
 	case "Meta":
-		return cs.Meta
+		return s.Meta
 	case "Mono":
-		return cs.Mono
+		return s.Mono
 	case "Number":
-		return cs.Number
+		return s.Number
 	case "Operator":
-		return cs.Operator
+		return s.Operator
 	case "String":
-		return cs.String
+		return s.String
 	case "Type":
-		return cs.Type
+		return s.Type
 	case "Value":
-		return cs.Value
+		return s.Value
 	case "Variable":
-		return cs.Variable
+		return s.Variable
 	default:
-		return cs.Default
+		return s.Default
 	}
 }
 
-// DefaultColorscheme return the default color scheme.
+// DefaultStyle return the default style.
 //
 // The default color scheme doesn't require any color scheme files to be installed
 // as it is embedded into the program's binary.
 //
 // The default color scheme uses the same colors as the terminal.
-func DefaultColorscheme() Colorscheme {
-	return Colorscheme{
+func DefaultStyle() style {
+	return style{
 		Default: tcell.StyleDefault,
 
 		Error:   tcell.StyleDefault.Foreground(tcell.ColorMaroon),
@@ -147,91 +147,91 @@ func DefaultColorscheme() Colorscheme {
 	}
 }
 
-// readFromJSON reads colorscheme from file named "name.json".
-func colorschemeFromJSON(name string) (Colorscheme, error) {
-	colorsDir := filepath.Join(ConfigDir, "colors")
+// styleFromJSON reads style from file named "style/<name>.json".
+func styleFromJSON(name string) (style, error) {
+	styleDir := filepath.Join(ConfigDir, "style")
 
-	path := filepath.Join(colorsDir, name+".json")
+	path := filepath.Join(styleDir, name+".json")
 
 	file, err := os.Open(path)
 	if err != nil {
-		return DefaultColorscheme(), fmt.Errorf("opening colorscheme file: %v", err)
+		return DefaultStyle(), fmt.Errorf("opening style file: %v", err)
 	}
 	defer file.Close()
 
 	data, err := io.ReadAll(file)
 	if err != nil {
-		return DefaultColorscheme(), fmt.Errorf("reading colors file: %v", err)
+		return DefaultStyle(), fmt.Errorf("reading style file: %v", err)
 	}
 
-	var colorschemeMap map[string]any
-	err = json.Unmarshal(data, &colorschemeMap)
+	var styleMap map[string]any
+	err = json.Unmarshal(data, &styleMap)
 	if err != nil {
-		return DefaultColorscheme(), fmt.Errorf("unmarshalling json colorscheme file: %v", err)
+		return DefaultStyle(), fmt.Errorf("unmarshalling json style file: %v", err)
 	}
 
-	cs, err := colorschemeFromMap(colorschemeMap)
+	cs, err := styleFromMap(styleMap)
 	if err != nil {
-		return DefaultColorscheme(), fmt.Errorf("%s: %v", path, err)
+		return DefaultStyle(), fmt.Errorf("%s: %v", path, err)
 	}
 
 	return cs, nil
 }
 
-// colorschemeFromMap creates Colorscheme from colorscheme map read from JSON file.
-func colorschemeFromMap(csm map[string]any) (Colorscheme, error) {
+// styleFromMap creates Style from style map read from JSON file.
+func styleFromMap(sm map[string]any) (style, error) {
 	var err error
-	cs := DefaultColorscheme()
+	s := DefaultStyle()
 
-	if cs.Default, err = readStyleFromMap("Default", csm, &tcell.StyleDefault); err != nil {
-		return cs, fmt.Errorf("%v", err)
+	if s.Default, err = readStyleFromMap("Default", sm, &tcell.StyleDefault); err != nil {
+		return s, fmt.Errorf("%v", err)
 	}
 
-	if cs.Error, err = readStyleFromMap("Error", csm, &cs.Default); err != nil {
-		return cs, fmt.Errorf("%v", err)
+	if s.Error, err = readStyleFromMap("Error", sm, &s.Default); err != nil {
+		return s, fmt.Errorf("%v", err)
 	}
 
-	if cs.LineNum, err = readStyleFromMap("LineNum", csm, &cs.Default); err != nil {
-		return cs, fmt.Errorf("%v", err)
+	if s.LineNum, err = readStyleFromMap("LineNum", sm, &s.Default); err != nil {
+		return s, fmt.Errorf("%v", err)
 	}
 
-	if cs.Whitespace, err = readStyleFromMap("Whitespace", csm, &cs.Default); err != nil {
-		return cs, fmt.Errorf("%v", err)
+	if s.Whitespace, err = readStyleFromMap("Whitespace", sm, &s.Default); err != nil {
+		return s, fmt.Errorf("%v", err)
 	}
 
-	if cs.Cursor, err = readStyleFromMap("Cursor", csm, &cs.Default); err != nil {
-		return cs, fmt.Errorf("%v", err)
+	if s.Cursor, err = readStyleFromMap("Cursor", sm, &s.Default); err != nil {
+		return s, fmt.Errorf("%v", err)
 	}
-	if cs.CursorWord, err = readStyleFromMap("CursorWord", csm, &cs.Default); err != nil {
-		return cs, fmt.Errorf("%v", err)
-	}
-
-	if cs.StatusLine, err = readStyleFromMap("StatusLine", csm, &cs.Default); err != nil {
-		return cs, fmt.Errorf("%v", err)
+	if s.CursorWord, err = readStyleFromMap("CursorWord", sm, &s.Default); err != nil {
+		return s, fmt.Errorf("%v", err)
 	}
 
-	if cs.StateMark, err = readStyleFromMap("StateMark", csm, &cs.Default); err != nil {
-		return cs, fmt.Errorf("%v", err)
+	if s.StatusLine, err = readStyleFromMap("StatusLine", sm, &s.Default); err != nil {
+		return s, fmt.Errorf("%v", err)
 	}
 
-	if cs.Prompt, err = readStyleFromMap("Prompt", csm, &cs.Default); err != nil {
-		return cs, fmt.Errorf("%v", err)
+	if s.StateMark, err = readStyleFromMap("StateMark", sm, &s.Default); err != nil {
+		return s, fmt.Errorf("%v", err)
 	}
 
-	if cs.PromptShadow, err = readStyleFromMap("PromptShadow", csm, &cs.Default); err != nil {
-		return cs, fmt.Errorf("%v", err)
+	if s.Prompt, err = readStyleFromMap("Prompt", sm, &s.Default); err != nil {
+		return s, fmt.Errorf("%v", err)
 	}
 
-	return cs, nil
+	if s.PromptShadow, err = readStyleFromMap("PromptShadow", sm, &s.Default); err != nil {
+		return s, fmt.Errorf("%v", err)
+	}
+
+	return s, nil
 }
 
-func readStyleFromMap(name string, csm map[string]any, dfltStyle *tcell.Style) (tcell.Style, error) {
+func readStyleFromMap(name string, sm map[string]any, dfltStyle *tcell.Style) (tcell.Style, error) {
 	style := tcell.StyleDefault
 	if dfltStyle != nil {
 		style = *dfltStyle
 	}
 
-	styleDefAny, ok := csm[name]
+	styleDefAny, ok := sm[name]
 	if !ok {
 		return style, nil
 	}
@@ -240,7 +240,7 @@ func readStyleFromMap(name string, csm map[string]any, dfltStyle *tcell.Style) (
 		return style, fmt.Errorf("invalid type for style \"%s\" in json file", name)
 	}
 
-	colorsAny, ok := csm["Colors"]
+	colorsAny, ok := sm["Colors"]
 	if !ok {
 		return style, fmt.Errorf("colorscheme file misses colors definitions")
 	}

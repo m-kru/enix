@@ -53,7 +53,7 @@ func (tab *Tab) HasCursorInLine(line *line.Line) bool {
 func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 	// Fill the background
 	for i := range frame.Width {
-		frame.SetContent(i, 0, ' ', cfg.Colors.StatusLine)
+		frame.SetContent(i, 0, ' ', cfg.Style.StatusLine)
 	}
 
 	// Render file path
@@ -61,7 +61,7 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 		if i >= frame.Width {
 			break
 		}
-		frame.SetContent(i, 0, r, cfg.Colors.StatusLine)
+		frame.SetContent(i, 0, r, cfg.Style.StatusLine)
 	}
 
 	// Render extra status information
@@ -111,13 +111,13 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 
 	startIdx := frame.Width - len(statusStr)
 	for i, r := range statusStr {
-		style := cfg.Colors.StatusLine
+		style := cfg.Style.StatusLine
 		if tab.RepCount > 0 && repCountStartIdx <= i && i < repCountEndIdx {
-			style = cfg.Colors.RepCount
+			style = cfg.Style.RepCount
 		} else if tab.State != "" && stateStartIdx <= i && i < stateEndIdx {
-			style = cfg.Colors.StateMark
+			style = cfg.Style.StateMark
 		} else if len(tab.SearchCtx.Finds) > 0 && findStartIdx <= i && i < findEndIdx {
-			style = cfg.Colors.FindMark
+			style = cfg.Style.FindMark
 		}
 
 		frame.SetContent(startIdx+i, 0, r, style)
@@ -131,9 +131,9 @@ func (tab *Tab) RenderLineNums(line *line.Line, lineNum int, frame frame.Frame) 
 		str := fmt.Sprintf("%*d ", frame.Width-1, lineNum)
 		for i, r := range str {
 			if tab.HasCursorInLine(line) && i < len(str)-1 {
-				frame.SetContent(i, y, r, cfg.Colors.Cursor)
+				frame.SetContent(i, y, r, cfg.Style.Cursor)
 			} else {
-				frame.SetContent(i, y, r, cfg.Colors.LineNum)
+				frame.SetContent(i, y, r, cfg.Style.LineNum)
 			}
 		}
 
@@ -149,7 +149,7 @@ func (tab *Tab) RenderLineNums(line *line.Line, lineNum int, frame frame.Frame) 
 	// Clear remaining line numbers.
 	for ; y < frame.Height; y++ {
 		for i := range frame.Width {
-			frame.SetContent(i, y, ' ', cfg.Colors.Default)
+			frame.SetContent(i, y, ' ', cfg.Style.Default)
 		}
 	}
 }
@@ -199,7 +199,7 @@ func (tab *Tab) RenderLines(line *line.Line, lineNum int, frame frame.Frame) {
 		}
 
 		for w := range frame.Width {
-			frame.SetContent(w, renderedCount, ' ', cfg.Colors.Default)
+			frame.SetContent(w, renderedCount, ' ', cfg.Style.Default)
 		}
 
 		renderedCount++

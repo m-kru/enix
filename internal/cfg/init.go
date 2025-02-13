@@ -36,7 +36,7 @@ func init() {
 // Function Init initializes and returns various configurations at the program start.
 func Init() error {
 	Cfg = DefaultConfig()
-	Colors = DefaultColorscheme()
+	Style = DefaultStyle()
 	Keys = DefaultKeybindings()
 	PromptKeys = DefaultPromptKeybindings()
 	InsertKeys = DefaultInsertKeybindings()
@@ -50,8 +50,8 @@ func Init() error {
 		}
 	}
 
-	if Cfg.Colorscheme != "default" {
-		Colors, err = colorschemeFromJSON(Cfg.Colorscheme)
+	if Cfg.Style != "default" {
+		Style, err = styleFromJSON(Cfg.Style)
 		if err != nil {
 			goto exit
 		}

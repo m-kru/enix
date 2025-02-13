@@ -365,7 +365,7 @@ func (w *window) RxDigit(digit rune) TcellEventReceiver {
 
 // Resize handles all the required logic when screen is resized.
 func (w *window) Resize() {
-	w.Screen.Fill(' ', cfg.Colors.Default)
+	w.Screen.Fill(' ', cfg.Style.Default)
 	w.Screen.Sync()
 
 	width, height := w.Screen.Size()

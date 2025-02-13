@@ -14,19 +14,19 @@ func Render(currentTab *tab.Tab) {
 			LineNum:      1,
 			StartRuneIdx: 0,
 			EndRuneIdx:   currentItem.StartIdx,
-			Style:        cfg.Colors.TabBar,
+			Style:        cfg.Style.TabBar,
 		},
 		highlight.Highlight{
 			LineNum:      1,
 			StartRuneIdx: currentItem.StartIdx,
 			EndRuneIdx:   currentItem.EndIdx + 1,
-			Style:        cfg.Colors.CurrentTab,
+			Style:        cfg.Style.CurrentTab,
 		},
 		highlight.Highlight{
 			LineNum:      1,
 			StartRuneIdx: currentItem.EndIdx + 1,
 			EndRuneIdx:   line.RuneCount(),
-			Style:        cfg.Colors.TabBar,
+			Style:        cfg.Style.TabBar,
 		},
 	}
 
@@ -34,7 +34,7 @@ func Render(currentTab *tab.Tab) {
 
 	// Fill missing space
 	for x := line.Columns(); x < iFrame.Width; x++ {
-		iFrame.SetContent(x, 0, ' ', cfg.Colors.TabBar)
+		iFrame.SetContent(x, 0, ' ', cfg.Style.TabBar)
 	}
 
 	renderLeftArrow()
@@ -46,15 +46,15 @@ func renderLeftArrow() {
 	if view.Column > 1 {
 		r = '<'
 	}
-	lFrame.SetContent(0, 0, r, cfg.Colors.TabBar)
-	lFrame.SetContent(1, 0, ' ', cfg.Colors.TabBar)
+	lFrame.SetContent(0, 0, r, cfg.Style.TabBar)
+	lFrame.SetContent(1, 0, ' ', cfg.Style.TabBar)
 }
 
 func renderRightArrow() {
-	rFrame.SetContent(0, 0, ' ', cfg.Colors.TabBar)
+	rFrame.SetContent(0, 0, ' ', cfg.Style.TabBar)
 	r := ' '
 	if view.LastColumn() < line.Columns() {
 		r = '>'
 	}
-	rFrame.SetContent(1, 0, r, cfg.Colors.TabBar)
+	rFrame.SetContent(1, 0, r, cfg.Style.TabBar)
 }

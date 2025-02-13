@@ -29,9 +29,9 @@ func (s *Selection) Render(
 			r := frame.GetContent(x, y)
 
 			if c == sv.Column && s.CursorOnLeft() || c == sv.LastColumn() && s.CursorOnRight() {
-				frame.SetContent(x, y, r, cfg.Colors.Cursor)
+				frame.SetContent(x, y, r, cfg.Style.Cursor)
 			} else {
-				frame.SetContent(x, y, r, cfg.Colors.Selection)
+				frame.SetContent(x, y, r, cfg.Style.Selection)
 			}
 		}
 
