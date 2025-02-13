@@ -186,7 +186,7 @@ func (tab *Tab) RxEventKeyInsert(ev *tcell.EventKey) string {
 	case tcell.KeyEnter:
 		act = tab.insertNewline()
 	default:
-		c, _ := cfg.InsertKeys.ToCmd(ev)
+		c, _ := cfg.KeysInsert.ToCmd(ev)
 		for range c.RepCount {
 			switch c.Name {
 			case "esc":

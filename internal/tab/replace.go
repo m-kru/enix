@@ -10,7 +10,7 @@ import (
 )
 
 func (tab *Tab) RxEventKeyReplace(ev *tcell.EventKey) {
-	c, _ := cfg.InsertKeys.ToCmd(ev)
+	c, _ := cfg.KeysInsert.ToCmd(ev)
 	switch c.Name {
 	case "esc":
 		tab.State = "" // Go back to normal mode

@@ -3,7 +3,7 @@ package arg
 var Config string // Path to the config file.
 var DumpConfig bool
 var DumpKeys bool
-var DumpInsertKeys bool
+var DumpKeysInsert bool
 var DumpPromptKeys bool
 var Profile bool
 
@@ -16,7 +16,7 @@ func isValidFlag(f string) bool {
 	flags := map[string]bool{
 		"-dump-config":      true,
 		"-dump-keys":        true,
-		"-dump-insert-keys": true,
+		"-dump-keys-insert": true,
 		"-dump-prompt-keys": true,
 		"-help":             true,
 		"-profile":          true,

@@ -156,7 +156,7 @@ Enix tries to offer sane default keybindings so the user doesn't have to configu
 The user can start using the editor right after installing it on various machines.
 
 To get currently set keybindings, call enix with one of the following flags:
-'-dump-keys', '-dump-insert-keys', or '-dump-prompt-keys'.
+'-dump-keys', '-dump-keys-insert', or '-dump-prompt-keys'.
 
 The default keybindings try to follow the following rules (with some exceptions):
   - The most common commands are under primary keys
