@@ -69,9 +69,18 @@ AutoSave : int
   Setting low n value on a constrained system may lead to performance drop.
   The tab is not autosaved if the corresponding file in the file system doesn't exist.
 
+HighlightCursorWord : bool
+  Highlight word under cursor and all occurence of the word in the view.
+
 TrimOnSave : bool
   Trim trailing whitespaces while saving the tab.
   TrimOnSave doesn't apply for autosaves.
+
+SafeFileSave : bool
+  Automatically create file backup before save.
+  This helps to avoid file loss if there is a power failure during the save.
+  After successful save, the backup file is removed.
+  The backup file has an additional '.enix-bak' extension.
 
 UndoSize : int
   Size of the undo and redo stacks.
