@@ -2,10 +2,6 @@ package help
 
 var Commands = map[string]string{
 
-	// Config
-
-	"config-dir": `config-dir  # Shows enix config home directory path.`,
-
 	// Command
 
 	"cmd": `cmd # Starts command prompt.

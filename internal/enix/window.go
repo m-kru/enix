@@ -149,8 +149,6 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		case "cmd":
 			Prompt.Activate("", "")
 			return &Prompt
-		case "config-dir":
-			info, err = exec.ConfigDir(c.Args)
 		case "cut":
 			info, err = exec.Cut(c.Args, tab)
 		case "del":

@@ -417,8 +417,6 @@ func (p *prompt) Exec() TcellEventReceiver {
 			return &Window
 		case "change":
 			err = exec.Change(c.Args, tab)
-		case "config-dir":
-			info, err = exec.ConfigDir(c.Args)
 		case "cursor-count":
 			p.ShowInfo(fmt.Sprintf("%d", len(tab.Cursors)))
 			return &Window
