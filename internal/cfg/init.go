@@ -13,7 +13,6 @@ import (
 
 // Function Init initializes and returns various configurations at the program start.
 func Init() error {
-	Style = DefaultStyle()
 	Keys = DefaultKeybindings()
 	KeysInsert = DefaultInsertKeybindings()
 	KeysPrompt = DefaultPromptKeybindings()
@@ -28,22 +27,20 @@ func Init() error {
 		err = initCfg()
 	}
 	if err != nil {
-		goto exit
+		return err
 	}
 
 	err = initColors()
 	if err != nil {
-		goto exit
-	}
-	if Cfg.Style != "" {
-		Style, err = styleFromJSON(Cfg.Style)
-		if err != nil {
-			goto exit
-		}
+		return err
 	}
 
-exit:
-	return err
+	err = initStyle()
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func initCfg() error {
@@ -126,6 +123,29 @@ func initColors() error {
 	Colors, err = ColorsJSON.ToColors()
 	if err != nil {
 		return fmt.Errorf("reading colors from file %s: %v", path, err)
+	}
+
+	return nil
+}
+
+func initStyle() error {
+	bytes, path, err := ReadConfigFile(filepath.Join("style", Cfg.Style+".json"))
+	if err != nil {
+		return err
+	}
+	if path == "" {
+		Style = DefaultStyle()
+		return nil
+	}
+
+	err = json.Unmarshal(bytes, &StyleJSON)
+	if err != nil {
+		return fmt.Errorf("reading style from %s: %v", path, err)
+	}
+
+	Style, err = StyleJSON.ToStyle()
+	if err != nil {
+		return fmt.Errorf("reading style from file %s: %v", path, err)
 	}
 
 	return nil

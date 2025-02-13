@@ -1,15 +1,242 @@
 package cfg
 
 import (
-	"encoding/json"
-	"fmt"
-	"path/filepath"
-	"strconv"
-
 	"github.com/gdamore/tcell/v2"
 )
 
 var Style style
+var StyleJSON styleJSON
+
+type itemStyle struct {
+	Fg     string
+	Bg     string
+	Bold   bool
+	Italic bool
+}
+
+func (is itemStyle) ToTcellStyle(dflt tcell.Style) (tcell.Style, error) {
+	s := dflt
+
+	if is.Fg != "" {
+		color, err := Colors.Get(is.Fg)
+		if err != nil {
+			return s, err
+		}
+		s = s.Foreground(color)
+	}
+
+	if is.Bg != "" {
+		color, err := Colors.Get(is.Bg)
+		if err != nil {
+			return s, err
+		}
+		s = s.Background(color)
+	}
+
+	s = s.Bold(is.Bold)
+	s = s.Italic(is.Italic)
+
+	return s, nil
+}
+
+type styleJSON struct {
+	Default      itemStyle
+	Error        itemStyle
+	Warning      itemStyle
+	TabBar       itemStyle
+	CurrentTab   itemStyle
+	LineNum      itemStyle
+	Whitespace   itemStyle
+	Cursor       itemStyle
+	CursorWord   itemStyle
+	Find         itemStyle
+	Selection    itemStyle
+	StatusLine   itemStyle
+	RepCount     itemStyle
+	StateMark    itemStyle
+	FindMark     itemStyle
+	Prompt       itemStyle
+	PromptShadow itemStyle
+	Attribute    itemStyle
+	Bold         itemStyle
+	Comment      itemStyle
+	Heading      itemStyle
+	Italic       itemStyle
+	Keyword      itemStyle
+	Meta         itemStyle
+	Mono         itemStyle
+	Number       itemStyle
+	Operator     itemStyle
+	String       itemStyle
+	Type         itemStyle
+	Value        itemStyle
+	Variable     itemStyle
+}
+
+func (sj styleJSON) ToStyle() (style, error) {
+	var s style
+	var ts tcell.Style
+	var err error
+
+	if ts, err = sj.Default.ToTcellStyle(tcell.StyleDefault); err != nil {
+		return s, err
+	}
+	s.Default = ts
+
+	if ts, err = sj.Error.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.Error = ts
+
+	if ts, err = sj.Warning.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.Warning = ts
+
+	if ts, err = sj.TabBar.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.TabBar = ts
+
+	if ts, err = sj.CurrentTab.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.CurrentTab = ts
+
+	if ts, err = sj.LineNum.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.LineNum = ts
+
+	if ts, err = sj.Whitespace.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.Whitespace = ts
+
+	if ts, err = sj.Cursor.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.Cursor = ts
+
+	if ts, err = sj.CursorWord.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.CursorWord = ts
+
+	if ts, err = sj.Find.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.Find = ts
+
+	if ts, err = sj.Selection.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.Selection = ts
+
+	if ts, err = sj.StatusLine.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.StatusLine = ts
+
+	if ts, err = sj.RepCount.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.RepCount = ts
+
+	if ts, err = sj.StateMark.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.StateMark = ts
+
+	if ts, err = sj.FindMark.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.FindMark = ts
+
+	if ts, err = sj.Prompt.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.Prompt = ts
+
+	if ts, err = sj.PromptShadow.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.PromptShadow = ts
+
+	// Syntax highlighting
+
+	if ts, err = sj.Attribute.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.Attribute = ts
+
+	if ts, err = sj.Bold.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.Bold = ts
+
+	if ts, err = sj.Comment.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.Comment = ts
+
+	if ts, err = sj.Heading.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.Heading = ts
+
+	if ts, err = sj.Italic.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.Italic = ts
+
+	if ts, err = sj.Keyword.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.Keyword = ts
+
+	if ts, err = sj.Meta.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.Meta = ts
+
+	if ts, err = sj.Mono.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.Mono = ts
+
+	if ts, err = sj.Number.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.Number = ts
+
+	if ts, err = sj.Operator.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.Operator = ts
+
+	if ts, err = sj.String.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.String = ts
+
+	if ts, err = sj.Type.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.Type = ts
+
+	if ts, err = sj.Value.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.Value = ts
+
+	if ts, err = sj.Variable.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.Variable = ts
+
+	return s, nil
+}
 
 type style struct {
 	Default tcell.Style
@@ -143,146 +370,4 @@ func DefaultStyle() style {
 		Value:     tcell.StyleDefault.Foreground(tcell.ColorMaroon),
 		Variable:  tcell.StyleDefault.Foreground(tcell.ColorMaroon),
 	}
-}
-
-// styleFromJSON reads style from file named "style/<name>.json".
-func styleFromJSON(name string) (style, error) {
-	data, path, err := ReadConfigFile(filepath.Join("style", name+".json"))
-	if err != nil {
-		return DefaultStyle(), fmt.Errorf("reading style file: %v", err)
-	}
-	if path == "" {
-		return DefaultStyle(), nil
-	}
-
-	var styleMap map[string]any
-	err = json.Unmarshal(data, &styleMap)
-	if err != nil {
-		return DefaultStyle(), fmt.Errorf("unmarshalling json style file: %v", err)
-	}
-
-	cs, err := styleFromMap(styleMap)
-	if err != nil {
-		return DefaultStyle(), fmt.Errorf("%s: %v", path, err)
-	}
-
-	return cs, nil
-}
-
-// styleFromMap creates Style from style map read from JSON file.
-func styleFromMap(sm map[string]any) (style, error) {
-	var err error
-	s := DefaultStyle()
-
-	if s.Default, err = readStyleFromMap("Default", sm, &tcell.StyleDefault); err != nil {
-		return s, fmt.Errorf("%v", err)
-	}
-
-	if s.Error, err = readStyleFromMap("Error", sm, &s.Default); err != nil {
-		return s, fmt.Errorf("%v", err)
-	}
-
-	if s.LineNum, err = readStyleFromMap("LineNum", sm, &s.Default); err != nil {
-		return s, fmt.Errorf("%v", err)
-	}
-
-	if s.Whitespace, err = readStyleFromMap("Whitespace", sm, &s.Default); err != nil {
-		return s, fmt.Errorf("%v", err)
-	}
-
-	if s.Cursor, err = readStyleFromMap("Cursor", sm, &s.Default); err != nil {
-		return s, fmt.Errorf("%v", err)
-	}
-	if s.CursorWord, err = readStyleFromMap("CursorWord", sm, &s.Default); err != nil {
-		return s, fmt.Errorf("%v", err)
-	}
-
-	if s.StatusLine, err = readStyleFromMap("StatusLine", sm, &s.Default); err != nil {
-		return s, fmt.Errorf("%v", err)
-	}
-
-	if s.StateMark, err = readStyleFromMap("StateMark", sm, &s.Default); err != nil {
-		return s, fmt.Errorf("%v", err)
-	}
-
-	if s.Prompt, err = readStyleFromMap("Prompt", sm, &s.Default); err != nil {
-		return s, fmt.Errorf("%v", err)
-	}
-
-	if s.PromptShadow, err = readStyleFromMap("PromptShadow", sm, &s.Default); err != nil {
-		return s, fmt.Errorf("%v", err)
-	}
-
-	return s, nil
-}
-
-func readStyleFromMap(name string, sm map[string]any, dfltStyle *tcell.Style) (tcell.Style, error) {
-	style := tcell.StyleDefault
-	if dfltStyle != nil {
-		style = *dfltStyle
-	}
-
-	styleDefAny, ok := sm[name]
-	if !ok {
-		return style, nil
-	}
-	styleDef, ok := styleDefAny.(map[string]any)
-	if !ok {
-		return style, fmt.Errorf("invalid type for style \"%s\" in json file", name)
-	}
-
-	colorsAny, ok := sm["Colors"]
-	if !ok {
-		return style, fmt.Errorf("colorscheme file misses colors definitions")
-	}
-	colors, ok := colorsAny.(map[string]any)
-	if !ok {
-		return style, fmt.Errorf("invalid type for \"Colors\" definition")
-	}
-
-	if col, ok := styleDef["Fg"]; ok {
-		colStr, ok := col.(string)
-		if !ok {
-			return style, fmt.Errorf("invalid type for \"Fg\" in json file, expected string")
-		}
-		val, err := getColor(colors, colStr)
-		if err != nil {
-			return style, fmt.Errorf("%v", err)
-		}
-		style = style.Foreground(tcell.NewHexColor(val))
-	}
-
-	if col, ok := styleDef["Bg"]; ok {
-		colStr, ok := col.(string)
-		if !ok {
-			return style, fmt.Errorf("invalid type for \"Bg\" in json file, expected string")
-		}
-		val, err := getColor(colors, colStr)
-		if err != nil {
-			return style, fmt.Errorf("%v", err)
-		}
-		style = style.Background(tcell.NewHexColor(val))
-	}
-
-	return style, nil
-}
-
-func getColor(cm map[string]any, name string) (int32, error) {
-	var val int64
-	var err error
-
-	if value, ok := cm[name]; ok {
-		if hex, ok := value.(string); ok {
-			val, err = strconv.ParseInt(hex, 16, 32)
-			if err != nil {
-				return 0, fmt.Errorf("can't convert value for %s color: %v", name, err)
-			}
-		} else {
-			return 0, fmt.Errorf("invalid value type for %s color, expected string", name)
-		}
-	} else {
-		return 0, fmt.Errorf("missing definition of %s color", name)
-	}
-
-	return int32(val), nil
 }

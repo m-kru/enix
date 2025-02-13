@@ -54,6 +54,49 @@ func DefaultColors() colors {
 	}
 }
 
+func (cols colors) Get(name string) (tcell.Color, error) {
+	switch name {
+	case "Background":
+		return cols.Background, nil
+	case "Foreground":
+		return cols.Foreground, nil
+	case "Black":
+		return cols.Black, nil
+	case "Red":
+		return cols.Red, nil
+	case "Green":
+		return cols.Green, nil
+	case "Yellow":
+		return cols.Yellow, nil
+	case "Blue":
+		return cols.Blue, nil
+	case "Magenta":
+		return cols.Magenta, nil
+	case "Cyan":
+		return cols.Cyan, nil
+	case "White":
+		return cols.White, nil
+	case "BrightBlack":
+		return cols.BrightBlack, nil
+	case "BrightRed":
+		return cols.BrightRed, nil
+	case "BrightGreen":
+		return cols.BrightGreen, nil
+	case "BrightYellow":
+		return cols.BrightYellow, nil
+	case "BrightBlue":
+		return cols.BrightBlue, nil
+	case "BrightMagenta":
+		return cols.BrightMagenta, nil
+	case "BrightCyan":
+		return cols.BrightCyan, nil
+	case "BrightWhite":
+		return cols.BrightWhite, nil
+	default:
+		return tcell.ColorDefault, fmt.Errorf("invalid color name '%s'", name)
+	}
+}
+
 type colorsJSON struct {
 	Background    string
 	Foreground    string
@@ -77,13 +120,19 @@ type colorsJSON struct {
 
 func stringToColor(str string) (tcell.Color, error) {
 	var col tcell.Color
+	var u64 uint64
+	var r, g, b int32
 
 	u64, err := strconv.ParseUint(str, 16, 64)
 	if err != nil {
 		return col, err
 	}
 
-	col = tcell.Color(u64) | tcell.ColorIsRGB
+	r = int32((u64 >> 16) & 0xFF)
+	g = int32((u64 >> 8) & 0xFF)
+	b = int32(u64 & 0xFF)
+
+	col = tcell.NewRGBColor(r, g, b)
 
 	return col, err
 }
