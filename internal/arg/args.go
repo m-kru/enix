@@ -4,7 +4,7 @@ var Config string // Path to the config file.
 var DumpConfig bool
 var DumpKeys bool
 var DumpKeysInsert bool
-var DumpPromptKeys bool
+var DumpKeysPrompt bool
 var Profile bool
 
 var Script string // Path to the script to be run.
@@ -17,7 +17,7 @@ func isValidFlag(f string) bool {
 		"-dump-config":      true,
 		"-dump-keys":        true,
 		"-dump-keys-insert": true,
-		"-dump-prompt-keys": true,
+		"-dump-keys-prompt": true,
 		"-help":             true,
 		"-profile":          true,
 		"-version":          true,

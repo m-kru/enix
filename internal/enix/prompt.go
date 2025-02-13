@@ -303,7 +303,7 @@ func (p *prompt) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 		Window.Resize()
 		Window.Render()
 	case *tcell.EventKey:
-		cmd, err := cfg.PromptKeys.ToCmd(ev)
+		cmd, err := cfg.KeysPrompt.ToCmd(ev)
 		if err != nil {
 			p.ShowError(fmt.Sprintf("%v", err))
 			return &Window

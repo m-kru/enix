@@ -16,7 +16,7 @@ func Init() error {
 	Style = DefaultStyle()
 	Keys = DefaultKeybindings()
 	KeysInsert = DefaultInsertKeybindings()
-	PromptKeys = DefaultPromptKeybindings()
+	KeysPrompt = DefaultPromptKeybindings()
 
 	var err error
 

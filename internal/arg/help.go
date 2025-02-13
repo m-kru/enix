@@ -18,7 +18,7 @@ Flags:
   -dump-config       Dump config to stdout.
   -dump-keys         Dump normal mode keybindings to stdout.
   -dump-keys-insert  Dump insert mode keybindings to stdout.
-  -dump-prompt-keys  Dump prompt keybindings to stdout.
+  -dump-keys-prompt  Dump prompt keybindings to stdout.
   -help              Display help.
   -profile           Enable CPU profiling and dump results to ./enix.prof file.
   -version           Display version.

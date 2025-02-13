@@ -9,7 +9,7 @@ import (
 
 var Keys Keybindings
 var KeysInsert Keybindings
-var PromptKeys Keybindings
+var KeysPrompt Keybindings
 
 // Keybindings struct represents configured keybindings.
 type Keybindings map[string]string

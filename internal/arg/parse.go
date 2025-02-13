@@ -87,8 +87,8 @@ func Parse() {
 			DumpKeys = true
 		case "-dump-keys-insert":
 			DumpKeysInsert = true
-		case "-dump-prompt-keys":
-			DumpPromptKeys = true
+		case "-dump-keys-prompt":
+			DumpKeysPrompt = true
 		case "-help":
 			printHelp()
 		case "-profile":
