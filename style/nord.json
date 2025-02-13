@@ -1,0 +1,58 @@
+{
+	"Default": {
+		"Fg": "Foreground",
+		"Bg": "Background"
+	},
+	"Error": {
+		"Fg": "Red"
+	},
+	"Warning": {
+		"Fg": "Yellow"
+	},
+	"Cursor": {
+		"Bg": "Foreground",
+		"Fg": "Background"
+	},
+	"CursorWord": {
+		"Fg": "BrightWhite"
+	},
+	"StateMark": {
+		"Fg": "Yellow"
+	},
+	"Find": {
+		"Bg": "Yellow"
+	},
+	"Selection": {
+		"Bg": "Red"
+	},
+	"StatusLine": {
+		"Bg": "Black"
+	},
+	"LineNum": {
+		"Bg": "Black"
+	},
+	"Whitespace": {
+		"Fg": "BrightBlack"
+	},
+	"Comment": {
+		"Fg": "BrightBlack"
+	},
+	"Keyword": {
+		"Fg": "Blue"
+	},
+	"Number": {
+		"Fg": "Red"
+	},
+	"Operator": {
+		"Fg": "Yellow"
+	},
+	"String": {
+		"Fg": "Green"
+	},
+	"Type": {
+		"Fg": "Yellow"
+	},
+	"Value": {
+		"Fg": "Red"
+	}
+}
