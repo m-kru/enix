@@ -27,6 +27,7 @@ help:
 
 
 # Build targets
+
 all: lint fmt build
 
 build:
@@ -36,14 +37,25 @@ debug:
 	go build -v -gcflags=all="-N -l" -o $(NAME) ./cmd/$(NAME)
 
 # Installation targets
+
 .PHONY: install-bin
 install-bin:
 	cp enix /usr/local/bin
 
+.PHONY: uninstall-bin
 uninstall-bin:
 	rm /usr/local/bin/enix
 
+.PHONY: install
+install:
+	./scripts/install.sh
+
+.PHONY: uninstall
+uninstall:
+	./scripts/uninstall.sh
+
 # Quality targets
+
 fmt:
 	go fmt ./...
 
@@ -51,6 +63,7 @@ lint:
 	golangci-lint run
 
 # Test targets
+
 .PHONY: test-all
 test-all: test test-arg test-cmd test-undo
 
@@ -69,12 +82,3 @@ test-cmd:
 .PHONY: test-undo
 test-undo:
 	@./scripts/test-undo.sh
-
-# Installation targets
-.PHONY: install
-install:
-	cp $(NAME) /usr/bin
-
-.PHONY: uninstall
-uninstall:
-	rm /usr/bin/$(NAME)
