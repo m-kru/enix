@@ -9,18 +9,29 @@
 	"Warning": {
 		"Fg": "Yellow"
 	},
+	"TabBar": {
+		"Bg": "Black"
+	},
+	"CurrentTab": {
+		"Bg": "Black",
+		"Fg": "Cyan"
+	},
+	"LineNum": {
+		"Fg": "BrightBlack"
+	},
+	"Whitespace": {
+		"Fg": "Black"
+	},
 	"Cursor": {
 		"Bg": "Foreground",
 		"Fg": "Background"
 	},
 	"CursorWord": {
-		"Fg": "BrightWhite"
-	},
-	"StateMark": {
-		"Fg": "Yellow"
+		"Fg": "Cyan"
 	},
 	"Find": {
-		"Bg": "Yellow"
+		"Bg": "Yellow",
+		"Fg": "Black"
 	},
 	"Selection": {
 		"Bg": "Red"
@@ -28,17 +39,47 @@
 	"StatusLine": {
 		"Bg": "Black"
 	},
-	"LineNum": {
-		"Bg": "Black"
+	"RepCount": {
+		"Bg": "Black",
+		"Fg": "Red"
 	},
-	"Whitespace": {
+	"StateMark": {
+		"Bg": "Black",
+		"Fg": "Green"
+	},
+	"FindMark": {
+		"Bg": "Black",
+		"Fg": "Yellow"
+	},
+	"Prompt": {
+		"Fg": "White"
+	},
+	"PromptShadow": {
 		"Fg": "BrightBlack"
+	},
+	"Attribute": {
+		"Fg": "Magenta"
+	},
+	"Bold": {
+		"Bold": true
 	},
 	"Comment": {
-		"Fg": "BrightBlack"
+		"Fg": "White"
+	},
+	"Heading": {
+		"Fg": "BrightRed"
+	},
+	"Italic": {
+		"Italic": true
 	},
 	"Keyword": {
-		"Fg": "Blue"
+		"Fg": "BrightBlue"
+	},
+	"Meta": {
+		"Fg": "Magenta"
+	},
+	"Mono": {
+		"Fg": "Magenta"
 	},
 	"Number": {
 		"Fg": "Red"
@@ -54,5 +95,8 @@
 	},
 	"Value": {
 		"Fg": "Red"
+	},
+	"Variable": {
+		"Fg": "BrightRed"
 	}
 }
