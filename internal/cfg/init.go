@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/m-kru/enix/internal/arg"
 
@@ -30,7 +31,11 @@ func Init() error {
 		goto exit
 	}
 
-	if Cfg.Style != "default" {
+	err = initColors()
+	if err != nil {
+		goto exit
+	}
+	if Cfg.Style != "" {
 		Style, err = styleFromJSON(Cfg.Style)
 		if err != nil {
 			goto exit
@@ -98,6 +103,29 @@ func configSanityChecks() error {
 
 	if Cfg.UndoSize < 0 {
 		return fmt.Errorf("UndoSize must be natural, current value %d", Cfg.UndoSize)
+	}
+
+	return nil
+}
+
+func initColors() error {
+	bytes, path, err := ReadConfigFile(filepath.Join("colors", Cfg.Colors+".json"))
+	if err != nil {
+		return err
+	}
+	if path == "" {
+		Colors = DefaultColors()
+		return nil
+	}
+
+	err = json.Unmarshal(bytes, &ColorsJSON)
+	if err != nil {
+		return fmt.Errorf("reading colors from %s: %v", path, err)
+	}
+
+	Colors, err = ColorsJSON.ToColors()
+	if err != nil {
+		return fmt.Errorf("reading colors from file %s: %v", path, err)
 	}
 
 	return nil

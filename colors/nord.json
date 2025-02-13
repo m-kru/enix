@@ -1,45 +1,20 @@
 {
-	"Colors": {
-		"Background": "2E3440",
-		"Foreground": "D8DEE9",
-		"Black": "3B4252",
-		"Red": "BF616A",
-		"Green": "A3BE8C",
-		"Yellow": "EBCB8B",
-		"Blue": "81A1C1",
-		"Magenta": "B48EAD",
-		"Cyan": "88C0D0",
-		"White": "E5E9F0",
-		"BrightBlack": "4C566A",
-		"BrightRed": "BF616A",
-		"BrightGreen": "A3BE8C",
-		"BrightYellow": "EBCB8B",
-		"BrightBlue": "81A1C1",
-		"BrightMagenta": "B48EAD",
-		"BrightCyan": "8FBCBB",
-		"BrightWhite": "ECEFF4"
-	},
-	"Default": {
-		"Fg": "Foreground",
-		"Bg": "Background",
-		"Bold": false,
-		"Italic": false,
-		"Underline": false
-	},
-	"Cursor": {
-		"Bg": "Foreground",
-		"Fg": "Background"
-	},
-	"Error": {
-		"Fg": "Red"
-	},
-	"InsertMark": {
-		"Fg": "Yellow"
-	},
-	"StatusLine": {
-		"Bg": "Black"
-	},
-	"Whitespace": {
-		"Fg": "BrightBlack"
-	}
+	"Background": "2E3440",
+	"Foreground": "D8DEE9",
+	"Black": "3B4252",
+	"Red": "BF616A",
+	"Green": "A3BE8C",
+	"Yellow": "EBCB8B",
+	"Blue": "81A1C1",
+	"Magenta": "B48EAD",
+	"Cyan": "88C0D0",
+	"White": "E5E9F0",
+	"BrightBlack": "4C566A",
+	"BrightRed": "BF616A",
+	"BrightGreen": "A3BE8C",
+	"BrightYellow": "EBCB8B",
+	"BrightBlue": "81A1C1",
+	"BrightMagenta": "B48EAD",
+	"BrightCyan": "8FBCBB",
+	"BrightWhite": "ECEFF4"
 }
