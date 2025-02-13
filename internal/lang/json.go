@@ -142,19 +142,19 @@ func (rj RegionJSON) ToRegion() (*Region, error) {
 	}, nil
 }
 
-func readLangDefFromJSON(lang string) ([]RegionJSON, error) {
-	langsDir := ""
+func readFiletypeDefFromJSON(lang string) ([]RegionJSON, error) {
+	filetypeDir := ""
 	if arg.LangsDir != "" {
-		langsDir = arg.LangsDir
+		filetypeDir = arg.LangsDir
 	}
-	if langsDir == "" {
-		langsDir = path.Join(os.Getenv("ENIX_RC_DIR"), "langs")
+	if filetypeDir == "" {
+		filetypeDir = path.Join(os.Getenv("ENIX_RC_DIR"), "filetype")
 	}
-	if langsDir == "" {
-		langsDir = filepath.Join(cfg.ConfigDir, "langs")
+	if filetypeDir == "" {
+		filetypeDir = filepath.Join(cfg.ConfigDir, "filetype")
 	}
 
-	path := filepath.Join(langsDir, lang+".json")
+	path := filepath.Join(filetypeDir, lang+".json")
 
 	file, err := os.Open(path)
 	if err != nil {
