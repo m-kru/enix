@@ -1,0 +1,104 @@
+{
+	"Default": {
+		"Fg": "Foreground",
+		"Bg": "Background"
+	},
+	"Error": {
+		"Fg": "Red"
+	},
+	"Warning": {
+		"Fg": "Yellow"
+	},
+	"TabBar": {
+		"Bg": "Black"
+	},
+	"CurrentTab": {
+		"Bg": "Black",
+		"Fg": "Cyan"
+	},
+	"LineNum": {
+		"Fg": "BrightBlack"
+	},
+	"Whitespace": {
+		"Fg": "White"
+	},
+	"Cursor": {
+		"Bg": "Foreground",
+		"Fg": "Background"
+	},
+	"CursorWord": {
+		"Fg": "Yellow"
+	},
+	"Find": {
+		"Bg": "Yellow",
+		"Fg": "Black"
+	},
+	"Selection": {
+		"Bg": "Red",
+		"Fg": "Background"
+	},
+	"StatusLine": {
+		"Bg": "White"
+	},
+	"RepCount": {
+		"Bg": "White",
+		"Fg": "Red"
+	},
+	"StateMark": {
+		"Bg": "White",
+		"Bold": true
+	},
+	"FindMark": {
+		"Fg": "Black",
+		"Bg": "Yellow"
+	},
+	"Prompt": {
+		"Fg": "Black"
+	},
+	"PromptShadow": {
+		"Fg": "BrightBlack"
+	},
+	"Attribute": {
+		"Bold": true
+	},
+	"Bold": {
+		"Bold": true
+	},
+	"Comment": {
+		"Fg": "BrightBlack"
+	},
+	"Heading": {
+		"Bold": true
+	},
+	"Italic": {
+		"Italic": true
+	},
+	"Keyword": {
+		"Bold": true
+	},
+	"Meta": {
+		"Bold": true
+	},
+	"Mono": {
+		"Fg": "Magenta"
+	},
+	"Number": {
+		"Fg": "Red"
+	},
+	"Operator": {
+		"Fg": "Yellow"
+	},
+	"String": {
+		"Fg": "Red"
+	},
+	"Type": {
+		"Bold": true
+	},
+	"Value": {
+		"Fg": "Red"
+	},
+	"Variable": {
+		"Fg": "Red",
+		"Bold": true
+	}
+}
