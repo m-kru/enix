@@ -8,7 +8,7 @@
 			"Regex": "\\b(__DATE__|__FILE__|__LINE__|__TIME__|__VA_ARGS__)\\b"
 		},
 		"Keyword": {
-			"Regex": "\\b(break|case|continue|default|do|else|enum|for|goto|if|return|switch|typedef|while)\\b",
+			"Regex": "\\b(break|case|continue|default|do|else|enum|for|goto|if|return|switch|typedef|while|sizeof|typeof)\\b",
 			"NegativeLookBehind": "#"
 		},
 		"Meta": {
@@ -19,7 +19,7 @@
 
 		},
 		"Operator": {
-			"Regex": "=|\\+|-|>|<|\\*|/|&|%|!|\\||~|\\b(sizeof|typeof)\\b"
+			"Regex": "=|\\+|-|>|<|\\*|/|&|%|!|\\||~"
 		},
 		"String": {
 			"Regex": "'.'"
