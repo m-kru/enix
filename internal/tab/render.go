@@ -71,13 +71,13 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 	if tab.RepCount != 0 {
 		b.WriteString(fmt.Sprintf("%d ", tab.RepCount))
 	}
-	repCountEndIdx := b.Len()
+	repCountEndIdx := b.Len() - 1
 
 	stateStartIdx := b.Len()
 	if tab.State != "" {
 		b.WriteString(fmt.Sprintf("%s ", tab.State))
 	}
-	stateEndIdx := b.Len()
+	stateEndIdx := b.Len() - 1
 
 	findStartIdx := b.Len()
 	if tab.SearchCtx.Regexp != nil {
@@ -87,7 +87,7 @@ func (tab *Tab) RenderStatusLine(frame frame.Frame) {
 			b.WriteString(fmt.Sprintf("%d finds ", len(tab.SearchCtx.Finds)))
 		}
 	}
-	findEndIdx := b.Len()
+	findEndIdx := b.Len() - 1
 
 	var c *cursor.Cursor
 	if len(tab.Cursors) > 0 {
