@@ -30,7 +30,7 @@
 		"Fg": "Yellow"
 	},
 	"Find": {
-		"Bg": "Yellow",
+		"Bg": "BrightYellow",
 		"Fg": "Black"
 	},
 	"Selection": {
@@ -50,7 +50,7 @@
 	},
 	"FindMark": {
 		"Fg": "Black",
-		"Bg": "Yellow"
+		"Bg": "BrightYellow"
 	},
 	"Prompt": {
 		"Fg": "Black"
