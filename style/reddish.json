@@ -10,11 +10,13 @@
 		"Fg": "Yellow"
 	},
 	"TabBar": {
-		"Bg": "Black"
+		"Bg": "White",
+		"Fg": "Black"
 	},
 	"CurrentTab": {
-		"Bg": "Black",
-		"Fg": "Cyan"
+		"Bg": "White",
+		"Fg": "Black",
+		"Bold": true
 	},
 	"LineNum": {
 		"Fg": "BrightBlack"
