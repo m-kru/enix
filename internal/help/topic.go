@@ -92,6 +92,12 @@ LineEndRune : int
   Line end rune.
   Unfortunately, the value type is int, so the rune is not visible in the config file.
 
+MouseScrollMultiplier : int
+  The setting is required because various terminal emulators generate different number of scroll events on a single mouse scroll.
+  Changing the value allows user to adjust how many lines or columns are scrolled on a single mouse scroll.
+  Setting 0 disables mouse scrolling functionality.
+  The default value equals 5.
+
 TabPadRune : int
   Tab padding rune.
   Unfortunately, the value type is int, so the rune is not visible in the config file.

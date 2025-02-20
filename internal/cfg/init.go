@@ -102,6 +102,10 @@ func configSanityChecks() error {
 		return fmt.Errorf("UndoSize must be natural, current value %d", Cfg.UndoSize)
 	}
 
+	if Cfg.MouseScrollMultiplier < 0 {
+		return fmt.Errorf("MouseScrollMultiplier must be natural, current value %d", Cfg.MouseScrollMultiplier)
+	}
+
 	return nil
 }
 

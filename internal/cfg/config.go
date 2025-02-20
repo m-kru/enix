@@ -19,6 +19,8 @@ type Config struct {
 	TabRune     rune
 	TabPadRune  rune
 
+	MouseScrollMultiplier int
+
 	UndoSize int // Undo and Redo stack size
 
 	Indent     map[string]string
@@ -27,16 +29,17 @@ type Config struct {
 
 func DefaultConfig() Config {
 	return Config{
-		Colors:              "",
-		Style:               "",
-		AutoSave:            0,
-		TrimOnSave:          true,
-		SafeFileSave:        true,
-		HighlightCursorWord: true,
-		LineEndRune:         '¬',
-		TabRune:             '▸',
-		TabPadRune:          '·',
-		UndoSize:            1024,
+		Colors:                "",
+		Style:                 "",
+		AutoSave:              0,
+		TrimOnSave:            true,
+		SafeFileSave:          true,
+		HighlightCursorWord:   true,
+		LineEndRune:           '¬',
+		TabRune:               '▸',
+		TabPadRune:            '·',
+		MouseScrollMultiplier: 5,
+		UndoSize:              1024,
 		Indent: map[string]string{
 			"fbdl":   "  ",
 			"python": "    ",

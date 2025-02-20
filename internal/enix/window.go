@@ -58,19 +58,19 @@ func (w *window) RxMouseEvent(ev mouse.Event) {
 	case mouse.PrimaryClickCtrl:
 		w.CurrentTab.PrimaryClickCtrl(x, y)
 	case mouse.WheelDown:
-		for range 5 {
+		for range cfg.Cfg.MouseScrollMultiplier {
 			w.CurrentTab.ViewDown()
 		}
 	case mouse.WheelUp:
-		for range 5 {
+		for range cfg.Cfg.MouseScrollMultiplier {
 			w.CurrentTab.ViewUp()
 		}
 	case mouse.WheelLeft:
-		for range 5 {
+		for range cfg.Cfg.MouseScrollMultiplier {
 			w.CurrentTab.ViewLeft()
 		}
 	case mouse.WheelRight:
-		for range 5 {
+		for range cfg.Cfg.MouseScrollMultiplier {
 			w.CurrentTab.ViewRight()
 		}
 	}
