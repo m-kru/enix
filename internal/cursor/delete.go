@@ -58,7 +58,11 @@ func (c *Cursor) Backspace() action.Action {
 
 	r := c.Line.DeleteRune(c.RuneIdx - 1)
 	c.RuneIdx--
-	c.colIdx -= runewidth.RuneWidth(r)
+	if r == '\t' {
+		c.colIdx = c.Line.ColumnIdx(c.RuneIdx)
+	} else {
+		c.colIdx -= runewidth.RuneWidth(r)
+	}
 
 	return &action.RuneDelete{Line: c.Line, Rune: r, RuneIdx: c.RuneIdx}
 }

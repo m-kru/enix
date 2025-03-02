@@ -43,7 +43,11 @@ func (c *Cursor) InsertNewline(indent bool) action.Actions {
 func (c *Cursor) InsertRune(r rune) *action.RuneInsert {
 	c.Line.InsertRune(r, c.RuneIdx)
 	c.RuneIdx++
-	c.colIdx += runewidth.RuneWidth(r)
+	if r == '\t' {
+		c.colIdx = c.Line.ColumnIdx(c.RuneIdx)
+	} else {
+		c.colIdx += runewidth.RuneWidth(r)
+	}
 	return &action.RuneInsert{Line: c.Line, Rune: r, RuneIdx: c.RuneIdx - 1}
 }
 
