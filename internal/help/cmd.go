@@ -1,5 +1,10 @@
 package help
 
+import (
+	"slices"
+	"strings"
+)
+
 var Commands = map[string]string{
 
 	// Command
@@ -369,4 +374,19 @@ If the second is absent, it is assumed to be the current tab.`,
 	"view-up": "view-up # Scrolls the view up by one line.",
 
 	"view-up-half": "view-up-half # Scrolls the view up by half of the screen height.",
+}
+
+func GetCommandNames(prefix string) []string {
+	cmds := make([]string, 0, len(Commands))
+
+	for name := range Commands {
+		if prefix != "" && !strings.HasPrefix(name, prefix) {
+			continue
+		}
+		cmds = append(cmds, name)
+	}
+
+	slices.Sort(cmds)
+
+	return cmds
 }

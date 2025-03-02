@@ -19,6 +19,10 @@ func (v View) LastLine() int {
 	return v.Line + v.Height - 1
 }
 
+func (v View) IsColumnVisible(c int) bool {
+	return v.Column <= c && c < v.Column+v.Width
+}
+
 func (v View) IsVisible(v2 View) bool {
 	if v2.LastColumn() < v.Column ||
 		v2.Column > v.LastColumn() ||

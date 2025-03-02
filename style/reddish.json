@@ -60,6 +60,15 @@
 	"PromptShadow": {
 		"Fg": "BrightBlack"
 	},
+	"Menu": {
+		"Bg": "Black",
+		"Fg": "BrightWhite"
+	},
+	"MenuItem": {
+		"Bg": "BrightBlack",
+		"Fg": "BrightWhite",
+		"Bold": true
+	},
 	"Attribute": {
 		"Bold": true
 	},

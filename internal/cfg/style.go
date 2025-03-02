@@ -57,6 +57,8 @@ type styleJSON struct {
 	FindMark     itemStyle
 	Prompt       itemStyle
 	PromptShadow itemStyle
+	Menu         itemStyle
+	MenuItem     itemStyle
 	Attribute    itemStyle
 	Bold         itemStyle
 	Comment      itemStyle
@@ -163,6 +165,16 @@ func (sj styleJSON) ToStyle() (style, error) {
 	}
 	s.PromptShadow = ts
 
+	if ts, err = sj.Menu.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.Menu = ts
+
+	if ts, err = sj.MenuItem.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.MenuItem = ts
+
 	// Syntax highlighting
 
 	if ts, err = sj.Attribute.ToTcellStyle(s.Default); err != nil {
@@ -254,7 +266,7 @@ type style struct {
 	Whitespace tcell.Style
 
 	Cursor     tcell.Style
-	CursorWord tcell.Style // Color of the word under cursor
+	CursorWord tcell.Style // Style of the word under cursor
 
 	Find      tcell.Style
 	Selection tcell.Style
@@ -266,6 +278,9 @@ type style struct {
 
 	Prompt       tcell.Style
 	PromptShadow tcell.Style
+
+	Menu     tcell.Style
+	MenuItem tcell.Style // Menu selected item
 
 	// Syntax highlighting
 	Attribute tcell.Style
@@ -354,6 +369,9 @@ func DefaultStyle() style {
 
 		Prompt:       tcell.StyleDefault.Foreground(tcell.ColorWhite),
 		PromptShadow: tcell.StyleDefault.Foreground(tcell.ColorGray),
+
+		Menu:     tcell.StyleDefault.Reverse(true),
+		MenuItem: tcell.StyleDefault.Bold(true),
 
 		Attribute: tcell.StyleDefault.Foreground(tcell.ColorTeal),
 		Bold:      tcell.StyleDefault.Bold(true),

@@ -5,13 +5,18 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode/utf8"
 
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cmd"
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/exec"
 	"github.com/m-kru/enix/internal/frame"
+	"github.com/m-kru/enix/internal/help"
 	"github.com/m-kru/enix/internal/line"
+	"github.com/m-kru/enix/internal/menu"
+	"github.com/m-kru/enix/internal/mouse"
+	enixTcell "github.com/m-kru/enix/internal/tcell"
 	"github.com/m-kru/enix/internal/util"
 	"github.com/m-kru/enix/internal/view"
 
@@ -24,10 +29,13 @@ const (
 	InText PromptState = iota
 	InShadow
 	InError
+	InCmdMenu
+	InPathMenu
 	TabReloadQuestion
 )
 
 var Prompt prompt
+var PromptMenu *menu.Menu
 
 // Prompt represents command line prompt.
 type prompt struct {
@@ -53,6 +61,11 @@ func (p *prompt) Clear() {
 	}
 	p.Screen.HideCursor()
 	p.Screen.Show()
+
+	if PromptMenu != nil {
+		PromptMenu = nil
+		Window.Height++
+	}
 }
 
 func (p *prompt) ShowError(msg string) {
@@ -161,6 +174,10 @@ func (p *prompt) Render() {
 	}
 
 	p.Cursor.Render(p.Frame.Line(1, 0), p.View)
+
+	if PromptMenu != nil {
+		PromptMenu.Render()
+	}
 
 	p.Screen.Show()
 }
@@ -282,6 +299,95 @@ func (p *prompt) Enter() TcellEventReceiver {
 	return p.Exec()
 }
 
+func (p *prompt) closeMenu() {
+	PromptMenu = nil
+	Window.Height++
+	Window.Render()
+	p.State = InText
+}
+
+func (p *prompt) openMenu(itemNames []string) {
+	frame := frame.Frame{
+		Screen: p.Screen,
+		X:      0,
+		Y:      p.Frame.Y - 1,
+		Width:  p.Frame.Width,
+		Height: 1,
+	}
+	Window.PromptMenuFrame = frame
+
+	PromptMenu = menu.New(
+		frame, itemNames, 0, cfg.Style.Menu, cfg.Style.MenuItem,
+	)
+
+	Window.Height--
+	Window.Render()
+}
+
+func (p *prompt) HandleBacktab() {
+	if p.State == InCmdMenu {
+		p.HandleBacktabCmdMenu()
+		return
+	} else if p.State == InPathMenu {
+		//p.HandleBacktabPathMenu()
+		return
+	}
+}
+
+func (p *prompt) HandleBacktabCmdMenu() {
+	_, text := PromptMenu.Prev()
+	p.Line, _ = line.FromString(text)
+	p.Cursor = cursor.New(p.Line, 1, len(text))
+}
+
+func (p *prompt) HandleTab() {
+	if p.State == InCmdMenu {
+		p.HandleTabCmdMenu()
+		return
+	} else if p.State == InPathMenu {
+		//p.HandleTabPathMenu()
+		return
+	}
+
+	if PromptMenu != nil {
+		_, text := PromptMenu.Next()
+		p.Line, _ = line.FromString(text)
+		p.Cursor = cursor.New(p.Line, 1, len(text))
+		return
+	}
+
+	if p.State == InShadow {
+		p.ShadowText = ""
+		p.State = InText
+	}
+
+	fields := strings.Fields(p.Line.String())
+	if len(fields) == 0 || (len(fields) == 1 && p.Cursor.RuneIdx == utf8.RuneCountInString(fields[0])) {
+		prefix := ""
+		if len(fields) > 0 {
+			prefix = fields[0]
+		}
+
+		itemNames := help.GetCommandNames(prefix)
+		if len(itemNames) == 0 {
+			return
+		}
+
+		p.openMenu(itemNames)
+		p.State = InCmdMenu
+
+		text := itemNames[0]
+		p.Line, _ = line.FromString(text)
+		p.Cursor = cursor.New(p.Line, 1, len(text))
+	}
+}
+
+func (p *prompt) HandleTabCmdMenu() {
+	_, text := PromptMenu.Next()
+	p.Line, _ = line.FromString(text)
+	p.Cursor = cursor.New(p.Line, 1, len(text))
+}
+
 func (p *prompt) HandleRune(r rune) {
 	switch p.State {
 	case InShadow:
@@ -291,6 +397,21 @@ func (p *prompt) HandleRune(r rune) {
 	case InText:
 		p.Cursor.InsertRune(r)
 	}
+}
+
+func (p *prompt) RxMouseEvent(ev mouse.Event) {
+	var text string
+
+	if Window.PromptMenuFrame.Within(ev.X(), ev.Y()) {
+		_, text = PromptMenu.RxMouseEvent(ev)
+	}
+
+	if p.State == InCmdMenu {
+		p.Line, _ = line.FromString(text)
+		p.Cursor = cursor.New(p.Line, 1, len(text))
+	}
+
+	p.Render()
 }
 
 func (p *prompt) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
@@ -303,6 +424,18 @@ func (p *prompt) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 		Window.Resize()
 		Window.Render()
 	case *tcell.EventKey:
+		// Code responsible for catching events related to menu handling
+		keyName := enixTcell.EventKeyName(ev)
+		if keyName == "Tab" {
+			p.HandleTab()
+			break
+		} else if keyName == "Backtab" {
+			p.HandleBacktab()
+			break
+		} else if p.State == InCmdMenu || p.State == InPathMenu {
+			p.closeMenu()
+		}
+
 		cmd, err := cfg.KeysPrompt.ToCmd(ev)
 		if err != nil {
 			p.ShowError(fmt.Sprintf("%v", err))

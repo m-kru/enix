@@ -31,12 +31,17 @@ type window struct {
 	TabBarFrame frame.Frame
 	TabFrame    frame.Frame
 
+	PromptMenuFrame frame.Frame
+
 	Tabs       *tab.Tab // First tab
 	CurrentTab *tab.Tab
 }
 
 func (w *window) RxMouseEvent(ev mouse.Event) {
-	if w.TabBarFrame.Within(ev.X(), ev.Y()) {
+	x := ev.X()
+	y := ev.Y()
+
+	if w.TabBarFrame.Within(x, y) {
 		newCurrentTab := tabbar.RxMouseEvent(ev)
 		if newCurrentTab != nil {
 			Window.CurrentTab = newCurrentTab
@@ -44,11 +49,16 @@ func (w *window) RxMouseEvent(ev mouse.Event) {
 		return
 	}
 
-	if !w.TabFrame.Within(ev.X(), ev.Y()) {
+	if w.PromptMenuFrame.Within(x, y) {
+		Prompt.RxMouseEvent(ev)
 		return
 	}
 
-	x, y := w.TabFrame.ToFramePosition(ev.X(), ev.Y())
+	if !w.TabFrame.Within(x, y) {
+		return
+	}
+
+	x, y = w.TabFrame.ToFramePosition(ev.X(), ev.Y())
 
 	switch ev.(type) {
 	case mouse.PrimaryClick:
@@ -475,13 +485,14 @@ func Start() {
 	width, height := screen.Size()
 
 	Window = window{
-		Screen:      screen,
-		Width:       width,
-		Height:      height - 1, // One line for prompt
-		TabBarFrame: frame.Frame{Screen: screen, X: 0, Y: 0, Width: 0, Height: 0},
-		TabFrame:    frame.Frame{Screen: screen, X: 0, Y: 0, Width: width, Height: height},
-		Tabs:        nil,
-		CurrentTab:  nil,
+		Screen:          screen,
+		Width:           width,
+		Height:          height - 1, // One line for prompt
+		TabBarFrame:     frame.Frame{Screen: screen, X: 0, Y: 0, Width: 0, Height: 0},
+		TabFrame:        frame.Frame{Screen: screen, X: 0, Y: 0, Width: width, Height: height},
+		PromptMenuFrame: frame.Frame{Screen: screen, X: 0, Y: 0, Width: 0, Height: 0},
+		Tabs:            nil,
+		CurrentTab:      nil,
 	}
 
 	Prompt = prompt{
