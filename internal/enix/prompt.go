@@ -14,7 +14,6 @@ import (
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/help"
 	"github.com/m-kru/enix/internal/line"
-	"github.com/m-kru/enix/internal/menu"
 	"github.com/m-kru/enix/internal/mouse"
 	enixTcell "github.com/m-kru/enix/internal/tcell"
 	"github.com/m-kru/enix/internal/util"
@@ -35,7 +34,7 @@ const (
 )
 
 var Prompt prompt
-var PromptMenu *menu.Menu
+var PromptMenu *menu
 
 // Prompt represents command line prompt.
 type prompt struct {
@@ -301,26 +300,18 @@ func (p *prompt) Enter() TcellEventReceiver {
 
 func (p *prompt) closeMenu() {
 	PromptMenu = nil
-	Window.Height++
+	Window.StatusLineFrame.Y++
 	Window.Render()
 	p.State = InText
 }
 
 func (p *prompt) openMenu(itemNames []string) {
-	frame := frame.Frame{
-		Screen: p.Screen,
-		X:      0,
-		Y:      p.Frame.Y - 1,
-		Width:  p.Frame.Width,
-		Height: 1,
-	}
-	Window.PromptMenuFrame = frame
+	Window.PromptMenuFrame = Window.StatusLineFrame
+	Window.StatusLineFrame.Y--
+	Window.TabFrame.Height--
 
-	PromptMenu = menu.New(
-		frame, itemNames, 0, cfg.Style.Menu, cfg.Style.MenuItem,
-	)
+	PromptMenu = newMenu(itemNames)
 
-	Window.Height--
 	Window.Render()
 }
 

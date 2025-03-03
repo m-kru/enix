@@ -28,9 +28,9 @@ type window struct {
 	Width  int
 	Height int
 
-	TabBarFrame frame.Frame
-	TabFrame    frame.Frame
-
+	TabBarFrame     frame.Frame
+	TabFrame        frame.Frame
+	StatusLineFrame frame.Frame
 	PromptMenuFrame frame.Frame
 
 	Tabs       *tab.Tab // First tab
@@ -381,7 +381,7 @@ func (w *window) Resize() {
 	width, height := w.Screen.Size()
 
 	w.Width = width
-	w.Height = height - 1
+	w.Height = height
 
 	Prompt.Frame = frame.Frame{
 		Screen: w.Screen,
@@ -398,7 +398,7 @@ func (w *window) Render() {
 		X:      0,
 		Y:      0,
 		Width:  w.Width,
-		Height: w.Height,
+		Height: w.Height - 2, // Minus status line and prompt line
 	}
 
 	// Tab bar
@@ -419,6 +419,7 @@ func (w *window) Render() {
 	}
 
 	w.CurrentTab.Render()
+	renderStatusLine(w.StatusLineFrame, w.CurrentTab)
 
 	w.Screen.Show()
 }
@@ -487,9 +488,10 @@ func Start() {
 	Window = window{
 		Screen:          screen,
 		Width:           width,
-		Height:          height - 1, // One line for prompt
+		Height:          height,
 		TabBarFrame:     frame.Frame{Screen: screen, X: 0, Y: 0, Width: 0, Height: 0},
 		TabFrame:        frame.Frame{Screen: screen, X: 0, Y: 0, Width: width, Height: height},
+		StatusLineFrame: frame.Frame{Screen: screen, X: 0, Y: height - 2, Width: width, Height: 1},
 		PromptMenuFrame: frame.Frame{Screen: screen, X: 0, Y: 0, Width: 0, Height: 0},
 		Tabs:            nil,
 		CurrentTab:      nil,

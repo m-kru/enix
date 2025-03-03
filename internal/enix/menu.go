@@ -1,51 +1,36 @@
-package menu
+package enix
 
 import (
 	"unicode/utf8"
 
-	"github.com/m-kru/enix/internal/frame"
+	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/highlight"
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/mouse"
 	"github.com/m-kru/enix/internal/view"
-
-	"github.com/gdamore/tcell/v2"
 )
 
-type item struct {
+type menuItem struct {
 	name     string
 	startIdx int
 	endIdx   int
 }
 
-type Menu struct {
-	lFrame frame.Frame // Left arrow frame
-	iFrame frame.Frame // Items frame
-	rFrame frame.Frame // Right arrow frame
-
-	items       []item
+type menu struct {
+	items       []menuItem
 	currItemIdx int // Current item index
 
 	line *line.Line
 	view view.View
-
-	style         tcell.Style
-	currItemStyle tcell.Style // Current item style
 }
 
-func New(
-	frame frame.Frame,
-	itemNames []string,
-	currItemIdx int,
-	style tcell.Style,
-	currItemStyle tcell.Style,
-) *Menu {
+func newMenu(itemNames []string) *menu {
 	// Create line and item list
-	items := make([]item, len(itemNames))
+	items := make([]menuItem, len(itemNames))
 	line, _ := line.FromString("")
 	rIdx := 0
 	for x, name := range itemNames {
-		it := item{
+		it := menuItem{
 			name:     name,
 			startIdx: rIdx,
 			endIdx:   0,
@@ -65,39 +50,30 @@ func New(
 		items[x] = it
 	}
 
-	lFrame := frame.ColumnSubframe(frame.X, 2)
-	iFrame := frame.ColumnSubframe(frame.X+2, frame.Width-4)
-	rFrame := frame.ColumnSubframe(frame.LastX()-1, 2)
-
 	view := view.View{
 		Line:   1,
 		Column: 1,
 		Height: 1,
-		Width:  iFrame.Width,
+		Width:  Window.PromptMenuFrame.Width - 4,
 	}
 
-	return &Menu{
-		lFrame:        lFrame,
-		iFrame:        iFrame,
-		rFrame:        rFrame,
-		items:         items,
-		currItemIdx:   currItemIdx,
-		line:          line,
-		view:          view,
-		style:         style,
-		currItemStyle: currItemStyle,
+	return &menu{
+		items:       items,
+		currItemIdx: 0,
+		line:        line,
+		view:        view,
 	}
 }
 
-func (menu *Menu) CurrentItemIdx() int {
+func (menu *menu) CurrentItemIdx() int {
 	return menu.currItemIdx
 }
 
-func (menu *Menu) CurrentItemName() string {
+func (menu *menu) CurrentItemName() string {
 	return menu.items[menu.currItemIdx].name
 }
 
-func (menu *Menu) updateView() {
+func (menu *menu) updateView() {
 	item := menu.items[menu.currItemIdx]
 	sIdx := item.startIdx
 	eIdx := item.endIdx
@@ -126,7 +102,7 @@ func (menu *Menu) updateView() {
 
 // Next goes to the next item.
 // If current item is the last one, then it wraps to the first item.
-func (menu *Menu) Next() (int, string) {
+func (menu *menu) Next() (int, string) {
 	menu.currItemIdx++
 	if menu.currItemIdx == len(menu.items) {
 		menu.currItemIdx = 0
@@ -140,7 +116,7 @@ func (menu *Menu) Next() (int, string) {
 
 // Prev goes to the previous item.
 // If current item is the first one, then it wraps to the last item.
-func (menu *Menu) Prev() (int, string) {
+func (menu *menu) Prev() (int, string) {
 	menu.currItemIdx--
 	if menu.currItemIdx < 0 {
 		menu.currItemIdx = len(menu.items) - 1
@@ -154,15 +130,20 @@ func (menu *Menu) Prev() (int, string) {
 
 // RxMouseEvent handles mouse event.
 // Returned values are the current item index and name.
-func (menu *Menu) RxMouseEvent(ev mouse.Event) (int, string) {
+func (menu *menu) RxMouseEvent(ev mouse.Event) (int, string) {
+	frame := Window.PromptMenuFrame
+	lFrame := frame.ColumnSubframe(frame.X, 2)
+	iFrame := frame.ColumnSubframe(frame.X+2, frame.Width-4)
+	rFrame := frame.ColumnSubframe(frame.LastX()-1, 2)
+
 	switch ev.(type) {
 	case mouse.PrimaryClick, mouse.DoublePrimaryClick, mouse.TriplePrimaryClick:
-		if menu.lFrame.Within(ev.X(), ev.Y()) {
+		if lFrame.Within(ev.X(), ev.Y()) {
 			menu.viewLeft()
-		} else if menu.rFrame.Within(ev.X(), ev.Y()) {
+		} else if rFrame.Within(ev.X(), ev.Y()) {
 			menu.viewRight()
 		} else {
-			menu.clickItemsFrame(ev.X() - menu.iFrame.X)
+			menu.clickItemsFrame(ev.X() - iFrame.X)
 		}
 	case mouse.WheelDown:
 		menu.viewRight()
@@ -174,7 +155,7 @@ func (menu *Menu) RxMouseEvent(ev mouse.Event) (int, string) {
 	return idx, menu.items[idx].name
 }
 
-func (menu *Menu) clickItemsFrame(x int) {
+func (menu *menu) clickItemsFrame(x int) {
 	rIdx, _, ok := menu.line.RuneIdx(menu.view.Column + x)
 	if !ok {
 		return
@@ -188,13 +169,13 @@ func (menu *Menu) clickItemsFrame(x int) {
 	}
 }
 
-func (menu *Menu) viewLeft() {
+func (menu *menu) viewLeft() {
 	for range 2 {
 		menu.view = menu.view.Left()
 	}
 }
 
-func (menu *Menu) viewRight() {
+func (menu *menu) viewRight() {
 	lineCols := menu.line.Columns()
 	for range 2 {
 		if menu.view.LastColumn() >= lineCols {
@@ -204,7 +185,7 @@ func (menu *Menu) viewRight() {
 	}
 }
 
-func (menu *Menu) Render() {
+func (menu *menu) Render() {
 	currItem := menu.items[menu.currItemIdx]
 	line := menu.line
 
@@ -213,48 +194,57 @@ func (menu *Menu) Render() {
 			LineNum:      1,
 			StartRuneIdx: 0,
 			EndRuneIdx:   currItem.startIdx,
-			Style:        menu.style,
+			Style:        cfg.Style.Menu,
 		},
 		highlight.Highlight{
 			LineNum:      1,
 			StartRuneIdx: currItem.startIdx,
 			EndRuneIdx:   currItem.endIdx,
-			Style:        menu.currItemStyle,
+			Style:        cfg.Style.MenuItem,
 		},
 		highlight.Highlight{
 			LineNum:      1,
 			StartRuneIdx: currItem.endIdx,
 			EndRuneIdx:   line.RuneCount(),
-			Style:        menu.style,
+			Style:        cfg.Style.Menu,
 		},
 	}
 
-	iFrame := menu.iFrame
+	frame := Window.PromptMenuFrame
+	iFrame := frame.ColumnSubframe(frame.X+2, frame.Width-4)
 	line.Render(1, iFrame, menu.view, hls, nil)
 
 	// Fill missing space
 	for x := line.Columns(); x < iFrame.Width; x++ {
-		iFrame.SetContent(x, 0, ' ', menu.style)
+		iFrame.SetContent(x, 0, ' ', cfg.Style.Menu)
 	}
 
 	menu.renderLeftArrow()
 	menu.renderRightArrow()
 }
 
-func (menu *Menu) renderLeftArrow() {
+func (menu *menu) renderLeftArrow() {
+	frame := Window.PromptMenuFrame
+	frame = frame.ColumnSubframe(frame.X, 2)
+
 	r := ' '
 	if menu.view.Column > 1 {
 		r = '<'
 	}
-	menu.lFrame.SetContent(0, 0, r, menu.style)
-	menu.lFrame.SetContent(1, 0, ' ', menu.style)
+
+	frame.SetContent(0, 0, r, cfg.Style.Menu)
+	frame.SetContent(1, 0, ' ', cfg.Style.Menu)
 }
 
-func (menu *Menu) renderRightArrow() {
-	menu.rFrame.SetContent(0, 0, ' ', menu.style)
+func (menu *menu) renderRightArrow() {
+	frame := Window.PromptMenuFrame
+	frame = frame.ColumnSubframe(frame.LastX()-1, 2)
+
 	r := ' '
 	if menu.view.LastColumn() < menu.line.Columns() {
 		r = '>'
 	}
-	menu.rFrame.SetContent(1, 0, r, menu.style)
+
+	frame.SetContent(0, 0, ' ', cfg.Style.Menu)
+	frame.SetContent(1, 0, r, cfg.Style.Menu)
 }
