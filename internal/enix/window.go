@@ -22,18 +22,16 @@ import (
 var Screen tcell.Screen
 var Window window
 
+// Frames
+var TabBarFrame frame.Frame
+var TabFrame frame.Frame
+var StatusLineFrame frame.Frame
+var PromptMenuFrame frame.Frame
+var PromptFrame frame.Frame
+
 var autoSaveTicker *time.Ticker
 
 type window struct {
-	Width  int
-	Height int
-
-	TabBarFrame     frame.Frame
-	TabFrame        frame.Frame
-	StatusLineFrame frame.Frame
-	PromptMenuFrame frame.Frame
-	PromptFrame     frame.Frame
-
 	Tabs       *tab.Tab // First tab
 	CurrentTab *tab.Tab
 }
@@ -42,7 +40,7 @@ func (w *window) RxMouseEvent(ev mouse.Event) {
 	x := ev.X()
 	y := ev.Y()
 
-	if w.TabBarFrame.Within(x, y) {
+	if TabBarFrame.Within(x, y) {
 		newCurrentTab := tabbar.RxMouseEvent(ev)
 		if newCurrentTab != nil {
 			Window.CurrentTab = newCurrentTab
@@ -50,16 +48,16 @@ func (w *window) RxMouseEvent(ev mouse.Event) {
 		return
 	}
 
-	if w.PromptMenuFrame.Within(x, y) {
+	if PromptMenuFrame.Within(x, y) {
 		Prompt.RxMouseEvent(ev)
 		return
 	}
 
-	if !w.TabFrame.Within(x, y) {
+	if !TabFrame.Within(x, y) {
 		return
 	}
 
-	x, y = w.TabFrame.ToFramePosition(ev.X(), ev.Y())
+	x, y = TabFrame.ToFramePosition(ev.X(), ev.Y())
 
 	switch ev.(type) {
 	case mouse.PrimaryClick:
@@ -378,62 +376,59 @@ func (w *window) RxDigit(digit rune) TcellEventReceiver {
 func (w *window) Resize() {
 	Screen.Fill(' ', cfg.Style.Default)
 	Screen.Sync()
-
-	width, height := Screen.Size()
-
-	w.Width = width
-	w.Height = height
 }
 
 // Do not rerender tab if focus is on the prompt.
 // This reduces responsiveness in the case of large files.
 func (w *window) Render(renderTab bool) {
-	w.TabFrame = frame.Frame{
+	width, height := Screen.Size()
+
+	TabFrame = frame.Frame{
 		Screen: Screen,
 		X:      0,
 		Y:      0,
-		Width:  w.Width,
-		Height: w.Height - 2, // Minus status line and prompt line
+		Width:  width,
+		Height: height - 2, // Minus status line and prompt line
 	}
 
-	w.StatusLineFrame = frame.Frame{
+	StatusLineFrame = frame.Frame{
 		Screen: Screen,
 		X:      0,
-		Y:      w.Height - 2,
-		Width:  w.Width,
+		Y:      height - 2,
+		Width:  width,
 		Height: 1,
 	}
 
 	if PromptMenu != nil {
-		w.PromptMenuFrame = Window.StatusLineFrame
-		w.StatusLineFrame.Y--
-		Window.TabFrame.Height--
+		PromptMenuFrame = StatusLineFrame
+		StatusLineFrame.Y--
+		TabFrame.Height--
 	}
 
 	// Tab bar
 	if w.Tabs.Count() > 1 {
-		w.TabFrame.Y++
-		w.TabFrame.Height--
+		TabFrame.Y++
+		TabFrame.Height--
 		f := frame.Frame{
 			Screen: Screen,
 			X:      0,
 			Y:      0,
-			Width:  w.Width,
+			Width:  width,
 			Height: 1,
 		}
 		tabbar.SetFrame(f)
 		tabbar.Update(w.Tabs, w.CurrentTab)
 		tabbar.Render(w.CurrentTab)
-		w.TabBarFrame = f
+		TabBarFrame = f
 	} else {
-		w.TabBarFrame = frame.NilFrame()
+		TabBarFrame = frame.NilFrame()
 	}
 
-	w.PromptFrame = frame.Frame{
+	PromptFrame = frame.Frame{
 		Screen: Screen,
 		X:      0,
-		Y:      w.Height - 1,
-		Width:  w.Width,
+		Y:      height - 1,
+		Width:  width,
 		Height: 1,
 	}
 
@@ -450,7 +445,7 @@ func (w *window) OpenArgFiles() {
 	errMsg := ""
 
 	for _, file := range arg.Files {
-		t, err := tab.Open(&w.TabFrame, file)
+		t, err := tab.Open(&TabFrame, file)
 		if t != nil {
 			if w.Tabs == nil {
 				w.Tabs = t
@@ -470,7 +465,7 @@ func (w *window) OpenArgFiles() {
 	}
 
 	if len(errMsg) > 0 {
-		errTab := tab.FromString(&w.TabFrame, errMsg, "error.enix")
+		errTab := tab.FromString(&TabFrame, errMsg, "error.enix")
 		if w.Tabs == nil {
 			w.Tabs = errTab
 		} else {
@@ -508,17 +503,16 @@ func Start() {
 
 	width, height := Screen.Size()
 
+	TabBarFrame = frame.NilFrame()
+	TabFrame = frame.Frame{Screen: Screen, X: 0, Y: 0, Width: width, Height: height - 2}
+	StatusLineFrame = frame.NilFrame()
+	PromptMenuFrame = frame.NilFrame()
+	PromptFrame = frame.NilFrame()
+
 	// TabFrame must be initialized to correctly center view of opened file
 	Window = window{
-		Width:           width,
-		Height:          height,
-		TabBarFrame:     frame.NilFrame(),
-		TabFrame:        frame.Frame{Screen: Screen, X: 0, Y: 0, Width: width, Height: height - 2},
-		StatusLineFrame: frame.NilFrame(),
-		PromptMenuFrame: frame.NilFrame(),
-		PromptFrame:     frame.NilFrame(),
-		Tabs:            nil,
-		CurrentTab:      nil,
+		Tabs:       nil,
+		CurrentTab: nil,
 	}
 
 	Prompt = prompt{
@@ -532,7 +526,7 @@ func Start() {
 	}
 
 	if len(arg.Files) == 0 {
-		Window.Tabs = tab.FromString(&Window.TabFrame, "", "no-name")
+		Window.Tabs = tab.FromString(&TabFrame, "", "no-name")
 		Window.CurrentTab = Window.Tabs
 	} else {
 		Window.OpenArgFiles()
@@ -582,7 +576,7 @@ func Start() {
 		case <-changeWatcher.C:
 			tab := Window.CurrentTab
 			if tab.ModTime.Compare(util.FileModTime(tab.Path)) < 0 {
-				Prompt.AskTabReload(Window.PromptFrame)
+				Prompt.AskTabReload(PromptFrame)
 				tcellEvRcvr = &Prompt
 			}
 		case <-autoSaveTicker.C:

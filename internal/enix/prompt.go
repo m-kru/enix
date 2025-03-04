@@ -52,7 +52,7 @@ type prompt struct {
 }
 
 func (p *prompt) Clear() {
-	frame := Window.PromptFrame
+	frame := PromptFrame
 
 	for x := range frame.Width {
 		frame.SetContent(x, 0, ' ', cfg.Style.Default)
@@ -66,7 +66,7 @@ func (p *prompt) Clear() {
 }
 
 func (p *prompt) ShowError(msg string) {
-	frame := Window.PromptFrame
+	frame := PromptFrame
 
 	x := 0
 	for _, r := range msg {
@@ -90,7 +90,7 @@ func (p *prompt) ShowError(msg string) {
 }
 
 func (p *prompt) ShowInfo(msg string) {
-	frame := Window.PromptFrame
+	frame := PromptFrame
 
 	x := 0
 	for _, r := range msg {
@@ -130,9 +130,11 @@ func (p *prompt) Activate(text, shadowText string) {
 		p.State = InShadow
 	}
 
+	width, _ := Screen.Size()
+
 	p.View.Line = 1
 	p.View.Column = 1
-	p.View.Width = Window.Width - 2 - 1 // - 1 because of cursor
+	p.View.Width = width - 2 - 1 // - 1 because of cursor
 	p.View.Height = 1
 }
 
@@ -162,7 +164,7 @@ func (p *prompt) AskTabReload(frame frame.Frame) {
 }
 
 func (p *prompt) Render() {
-	frame := Window.PromptFrame
+	frame := PromptFrame
 
 	if p.State == Inactive {
 		return
@@ -313,7 +315,7 @@ func (p *prompt) Enter() TcellEventReceiver {
 
 func (p *prompt) closeMenu() {
 	PromptMenu = nil
-	Window.StatusLineFrame.Y++
+	StatusLineFrame.Y++
 	p.State = InText
 }
 
@@ -399,7 +401,7 @@ func (p *prompt) HandleRune(r rune) {
 func (p *prompt) RxMouseEvent(ev mouse.Event) {
 	var text string
 
-	if Window.PromptMenuFrame.Within(ev.X(), ev.Y()) {
+	if PromptMenuFrame.Within(ev.X(), ev.Y()) {
 		_, text = PromptMenu.RxMouseEvent(ev)
 	}
 
@@ -477,7 +479,7 @@ func (p *prompt) rxTcellEventTabReloadQuestion(ev tcell.Event) TcellEventReceive
 	switch ev := ev.(type) {
 	case *tcell.EventResize:
 		Window.Resize()
-		p.AskTabReload(Window.PromptFrame)
+		p.AskTabReload(PromptFrame)
 	case *tcell.EventKey:
 		switch ev.Key() {
 		case tcell.KeyRune:

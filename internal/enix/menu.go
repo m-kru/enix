@@ -50,11 +50,12 @@ func newMenu(itemNames []string) *menu {
 		items[x] = it
 	}
 
+	width, _ := Screen.Size()
 	view := view.View{
 		Line:   1,
 		Column: 1,
 		Height: 1,
-		Width:  Window.Width - 4,
+		Width:  width - 4,
 	}
 
 	return &menu{
@@ -74,8 +75,9 @@ func (menu *menu) CurrentItemName() string {
 }
 
 func (menu *menu) updateView() {
-	// Window might be resized, update view width
-	menu.view.Width = Window.Width
+	// Screen might be resized, update view width
+	width, _ := Screen.Size()
+	menu.view.Width = width
 
 	item := menu.items[menu.currItemIdx]
 	sIdx := item.startIdx
@@ -134,7 +136,7 @@ func (menu *menu) Prev() (int, string) {
 // RxMouseEvent handles mouse event.
 // Returned values are the current item index and name.
 func (menu *menu) RxMouseEvent(ev mouse.Event) (int, string) {
-	frame := Window.PromptMenuFrame
+	frame := PromptMenuFrame
 	lFrame := frame.ColumnSubframe(frame.X, 2)
 	iFrame := frame.ColumnSubframe(frame.X+2, frame.Width-4)
 	rFrame := frame.ColumnSubframe(frame.LastX()-1, 2)
@@ -213,7 +215,7 @@ func (menu *menu) Render() {
 		},
 	}
 
-	frame := Window.PromptMenuFrame
+	frame := PromptMenuFrame
 	iFrame := frame.ColumnSubframe(frame.X+2, frame.Width-4)
 	line.Render(1, iFrame, menu.view, hls, nil)
 
@@ -227,7 +229,7 @@ func (menu *menu) Render() {
 }
 
 func (menu *menu) renderLeftArrow() {
-	frame := Window.PromptMenuFrame
+	frame := PromptMenuFrame
 	frame = frame.ColumnSubframe(frame.X, 2)
 
 	r := ' '
@@ -240,7 +242,7 @@ func (menu *menu) renderLeftArrow() {
 }
 
 func (menu *menu) renderRightArrow() {
-	frame := Window.PromptMenuFrame
+	frame := PromptMenuFrame
 	frame = frame.ColumnSubframe(frame.LastX()-1, 2)
 
 	r := ' '
