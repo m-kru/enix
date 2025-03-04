@@ -38,45 +38,6 @@ type window struct {
 	CurrentTab *tab.Tab
 }
 
-func ShowError(msg string) {
-	frame := Window.PromptFrame
-
-	x := 0
-	for _, r := range msg {
-		if x == frame.Width {
-			break
-		}
-		frame.SetContent(x, 0, r, cfg.Style.Error)
-		x++
-	}
-	for {
-		if x == frame.Width {
-			break
-		}
-		frame.SetContent(x, 0, ' ', cfg.Style.Prompt)
-		x++
-	}
-	Window.Screen.Show()
-}
-
-func ShowInfo(msg string) {
-	frame := Window.PromptFrame
-
-	x := 0
-	for _, r := range msg {
-		frame.SetContent(x, 0, r, cfg.Style.Default)
-		x++
-	}
-	for {
-		if x == frame.Width {
-			break
-		}
-		frame.SetContent(x, 0, ' ', cfg.Style.Default)
-		x++
-	}
-	Window.Screen.Show()
-}
-
 func (w *window) RxMouseEvent(ev mouse.Event) {
 	x := ev.X()
 	y := ev.Y()
@@ -161,7 +122,7 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 
 	c, err := cfg.Keys.ToCmd(ev)
 	if err != nil {
-		ShowError(fmt.Sprintf("%v", err))
+		Prompt.ShowError(fmt.Sprintf("%v", err))
 		return w
 	}
 
@@ -391,9 +352,9 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 	}
 
 	if err != nil {
-		ShowError(fmt.Sprintf("%v", err))
+		Prompt.ShowError(fmt.Sprintf("%v", err))
 	} else if info != "" {
-		ShowInfo(info)
+		Prompt.ShowInfo(info)
 	} else {
 		Prompt.Clear()
 	}
@@ -432,7 +393,9 @@ func (w *window) Resize() {
 	}
 }
 
-func (w *window) Render() {
+// Do not rerender tab if focus is on the prompt.
+// This reduces responsiveness in the case of large files.
+func (w *window) Render(renderTab bool) {
 	w.TabFrame = frame.Frame{
 		Screen: w.Screen,
 		X:      0,
@@ -482,8 +445,11 @@ func (w *window) Render() {
 		Height: 1,
 	}
 
-	w.CurrentTab.Render()
+	if renderTab {
+		w.CurrentTab.Render()
+	}
 	renderStatusLine(w.StatusLineFrame, w.CurrentTab)
+	Prompt.Render(w.PromptFrame)
 
 	w.Screen.Show()
 }
@@ -577,7 +543,7 @@ func Start() {
 		Cursor:     nil,
 		View:       view.Zero(),
 		ShadowText: "",
-		State:      InText,
+		State:      Inactive,
 	}
 
 	if len(arg.Files) == 0 {
@@ -587,7 +553,7 @@ func Start() {
 		Window.OpenArgFiles()
 	}
 
-	Window.Render()
+	Window.Render(true)
 
 	changeWatcher := time.NewTicker(500 * time.Millisecond)
 
@@ -605,7 +571,7 @@ func Start() {
 	go screen.ChannelEvents(tcellEventChan, nil)
 
 	for {
-		render := false
+		renderTab := false
 
 		select {
 		case ev := <-tcellEventChan:
@@ -614,7 +580,7 @@ func Start() {
 				mEv := mouse.RxTcellEventMouse(ev)
 				if mEv != nil {
 					Window.RxMouseEvent(mEv)
-					render = true
+					renderTab = true
 				} else {
 					// Don't render the whole window, as nothing happened.
 					// Don't waste CPU.
@@ -623,7 +589,7 @@ func Start() {
 			default:
 				tcellEvRcvr = tcellEvRcvr.RxTcellEvent(ev)
 				if tcellEvRcvr == &Window {
-					render = true
+					renderTab = true
 				} else if tcellEvRcvr == nil {
 					return
 				}
@@ -631,7 +597,7 @@ func Start() {
 		case <-changeWatcher.C:
 			tab := Window.CurrentTab
 			if tab.ModTime.Compare(util.FileModTime(tab.Path)) < 0 {
-				Prompt.AskTabReload()
+				Prompt.AskTabReload(Window.PromptFrame)
 				tcellEvRcvr = &Prompt
 			}
 		case <-autoSaveTicker.C:
@@ -647,14 +613,8 @@ func Start() {
 				tab.AutoSave()
 				tab = tab.Next
 			}
-
-			render = true
 		}
 
-		// Do not rerender if focus is on the prompt.
-		// This reduces responsiveness in the case of large files.
-		if render {
-			Window.Render()
-		}
+		Window.Render(renderTab)
 	}
 }
