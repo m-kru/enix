@@ -32,9 +32,49 @@ type window struct {
 	TabFrame        frame.Frame
 	StatusLineFrame frame.Frame
 	PromptMenuFrame frame.Frame
+	PromptFrame     frame.Frame
 
 	Tabs       *tab.Tab // First tab
 	CurrentTab *tab.Tab
+}
+
+func ShowError(msg string) {
+	frame := Window.PromptFrame
+
+	x := 0
+	for _, r := range msg {
+		if x == frame.Width {
+			break
+		}
+		frame.SetContent(x, 0, r, cfg.Style.Error)
+		x++
+	}
+	for {
+		if x == frame.Width {
+			break
+		}
+		frame.SetContent(x, 0, ' ', cfg.Style.Prompt)
+		x++
+	}
+	Window.Screen.Show()
+}
+
+func ShowInfo(msg string) {
+	frame := Window.PromptFrame
+
+	x := 0
+	for _, r := range msg {
+		frame.SetContent(x, 0, r, cfg.Style.Default)
+		x++
+	}
+	for {
+		if x == frame.Width {
+			break
+		}
+		frame.SetContent(x, 0, ' ', cfg.Style.Default)
+		x++
+	}
+	Window.Screen.Show()
 }
 
 func (w *window) RxMouseEvent(ev mouse.Event) {
@@ -121,7 +161,7 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 
 	c, err := cfg.Keys.ToCmd(ev)
 	if err != nil {
-		Prompt.ShowError(fmt.Sprintf("%v", err))
+		ShowError(fmt.Sprintf("%v", err))
 		return w
 	}
 
@@ -351,9 +391,9 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 	}
 
 	if err != nil {
-		Prompt.ShowError(fmt.Sprintf("%v", err))
+		ShowError(fmt.Sprintf("%v", err))
 	} else if info != "" {
-		Prompt.ShowInfo(info)
+		ShowInfo(info)
 	} else {
 		Prompt.Clear()
 	}
@@ -434,6 +474,14 @@ func (w *window) Render() {
 		w.TabBarFrame = frame.NilFrame()
 	}
 
+	w.PromptFrame = frame.Frame{
+		Screen: w.Screen,
+		X:      0,
+		Y:      w.Height - 1,
+		Width:  w.Width,
+		Height: 1,
+	}
+
 	w.CurrentTab.Render()
 	renderStatusLine(w.StatusLineFrame, w.CurrentTab)
 
@@ -509,6 +557,7 @@ func Start() {
 		TabFrame:        frame.NilFrame(),
 		StatusLineFrame: frame.NilFrame(),
 		PromptMenuFrame: frame.NilFrame(),
+		PromptFrame:     frame.NilFrame(),
 		Tabs:            nil,
 		CurrentTab:      nil,
 	}

@@ -27,7 +27,6 @@ type PromptState int
 const (
 	InText PromptState = iota
 	InShadow
-	InError
 	InCmdMenu
 	InPathMenu
 	TabReloadQuestion
@@ -65,43 +64,6 @@ func (p *prompt) Clear() {
 		PromptMenu = nil
 		Window.Height++
 	}
-}
-
-func (p *prompt) ShowError(msg string) {
-	x := 0
-	for _, r := range msg {
-		if x == p.Frame.Width {
-			break
-		}
-		p.Frame.SetContent(x, 0, r, cfg.Style.Error)
-		x++
-	}
-	for {
-		if x == p.Frame.Width {
-			break
-		}
-		p.Frame.SetContent(x, 0, ' ', cfg.Style.Prompt)
-		x++
-	}
-	p.Screen.Show()
-	p.State = InError
-}
-
-func (p *prompt) ShowInfo(msg string) {
-	x := 0
-	for _, r := range msg {
-		p.Frame.SetContent(x, 0, r, cfg.Style.Default)
-		x++
-	}
-	for {
-		if x == p.Frame.Width {
-			break
-		}
-		p.Frame.SetContent(x, 0, ' ', cfg.Style.Default)
-		x++
-	}
-	p.Screen.Show()
-	p.State = InError
 }
 
 // Currently assume text + shadow text always fits screen width.
@@ -425,7 +387,7 @@ func (p *prompt) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 
 		cmd, err := cfg.KeysPrompt.ToCmd(ev)
 		if err != nil {
-			p.ShowError(fmt.Sprintf("%v", err))
+			ShowError(fmt.Sprintf("%v", err))
 			return &Window
 		}
 
@@ -496,7 +458,7 @@ func (p *prompt) rxTcellEventTabReloadQuestion(ev tcell.Event) TcellEventReceive
 	p.Clear()
 
 	if err != nil {
-		p.ShowError(err.Error())
+		ShowError(err.Error())
 	}
 
 	return &Window
@@ -506,7 +468,7 @@ func (p *prompt) rxTcellEventTabReloadQuestion(ev tcell.Event) TcellEventReceive
 func (p *prompt) Exec() TcellEventReceiver {
 	c, err := cmd.Parse(strings.TrimSpace(p.Line.String()))
 	if err != nil {
-		p.ShowError(fmt.Sprintf("%v", err))
+		ShowError(fmt.Sprintf("%v", err))
 		return &Window
 	}
 
@@ -530,15 +492,15 @@ func (p *prompt) Exec() TcellEventReceiver {
 			p.Activate("", "")
 			return p
 		case "exec-error":
-			p.ShowError(strings.Join(c.Args, " "))
+			ShowError(strings.Join(c.Args, " "))
 			return &Window
 		case "exec-info":
-			p.ShowInfo(strings.Join(c.Args, " "))
+			ShowInfo(strings.Join(c.Args, " "))
 			return &Window
 		case "change":
 			err = exec.Change(c.Args, tab)
 		case "cursor-count":
-			p.ShowInfo(fmt.Sprintf("%d", len(tab.Cursors)))
+			ShowInfo(fmt.Sprintf("%d", len(tab.Cursors)))
 			return &Window
 		case "cut":
 			info, err = exec.Cut(c.Args, tab)
@@ -638,7 +600,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 		case "sel-all":
 			err = exec.SelAll(c.Args, tab)
 		case "sel-count":
-			p.ShowInfo(fmt.Sprintf("%d", len(tab.Selections)))
+			ShowInfo(fmt.Sprintf("%d", len(tab.Selections)))
 			return &Window
 		case "sel-down":
 			err = exec.SelDown(c.Args, tab)
@@ -677,7 +639,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 		case "tab":
 			err = exec.Tab(c.Args, tab)
 		case "tab-count":
-			p.ShowInfo(fmt.Sprintf("%d", Window.Tabs.Count()))
+			ShowInfo(fmt.Sprintf("%d", Window.Tabs.Count()))
 			return &Window
 		case "tn", "tab-next":
 			Window.CurrentTab, err = exec.TabNext(c.Args, tab)
@@ -720,7 +682,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 		case "yank":
 			info, err = exec.Yank(c.Args, tab)
 		default:
-			p.ShowError(
+			ShowError(
 				fmt.Sprintf(
 					"invalid or unimplemented command '%s', if unimplemented report on https://github.com/m-kru/enix",
 					c.Name,
@@ -735,7 +697,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 	}
 
 	if err != nil {
-		p.ShowError(fmt.Sprintf("%v", err))
+		ShowError(fmt.Sprintf("%v", err))
 		return &Window
 	}
 
@@ -744,7 +706,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 	}
 
 	if info != "" {
-		p.ShowInfo(info)
+		ShowInfo(info)
 	} else {
 		p.Clear()
 	}
