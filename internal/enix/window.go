@@ -19,12 +19,12 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
+var Screen tcell.Screen
 var Window window
 
 var autoSaveTicker *time.Ticker
 
 type window struct {
-	Screen tcell.Screen
 	Width  int
 	Height int
 
@@ -285,7 +285,7 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		case "spawn-up":
 			err = exec.SpawnUp(c.Args, tab)
 		case "suspend":
-			err = exec.Suspend(c.Args, w.Screen)
+			err = exec.Suspend(c.Args, Screen)
 		case "tab":
 			err = exec.Tab(c.Args, tab)
 		case "tn", "tab-next":
@@ -376,28 +376,20 @@ func (w *window) RxDigit(digit rune) TcellEventReceiver {
 
 // Resize handles all the required logic when screen is resized.
 func (w *window) Resize() {
-	w.Screen.Fill(' ', cfg.Style.Default)
-	w.Screen.Sync()
+	Screen.Fill(' ', cfg.Style.Default)
+	Screen.Sync()
 
-	width, height := w.Screen.Size()
+	width, height := Screen.Size()
 
 	w.Width = width
 	w.Height = height
-
-	Prompt.Frame = frame.Frame{
-		Screen: w.Screen,
-		X:      0,
-		Y:      height - 1,
-		Width:  width,
-		Height: 1,
-	}
 }
 
 // Do not rerender tab if focus is on the prompt.
 // This reduces responsiveness in the case of large files.
 func (w *window) Render(renderTab bool) {
 	w.TabFrame = frame.Frame{
-		Screen: w.Screen,
+		Screen: Screen,
 		X:      0,
 		Y:      0,
 		Width:  w.Width,
@@ -405,7 +397,7 @@ func (w *window) Render(renderTab bool) {
 	}
 
 	w.StatusLineFrame = frame.Frame{
-		Screen: w.Screen,
+		Screen: Screen,
 		X:      0,
 		Y:      w.Height - 2,
 		Width:  w.Width,
@@ -423,7 +415,7 @@ func (w *window) Render(renderTab bool) {
 		w.TabFrame.Y++
 		w.TabFrame.Height--
 		f := frame.Frame{
-			Screen: w.Screen,
+			Screen: Screen,
 			X:      0,
 			Y:      0,
 			Width:  w.Width,
@@ -438,7 +430,7 @@ func (w *window) Render(renderTab bool) {
 	}
 
 	w.PromptFrame = frame.Frame{
-		Screen: w.Screen,
+		Screen: Screen,
 		X:      0,
 		Y:      w.Height - 1,
 		Width:  w.Width,
@@ -448,10 +440,10 @@ func (w *window) Render(renderTab bool) {
 	if renderTab {
 		w.CurrentTab.Render()
 	}
-	renderStatusLine(w.StatusLineFrame, w.CurrentTab)
-	Prompt.Render(w.PromptFrame)
+	renderStatusLine()
+	Prompt.Render()
 
-	w.Screen.Show()
+	Screen.Show()
 }
 
 func (w *window) OpenArgFiles() {
@@ -489,38 +481,39 @@ func (w *window) OpenArgFiles() {
 }
 
 func Start() {
-	screen, err := tcell.NewScreen()
+	var err error
+	Screen, err = tcell.NewScreen()
 	if err != nil {
 		log.Fatalf("%v", err)
 	}
 
-	err = screen.Init()
+	err = Screen.Init()
 	if err != nil {
 		log.Fatalf("%v", err)
 	}
 
-	screen.Clear()
-	screen.EnableMouse()
+	Screen.Clear()
+	Screen.EnableMouse()
 
 	// Catch panics in a defer, clean up, and re-raise them.
 	// Otherwise the application can die without leaving any diagnostic trace.
 	quit := func() {
 		maybePanic := recover()
-		screen.Fini()
+		Screen.Fini()
 		if maybePanic != nil {
 			panic(maybePanic)
 		}
 	}
 	defer quit()
 
-	width, height := screen.Size()
+	width, height := Screen.Size()
 
+	// TabFrame must be initialized to correctly center view of opened file
 	Window = window{
-		Screen:          screen,
 		Width:           width,
 		Height:          height,
 		TabBarFrame:     frame.NilFrame(),
-		TabFrame:        frame.NilFrame(),
+		TabFrame:        frame.Frame{Screen: Screen, X: 0, Y: 0, Width: width, Height: height - 2},
 		StatusLineFrame: frame.NilFrame(),
 		PromptMenuFrame: frame.NilFrame(),
 		PromptFrame:     frame.NilFrame(),
@@ -529,14 +522,6 @@ func Start() {
 	}
 
 	Prompt = prompt{
-		Screen: screen,
-		Frame: frame.Frame{
-			Screen: screen,
-			X:      0,
-			Y:      height - 1,
-			Width:  width,
-			Height: 1,
-		},
 		History:    make([]string, 0, 64),
 		HistoryIdx: 0,
 		Line:       nil,
@@ -568,7 +553,7 @@ func Start() {
 
 	var tcellEvRcvr TcellEventReceiver = &Window
 	tcellEventChan := make(chan tcell.Event)
-	go screen.ChannelEvents(tcellEventChan, nil)
+	go Screen.ChannelEvents(tcellEventChan, nil)
 
 	for {
 		renderTab := false

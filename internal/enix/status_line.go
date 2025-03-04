@@ -6,12 +6,12 @@ import (
 
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
-	"github.com/m-kru/enix/internal/frame"
-	"github.com/m-kru/enix/internal/tab"
 )
 
-// tab must be pointer to the current tab.
-func renderStatusLine(frame frame.Frame, tab *tab.Tab) {
+func renderStatusLine() {
+	frame := Window.StatusLineFrame
+	tab := Window.CurrentTab
+
 	// Fill the background
 	for i := range frame.Width {
 		frame.SetContent(i, 0, ' ', cfg.Style.StatusLine)

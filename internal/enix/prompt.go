@@ -38,9 +38,6 @@ var PromptMenu *menu
 
 // Prompt represents command line prompt.
 type prompt struct {
-	Screen tcell.Screen
-	Frame  frame.Frame
-
 	// History of executed commands.
 	History    []string
 	HistoryIdx int
@@ -55,8 +52,10 @@ type prompt struct {
 }
 
 func (p *prompt) Clear() {
-	for x := range p.Frame.Width {
-		p.Frame.SetContent(x, 0, ' ', cfg.Style.Default)
+	frame := Window.PromptFrame
+
+	for x := range frame.Width {
+		frame.SetContent(x, 0, ' ', cfg.Style.Default)
 	}
 
 	if PromptMenu != nil {
@@ -87,7 +86,7 @@ func (p *prompt) ShowError(msg string) {
 
 	p.State = Inactive
 
-	Window.Screen.Show()
+	Screen.Show()
 }
 
 func (p *prompt) ShowInfo(msg string) {
@@ -108,7 +107,7 @@ func (p *prompt) ShowInfo(msg string) {
 
 	p.State = Inactive
 
-	Window.Screen.Show()
+	Screen.Show()
 }
 
 // Currently assume text + shadow text always fits screen width.
@@ -159,10 +158,12 @@ func (p *prompt) AskTabReload(frame frame.Frame) {
 		x++
 	}
 
-	p.Screen.Show()
+	Screen.Show()
 }
 
-func (p *prompt) Render(frame frame.Frame) {
+func (p *prompt) Render() {
+	frame := Window.PromptFrame
+
 	if p.State == Inactive {
 		return
 	} else if p.State == TabReloadQuestion {
@@ -190,7 +191,7 @@ func (p *prompt) Render(frame frame.Frame) {
 		PromptMenu.Render()
 	}
 
-	p.Screen.Show()
+	Screen.Show()
 }
 
 func (p *prompt) Backspace() {
@@ -672,7 +673,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 		case "spawn-up":
 			err = exec.SpawnUp(c.Args, tab)
 		case "suspend":
-			err = exec.Suspend(c.Args, Window.Screen)
+			err = exec.Suspend(c.Args, Screen)
 		case "tab":
 			err = exec.Tab(c.Args, tab)
 		case "tab-count":
