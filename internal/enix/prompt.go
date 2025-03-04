@@ -306,10 +306,6 @@ func (p *prompt) closeMenu() {
 }
 
 func (p *prompt) openMenu(itemNames []string) {
-	Window.PromptMenuFrame = Window.StatusLineFrame
-	Window.StatusLineFrame.Y--
-	Window.TabFrame.Height--
-
 	PromptMenu = newMenu(itemNames)
 
 	Window.Render()

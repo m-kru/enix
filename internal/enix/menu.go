@@ -54,7 +54,7 @@ func newMenu(itemNames []string) *menu {
 		Line:   1,
 		Column: 1,
 		Height: 1,
-		Width:  Window.PromptMenuFrame.Width - 4,
+		Width:  Window.Width - 4,
 	}
 
 	return &menu{
@@ -74,6 +74,9 @@ func (menu *menu) CurrentItemName() string {
 }
 
 func (menu *menu) updateView() {
+	// Window might be resized, update view width
+	menu.view.Width = Window.Width
+
 	item := menu.items[menu.currItemIdx]
 	sIdx := item.startIdx
 	eIdx := item.endIdx

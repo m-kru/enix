@@ -12,7 +12,7 @@ type Frame struct {
 	Height int
 }
 
-func nilFrame() Frame {
+func NilFrame() Frame {
 	return Frame{Screen: nil, X: 0, Y: 0, Width: 0, Height: 0}
 }
 
@@ -60,10 +60,10 @@ func (f Frame) ShowCursor(x, y int) {
 // Line returns frame f subframe for line rendering.
 func (f Frame) Line(x int, y int) Frame {
 	if x >= f.Width {
-		return nilFrame()
+		return NilFrame()
 	}
 	if y >= f.Height {
-		return nilFrame()
+		return NilFrame()
 	}
 
 	return Frame{
@@ -91,10 +91,10 @@ func (f Frame) LastLine() Frame {
 // If any of the above conditions is not met, then nil frame is returned.
 func (f Frame) ColumnSubframe(x int, width int) Frame {
 	if x < f.X || f.X+f.Width <= x {
-		return nilFrame()
+		return NilFrame()
 	}
 	if x+width > f.X+f.Width {
-		return nilFrame()
+		return NilFrame()
 	}
 
 	return Frame{

@@ -401,6 +401,20 @@ func (w *window) Render() {
 		Height: w.Height - 2, // Minus status line and prompt line
 	}
 
+	w.StatusLineFrame = frame.Frame{
+		Screen: w.Screen,
+		X:      0,
+		Y:      w.Height - 2,
+		Width:  w.Width,
+		Height: 1,
+	}
+
+	if PromptMenu != nil {
+		w.PromptMenuFrame = Window.StatusLineFrame
+		w.StatusLineFrame.Y--
+		Window.TabFrame.Height--
+	}
+
 	// Tab bar
 	if w.Tabs.Count() > 1 {
 		w.TabFrame.Y++
@@ -416,6 +430,8 @@ func (w *window) Render() {
 		tabbar.Update(w.Tabs, w.CurrentTab)
 		tabbar.Render(w.CurrentTab)
 		w.TabBarFrame = f
+	} else {
+		w.TabBarFrame = frame.NilFrame()
 	}
 
 	w.CurrentTab.Render()
@@ -489,10 +505,10 @@ func Start() {
 		Screen:          screen,
 		Width:           width,
 		Height:          height,
-		TabBarFrame:     frame.Frame{Screen: screen, X: 0, Y: 0, Width: 0, Height: 0},
-		TabFrame:        frame.Frame{Screen: screen, X: 0, Y: 0, Width: width, Height: height},
-		StatusLineFrame: frame.Frame{Screen: screen, X: 0, Y: height - 2, Width: width, Height: 1},
-		PromptMenuFrame: frame.Frame{Screen: screen, X: 0, Y: 0, Width: 0, Height: 0},
+		TabBarFrame:     frame.NilFrame(),
+		TabFrame:        frame.NilFrame(),
+		StatusLineFrame: frame.NilFrame(),
+		PromptMenuFrame: frame.NilFrame(),
 		Tabs:            nil,
 		CurrentTab:      nil,
 	}
