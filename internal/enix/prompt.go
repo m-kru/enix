@@ -676,6 +676,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 			err = exec.SpawnUp(c.Args, tab)
 		case "suspend":
 			err = exec.Suspend(c.Args, Screen)
+			InitScreen()
 		case "tab":
 			err = exec.Tab(c.Args, tab)
 		case "tab-count":

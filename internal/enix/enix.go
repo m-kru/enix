@@ -23,6 +23,8 @@ import (
 var Quit bool
 
 var Screen tcell.Screen
+var screenQuitChan chan struct{}
+var tcellEventChan chan tcell.Event
 
 // Frames
 var TabBarFrame frame.Frame
@@ -287,6 +289,7 @@ func RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			err = exec.SpawnUp(c.Args, tab)
 		case "suspend":
 			err = exec.Suspend(c.Args, Screen)
+			InitScreen()
 		case "tab":
 			err = exec.Tab(c.Args, tab)
 		case "tn", "tab-next":
@@ -476,8 +479,15 @@ func OpenArgFiles() {
 	}
 }
 
-func Start() {
+func InitScreen() {
+	if Screen != nil {
+		screenQuitChan <- struct{}{}
+		Screen.Fini()
+		close(screenQuitChan)
+	}
+
 	var err error
+
 	Screen, err = tcell.NewScreen()
 	if err != nil {
 		log.Fatalf("%v", err)
@@ -490,6 +500,14 @@ func Start() {
 
 	Screen.Clear()
 	Screen.EnableMouse()
+
+	tcellEventChan = make(chan tcell.Event)
+	screenQuitChan = make(chan struct{})
+	go Screen.ChannelEvents(tcellEventChan, screenQuitChan)
+}
+
+func Start() {
+	InitScreen()
 
 	// Catch panics in a defer, clean up, and re-raise them.
 	// Otherwise the application can die without leaving any diagnostic trace.
@@ -541,8 +559,6 @@ func Start() {
 	}
 
 	var tcellEvRcvr TcellEventReceiver
-	tcellEventChan := make(chan tcell.Event)
-	go Screen.ChannelEvents(tcellEventChan, nil)
 
 	for {
 		if Quit {
