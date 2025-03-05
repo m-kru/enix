@@ -2,6 +2,8 @@ package enix
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -49,6 +51,8 @@ type prompt struct {
 	ShadowText string
 
 	State PromptState
+
+	PathDir string // Used for menu path
 }
 
 func (p *prompt) Clear() {
@@ -313,14 +317,52 @@ func (p *prompt) Enter() TcellEventReceiver {
 	return p.Exec()
 }
 
-func (p *prompt) closeMenu() {
-	PromptMenu = nil
-	StatusLineFrame.Y++
-	p.State = InText
+func (p *prompt) openPathMenu(path string) {
+	var dir string
+	var base string
+
+	if strings.HasSuffix(path, string(os.PathSeparator)) {
+		dir = path
+	} else if path != "" {
+		dir = filepath.Dir(path)
+		if len(dir) == 1 && dir[0] == '.' {
+			dir = ""
+		}
+		if dir != "" {
+			dir += string(os.PathSeparator)
+		}
+
+		base = filepath.Base(path)
+	}
+
+	p.PathDir = dir
+
+	names := util.DirEntries(dir, base)
+	if len(names) == 0 {
+		return
+	}
+
+	PromptMenu = newMenu(names)
+
+	path = dir + names[0]
+	fields := strings.Fields(p.Line.String())
+	if len(fields) > 1 {
+		fields = fields[0 : len(fields)-1]
+	}
+	fields = append(fields, path)
+	text := strings.Join(fields, " ")
+
+	p.Line, _ = line.FromString(text)
+	p.Cursor = cursor.New(p.Line, 1, len(text))
+
+	p.State = InPathMenu
 }
 
-func (p *prompt) openMenu(itemNames []string) {
-	PromptMenu = newMenu(itemNames)
+func (p *prompt) closeMenu() {
+	PromptMenu = nil
+	p.State = InText
+
+	Render(true)
 }
 
 func (p *prompt) HandleBacktab() {
@@ -328,7 +370,7 @@ func (p *prompt) HandleBacktab() {
 		p.HandleBacktabCmdMenu()
 		return
 	} else if p.State == InPathMenu {
-		//p.HandleBacktabPathMenu()
+		p.HandleBacktabPathMenu()
 		return
 	}
 }
@@ -339,19 +381,25 @@ func (p *prompt) HandleBacktabCmdMenu() {
 	p.Cursor = cursor.New(p.Line, 1, len(text))
 }
 
+func (p *prompt) HandleBacktabPathMenu() {
+	_, name := PromptMenu.Prev()
+
+	path := p.PathDir + name
+	fields := strings.Fields(p.Line.String())
+	fields = fields[0 : len(fields)-1]
+	fields = append(fields, path)
+	text := strings.Join(fields, " ")
+
+	p.Line, _ = line.FromString(text)
+	p.Cursor = cursor.New(p.Line, 1, len(text))
+}
+
 func (p *prompt) HandleTab() {
 	if p.State == InCmdMenu {
 		p.HandleTabCmdMenu()
 		return
 	} else if p.State == InPathMenu {
-		//p.HandleTabPathMenu()
-		return
-	}
-
-	if PromptMenu != nil {
-		_, text := PromptMenu.Next()
-		p.Line, _ = line.FromString(text)
-		p.Cursor = cursor.New(p.Line, 1, len(text))
+		p.HandleTabPathMenu()
 		return
 	}
 
@@ -360,6 +408,7 @@ func (p *prompt) HandleTab() {
 		p.State = InText
 	}
 
+	// Check if menu should be opened for command name
 	fields := strings.Fields(p.Line.String())
 	if len(fields) == 0 || (len(fields) == 1 && p.Cursor.RuneIdx == utf8.RuneCountInString(fields[0])) {
 		prefix := ""
@@ -372,17 +421,48 @@ func (p *prompt) HandleTab() {
 			return
 		}
 
-		p.openMenu(itemNames)
+		PromptMenu = newMenu(itemNames)
 		p.State = InCmdMenu
 
 		text := itemNames[0]
 		p.Line, _ = line.FromString(text)
 		p.Cursor = cursor.New(p.Line, 1, len(text))
+
+		return
 	}
+
+	// Check if menu should be opened for file path
+	cmd := fields[0]
+	if cmd == "e" || cmd == "edit" || cmd == "s" || cmd == "save" {
+		if p.Cursor.RuneIdx == len(cmd) || p.Cursor.RuneIdx != p.Line.RuneCount() {
+			return
+		}
+
+		path := ""
+		if len(fields) > 1 {
+			path = fields[len(fields)-1]
+		}
+
+		p.openPathMenu(path)
+	}
+
 }
 
 func (p *prompt) HandleTabCmdMenu() {
 	_, text := PromptMenu.Next()
+	p.Line, _ = line.FromString(text)
+	p.Cursor = cursor.New(p.Line, 1, len(text))
+}
+
+func (p *prompt) HandleTabPathMenu() {
+	_, name := PromptMenu.Next()
+
+	path := p.PathDir + name
+	fields := strings.Fields(p.Line.String())
+	fields = fields[0 : len(fields)-1]
+	fields = append(fields, path)
+	text := strings.Join(fields, " ")
+
 	p.Line, _ = line.FromString(text)
 	p.Cursor = cursor.New(p.Line, 1, len(text))
 }
@@ -634,7 +714,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 			updateView = false
 		case "redo":
 			err = exec.Redo(c.Args, tab)
-		case "save":
+		case "s", "save":
 			info, err = exec.Save(c.Args, tab, cfg.Cfg.TrimOnSave)
 			updateView = false
 		case "search":

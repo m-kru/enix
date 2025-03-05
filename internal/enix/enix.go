@@ -244,7 +244,7 @@ func RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			tab.State = "replace"
 		case "right":
 			err = exec.Right(c.Args, tab)
-		case "save":
+		case "s", "save":
 			info, err = exec.Save(c.Args, tab, cfg.Cfg.TrimOnSave)
 			updateView = false
 		case "search":
@@ -536,6 +536,7 @@ func Start() {
 		View:       view.Zero(),
 		ShadowText: "",
 		State:      Inactive,
+		PathDir:    "",
 	}
 
 	if len(arg.Files) == 0 {

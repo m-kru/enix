@@ -104,6 +104,8 @@ If you have an alias for the enix in a shell, then the alias is probably 'e'.
 The edit command has an alias 'e' inside the enix.
 This means that opening a file in a shell and the enix has the same syntax when using aliases.`,
 
+	"s": `s # An alias for the 'save' command.`,
+
 	"save": `save [path/to/file] # Saves tab to the file using the provided path.
 If the path to a file is not provided, then it uses the current file path.`,
 

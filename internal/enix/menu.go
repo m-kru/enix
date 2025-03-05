@@ -77,7 +77,7 @@ func (menu *menu) CurrentItemName() string {
 func (menu *menu) updateView() {
 	// Screen might be resized, update view width
 	width, _ := Screen.Size()
-	menu.view.Width = width
+	menu.view.Width = width - 4
 
 	item := menu.items[menu.currItemIdx]
 	sIdx := item.startIdx
