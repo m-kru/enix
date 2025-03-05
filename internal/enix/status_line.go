@@ -10,7 +10,7 @@ import (
 
 func renderStatusLine() {
 	frame := StatusLineFrame
-	tab := Window.CurrentTab
+	tab := CurrentTab
 
 	// Fill the background
 	for i := range frame.Width {

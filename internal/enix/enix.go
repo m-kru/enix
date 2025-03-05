@@ -19,8 +19,10 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
+// Global quit flag
+var Quit bool
+
 var Screen tcell.Screen
-var Window window
 
 // Frames
 var TabBarFrame frame.Frame
@@ -29,21 +31,19 @@ var StatusLineFrame frame.Frame
 var PromptMenuFrame frame.Frame
 var PromptFrame frame.Frame
 
+var Tabs *tab.Tab // First tab
+var CurrentTab *tab.Tab
+
 var autoSaveTicker *time.Ticker
 
-type window struct {
-	Tabs       *tab.Tab // First tab
-	CurrentTab *tab.Tab
-}
-
-func (w *window) RxMouseEvent(ev mouse.Event) {
+func RxMouseEvent(ev mouse.Event) {
 	x := ev.X()
 	y := ev.Y()
 
 	if TabBarFrame.Within(x, y) {
 		newCurrentTab := tabbar.RxMouseEvent(ev)
 		if newCurrentTab != nil {
-			Window.CurrentTab = newCurrentTab
+			CurrentTab = newCurrentTab
 		}
 		return
 	}
@@ -61,46 +61,46 @@ func (w *window) RxMouseEvent(ev mouse.Event) {
 
 	switch ev.(type) {
 	case mouse.PrimaryClick:
-		w.CurrentTab.PrimaryClick(x, y)
+		CurrentTab.PrimaryClick(x, y)
 	case mouse.DoublePrimaryClick:
 		// Implement word selection here.
 	case mouse.PrimaryClickCtrl:
-		w.CurrentTab.PrimaryClickCtrl(x, y)
+		CurrentTab.PrimaryClickCtrl(x, y)
 	case mouse.WheelDown:
 		for range cfg.Cfg.MouseScrollMultiplier {
-			w.CurrentTab.ViewDown()
+			CurrentTab.ViewDown()
 		}
 	case mouse.WheelUp:
 		for range cfg.Cfg.MouseScrollMultiplier {
-			w.CurrentTab.ViewUp()
+			CurrentTab.ViewUp()
 		}
 	case mouse.WheelLeft:
 		for range cfg.Cfg.MouseScrollMultiplier {
-			w.CurrentTab.ViewLeft()
+			CurrentTab.ViewLeft()
 		}
 	case mouse.WheelRight:
 		for range cfg.Cfg.MouseScrollMultiplier {
-			w.CurrentTab.ViewRight()
+			CurrentTab.ViewRight()
 		}
 	}
 }
 
-func (w *window) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
+func RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 	switch ev := ev.(type) {
 	case *tcell.EventResize:
-		w.Resize()
+		Resize()
 	case *tcell.EventKey:
-		return w.RxTcellEventKey(ev)
+		return RxTcellEventKey(ev)
 	}
 
-	return w
+	return nil
 }
 
-func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
+func RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 	var err error
 	var info string
 	updateView := true
-	tab := w.CurrentTab
+	tab := CurrentTab
 
 	if tab.State != "" {
 		cmd := tab.RxEventKey(ev)
@@ -108,24 +108,25 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			Prompt.Activate(cmd, "")
 			return &Prompt
 		}
-		return w
+		return nil
 	}
 
 	if ev.Key() == tcell.KeyRune {
 		r := ev.Rune()
 		if unicode.IsDigit(r) {
-			return w.RxDigit(r)
+			RxDigit(r)
+			return nil
 		}
 	}
 
 	c, err := cfg.Keys.ToCmd(ev)
 	if err != nil {
 		Prompt.ShowError(fmt.Sprintf("%v", err))
-		return w
+		return nil
 	}
 
 	if c.Name == "" {
-		return w
+		return nil
 	}
 
 	if tab.RepCount != 0 {
@@ -218,19 +219,21 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		case "quit", "q":
 			tab, err = exec.Quit(c.Args, tab, false)
 			if err == nil && tab == nil {
+				Quit = true
 				return nil
 			} else if tab != nil {
-				w.Tabs = tab.First()
-				w.CurrentTab = tab
+				Tabs = tab.First()
+				CurrentTab = tab
 			}
 			updateView = false
 		case "quit!", "q!":
 			tab, _ = exec.Quit(c.Args, tab, true)
 			if tab == nil {
+				Quit = true
 				return nil
 			} else {
-				w.Tabs = tab.First()
-				w.Tabs = w.CurrentTab.First()
+				Tabs = tab.First()
+				Tabs = CurrentTab.First()
 			}
 			updateView = false
 		case "redo":
@@ -266,7 +269,7 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		case "sel-tab-end":
 			err = exec.SelTabEnd(c.Args, tab)
 		case "sel-to-tab":
-			w.CurrentTab, err = exec.SelToTab(c.Args, tab)
+			CurrentTab, err = exec.SelToTab(c.Args, tab)
 		case "sel-up":
 			err = exec.SelUp(c.Args, tab)
 		case "sel-word":
@@ -287,9 +290,9 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		case "tab":
 			err = exec.Tab(c.Args, tab)
 		case "tn", "tab-next":
-			w.CurrentTab, err = exec.TabNext(c.Args, tab)
+			CurrentTab, err = exec.TabNext(c.Args, tab)
 		case "tp", "tab-prev":
-			w.CurrentTab, err = exec.TabPrev(c.Args, tab)
+			CurrentTab, err = exec.TabPrev(c.Args, tab)
 		case "trim":
 			err = exec.Trim(c.Args, tab)
 		case "trim-on-save":
@@ -357,30 +360,28 @@ func (w *window) RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		Prompt.Clear()
 	}
 
-	return w
+	return nil
 }
 
-func (w *window) RxDigit(digit rune) TcellEventReceiver {
+func RxDigit(digit rune) {
 	d := int(digit - '0')
 
-	t := w.CurrentTab
+	t := CurrentTab
 	t.RepCount = t.RepCount*10 + d
 	if t.RepCount < 0 {
 		t.RepCount = 0
 	}
-
-	return w
 }
 
 // Resize handles all the required logic when screen is resized.
-func (w *window) Resize() {
+func Resize() {
 	Screen.Fill(' ', cfg.Style.Default)
 	Screen.Sync()
 }
 
 // Do not rerender tab if focus is on the prompt.
 // This reduces responsiveness in the case of large files.
-func (w *window) Render(renderTab bool) {
+func Render(renderTab bool) {
 	width, height := Screen.Size()
 
 	TabFrame = frame.Frame{
@@ -406,7 +407,7 @@ func (w *window) Render(renderTab bool) {
 	}
 
 	// Tab bar
-	if w.Tabs.Count() > 1 {
+	if Tabs.Count() > 1 {
 		TabFrame.Y++
 		TabFrame.Height--
 		f := frame.Frame{
@@ -417,8 +418,8 @@ func (w *window) Render(renderTab bool) {
 			Height: 1,
 		}
 		tabbar.SetFrame(f)
-		tabbar.Update(w.Tabs, w.CurrentTab)
-		tabbar.Render(w.CurrentTab)
+		tabbar.Update(Tabs, CurrentTab)
+		tabbar.Render(CurrentTab)
 		TabBarFrame = f
 	} else {
 		TabBarFrame = frame.NilFrame()
@@ -433,7 +434,7 @@ func (w *window) Render(renderTab bool) {
 	}
 
 	if renderTab {
-		w.CurrentTab.Render()
+		CurrentTab.Render()
 	}
 	renderStatusLine()
 	Prompt.Render()
@@ -441,19 +442,19 @@ func (w *window) Render(renderTab bool) {
 	Screen.Show()
 }
 
-func (w *window) OpenArgFiles() {
+func OpenArgFiles() {
 	errMsg := ""
 
 	for _, file := range arg.Files {
 		t, err := tab.Open(&TabFrame, file)
 		if t != nil {
-			if w.Tabs == nil {
-				w.Tabs = t
+			if Tabs == nil {
+				Tabs = t
 			} else {
-				w.Tabs.Append(t)
+				Tabs.Append(t)
 			}
-			if w.CurrentTab == nil {
-				w.CurrentTab = t
+			if CurrentTab == nil {
+				CurrentTab = t
 			}
 
 			t.Go(arg.Line, arg.Column)
@@ -466,12 +467,12 @@ func (w *window) OpenArgFiles() {
 
 	if len(errMsg) > 0 {
 		errTab := tab.FromString(&TabFrame, errMsg, "error.enix")
-		if w.Tabs == nil {
-			w.Tabs = errTab
+		if Tabs == nil {
+			Tabs = errTab
 		} else {
-			w.Tabs.Append(errTab)
+			Tabs.Append(errTab)
 		}
-		w.CurrentTab = errTab
+		CurrentTab = errTab
 	}
 }
 
@@ -509,12 +510,6 @@ func Start() {
 	PromptMenuFrame = frame.NilFrame()
 	PromptFrame = frame.NilFrame()
 
-	// TabFrame must be initialized to correctly center view of opened file
-	Window = window{
-		Tabs:       nil,
-		CurrentTab: nil,
-	}
-
 	Prompt = prompt{
 		History:    make([]string, 0, 64),
 		HistoryIdx: 0,
@@ -526,13 +521,13 @@ func Start() {
 	}
 
 	if len(arg.Files) == 0 {
-		Window.Tabs = tab.FromString(&TabFrame, "", "no-name")
-		Window.CurrentTab = Window.Tabs
+		Tabs = tab.FromString(&TabFrame, "", "no-name")
+		CurrentTab = Tabs
 	} else {
-		Window.OpenArgFiles()
+		OpenArgFiles()
 	}
 
-	Window.Render(true)
+	Render(true)
 
 	changeWatcher := time.NewTicker(500 * time.Millisecond)
 
@@ -545,11 +540,15 @@ func Start() {
 		autoSaveTicker.Reset(time.Duration(cfg.Cfg.AutoSave) * time.Second)
 	}
 
-	var tcellEvRcvr TcellEventReceiver = &Window
+	var tcellEvRcvr TcellEventReceiver
 	tcellEventChan := make(chan tcell.Event)
 	go Screen.ChannelEvents(tcellEventChan, nil)
 
 	for {
+		if Quit {
+			return
+		}
+
 		renderTab := false
 
 		select {
@@ -558,7 +557,7 @@ func Start() {
 			case *tcell.EventMouse:
 				mEv := mouse.RxTcellEventMouse(ev)
 				if mEv != nil {
-					Window.RxMouseEvent(mEv)
+					RxMouseEvent(mEv)
 					renderTab = true
 				} else {
 					// Don't render the whole window, as nothing happened.
@@ -566,15 +565,18 @@ func Start() {
 					continue
 				}
 			default:
-				tcellEvRcvr = tcellEvRcvr.RxTcellEvent(ev)
-				if tcellEvRcvr == &Window {
+				if tcellEvRcvr == nil {
+					tcellEvRcvr = RxTcellEvent(ev)
+				} else {
+					tcellEvRcvr = tcellEvRcvr.RxTcellEvent(ev)
+				}
+
+				if tcellEvRcvr == nil {
 					renderTab = true
-				} else if tcellEvRcvr == nil {
-					return
 				}
 			}
 		case <-changeWatcher.C:
-			tab := Window.CurrentTab
+			tab := CurrentTab
 			if tab.ModTime.Compare(util.FileModTime(tab.Path)) < 0 {
 				Prompt.AskTabReload(PromptFrame)
 				tcellEvRcvr = &Prompt
@@ -584,7 +586,7 @@ func Start() {
 				continue
 			}
 
-			tab := Window.CurrentTab.First()
+			tab := CurrentTab.First()
 			for {
 				if tab == nil {
 					break
@@ -594,6 +596,6 @@ func Start() {
 			}
 		}
 
-		Window.Render(renderTab)
+		Render(renderTab)
 	}
 }

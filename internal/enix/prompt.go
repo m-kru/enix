@@ -418,7 +418,7 @@ func (p *prompt) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 
 	switch ev := ev.(type) {
 	case *tcell.EventResize:
-		Window.Resize()
+		Resize()
 	case *tcell.EventKey:
 		// Code responsible for catching events related to menu handling
 		keyName := enixTcell.EventKeyName(ev)
@@ -435,7 +435,7 @@ func (p *prompt) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 		cmd, err := cfg.KeysPrompt.ToCmd(ev)
 		if err != nil {
 			p.ShowError(fmt.Sprintf("%v", err))
-			return &Window
+			return nil
 		}
 
 		switch cmd.Name {
@@ -449,7 +449,7 @@ func (p *prompt) RxTcellEvent(ev tcell.Event) TcellEventReceiver {
 			return p.Enter()
 		case "esc", "quit":
 			p.Clear()
-			return &Window
+			return nil
 		case "left":
 			p.Left()
 		case "line-start":
@@ -478,7 +478,7 @@ func (p *prompt) rxTcellEventTabReloadQuestion(ev tcell.Event) TcellEventReceive
 
 	switch ev := ev.(type) {
 	case *tcell.EventResize:
-		Window.Resize()
+		Resize()
 		p.AskTabReload(PromptFrame)
 	case *tcell.EventKey:
 		switch ev.Key() {
@@ -492,7 +492,7 @@ func (p *prompt) rxTcellEventTabReloadQuestion(ev tcell.Event) TcellEventReceive
 	}
 
 	var err error
-	tab := Window.CurrentTab
+	tab := CurrentTab
 	if r == 'y' {
 		err = tab.Reload()
 	}
@@ -505,7 +505,7 @@ func (p *prompt) rxTcellEventTabReloadQuestion(ev tcell.Event) TcellEventReceive
 		p.ShowError(err.Error())
 	}
 
-	return &Window
+	return nil
 }
 
 // Exec executes command.
@@ -513,11 +513,11 @@ func (p *prompt) Exec() TcellEventReceiver {
 	c, err := cmd.Parse(strings.TrimSpace(p.Line.String()))
 	if err != nil {
 		p.ShowError(fmt.Sprintf("%v", err))
-		return &Window
+		return nil
 	}
 
 	var info string
-	tab := Window.CurrentTab
+	tab := CurrentTab
 	updateView := true
 
 	for range c.RepCount {
@@ -554,7 +554,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 		case "e", "edit":
 			tab, err = exec.Edit(c.Args, tab)
 			if err == nil {
-				Window.CurrentTab = tab
+				CurrentTab = tab
 			}
 			updateView = false
 		case "esc":
@@ -574,7 +574,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 		case "h", "help":
 			tab, err = exec.Help(c.Args, tab)
 			if err == nil {
-				Window.CurrentTab = tab
+				CurrentTab = tab
 			}
 			updateView = false
 		case "insert-line-above":
@@ -586,7 +586,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 		case "key-name":
 			knTab, err := exec.KeyName(c.Args, tab)
 			if err == nil {
-				Window.CurrentTab = knTab
+				CurrentTab = knTab
 			}
 		case "left":
 			err = exec.Left(c.Args, tab)
@@ -617,8 +617,8 @@ func (p *prompt) Exec() TcellEventReceiver {
 			if err == nil && tab == nil {
 				return nil
 			} else if tab != nil {
-				Window.Tabs = tab.First()
-				Window.CurrentTab = tab
+				Tabs = tab.First()
+				CurrentTab = tab
 			}
 			updateView = false
 		case "quit!", "q!":
@@ -626,8 +626,8 @@ func (p *prompt) Exec() TcellEventReceiver {
 			if tab == nil {
 				return nil
 			} else {
-				Window.Tabs = tab.First()
-				Window.CurrentTab = tab
+				Tabs = tab.First()
+				CurrentTab = tab
 			}
 			updateView = false
 		case "redo":
@@ -659,7 +659,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 		case "sel-tab-end":
 			err = exec.SelTabEnd(c.Args, tab)
 		case "sel-to-tab":
-			Window.CurrentTab, err = exec.SelToTab(c.Args, tab)
+			CurrentTab, err = exec.SelToTab(c.Args, tab)
 		case "sel-switch-cursor":
 			err = exec.SelSwitchCursor(c.Args, tab)
 		case "sel-up":
@@ -679,11 +679,11 @@ func (p *prompt) Exec() TcellEventReceiver {
 		case "tab":
 			err = exec.Tab(c.Args, tab)
 		case "tab-count":
-			info = fmt.Sprintf("%d", Window.Tabs.Count())
+			info = fmt.Sprintf("%d", Tabs.Count())
 		case "tn", "tab-next":
-			Window.CurrentTab, err = exec.TabNext(c.Args, tab)
+			CurrentTab, err = exec.TabNext(c.Args, tab)
 		case "tp", "tab-prev":
-			Window.CurrentTab, err = exec.TabPrev(c.Args, tab)
+			CurrentTab, err = exec.TabPrev(c.Args, tab)
 		case "trim":
 			err = exec.Trim(c.Args, tab)
 		case "trim-on-save":
@@ -734,7 +734,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 
 	if err != nil {
 		p.ShowError(fmt.Sprintf("%v", err))
-		return &Window
+		return nil
 	}
 
 	if updateView {
@@ -747,7 +747,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 		p.Clear()
 	}
 
-	return &Window
+	return nil
 }
 
 // Auto save command modifies autoSaveTicker, and can't be executed by the exec package.
