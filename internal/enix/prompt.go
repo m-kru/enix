@@ -615,6 +615,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 		case "quit", "q":
 			tab, err = exec.Quit(c.Args, tab, false)
 			if err == nil && tab == nil {
+				Quit = true
 				return nil
 			} else if tab != nil {
 				Tabs = tab.First()
@@ -624,6 +625,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 		case "quit!", "q!":
 			tab, _ = exec.Quit(c.Args, tab, true)
 			if tab == nil {
+				Quit = true
 				return nil
 			} else {
 				Tabs = tab.First()
