@@ -2,7 +2,7 @@
 	{
 		"Name": "Default",
 		"Bold": {
-			"Regex": "\\b(append|cap|copy|len|make|panic)\\b"
+			"Regex": "\\b(append|cap|close|copy|len|make|panic)\\b"
 		},
 		"Keyword": {
 			"Regex": "\\b(break|case|chan|const|continue|default|defer|else|fallthrough|for|func|go|goto|if|import|package|range|return|select|switch|type|var)\\b"
