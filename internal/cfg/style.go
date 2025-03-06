@@ -350,7 +350,7 @@ func DefaultStyle() style {
 		Warning: tcell.StyleDefault.Foreground(tcell.ColorOlive),
 
 		TabBar:     tcell.StyleDefault.Background(tcell.ColorBlack),
-		CurrentTab: tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorOlive),
+		CurrentTab: tcell.StyleDefault.Background(tcell.ColorBlack).Bold(true),
 
 		LineNum: tcell.StyleDefault.Foreground(tcell.ColorGray),
 
@@ -370,8 +370,8 @@ func DefaultStyle() style {
 		Prompt:       tcell.StyleDefault.Foreground(tcell.ColorWhite),
 		PromptShadow: tcell.StyleDefault.Foreground(tcell.ColorGray),
 
-		Menu:     tcell.StyleDefault.Reverse(true),
-		MenuItem: tcell.StyleDefault.Bold(true),
+		Menu:     tcell.StyleDefault.Background(tcell.ColorBlack),
+		MenuItem: tcell.StyleDefault.Background(tcell.ColorGray).Bold(true),
 
 		Attribute: tcell.StyleDefault.Foreground(tcell.ColorTeal),
 		Bold:      tcell.StyleDefault.Bold(true),
