@@ -193,10 +193,6 @@ func (p *prompt) Render() {
 
 	p.Cursor.Render(frame.Line(1, 0), p.View)
 
-	if PromptMenu != nil {
-		PromptMenu.Render(PromptMenuFrame)
-	}
-
 	Screen.Show()
 }
 
@@ -361,8 +357,6 @@ func (p *prompt) openPathMenu(path string) {
 func (p *prompt) closeMenu() {
 	PromptMenu = nil
 	p.State = InText
-
-	Render(true)
 }
 
 func (p *prompt) HandleBacktab() {

@@ -387,6 +387,8 @@ func Resize() {
 func Render(renderTab bool) {
 	width, height := Screen.Size()
 
+	// Set frames
+
 	TabFrame = frame.Frame{
 		Screen: Screen,
 		X:      0,
@@ -421,8 +423,6 @@ func Render(renderTab bool) {
 			Height: 1,
 		}
 		tabbar.SetFrame(f)
-		tabbar.Update(Tabs, CurrentTab)
-		tabbar.Render(CurrentTab)
 		TabBarFrame = f
 	} else {
 		TabBarFrame = frame.NilFrame()
@@ -436,10 +436,23 @@ func Render(renderTab bool) {
 		Height: 1,
 	}
 
+	// Render objects
+
+	if Tabs.Count() > 1 {
+		tabbar.Update(Tabs, CurrentTab)
+		tabbar.Render(CurrentTab)
+	}
+
 	if renderTab {
 		CurrentTab.Render()
 	}
+
 	renderStatusLine()
+
+	if PromptMenu != nil {
+		PromptMenu.Render(PromptMenuFrame)
+	}
+
 	Prompt.Render()
 
 	Screen.Show()
