@@ -19,12 +19,12 @@ func Render(currentTab *tab.Tab) {
 		highlight.Highlight{
 			LineNum:      1,
 			StartRuneIdx: currentItem.StartIdx,
-			EndRuneIdx:   currentItem.EndIdx + 1,
+			EndRuneIdx:   currentItem.EndIdx,
 			Style:        cfg.Style.CurrentTab,
 		},
 		highlight.Highlight{
 			LineNum:      1,
-			StartRuneIdx: currentItem.EndIdx + 1,
+			StartRuneIdx: currentItem.EndIdx,
 			EndRuneIdx:   line.RuneCount(),
 			Style:        cfg.Style.TabBar,
 		},
