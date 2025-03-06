@@ -357,6 +357,11 @@ func (p *prompt) openPathMenu(path string) {
 func (p *prompt) closeMenu() {
 	PromptMenu = nil
 	p.State = InText
+
+	// The focus is still on prompt.
+	// However, the status line changes its position one line down,
+	// so the tab must be rerendered.
+	Render(true)
 }
 
 func (p *prompt) HandleBacktab() {
