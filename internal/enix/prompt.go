@@ -194,7 +194,7 @@ func (p *prompt) Render() {
 	p.Cursor.Render(frame.Line(1, 0), p.View)
 
 	if PromptMenu != nil {
-		PromptMenu.Render()
+		PromptMenu.Render(PromptMenuFrame)
 	}
 
 	Screen.Show()

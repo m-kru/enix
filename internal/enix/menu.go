@@ -4,6 +4,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/m-kru/enix/internal/cfg"
+	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/highlight"
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/mouse"
@@ -190,7 +191,7 @@ func (menu *menu) viewRight() {
 	}
 }
 
-func (menu *menu) Render() {
+func (menu *menu) Render(frame frame.Frame) {
 	currItem := menu.items[menu.currItemIdx]
 	line := menu.line
 
@@ -215,7 +216,6 @@ func (menu *menu) Render() {
 		},
 	}
 
-	frame := PromptMenuFrame
 	iFrame := frame.ColumnSubframe(frame.X+2, frame.Width-4)
 	line.Render(1, iFrame, menu.view, hls, nil)
 
@@ -224,14 +224,14 @@ func (menu *menu) Render() {
 		iFrame.SetContent(x, 0, ' ', cfg.Style.Menu)
 	}
 
-	menu.renderLeftArrow()
-	menu.renderRightArrow()
+	lFrame := frame.ColumnSubframe(frame.X, 2)
+	menu.renderLeftArrow(lFrame)
+
+	rFrame := frame.ColumnSubframe(frame.LastX()-1, 2)
+	menu.renderRightArrow(rFrame)
 }
 
-func (menu *menu) renderLeftArrow() {
-	frame := PromptMenuFrame
-	frame = frame.ColumnSubframe(frame.X, 2)
-
+func (menu *menu) renderLeftArrow(frame frame.Frame) {
 	r := ' '
 	if menu.view.Column > 1 {
 		r = '<'
@@ -241,10 +241,7 @@ func (menu *menu) renderLeftArrow() {
 	frame.SetContent(1, 0, ' ', cfg.Style.Menu)
 }
 
-func (menu *menu) renderRightArrow() {
-	frame := PromptMenuFrame
-	frame = frame.ColumnSubframe(frame.LastX()-1, 2)
-
+func (menu *menu) renderRightArrow(frame frame.Frame) {
 	r := ' '
 	if menu.view.LastColumn() < menu.line.Columns() {
 		r = '>'
