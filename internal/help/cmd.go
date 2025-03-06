@@ -392,3 +392,14 @@ func GetCommandNames(prefix string) []string {
 
 	return cmds
 }
+
+// IsPathCmd returns true if provided command accepts a file system path as the last argument.
+func IsPathCmd(cmd string) bool {
+	pathCmds := map[string]bool{
+		"e": true, "edit": true, "path": true, "s": true, "save": true,
+	}
+	if _, ok := pathCmds[cmd]; ok {
+		return true
+	}
+	return false
+}

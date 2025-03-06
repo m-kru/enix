@@ -433,7 +433,7 @@ func (p *prompt) HandleTab() {
 
 	// Check if menu should be opened for file path
 	cmd := fields[0]
-	if cmd == "e" || cmd == "edit" || cmd == "s" || cmd == "save" {
+	if help.IsPathCmd(cmd) {
 		if p.Cursor.RuneIdx == len(cmd) || p.Cursor.RuneIdx != p.Line.RuneCount() {
 			return
 		}
