@@ -38,6 +38,9 @@ func (tab *Tab) WriteTo(strWr io.StringWriter) error {
 }
 
 func (tab *Tab) Save(path string, trim bool) (string, error) {
+	if trim {
+		tab.Trim()
+	}
 
 	tab.ModMutex.Lock()
 	defer tab.ModMutex.Unlock()
