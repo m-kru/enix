@@ -42,7 +42,8 @@
 		"Name": "Math",
 		"Style": "Number",
 		"Start": {
-			"Regex": "\\$"
+			"Regex": "\\$",
+			"NegativeLookBehind": "\\\\"
 		},
 		"End": {
 			"Regex": "\\$"
