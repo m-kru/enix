@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/mouse"
 	"github.com/m-kru/enix/internal/tab"
@@ -45,7 +46,7 @@ type tabBar struct {
 
 func (tb *tabBar) Init() {
 	tb.Update()
-	tb.menu = newMenu([]string{""}, 0)
+	tb.menu = newMenu([]string{""}, 0, cfg.Style.TabBar, cfg.Style.CurrentTab)
 }
 
 func (tb *tabBar) getCurrentItem() (*tabBarItem, int) {
@@ -146,7 +147,7 @@ func (tb *tabBar) Render(frame frame.Frame) {
 	}
 
 	view := tb.menu.view
-	tb.menu = newMenu(names, currIdx)
+	tb.menu = newMenu(names, currIdx, cfg.Style.TabBar, cfg.Style.CurrentTab)
 	tb.menu.view = view
 	if tb.updateView {
 		tb.menu.updateView()

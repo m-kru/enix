@@ -3,7 +3,8 @@ package enix
 import (
 	"unicode/utf8"
 
-	"github.com/m-kru/enix/internal/cfg"
+	"github.com/gdamore/tcell/v2"
+
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/highlight"
 	"github.com/m-kru/enix/internal/line"
@@ -23,9 +24,17 @@ type menu struct {
 
 	line *line.Line
 	view view.View
+
+	style         tcell.Style
+	currItemStyle tcell.Style
 }
 
-func newMenu(itemNames []string, currItemIdx int) *menu {
+func newMenu(
+	itemNames []string,
+	currItemIdx int,
+	style tcell.Style,
+	currItemStyle tcell.Style,
+) *menu {
 	// Create line and item list
 	items := make([]menuItem, len(itemNames))
 	line, _ := line.FromString("")
@@ -60,10 +69,12 @@ func newMenu(itemNames []string, currItemIdx int) *menu {
 	}
 
 	return &menu{
-		items:       items,
-		currItemIdx: currItemIdx,
-		line:        line,
-		view:        view,
+		items:         items,
+		currItemIdx:   currItemIdx,
+		line:          line,
+		view:          view,
+		style:         style,
+		currItemStyle: currItemStyle,
 	}
 }
 
@@ -201,19 +212,19 @@ func (menu *menu) Render(frame frame.Frame) {
 			LineNum:      1,
 			StartRuneIdx: 0,
 			EndRuneIdx:   currItem.startIdx,
-			Style:        cfg.Style.Menu,
+			Style:        menu.style,
 		},
 		highlight.Highlight{
 			LineNum:      1,
 			StartRuneIdx: currItem.startIdx,
 			EndRuneIdx:   currItem.endIdx,
-			Style:        cfg.Style.MenuItem,
+			Style:        menu.currItemStyle,
 		},
 		highlight.Highlight{
 			LineNum:      1,
 			StartRuneIdx: currItem.endIdx,
 			EndRuneIdx:   line.RuneCount(),
-			Style:        cfg.Style.Menu,
+			Style:        menu.style,
 		},
 	}
 
@@ -222,7 +233,7 @@ func (menu *menu) Render(frame frame.Frame) {
 
 	// Fill missing space
 	for x := line.Columns(); x < iFrame.Width; x++ {
-		iFrame.SetContent(x, 0, ' ', cfg.Style.Menu)
+		iFrame.SetContent(x, 0, ' ', menu.style)
 	}
 
 	lFrame := frame.ColumnSubframe(frame.X, 2)
@@ -238,8 +249,8 @@ func (menu *menu) renderLeftArrow(frame frame.Frame) {
 		r = '<'
 	}
 
-	frame.SetContent(0, 0, r, cfg.Style.Menu)
-	frame.SetContent(1, 0, ' ', cfg.Style.Menu)
+	frame.SetContent(0, 0, r, menu.style)
+	frame.SetContent(1, 0, ' ', menu.style)
 }
 
 func (menu *menu) renderRightArrow(frame frame.Frame) {
@@ -248,6 +259,6 @@ func (menu *menu) renderRightArrow(frame frame.Frame) {
 		r = '>'
 	}
 
-	frame.SetContent(0, 0, ' ', cfg.Style.Menu)
-	frame.SetContent(1, 0, r, cfg.Style.Menu)
+	frame.SetContent(0, 0, ' ', menu.style)
+	frame.SetContent(1, 0, r, menu.style)
 }
