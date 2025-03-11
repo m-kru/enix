@@ -49,16 +49,16 @@ func Cut(args []string, tab *tab.Tab) (string, error) {
 	return info, nil
 }
 
-func Esc(args []string, tab *tab.Tab) error {
+func Esc(args []string, tab *tab.Tab) (bool, error) {
 	if len(args) > 0 {
-		return fmt.Errorf(
+		return false, fmt.Errorf(
 			"esc: expected 0 args, provided %d", len(args),
 		)
 	}
 
-	tab.Esc()
+	updateView := tab.Esc()
 
-	return nil
+	return updateView, nil
 }
 
 func Filetype(args []string, tab *tab.Tab) error {

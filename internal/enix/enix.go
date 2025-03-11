@@ -172,7 +172,7 @@ func RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			Prompt.Activate("edit ", "")
 			return &Prompt
 		case "esc":
-			err = exec.Esc(c.Args, tab)
+			updateView, err = exec.Esc(c.Args, tab)
 			Prompt.Clear()
 		case "ft", "filetype":
 			err = exec.Filetype(c.Args, tab)

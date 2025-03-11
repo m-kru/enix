@@ -4,26 +4,29 @@ import (
 	"github.com/m-kru/enix/internal/sel"
 )
 
-func (tab *Tab) Esc() {
+// Esc returns true if tab view should be updated after escape execution.
+func (tab *Tab) Esc() bool {
 	if tab.RepCount != 0 {
 		tab.RepCount = 0
-		return
+		return false
 	}
 
 	if len(tab.Selections) > 0 {
 		tab.Cursors = sel.ToCursors(tab.Selections)
 		tab.Selections = nil
-		return
+		return false
 	}
 
 	if len(tab.Cursors) > 1 {
 		tab.Cursors = tab.Cursors[len(tab.Cursors)-1:]
-		return
+		return false
 	}
 
 	if tab.SearchCtx.Regexp != nil {
 		tab.SearchCtx.PrevRegexp = tab.SearchCtx.Regexp
 		tab.SearchCtx.Regexp = nil
-		return
+		return false
 	}
+
+	return true
 }

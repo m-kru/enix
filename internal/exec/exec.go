@@ -25,7 +25,7 @@ func Exec(c cmd.Command, tab *tab.Tab) error {
 		case "down":
 			err = Down(c.Args, tab)
 		case "esc":
-			err = Esc(c.Args, tab)
+			_, err = Esc(c.Args, tab)
 		case "go":
 			err = Go(c.Args, tab)
 		case "join":
