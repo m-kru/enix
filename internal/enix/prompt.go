@@ -763,9 +763,9 @@ func (p *prompt) Exec() TcellEventReceiver {
 		case "tab-count":
 			info = fmt.Sprintf("%d", Tabs.Count())
 		case "tn", "tab-next":
-			CurrentTab, err = exec.TabNext(c.Args, tab)
+			CurrentTab, err = exec.TabNext(c.Args, CurrentTab)
 		case "tp", "tab-prev":
-			CurrentTab, err = exec.TabPrev(c.Args, tab)
+			CurrentTab, err = exec.TabPrev(c.Args, CurrentTab)
 		case "trim":
 			err = exec.Trim(c.Args, tab)
 		case "trim-on-save":
