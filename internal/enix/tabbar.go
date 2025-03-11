@@ -16,10 +16,8 @@ import (
 )
 
 type tabBarItem struct {
-	Tab      *tab.Tab
-	Name     string
-	StartIdx int // Start rune idx
-	EndIdx   int // End rune idx
+	menuItem
+	Tab *tab.Tab
 }
 
 func (item *tabBarItem) assignName(lvl int) {
@@ -41,7 +39,7 @@ func (item *tabBarItem) assignName(lvl int) {
 
 	name += fields[(len(fields) - 1)]
 
-	item.Name = name
+	item.name = name
 }
 
 type tabBar struct {
@@ -81,7 +79,7 @@ func (tb *tabBar) Update(tabs *tab.Tab, currentTab *tab.Tab) {
 	for x := range tb.items {
 		t := tb.items[x].Tab
 
-		tb.items[x].StartIdx = rIdx
+		tb.items[x].startIdx = rIdx
 
 		line.Append([]byte(" "))
 		rIdx++
@@ -91,14 +89,14 @@ func (tb *tabBar) Update(tabs *tab.Tab, currentTab *tab.Tab) {
 			rIdx++
 		}
 
-		name := tb.items[x].Name
+		name := tb.items[x].name
 		line.Append([]byte(name))
 		rIdx += utf8.RuneCountInString(name)
 
 		line.Append([]byte(" "))
 		rIdx++
 
-		tb.items[x].EndIdx = rIdx
+		tb.items[x].endIdx = rIdx
 	}
 
 	tb.line = line
@@ -141,7 +139,10 @@ func (tb *tabBar) createItems(tabs *tab.Tab) {
 			break
 		}
 
-		i := tabBarItem{t, "", 0, 0}
+		i := tabBarItem{
+			menuItem: menuItem{"", 0, 0},
+			Tab:      t,
+		}
 		tb.items = append(tb.items, &i)
 
 		t = t.Next
@@ -168,7 +169,7 @@ func (tb *tabBar) itemsNameConflicts() map[string][]int {
 	names := make(map[string][]int)
 
 	for x, i := range tb.items {
-		names[i.Name] = append(names[i.Name], x)
+		names[i.name] = append(names[i.name], x)
 	}
 
 	for key, val := range names {
@@ -218,7 +219,7 @@ func (tb *tabBar) clickItemsFrame(x int) *tab.Tab {
 	}
 
 	for _, item := range tb.items {
-		if item.StartIdx <= rIdx && rIdx < item.EndIdx {
+		if item.startIdx <= rIdx && rIdx < item.endIdx {
 			return item.Tab
 		}
 	}
@@ -233,18 +234,18 @@ func (tb *tabBar) Render(currentTab *tab.Tab) {
 		highlight.Highlight{
 			LineNum:      1,
 			StartRuneIdx: 0,
-			EndRuneIdx:   currentItem.StartIdx,
+			EndRuneIdx:   currentItem.startIdx,
 			Style:        cfg.Style.TabBar,
 		},
 		highlight.Highlight{
 			LineNum:      1,
-			StartRuneIdx: currentItem.StartIdx,
-			EndRuneIdx:   currentItem.EndIdx,
+			StartRuneIdx: currentItem.startIdx,
+			EndRuneIdx:   currentItem.endIdx,
 			Style:        cfg.Style.CurrentTab,
 		},
 		highlight.Highlight{
 			LineNum:      1,
-			StartRuneIdx: currentItem.EndIdx,
+			StartRuneIdx: currentItem.endIdx,
 			EndRuneIdx:   tb.line.RuneCount(),
 			Style:        cfg.Style.TabBar,
 		},
