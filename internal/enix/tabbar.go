@@ -9,10 +9,10 @@ import (
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/highlight"
-	ln "github.com/m-kru/enix/internal/line"
+	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/mouse"
 	"github.com/m-kru/enix/internal/tab"
-	vw "github.com/m-kru/enix/internal/view"
+	"github.com/m-kru/enix/internal/view"
 )
 
 type tabBarItem struct {
@@ -45,11 +45,11 @@ func (item *tabBarItem) assignName(lvl int) {
 type tabBar struct {
 	items []*tabBarItem
 
-	line   *ln.Line
+	line   *line.Line
 	lFrame frame.Frame // Left arrow frame
 	iFrame frame.Frame // Items frame
 	rFrame frame.Frame // Right arrow frame
-	view   vw.View
+	view   view.View
 }
 
 func (tb *tabBar) SetFrame(f frame.Frame) {
@@ -59,7 +59,7 @@ func (tb *tabBar) SetFrame(f frame.Frame) {
 
 	// Init view
 	if tb.view.Line == 0 {
-		tb.view = vw.View{
+		tb.view = view.View{
 			Line:   1,
 			Column: 1,
 			Height: 1,
@@ -72,7 +72,7 @@ func (tb *tabBar) Update(tabs *tab.Tab, currentTab *tab.Tab) {
 	tb.createItems(tabs)
 
 	// Create line
-	line, _ := ln.FromString("")
+	line, _ := line.FromString("")
 
 	rIdx := 0
 
