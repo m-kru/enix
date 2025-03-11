@@ -12,7 +12,6 @@ import (
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/mouse"
 	"github.com/m-kru/enix/internal/tab"
-	"github.com/m-kru/enix/internal/tabbar"
 	"github.com/m-kru/enix/internal/util"
 	"github.com/m-kru/enix/internal/view"
 
@@ -33,7 +32,7 @@ var StatusLineFrame frame.Frame
 var PromptMenuFrame frame.Frame
 var PromptFrame frame.Frame
 
-var TabBar tabbar.TabBar
+var TabBar tabBar
 
 var Tabs *tab.Tab // First tab
 var CurrentTab *tab.Tab
