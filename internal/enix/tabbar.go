@@ -38,8 +38,14 @@ func (item *tabBarItem) assignName(lvl int) {
 }
 
 type tabBar struct {
-	items []*tabBarItem
-	menu  *menu
+	items      []*tabBarItem
+	menu       *menu
+	updateView bool
+}
+
+func (tb *tabBar) Init() {
+	tb.Update()
+	tb.menu = newMenu([]string{""}, 0)
 }
 
 func (tb *tabBar) getCurrentItem() (*tabBarItem, int) {
@@ -75,6 +81,8 @@ func (tb *tabBar) Update() {
 	}
 
 	tb.assignItemNames()
+
+	tb.updateView = true
 }
 
 func (tb *tabBar) assignItemNames() {
@@ -137,8 +145,13 @@ func (tb *tabBar) Render(frame frame.Frame) {
 		names = append(names, name)
 	}
 
+	view := tb.menu.view
 	tb.menu = newMenu(names, currIdx)
-	tb.menu.updateView()
+	tb.menu.view = view
+	if tb.updateView {
+		tb.menu.updateView()
+		tb.updateView = false
+	}
 
 	tb.menu.Render(frame)
 }

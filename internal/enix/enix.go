@@ -227,6 +227,7 @@ func RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			} else if tab != nil {
 				Tabs = tab.First()
 				CurrentTab = tab
+				TabBar.Update()
 			}
 			updateView = false
 		case "quit!", "q!":
@@ -237,6 +238,7 @@ func RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			} else {
 				Tabs = tab.First()
 				Tabs = CurrentTab.First()
+				TabBar.Update()
 			}
 			updateView = false
 		case "redo":
@@ -273,6 +275,7 @@ func RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			err = exec.SelTabEnd(c.Args, tab)
 		case "sel-to-tab":
 			CurrentTab, err = exec.SelToTab(c.Args, tab)
+			TabBar.Update()
 		case "sel-up":
 			err = exec.SelUp(c.Args, tab)
 		case "sel-word":
@@ -295,8 +298,10 @@ func RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			err = exec.Tab(c.Args, tab)
 		case "tn", "tab-next":
 			CurrentTab, err = exec.TabNext(c.Args, tab)
+			TabBar.Update()
 		case "tp", "tab-prev":
 			CurrentTab, err = exec.TabPrev(c.Args, tab)
+			TabBar.Update()
 		case "trim":
 			err = exec.Trim(c.Args, tab)
 		case "trim-on-save":
@@ -439,7 +444,6 @@ func Render(renderTab bool) {
 	// Render objects
 
 	if Tabs.Count() > 1 {
-		TabBar.Update()
 		TabBar.Render(TabBarFrame)
 	}
 
@@ -559,6 +563,7 @@ func Start() {
 		OpenArgFiles()
 	}
 
+	TabBar.Init()
 	Render(true)
 
 	changeWatcher := time.NewTicker(500 * time.Millisecond)

@@ -634,6 +634,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 			tab, err = exec.Edit(c.Args, tab)
 			if err == nil {
 				CurrentTab = tab
+				TabBar.Update()
 			}
 			updateView = false
 		case "esc":
@@ -654,6 +655,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 			tab, err = exec.Help(c.Args, tab)
 			if err == nil {
 				CurrentTab = tab
+				TabBar.Update()
 			}
 			updateView = false
 		case "insert-line-above":
@@ -666,6 +668,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 			knTab, err := exec.KeyName(c.Args, tab)
 			if err == nil {
 				CurrentTab = knTab
+				TabBar.Update()
 			}
 		case "left":
 			err = exec.Left(c.Args, tab)
@@ -699,6 +702,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 			} else if tab != nil {
 				Tabs = tab.First()
 				CurrentTab = tab
+				TabBar.Update()
 			}
 			updateView = false
 		case "quit!", "q!":
@@ -709,6 +713,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 			} else {
 				Tabs = tab.First()
 				CurrentTab = tab
+				TabBar.Update()
 			}
 			updateView = false
 		case "redo":
@@ -741,6 +746,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 			err = exec.SelTabEnd(c.Args, tab)
 		case "sel-to-tab":
 			CurrentTab, err = exec.SelToTab(c.Args, tab)
+			TabBar.Update()
 		case "sel-switch-cursor":
 			err = exec.SelSwitchCursor(c.Args, tab)
 		case "sel-up":
@@ -764,8 +770,10 @@ func (p *prompt) Exec() TcellEventReceiver {
 			info = fmt.Sprintf("%d", Tabs.Count())
 		case "tn", "tab-next":
 			CurrentTab, err = exec.TabNext(c.Args, CurrentTab)
+			TabBar.Update()
 		case "tp", "tab-prev":
 			CurrentTab, err = exec.TabPrev(c.Args, CurrentTab)
+			TabBar.Update()
 		case "trim":
 			err = exec.Trim(c.Args, tab)
 		case "trim-on-save":
