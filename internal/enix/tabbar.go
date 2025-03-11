@@ -139,7 +139,7 @@ func (tb *tabBar) Render(frame frame.Frame) {
 
 	for _, it := range tb.items {
 		name := it.name
-		if it.Tab == CurrentTab {
+		if it.Tab.HasChanges() {
 			name = "*" + name
 		}
 		names = append(names, name)
