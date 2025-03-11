@@ -5,32 +5,32 @@ import (
 	"github.com/m-kru/enix/internal/tab"
 )
 
-func RxMouseEvent(ev mouse.Event) *tab.Tab {
+func (tb *TabBar) RxMouseEvent(ev mouse.Event) *tab.Tab {
 	switch ev.(type) {
 	case mouse.PrimaryClick, mouse.DoublePrimaryClick, mouse.TriplePrimaryClick:
-		if lFrame.Within(ev.X(), ev.Y()) {
-			viewLeft()
-		} else if rFrame.Within(ev.X(), ev.Y()) {
-			viewRight()
+		if tb.lFrame.Within(ev.X(), ev.Y()) {
+			tb.viewLeft()
+		} else if tb.rFrame.Within(ev.X(), ev.Y()) {
+			tb.viewRight()
 		} else {
-			return clickItemsFrame(ev.X() - iFrame.X)
+			return tb.clickItemsFrame(ev.X() - tb.iFrame.X)
 		}
 	case mouse.WheelDown:
-		viewRight()
+		tb.viewRight()
 	case mouse.WheelUp:
-		viewLeft()
+		tb.viewLeft()
 	}
 
 	return nil
 }
 
-func clickItemsFrame(x int) *tab.Tab {
-	rIdx, _, ok := line.RuneIdx(view.Column + x)
+func (tb *TabBar) clickItemsFrame(x int) *tab.Tab {
+	rIdx, _, ok := tb.line.RuneIdx(tb.view.Column + x)
 	if !ok {
 		return nil
 	}
 
-	for _, item := range items {
+	for _, item := range tb.items {
 		if item.StartIdx <= rIdx && rIdx < item.EndIdx {
 			return item.Tab
 		}

@@ -1,6 +1,9 @@
 package tabbar
 
 import (
+	"fmt"
+	"os"
+	"strings"
 	"unicode/utf8"
 
 	"github.com/m-kru/enix/internal/frame"
@@ -9,42 +12,73 @@ import (
 	vw "github.com/m-kru/enix/internal/view"
 )
 
-var line *ln.Line
+type tabBarItem struct {
+	Tab      *tab.Tab
+	Name     string
+	StartIdx int // Start rune idx
+	EndIdx   int // End rune idx
+}
 
-var lFrame frame.Frame // Left arrow frame
-var iFrame frame.Frame // Items frame
-var rFrame frame.Frame // Right arrow frame
+func (item *tabBarItem) assignName(lvl int) {
+	fields := strings.Split(item.Tab.Path, fmt.Sprintf("%c", os.PathSeparator))
+	name := ""
 
-var view vw.View
+	if lvl > 0 {
+		for x := range lvl {
+			if x >= len(fields)-1 {
+				break
+			}
 
-func SetFrame(f frame.Frame) {
-	lFrame = f.ColumnSubframe(f.X, 2)
-	iFrame = f.ColumnSubframe(f.X+2, f.Width-4)
-	rFrame = f.ColumnSubframe(f.LastX()-1, 2)
+			name = fmt.Sprintf(
+				"%s%c%s",
+				fields[len(fields)-2-x], os.PathSeparator, name,
+			)
+		}
+	}
+
+	name += fields[(len(fields) - 1)]
+
+	item.Name = name
+}
+
+type TabBar struct {
+	items []*tabBarItem
+
+	line   *ln.Line
+	lFrame frame.Frame // Left arrow frame
+	iFrame frame.Frame // Items frame
+	rFrame frame.Frame // Right arrow frame
+	view   vw.View
+}
+
+func (tb *TabBar) SetFrame(f frame.Frame) {
+	tb.lFrame = f.ColumnSubframe(f.X, 2)
+	tb.iFrame = f.ColumnSubframe(f.X+2, f.Width-4)
+	tb.rFrame = f.ColumnSubframe(f.LastX()-1, 2)
 
 	// Init view
-	if view.Line == 0 {
-		view = vw.View{
+	if tb.view.Line == 0 {
+		tb.view = vw.View{
 			Line:   1,
 			Column: 1,
 			Height: 1,
-			Width:  iFrame.Width,
+			Width:  tb.iFrame.Width,
 		}
 	}
 }
 
-func Update(tabs *tab.Tab, currentTab *tab.Tab) {
-	items = createItems(tabs)
+func (tb *TabBar) Update(tabs *tab.Tab, currentTab *tab.Tab) {
+	tb.createItems(tabs)
 
 	// Create line
-	line, _ = ln.FromString("")
+	line, _ := ln.FromString("")
 
 	rIdx := 0
 
-	for x := range items {
-		t := items[x].Tab
+	for x := range tb.items {
+		t := tb.items[x].Tab
 
-		items[x].StartIdx = rIdx
+		tb.items[x].StartIdx = rIdx
 
 		line.Append([]byte(" "))
 		rIdx++
@@ -54,29 +88,31 @@ func Update(tabs *tab.Tab, currentTab *tab.Tab) {
 			rIdx++
 		}
 
-		name := items[x].Name
+		name := tb.items[x].Name
 		line.Append([]byte(name))
 		rIdx += utf8.RuneCountInString(name)
 
 		line.Append([]byte(" "))
 		rIdx++
 
-		items[x].EndIdx = rIdx
+		tb.items[x].EndIdx = rIdx
+	}
+
+	tb.line = line
+}
+
+func (tb *TabBar) viewLeft() {
+	for range 2 {
+		tb.view = tb.view.Left()
 	}
 }
 
-func viewLeft() {
+func (tb *TabBar) viewRight() {
+	lineCols := tb.line.Columns()
 	for range 2 {
-		view = view.Left()
-	}
-}
-
-func viewRight() {
-	lineCols := line.Columns()
-	for range 2 {
-		if view.LastColumn() >= lineCols {
+		if tb.view.LastColumn() >= lineCols {
 			return
 		}
-		view = view.Right()
+		tb.view = tb.view.Right()
 	}
 }

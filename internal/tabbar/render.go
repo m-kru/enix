@@ -6,8 +6,8 @@ import (
 	"github.com/m-kru/enix/internal/tab"
 )
 
-func Render(currentTab *tab.Tab) {
-	currentItem := getCurrentItem(currentTab)
+func (tb *TabBar) Render(currentTab *tab.Tab) {
+	currentItem := tb.getCurrentItem(currentTab)
 
 	hls := []highlight.Highlight{
 		highlight.Highlight{
@@ -25,36 +25,36 @@ func Render(currentTab *tab.Tab) {
 		highlight.Highlight{
 			LineNum:      1,
 			StartRuneIdx: currentItem.EndIdx,
-			EndRuneIdx:   line.RuneCount(),
+			EndRuneIdx:   tb.line.RuneCount(),
 			Style:        cfg.Style.TabBar,
 		},
 	}
 
-	line.Render(1, iFrame, view, hls, nil)
+	tb.line.Render(1, tb.iFrame, tb.view, hls, nil)
 
 	// Fill missing space
-	for x := line.Columns(); x < iFrame.Width; x++ {
-		iFrame.SetContent(x, 0, ' ', cfg.Style.TabBar)
+	for x := tb.line.Columns(); x < tb.iFrame.Width; x++ {
+		tb.iFrame.SetContent(x, 0, ' ', cfg.Style.TabBar)
 	}
 
-	renderLeftArrow()
-	renderRightArrow()
+	tb.renderLeftArrow()
+	tb.renderRightArrow()
 }
 
-func renderLeftArrow() {
+func (tb *TabBar) renderLeftArrow() {
 	r := ' '
-	if view.Column > 1 {
+	if tb.view.Column > 1 {
 		r = '<'
 	}
-	lFrame.SetContent(0, 0, r, cfg.Style.TabBar)
-	lFrame.SetContent(1, 0, ' ', cfg.Style.TabBar)
+	tb.lFrame.SetContent(0, 0, r, cfg.Style.TabBar)
+	tb.lFrame.SetContent(1, 0, ' ', cfg.Style.TabBar)
 }
 
-func renderRightArrow() {
-	rFrame.SetContent(0, 0, ' ', cfg.Style.TabBar)
+func (tb *TabBar) renderRightArrow() {
+	tb.rFrame.SetContent(0, 0, ' ', cfg.Style.TabBar)
 	r := ' '
-	if view.LastColumn() < line.Columns() {
+	if tb.view.LastColumn() < tb.line.Columns() {
 		r = '>'
 	}
-	rFrame.SetContent(1, 0, r, cfg.Style.TabBar)
+	tb.rFrame.SetContent(1, 0, r, cfg.Style.TabBar)
 }

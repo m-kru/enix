@@ -1,36 +1,23 @@
 package tabbar
 
 import (
-	"fmt"
-	"os"
-	"strings"
-
 	"github.com/m-kru/enix/internal/tab"
 )
 
-var items []item
-
-type item struct {
-	Tab      *tab.Tab
-	Name     string
-	StartIdx int // Start rune idx
-	EndIdx   int // End rune idx
-}
-
-func getCurrentItem(currentTab *tab.Tab) *item {
-	for x := range items {
-		if items[x].Tab == currentTab {
-			return &items[x]
+func (tb *TabBar) getCurrentItem(currentTab *tab.Tab) *tabBarItem {
+	for x := range tb.items {
+		if tb.items[x].Tab == currentTab {
+			return tb.items[x]
 		}
 	}
 
 	// If the code gets here, then there is a bug.
 	// However, to avoid panics return first item.
-	return &items[0]
+	return tb.items[0]
 }
 
-func createItems(tabs *tab.Tab) []item {
-	items := make([]item, 0, tabs.Count())
+func (tb *TabBar) createItems(tabs *tab.Tab) {
+	tb.items = make([]*tabBarItem, 0, tabs.Count())
 
 	t := tabs
 	for {
@@ -38,59 +25,33 @@ func createItems(tabs *tab.Tab) []item {
 			break
 		}
 
-		i := item{t, "", 0, 0}
-		items = append(items, i)
+		i := tabBarItem{t, "", 0, 0}
+		tb.items = append(tb.items, &i)
 
 		t = t.Next
 	}
 
-	items = assignItemNames(items)
-
-	return items
+	tb.assignItemNames()
 }
 
-func assignItemNames(items []item) []item {
-	for x := range items {
-		assignItemName(&items[x], 0)
+func (tb *TabBar) assignItemNames() {
+	for x := range tb.items {
+		tb.items[x].assignName(0)
 	}
 
 	for lvl := 1; ; lvl++ {
-		confs := itemsNameConflicts(items)
+		confs := tb.itemsNameConflicts()
 		if len(confs) == 0 {
 			break
 		}
-		items = extendItemsNames(items, confs, lvl)
+		tb.extendItemsNames(confs, lvl)
 	}
-
-	return items
 }
 
-func assignItemName(item *item, lvl int) {
-	fields := strings.Split(item.Tab.Path, fmt.Sprintf("%c", os.PathSeparator))
-	name := ""
-
-	if lvl > 0 {
-		for x := range lvl {
-			if x >= len(fields)-1 {
-				break
-			}
-
-			name = fmt.Sprintf(
-				"%s%c%s",
-				fields[len(fields)-2-x], os.PathSeparator, name,
-			)
-		}
-	}
-
-	name += fields[(len(fields) - 1)]
-
-	item.Name = name
-}
-
-func itemsNameConflicts(items []item) map[string][]int {
+func (tb *TabBar) itemsNameConflicts() map[string][]int {
 	names := make(map[string][]int)
 
-	for x, i := range items {
+	for x, i := range tb.items {
 		names[i.Name] = append(names[i.Name], x)
 	}
 
@@ -103,16 +64,14 @@ func itemsNameConflicts(items []item) map[string][]int {
 	return names
 }
 
-func extendItemsNames(items []item, confs map[string][]int, lvl int) []item {
+func (tb *TabBar) extendItemsNames(confs map[string][]int, lvl int) {
 	for _, idxs := range confs {
-		its := []*item{}
+		its := []*tabBarItem{}
 		for _, x := range idxs {
-			its = append(its, &items[x])
+			its = append(its, tb.items[x])
 		}
 		for _, it := range its {
-			assignItemName(it, lvl)
+			it.assignName(lvl)
 		}
 	}
-
-	return items
 }

@@ -33,6 +33,8 @@ var StatusLineFrame frame.Frame
 var PromptMenuFrame frame.Frame
 var PromptFrame frame.Frame
 
+var TabBar tabbar.TabBar
+
 var Tabs *tab.Tab // First tab
 var CurrentTab *tab.Tab
 
@@ -43,7 +45,7 @@ func RxMouseEvent(ev mouse.Event) {
 	y := ev.Y()
 
 	if TabBarFrame.Within(x, y) {
-		newCurrentTab := tabbar.RxMouseEvent(ev)
+		newCurrentTab := TabBar.RxMouseEvent(ev)
 		if newCurrentTab != nil {
 			CurrentTab = newCurrentTab
 		}
@@ -422,7 +424,7 @@ func Render(renderTab bool) {
 			Width:  width,
 			Height: 1,
 		}
-		tabbar.SetFrame(f)
+		TabBar.SetFrame(f)
 		TabBarFrame = f
 	} else {
 		TabBarFrame = frame.NilFrame()
@@ -439,8 +441,8 @@ func Render(renderTab bool) {
 	// Render objects
 
 	if Tabs.Count() > 1 {
-		tabbar.Update(Tabs, CurrentTab)
-		tabbar.Render(CurrentTab)
+		TabBar.Update(Tabs, CurrentTab)
+		TabBar.Render(CurrentTab)
 	}
 
 	if renderTab {
