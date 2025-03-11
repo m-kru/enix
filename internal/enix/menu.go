@@ -25,7 +25,7 @@ type menu struct {
 	view view.View
 }
 
-func newMenu(itemNames []string) *menu {
+func newMenu(itemNames []string, currItemIdx int) *menu {
 	// Create line and item list
 	items := make([]menuItem, len(itemNames))
 	line, _ := line.FromString("")
@@ -61,7 +61,7 @@ func newMenu(itemNames []string) *menu {
 
 	return &menu{
 		items:       items,
-		currItemIdx: 0,
+		currItemIdx: currItemIdx,
 		line:        line,
 		view:        view,
 	}

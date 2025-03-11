@@ -423,7 +423,6 @@ func Render(renderTab bool) {
 			Width:  width,
 			Height: 1,
 		}
-		TabBar.SetFrame(f)
 		TabBarFrame = f
 	} else {
 		TabBarFrame = frame.NilFrame()
@@ -440,8 +439,8 @@ func Render(renderTab bool) {
 	// Render objects
 
 	if Tabs.Count() > 1 {
-		TabBar.Update(Tabs, CurrentTab)
-		TabBar.Render(CurrentTab)
+		TabBar.Update()
+		TabBar.Render(TabBarFrame)
 	}
 
 	if renderTab {
