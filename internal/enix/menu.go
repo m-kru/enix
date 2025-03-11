@@ -77,6 +77,7 @@ func (menu *menu) CurrentItemName() string {
 
 func (menu *menu) updateView() {
 	// Screen might be resized, update view width
+	// Assume a menu always occupies full width.
 	width, _ := Screen.Size()
 	menu.view.Width = width - 4
 
