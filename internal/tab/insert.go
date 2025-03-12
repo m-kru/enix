@@ -186,9 +186,9 @@ func (tab *Tab) RxEventKeyInsert(ev *tcell.EventKey) string {
 	case tcell.KeyEnter:
 		act = tab.insertNewline()
 	default:
-		c, _ := cfg.KeysInsert.ToCmd(ev)
-		for range c.RepCount {
-			switch c.Name {
+		cmd, _ := cfg.KeysInsert.ToCmd(ev)
+		for range cmd.RepCount {
+			switch cmd.Name {
 			case "esc":
 				// Trim spaces from empty lines.
 				curs := cursor.Uniques(tab.Cursors, true)
@@ -215,7 +215,7 @@ func (tab *Tab) RxEventKeyInsert(ev *tcell.EventKey) string {
 				tab.ViewUp()
 				updateView = false
 			case "path", "sh":
-				return c.String()
+				return cmd.String()
 			}
 		}
 	}
