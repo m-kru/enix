@@ -4,6 +4,7 @@ import (
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/highlight"
 	"github.com/m-kru/enix/internal/line"
+	"github.com/m-kru/enix/internal/util"
 )
 
 type Section struct {
@@ -39,8 +40,8 @@ func (sec Section) Analyze(line *line.Line, startLineIdx int) ([]highlight.Highl
 		// First create region default highlight
 		hl := highlight.Highlight{
 			LineNum:      lineIdx,
-			StartRuneIdx: startIdx,
-			EndRuneIdx:   endIdx,
+			StartRuneIdx: util.ByteIdxToRuneIdx(line.Buf, startIdx),
+			EndRuneIdx:   util.ByteIdxToRuneIdx(line.Buf, endIdx),
 			Style:        cfg.Style.Get(sec.Region.Style),
 		}
 		hls = append(hls, hl)
