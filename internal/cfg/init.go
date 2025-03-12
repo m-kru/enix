@@ -3,6 +3,7 @@ package cfg
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 
@@ -12,7 +13,7 @@ import (
 )
 
 // Function Init initializes and returns various configurations at the program start.
-func Init() error {
+func Init() {
 	Keys = DefaultKeybindings()
 	KeysInsert = DefaultInsertKeybindings()
 	KeysPrompt = DefaultPromptKeybindings()
@@ -27,20 +28,21 @@ func Init() error {
 		err = initCfg()
 	}
 	if err != nil {
-		return err
+		Cfg = DefaultConfig()
+		log.Printf("%v", err)
 	}
 
 	err = initColors()
 	if err != nil {
-		return err
+		Colors = DefaultColors()
+		log.Printf("%v", err)
 	}
 
 	err = initStyle()
 	if err != nil {
-		return err
+		Style = DefaultStyle()
+		log.Printf("%v", err)
 	}
-
-	return nil
 }
 
 func initCfg() error {

@@ -18,10 +18,7 @@ func main() {
 
 	arg.Parse()
 
-	err := cfg.Init()
-	if err != nil {
-		log.Fatalf("%v", err)
-	}
+	cfg.Init()
 
 	if arg.DumpConfig {
 		data, err := json.MarshalIndent(cfg.Cfg, "", "\t")
