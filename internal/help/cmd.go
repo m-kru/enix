@@ -218,6 +218,10 @@ To restore marks one has to use the 'go' command providing as an argument the na
 
 	"line-count": `line-count # Prints the number of lines in the current tab.`,
 
+	"path": `path file/system/path # Inserts file system path.
+The command is useful because user can automatically expand the path using the tab key.
+Enix doesn't verify if the provided path exists.`,
+
 	"pwd": `pwd # Prints working directory.`,
 
 	"q": `q # An alias for the 'quit' command.`,

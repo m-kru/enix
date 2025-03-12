@@ -11,10 +11,12 @@ import (
 	"github.com/m-kru/enix/internal/util"
 )
 
-func (tab *Tab) Paste() {
-	text := clip.Read()
+func (tab *Tab) Paste(text string) {
 	if len(text) == 0 {
-		return
+		text = clip.Read()
+		if len(text) == 0 {
+			return
+		}
 	}
 
 	prevCurs := cursor.Clone(tab.Cursors)

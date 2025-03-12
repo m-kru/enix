@@ -91,6 +91,7 @@ func DefaultKeybindings() Keybindings {
 		"Rune[ ]": "space",
 		"Rune[>]": "indent",
 		"Tab":     "tab",
+		"Ctrl+P":  "path",
 		// Selection
 		"Rune[%]": "sel-all",
 		"Rune[v]": "sel-line",
@@ -144,6 +145,7 @@ func DefaultInsertKeybindings() Keybindings {
 	return map[string]string{
 		"Ctrl+A":     "line-start",
 		"Ctrl+T":     "sh -i tmpl -enix $ENIX_FILETYPE",
+		"Ctrl+P":     "path",
 		"Backspace":  "backspace",
 		"Backspace2": "backspace",
 		"Delete":     "del",

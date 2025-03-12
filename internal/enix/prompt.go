@@ -688,6 +688,8 @@ func (p *prompt) Exec() TcellEventReceiver {
 			info, err = exec.Mark(c.Args, tab)
 		case "pwd":
 			info, err = exec.Pwd(c.Args)
+		case "path":
+			err = exec.Path(c.Args, tab)
 		case "paste":
 			err = exec.Paste(c.Args, tab)
 		case "right":

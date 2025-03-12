@@ -93,6 +93,18 @@ func LineCount(args []string, tab *tab.Tab) (string, error) {
 	return fmt.Sprintf("%d", tab.LineCount), nil
 }
 
+func Path(args []string, tab *tab.Tab) error {
+	if len(args) != 1 {
+		return fmt.Errorf(
+			"path: expected 1 arg, provided %d", len(args),
+		)
+	}
+
+	tab.InsertPath(args[0])
+
+	return nil
+}
+
 func Trim(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf(
@@ -200,7 +212,7 @@ func Paste(args []string, tab *tab.Tab) error {
 		)
 	}
 
-	tab.Paste()
+	tab.Paste("")
 
 	return nil
 }

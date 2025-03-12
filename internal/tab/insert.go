@@ -214,7 +214,7 @@ func (tab *Tab) RxEventKeyInsert(ev *tcell.EventKey) string {
 			case "view-up":
 				tab.ViewUp()
 				updateView = false
-			case "sh":
+			case "path", "sh":
 				return c.String()
 			}
 		}
@@ -410,4 +410,17 @@ func (tab *Tab) insertNewlineSelections() action.Actions {
 	}
 
 	return actions
+}
+
+func (tab *Tab) InsertPath(path string) {
+	tab.Paste(path)
+
+	if len(tab.Selections) > 0 {
+		tab.Cursors = sel.ToCursors(tab.Selections)
+		tab.Selections = nil
+
+		for _, c := range tab.Cursors {
+			c.Right()
+		}
+	}
 }

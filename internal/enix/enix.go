@@ -215,6 +215,9 @@ func RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			info, err = exec.Mark(c.Args, tab)
 		case "newline":
 			err = exec.Newline(c.Args, tab)
+		case "path":
+			Prompt.Activate("path ", tab.GetWord())
+			return &Prompt
 		case "paste":
 			err = exec.Paste(c.Args, tab)
 		case "pwd":
