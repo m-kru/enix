@@ -89,8 +89,9 @@ func (s *Selection) adjust(c *cursor.Cursor) *Selection {
 		s.Cursor = c
 
 		if oldCurOnLeft {
-			first = s
+			s.Prev = nil
 			s.StartRuneIdx = c.RuneIdx
+			first = s
 		} else {
 			s.EndRuneIdx = c.RuneIdx
 			s.Next = nil
