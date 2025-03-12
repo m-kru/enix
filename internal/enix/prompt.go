@@ -324,7 +324,7 @@ func (p *prompt) openPathMenu(path string) {
 		if len(dir) == 1 && dir[0] == '.' {
 			dir = ""
 		}
-		if dir != "" {
+		if len(dir) > 1 {
 			dir += string(os.PathSeparator)
 		}
 
