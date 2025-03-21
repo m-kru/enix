@@ -103,8 +103,9 @@ func DefaultKeybindings() Keybindings {
 		"Rune[H]": "sel-left",
 		"Rune[L]": "sel-right",
 		"Rune[K]": "sel-up",
-		"Rune[W]": "sel-word",
+		"Rune[W]": "sel-word-start",
 		"Rune[E]": "sel-word-end",
+		"Rune[z]": "sel-word",
 		"Rune[;]": "sel-switch-cursor",
 		"Rune[C]": "sel-tab-end",
 		// View
