@@ -117,18 +117,18 @@ func (c *Cursor) WordEnd() {
 	}
 }
 
-func (c *Cursor) WordStart() {
+func (c *Cursor) WordStart() bool {
 	if idx, ok := util.WordStart([]rune(c.Line.String()), c.RuneIdx); ok {
 		c.RuneIdx = idx
 		c.colIdx = c.Line.ColumnIdx(idx)
-		return
+		return true
 	}
 
 	line := c.Line.Next
 	lineNum := c.LineNum
 	for {
 		if line == nil {
-			return
+			return false
 		}
 		lineNum++
 
@@ -137,7 +137,7 @@ func (c *Cursor) WordStart() {
 			c.LineNum = lineNum
 			c.RuneIdx = idx
 			c.colIdx = c.Line.ColumnIdx(idx)
-			return
+			return true
 		}
 
 		line = line.Next

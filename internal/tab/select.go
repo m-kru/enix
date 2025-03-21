@@ -205,8 +205,11 @@ func (tab *Tab) SelWord() {
 }
 
 func (tab *Tab) selWordCursors() {
-	tab.Selections = sel.FromCursorsWord(tab.Cursors)
-	tab.Cursors = nil
+	sels := sel.FromCursorsWord(tab.Cursors)
+	if len(sels) > 0 {
+		tab.Selections = sels
+		tab.Cursors = nil
+	}
 }
 
 func (tab *Tab) selWordSelections() {
