@@ -161,19 +161,6 @@ func (c *Cursor) LineStart() {
 }
 
 func (c *Cursor) LineEnd() {
-	for i := c.Line.RuneCount() - 1; i > 0; i-- {
-		r := c.Line.Rune(i)
-		if !unicode.IsSpace(r) {
-			if c.RuneIdx == i+1 {
-				break
-			} else {
-				c.RuneIdx = i + 1
-				c.colIdx = c.Line.ColumnIdx(c.RuneIdx)
-				return
-			}
-		}
-	}
-
 	c.RuneIdx = c.Line.RuneCount()
 	c.colIdx = c.Line.ColumnIdx(c.RuneIdx)
 }
