@@ -220,6 +220,8 @@ func RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			return &Prompt
 		case "paste":
 			err = exec.Paste(c.Args, tab)
+		case "paste-before":
+			err = exec.PasteBefore(c.Args, tab)
 		case "pwd":
 			info, err = exec.Pwd(c.Args)
 		case "quit", "q":

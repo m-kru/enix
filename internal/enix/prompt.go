@@ -692,6 +692,8 @@ func (p *prompt) Exec() TcellEventReceiver {
 			err = exec.Path(c.Args, tab)
 		case "paste":
 			err = exec.Paste(c.Args, tab)
+		case "paste-before":
+			err = exec.PasteBefore(c.Args, tab)
 		case "right":
 			err = exec.Right(c.Args, tab)
 		case "rune":

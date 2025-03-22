@@ -139,7 +139,7 @@ func (tab *Tab) insertLineAboveCursors() action.Actions {
 
 		newLine := c.Line.Prev
 		rIdx := newLine.RuneCount()
-		newC := cursor.New(newLine, c.LineNum, rIdx)
+		newC := cursor.New(newLine, c.LineNum-1, rIdx)
 
 		newCurs = append(newCurs, newC)
 	}

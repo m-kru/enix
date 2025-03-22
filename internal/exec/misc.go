@@ -217,6 +217,18 @@ func Paste(args []string, tab *tab.Tab) error {
 	return nil
 }
 
+func PasteBefore(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf(
+			"paste-before: expected 0 args, provided %d", len(args),
+		)
+	}
+
+	tab.PasteBefore("")
+
+	return nil
+}
+
 func Pwd(args []string) (string, error) {
 	if len(args) > 0 {
 		return "", fmt.Errorf(

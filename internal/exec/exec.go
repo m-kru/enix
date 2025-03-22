@@ -42,6 +42,8 @@ func Exec(c cmd.Command, tab *tab.Tab) error {
 			_, err = Mark(c.Args, tab)
 		case "newline":
 			err = Newline(c.Args, tab)
+		case "paste-before":
+			err = PasteBefore(c.Args, tab)
 		case "prev-word-start":
 			err = PrevWordStart(c.Args, tab)
 		case "right":
@@ -76,6 +78,8 @@ func Exec(c cmd.Command, tab *tab.Tab) error {
 			err = WordEnd(c.Args, tab)
 		case "word-start":
 			err = WordStart(c.Args, tab)
+		case "yank":
+			_, err = Yank(c.Args, tab)
 		default:
 			err = fmt.Errorf("invalid or unimplemented command '%s'", c.Name)
 		}

@@ -75,7 +75,9 @@ func (c *Cursor) InsertLineAbove(s string) *action.LineInsert {
 	newLine.Prev = c.Line.Prev
 	c.Line.Prev = newLine
 
-	return &action.LineInsert{Line: newLine, LineNum: c.LineNum}
+	c.LineNum++
+
+	return &action.LineInsert{Line: newLine, LineNum: c.LineNum - 1}
 }
 
 func (c *Cursor) InsertLineBelow(s string) *action.LineInsert {

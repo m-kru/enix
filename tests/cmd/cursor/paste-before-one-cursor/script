@@ -1,0 +1,6 @@
+down
+2 sel-line
+yank
+esc
+paste-before
+save got
