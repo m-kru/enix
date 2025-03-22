@@ -340,15 +340,14 @@ func (tab *Tab) pasteBeforeSelections(text string) action.Actions {
 }
 
 func (tab *Tab) pasteBeforeSelectionsLineBased(text string) action.Actions {
-	/*
-		selCurs := make([]*cursor.Cursor, 0, len(tab.Selections))
-		for _, s := range tab.Selections {
-			selCurs = append(selCurs, s.SpawnCursorOnRight())
-		}
+	selCurs := make([]*cursor.Cursor, 0, len(tab.Selections))
 
-		curs := cursor.Uniques(selCurs, true)
+	for _, s := range tab.Selections {
+		c := cursor.New(s.Line, s.LineNum, 0)
+		selCurs = append(selCurs, c)
+	}
 
-		return tab.pasteLineBased(text, false, curs)
-	*/
-	return nil
+	curs := cursor.Uniques(selCurs, true)
+
+	return tab.pasteBeforeLineBased(text, false, curs)
 }
