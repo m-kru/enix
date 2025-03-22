@@ -41,6 +41,7 @@ func (tab *Tab) pasteLineBased(text string, addIndent bool, curs []*cursor.Curso
 	var lines *line.Line
 	var lineCount int
 	for _, cur := range curs {
+		// Each cursors might be in a line with a different indent.
 		if lines == nil || addIndent {
 			t := text
 			if addIndent {
