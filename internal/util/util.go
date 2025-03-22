@@ -17,7 +17,7 @@ var fileExtToType = map[string]string{
 	"fbd":  "fbdl",
 	"go":   "go",
 	"json": "json",
-	"tex":  "latex",
+	"tex":  "tex",
 	"md":   "markdown",
 	"py":   "python",
 	"tcl":  "tcl",
