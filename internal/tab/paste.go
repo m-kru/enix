@@ -52,12 +52,8 @@ func (tab *Tab) pasteLineBased(text string, addIndent bool, curs []*cursor.Curso
 
 		var startCur *cursor.Cursor
 
-		// Move cursor to the first column.
-		cur.LineStart()
-		// There might be spaces at the line start.
-		if cur.RuneIdx != 0 {
-			cur.LineStart()
-		}
+		// Create cursor at the line start
+		cur = cursor.New(cur.Line, cur.LineNum, 0)
 
 		acts := make(action.Actions, 0, lineCount)
 
@@ -78,10 +74,8 @@ func (tab *Tab) pasteLineBased(text string, addIndent bool, curs []*cursor.Curso
 				startCur = cur.Clone()
 			}
 
-			for _, cur2 := range curs {
-				if cur2 != cur {
-					cur2.Inform(act)
-				}
+			for _, c := range curs {
+				c.Inform(act)
 			}
 
 			for _, m := range tab.Marks {
