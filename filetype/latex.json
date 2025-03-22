@@ -19,7 +19,7 @@
 		"Name": "Command",
 		"Style": "Keyword",
 		"Start": {
-			"Regex": "\\\\\\w"
+			"Regex": "\\\\[a-zA-Z]"
 		},
 		"End": {
 			"Regex": "\\w",
