@@ -356,7 +356,7 @@ func FromCursorsWord(curs []*cursor.Cursor) []*Selection {
 	sels := make([]*Selection, 0, len(curs))
 
 	for _, c := range curs {
-		s := fromCursorWord(c)
+		s := FromCursorWord(c)
 		if s != nil {
 			sels = append(sels, s)
 		}
@@ -367,7 +367,7 @@ func FromCursorsWord(curs []*cursor.Cursor) []*Selection {
 	return sels
 }
 
-func fromCursorWord(c *cursor.Cursor) *Selection {
+func FromCursorWord(c *cursor.Cursor) *Selection {
 	wordPos := c.WordPosition()
 
 	switch wordPos {

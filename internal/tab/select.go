@@ -213,12 +213,18 @@ func (tab *Tab) selWordCursors() {
 }
 
 func (tab *Tab) selWordSelections() {
-	/*
-		for i, s := range tab.Selections {
-			tab.Selections[i] = s.Word()
+	for i, s1 := range tab.Selections {
+		c := s1.GetCursor()
+		s2 := sel.FromCursorWord(c)
+		if s2 == nil {
+			continue
 		}
-		tab.Selections = sel.Prune(tab.Selections)
-	*/
+		if s1.Line == s2.Line && s1.StartRuneIdx == s2.StartRuneIdx && s1.EndRuneIdx == s2.EndRuneIdx {
+			continue
+		}
+		tab.Selections[i] = s2
+	}
+	tab.Selections = sel.Prune(tab.Selections)
 }
 
 func (tab *Tab) SelWordEnd() {
