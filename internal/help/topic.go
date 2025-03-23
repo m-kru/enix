@@ -165,7 +165,7 @@ To get currently set keybindings, call enix with one of the following flags:
 '-dump-keys', '-dump-keys-insert', or '-dump-keys-prompt'.
 
 The default keybindings try to follow the following rules (with some exceptions):
-  - The most common commands are under primary keys
+  - The most common commands are under primary keys.
     The actions associated with them can be executed with a single keystroke.
   - Keybindings with the Ctrl modifier are used to control things.
     For example, spawn new cursors, scroll view, create or iterate tabs.
