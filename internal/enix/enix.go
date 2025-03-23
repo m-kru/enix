@@ -66,7 +66,7 @@ func RxMouseEvent(ev mouse.Event) {
 	case mouse.PrimaryClick:
 		CurrentTab.PrimaryClick(x, y)
 	case mouse.DoublePrimaryClick:
-		// Implement word selection here.
+		CurrentTab.DoublePrimaryClick(x, y)
 	case mouse.PrimaryClickCtrl:
 		CurrentTab.PrimaryClickCtrl(x, y)
 	case mouse.WheelDown:
