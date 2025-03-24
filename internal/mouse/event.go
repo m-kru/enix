@@ -42,6 +42,15 @@ func (pcc PrimaryClickCtrl) isEvent() {}
 func (pcc PrimaryClickCtrl) X() int   { return pcc.x }
 func (pcc PrimaryClickCtrl) Y() int   { return pcc.y }
 
+type PrimaryClickAlt struct {
+	x int
+	y int
+}
+
+func (pca PrimaryClickAlt) isEvent() {}
+func (pca PrimaryClickAlt) X() int   { return pca.x }
+func (pca PrimaryClickAlt) Y() int   { return pca.y }
+
 type WheelDown struct {
 	x int
 	y int

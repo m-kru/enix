@@ -65,10 +65,12 @@ func RxMouseEvent(ev mouse.Event) {
 	switch ev.(type) {
 	case mouse.PrimaryClick:
 		CurrentTab.PrimaryClick(x, y)
-	case mouse.DoublePrimaryClick:
-		CurrentTab.DoublePrimaryClick(x, y)
+	case mouse.PrimaryClickAlt:
+		CurrentTab.PrimaryClickAlt(x, y)
 	case mouse.PrimaryClickCtrl:
 		CurrentTab.PrimaryClickCtrl(x, y)
+	case mouse.DoublePrimaryClick:
+		CurrentTab.DoublePrimaryClick(x, y)
 	case mouse.WheelDown:
 		for range cfg.Cfg.MouseScrollMultiplier {
 			CurrentTab.ViewDown()

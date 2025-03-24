@@ -9,9 +9,10 @@ type State int
 const (
 	idle State = iota
 	primaryClick
+	primaryClickAlt
+	primaryClickCtrl
 	doublePrimaryClick
 	triplePrimaryClick
-	primaryClickCtrl
 )
 
 var state State
@@ -29,10 +30,12 @@ func RxTcellEventMouse(ev *tcell.EventMouse) Event {
 		return rxEventIdle(ev)
 	case primaryClick:
 		return rxEventPrimaryClick(ev)
-	case doublePrimaryClick:
-		return rxEventDoublePrimaryClick(ev)
+	case primaryClickAlt:
+		return rxEventPrimaryClickAlt(ev)
 	case primaryClickCtrl:
 		return rxEventPrimaryClickCtrl(ev)
+	case doublePrimaryClick:
+		return rxEventDoublePrimaryClick(ev)
 	}
 
 	return nil
@@ -49,7 +52,10 @@ func rxEventIdle(ev *tcell.EventMouse) Event {
 		if ev.Modifiers()&tcell.ModCtrl != 0 {
 			state = primaryClickCtrl
 			return PrimaryClickCtrl{x, y}
-		} else {
+		} else if ev.Modifiers()&tcell.ModAlt != 0 {
+			state = primaryClickAlt
+			return PrimaryClickAlt{x, y}
+		} else if ev.Modifiers() == 0 {
 			state = primaryClick
 			return PrimaryClick{x, y}
 		}
@@ -72,7 +78,9 @@ func rxEventPrimaryClick(ev *tcell.EventMouse) Event {
 		prevEv = ev
 		if x == x2 && y == y2 {
 			state = doublePrimaryClick
-			return DoublePrimaryClick{x, y}
+			if ev.Modifiers() == 0 {
+				return DoublePrimaryClick{x, y}
+			}
 		} else {
 			return PrimaryClick{x2, y2}
 		}
@@ -95,7 +103,7 @@ func rxEventDoublePrimaryClick(ev *tcell.EventMouse) Event {
 		prevEv = ev
 		if x == x2 && y == y2 {
 			// Go back to idle state.
-			// Triple primary click is a terminal event.
+			// Triple primary click is an ultimate event.
 			state = idle
 			return TriplePrimaryClick{x, y}
 		} else {
@@ -104,6 +112,31 @@ func rxEventDoublePrimaryClick(ev *tcell.EventMouse) Event {
 		// Implement TriplePrimaryClick event handling here.
 	case tcell.WheelDown, tcell.WheelUp:
 		return rxScrollEvent(ev)
+	default:
+		// Do nothing, other mouse event
+	}
+
+	return nil
+}
+
+func rxEventPrimaryClickAlt(ev *tcell.EventMouse) Event {
+	switch ev.Buttons() {
+	case tcell.ButtonNone:
+		// Do nothing, just mouse movement.
+	case tcell.Button1:
+		prevEv = ev
+		x, y := ev.Position()
+
+		if ev.Modifiers()&tcell.ModCtrl != 0 {
+			state = primaryClickCtrl
+			return PrimaryClickCtrl{x, y}
+		} else if ev.Modifiers()&tcell.ModAlt != 0 {
+			state = primaryClickAlt
+			return PrimaryClickAlt{x, y}
+		} else {
+			state = primaryClick
+			return PrimaryClick{x, y}
+		}
 	default:
 		// Do nothing, other mouse event
 	}
@@ -122,6 +155,9 @@ func rxEventPrimaryClickCtrl(ev *tcell.EventMouse) Event {
 		if ev.Modifiers()&tcell.ModCtrl != 0 {
 			state = primaryClickCtrl
 			return PrimaryClickCtrl{x, y}
+		} else if ev.Modifiers()&tcell.ModAlt != 0 {
+			state = primaryClickAlt
+			return PrimaryClickAlt{x, y}
 		} else {
 			state = primaryClick
 			return PrimaryClick{x, y}
