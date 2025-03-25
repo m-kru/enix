@@ -6,7 +6,8 @@
 		"Name": "Line Comment",
 		"Style": "Comment",
 		"Start": {
-			"Regex": "%"
+			"Regex": "%",
+			"NegativeLookBehind": "\\\\"
 		},
 		"End": {
 			"Regex": "$"
