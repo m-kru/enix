@@ -38,16 +38,5 @@
 			"Regex": "\\\\cite",
 			"PosiotiveLookAhead": "{"
 		}
-	},
-	{
-		"Name": "Math",
-		"Style": "Number",
-		"Start": {
-			"Regex": "\\$",
-			"NegativeLookBehind": "\\\\"
-		},
-		"End": {
-			"Regex": "\\$"
-		}
 	}
 ]
