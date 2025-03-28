@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/m-kru/enix/internal/action"
+	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/lang"
@@ -262,6 +263,8 @@ func (tab *Tab) SetFiletype(ft string) error {
 		return err
 	}
 	tab.Highlighter = hl
+
+	tab.IndentStr = cfg.Cfg.GetIndent(ft)
 
 	return nil
 }
