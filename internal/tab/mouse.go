@@ -26,9 +26,9 @@ func (tab *Tab) PrimaryClick(x, y int) {
 	}
 
 	c := cursor.New(line, line.Num(), rIdx)
+	tab.Cursors = []*cursor.Cursor{c}
 
-	tab.Cursors = make([]*cursor.Cursor, 1, 16)
-	tab.Cursors[0] = c
+	tab.Selections = nil
 }
 
 // PrimaryClickCtrl handles mouse primary button click with Ctrl modifier.
