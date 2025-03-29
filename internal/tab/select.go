@@ -247,6 +247,26 @@ func (tab *Tab) selWordEndSelections() {
 	tab.Selections = sel.Prune(tab.Selections)
 }
 
+func (tab *Tab) SelWordStart() {
+	if len(tab.Cursors) > 0 {
+		tab.selWordStartCursors()
+	} else {
+		tab.selWordStartSelections()
+	}
+}
+
+func (tab *Tab) selWordStartCursors() {
+	tab.Selections = sel.FromCursorsWordStart(tab.Cursors)
+	tab.Cursors = nil
+}
+
+func (tab *Tab) selWordStartSelections() {
+	for i, s := range tab.Selections {
+		tab.Selections[i] = s.WordStart()
+	}
+	tab.Selections = sel.Prune(tab.Selections)
+}
+
 func (tab *Tab) SelToTab(path string) *Tab {
 	if len(tab.Selections) == 0 {
 		return nil

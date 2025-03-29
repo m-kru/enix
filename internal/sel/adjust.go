@@ -309,6 +309,12 @@ func (s *Selection) WordEnd() *Selection {
 	return s.adjust(c)
 }
 
+func (s *Selection) WordStart() *Selection {
+	c := s.GetCursor().Clone()
+	c.WordStart()
+	return s.adjust(c)
+}
+
 func (s *Selection) TabEnd() *Selection {
 	c := s.GetCursor().Clone()
 	c.TabEnd()

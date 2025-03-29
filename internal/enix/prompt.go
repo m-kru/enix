@@ -757,6 +757,8 @@ func (p *prompt) Exec() TcellEventReceiver {
 			err = exec.SelUp(c.Args, tab)
 		case "sel-word-end":
 			err = exec.SelWordEnd(c.Args, tab)
+		case "sel-word-start":
+			err = exec.SelWordStart(c.Args, tab)
 		case "space":
 			err = exec.Space(c.Args, tab)
 		case "sh":

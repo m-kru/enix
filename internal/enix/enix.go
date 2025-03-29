@@ -289,6 +289,8 @@ func RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			err = exec.SelWord(c.Args, tab)
 		case "sel-word-end":
 			err = exec.SelWordEnd(c.Args, tab)
+		case "sel-word-start":
+			err = exec.SelWordStart(c.Args, tab)
 		case "sh":
 			Prompt.Activate(c.String(), "")
 			return &Prompt

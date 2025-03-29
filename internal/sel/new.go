@@ -464,6 +464,75 @@ func fromCursorWordEnd(c *cursor.Cursor) *Selection {
 	return first
 }
 
+func FromCursorsWordStart(curs []*cursor.Cursor) []*Selection {
+	sels := make([]*Selection, 0, len(curs))
+
+	for _, c := range curs {
+		sels = append(sels, fromCursorWordStart(c))
+	}
+
+	sels = Prune(sels)
+
+	return sels
+}
+
+func fromCursorWordStart(c *cursor.Cursor) *Selection {
+	s := &Selection{
+		Line:         c.Line,
+		LineNum:      c.LineNum,
+		StartRuneIdx: c.RuneIdx,
+		EndRuneIdx:   c.Line.RuneCount(),
+		Cursor:       nil,
+		Prev:         nil,
+		Next:         nil,
+	}
+
+	c.WordStart()
+
+	if c.Line == s.Line {
+		s.EndRuneIdx = c.RuneIdx
+		s.Cursor = c
+		return s
+	}
+
+	first := s
+
+	line := s.Line
+	lineNum := s.LineNum
+
+	for range c.LineNum - first.LineNum - 1 {
+		line = line.Next
+		lineNum++
+
+		nextS := &Selection{
+			Line:         line,
+			LineNum:      lineNum,
+			StartRuneIdx: 0,
+			EndRuneIdx:   line.RuneCount(),
+			Cursor:       nil,
+			Prev:         s,
+			Next:         nil,
+		}
+
+		s.Next = nextS
+		s = nextS
+	}
+
+	last := &Selection{
+		Line:         c.Line,
+		LineNum:      c.LineNum,
+		StartRuneIdx: 0,
+		EndRuneIdx:   c.RuneIdx,
+		Cursor:       c,
+		Prev:         s,
+		Next:         nil,
+	}
+
+	s.Next = last
+
+	return first
+}
+
 func FromCursorsPrevWordStart(curs []*cursor.Cursor) []*Selection {
 	sels := make([]*Selection, 0, len(curs))
 

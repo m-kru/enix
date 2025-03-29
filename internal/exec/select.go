@@ -177,6 +177,18 @@ func SelWordEnd(args []string, tab *tab.Tab) error {
 	return nil
 }
 
+func SelWordStart(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf(
+			"sel-word-start: provided %d args, expected 0", len(args),
+		)
+	}
+
+	tab.SelWordStart()
+
+	return nil
+}
+
 func SelTabEnd(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf(
