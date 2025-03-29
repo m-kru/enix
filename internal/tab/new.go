@@ -114,6 +114,11 @@ func Open(
 		}
 		filetype = cfg.Cfg.GetFileType(fileExt)
 	}
+	// Try to determine file type based on the shebang.
+	if filetype == "" {
+		firstLine := lines.String()
+		filetype = util.ShebangToFiletype(firstLine)
+	}
 
 	// Highlighter initialization
 	hl, err := lang.NewHighlighter(filetype)

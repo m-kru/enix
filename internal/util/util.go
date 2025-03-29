@@ -63,6 +63,32 @@ func FileNameToType(name string) string {
 	return ""
 }
 
+func ShebangToFiletype(sb string) string {
+	if !strings.HasPrefix(sb, "#!") {
+		return ""
+	}
+
+	if strings.Contains(sb, "bash") {
+		return "sh"
+	} else if strings.Contains(sb, "csh") {
+		return "sh"
+	} else if strings.Contains(sb, "ksh") {
+		return "h"
+	} else if strings.Contains(sb, "mksh") {
+		return "sh"
+	} else if strings.Contains(sb, "python") {
+		return "python"
+	} else if strings.Contains(sb, "tclsh") {
+		return "tcl"
+	} else if strings.Contains(sb, "sh") {
+		return "sh"
+	} else if strings.Contains(sb, "zsh") {
+		return "sh"
+	}
+
+	return ""
+}
+
 func IsBracket(r rune) bool {
 	return r == '(' || r == ')' ||
 		r == '[' || r == ']' ||
