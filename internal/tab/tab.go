@@ -127,6 +127,13 @@ func (tab *Tab) Append(newTab *Tab) {
 }
 
 func (tab *Tab) Trim() {
+	// Do nothing in the case of selections.
+	// Trimming when there are selections leads to some nasty corner cases.
+	// For example, breaking a single selection into multiple.
+	if len(tab.Selections) > 0 {
+		return
+	}
+
 	var trimmedLines []*line.Line
 
 	l := tab.Lines
