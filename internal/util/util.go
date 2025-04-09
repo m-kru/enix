@@ -10,6 +10,7 @@ var fileNameToType = map[string]string{
 	"Makefile":       "make", "makefile": "make",
 	"Dockerfile": "docker",
 	".bashrc":    "sh", ".profile": "sh", "bspwmrc": "sh",
+	".tclshrc": "tcl",
 }
 
 var fileExtToType = map[string]string{
@@ -19,6 +20,7 @@ var fileExtToType = map[string]string{
 	"json": "json",
 	"tex":  "tex",
 	"md":   "markdown",
+	"mk":   "make",
 	"py":   "python",
 	"tcl":  "tcl",
 	"toml": "toml",
