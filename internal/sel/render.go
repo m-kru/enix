@@ -23,10 +23,17 @@ func (s *Selection) Render(
 
 		iv := view.Intersection(sv)
 
+		lastColNum := s.LastColumnNumber()
+
 		for c := iv.Column; c <= iv.LastColumn(); c++ {
 			x := c - view.Column
 			y := iv.Line - view.Line
 			r := frame.GetContent(x, y)
+
+			// + 1 because of the newline character rendering.
+			if c > lastColNum+1 {
+				continue
+			}
 
 			if c == sv.Column && s.CursorOnLeft() || c == sv.LastColumn() && s.CursorOnRight() {
 				frame.SetContent(x, y, r, cfg.Style.Cursor)

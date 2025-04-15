@@ -33,6 +33,14 @@ func (v View) IsVisible(v2 View) bool {
 	return true
 }
 
+func (v View) AllLinesVisible(v2 View) bool {
+	if v2.Line < v.Line || (v.LastLine() < v2.LastLine()) {
+		return false
+	}
+
+	return true
+}
+
 // Intersection returns intersection of two views.
 // It is users responsibility to first check if two views
 // intersect using the IsVisible function.
@@ -63,6 +71,23 @@ func (v View) Intersection(v2 View) View {
 		Height: height,
 		Width:  width,
 	}
+}
+
+// LineAdjust adjusts start line number so that line is visible.
+// If line is already visible it returns unmodified view.
+func (v View) LineAdjust(line int) View {
+	if v.Line <= line && line < v.Line+v.Height {
+		return v
+	}
+
+	if line < v.Line {
+		v.Line = line
+		return v
+	}
+
+	v.Line += line - (v.Line + v.Height - 1)
+
+	return v
 }
 
 // MinAdjust returns a new View with minimal adjustments so that inner view (iv) is visible.

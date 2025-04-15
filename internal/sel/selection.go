@@ -48,21 +48,11 @@ func (s *Selection) GetCursor() *cursor.Cursor {
 	return s.Cursor
 }
 
-func (s *Selection) View() view.View {
-	startCol := s.Line.ColumnIdx(s.StartRuneIdx)
-	endCol := s.Line.ColumnIdx(s.EndRuneIdx)
-
-	v := view.View{
-		Line:   s.LineNum,
-		Column: startCol,
-		Width:  endCol - startCol + 1,
-		Height: 1,
-	}
-
-	return v
+func (s *Selection) LastColumnNumber() int {
+	return s.Line.Columns()
 }
 
-func (s *Selection) FullView() view.View {
+func (s *Selection) View() view.View {
 	line := s.LineNum
 
 	minCol := s.Line.ColumnIdx(s.StartRuneIdx)

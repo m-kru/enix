@@ -8,20 +8,40 @@ import (
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/search"
-	"github.com/m-kru/enix/internal/view"
 )
 
-// Currently view updating works in such a way, that the last cursor is always visible.
 func (tab *Tab) UpdateView() {
-	var v view.View
-
 	if len(tab.Cursors) > 0 {
-		v = tab.Cursors[len(tab.Cursors)-1].View()
+		tab.UpdateViewCursors()
 	} else {
-		v = tab.LastSel().GetCursor().View()
+		tab.UpdateViewSelections()
 	}
+}
 
+func (tab *Tab) UpdateViewCursors() {
+	v := tab.Cursors[len(tab.Cursors)-1].View()
 	tab.View = tab.View.MinAdjust(v)
+}
+
+func (tab *Tab) UpdateViewSelections() {
+	sel := tab.LastSel()
+
+	// Handle all the possible cases
+	if sel.Next == nil {
+		// This is single line view, behave the same as in case of cursor.
+		v := sel.GetCursor().View()
+		tab.View = tab.View.MinAdjust(v)
+		return
+	}
+	// This is multi line view.
+	// Adjust so that line with the cursor is visible
+	// The cursor is not necessarily visible.
+	line := sel.LineNum
+	if !sel.CursorOnLeft() {
+		// Cursor in last line.
+		line = sel.Last().LineNum
+	}
+	tab.View = tab.View.LineAdjust(line)
 }
 
 func (tab *Tab) HasCursorInLine(line *line.Line) bool {
@@ -143,7 +163,7 @@ func (tab *Tab) RenderCursors(frame frame.Frame) {
 
 func (tab *Tab) RenderSelections(frame frame.Frame) {
 	for _, s := range tab.Selections {
-		if !tab.View.IsVisible(s.FullView()) {
+		if !tab.View.IsVisible(s.View()) {
 			continue
 		}
 
