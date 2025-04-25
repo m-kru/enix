@@ -35,10 +35,7 @@ func (l *Line) Render(
 			colIdx = l.ColumnIdx(rIdx) + tabSubcol
 		}
 
-		for {
-			if colIdx%8 == 1 || x >= frame.Width {
-				break
-			}
+		for colIdx%8 != 1 && x < frame.Width {
 			frame.SetContent(x, 0, cfg.Cfg.TabPadRune, style)
 			x++
 			colIdx++
@@ -49,12 +46,8 @@ func (l *Line) Render(
 	setStyle := func() {
 		style = cfg.Style.Default
 		if hls != nil {
-			for {
-				// TODO: We shouldn't need this check, is there some bug?
-				if hlIdx >= len(hls) {
-					break
-				}
-
+			// TODO: We shouldn't need this check, is there some bug?
+			for hlIdx < len(hls) {
 				if hls[hlIdx].CoversCell(lineNum, rIdx) {
 					style = hls[hlIdx].Style
 					break
@@ -94,11 +87,7 @@ func (l *Line) Render(
 		rIdx++
 	}
 
-	for {
-		if rIdx == l.RuneCount() || x >= frame.Width {
-			break
-		}
-
+	for rIdx != l.RuneCount() && x < frame.Width {
 		r = l.Rune(rIdx)
 
 		setStyle()

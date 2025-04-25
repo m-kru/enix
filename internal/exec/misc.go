@@ -159,10 +159,7 @@ func KeyName(args []string, t *tab.Tab) (*tab.Tab, error) {
 
 	path := "key-name"
 	idx := 2
-	for {
-		if !t.Exists(path) {
-			break
-		}
+	for t.Exists(path) {
 		path = fmt.Sprintf("key-name-%d", idx)
 		idx++
 	}

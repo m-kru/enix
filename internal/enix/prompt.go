@@ -80,10 +80,7 @@ func (p *prompt) ShowError(msg string) {
 		frame.SetContent(x, 0, r, cfg.Style.Error)
 		x++
 	}
-	for {
-		if x == frame.Width {
-			break
-		}
+	for x < frame.Width {
 		frame.SetContent(x, 0, ' ', cfg.Style.Prompt)
 		x++
 	}
@@ -101,10 +98,7 @@ func (p *prompt) ShowInfo(msg string) {
 		frame.SetContent(x, 0, r, cfg.Style.Default)
 		x++
 	}
-	for {
-		if x == frame.Width {
-			break
-		}
+	for x < frame.Width {
 		frame.SetContent(x, 0, ' ', cfg.Style.Default)
 		x++
 	}
@@ -156,10 +150,7 @@ func (p *prompt) AskTabReload(frame frame.Frame) {
 	frame.SetContent(x, 0, ' ', cfg.Style.Warning.Reverse(true))
 	x++
 
-	for {
-		if x == frame.Width {
-			break
-		}
+	for x < frame.Width {
 		frame.SetContent(x, 0, ' ', cfg.Style.Warning)
 		x++
 	}

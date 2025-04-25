@@ -127,10 +127,7 @@ func SelToTab(args []string, tab *tab.Tab) (*tab.Tab, error) {
 
 	idx := 1
 	pathBase := path
-	for {
-		if !tab.Exists(path) {
-			break
-		}
+	for tab.Exists(path) {
 		path = fmt.Sprintf("%s-%d", pathBase, idx)
 		idx++
 	}

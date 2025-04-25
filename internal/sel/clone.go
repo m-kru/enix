@@ -17,11 +17,7 @@ func (s *Selection) Clone() *Selection {
 
 	prevS := first
 	s = s.Next
-	for {
-		if s == nil {
-			break
-		}
-
+	for s != nil {
 		nextS := &Selection{
 			Line:         s.Line,
 			LineNum:      s.LineNum,

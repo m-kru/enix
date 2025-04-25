@@ -59,11 +59,7 @@ func (tab *Tab) pasteLineBased(text string, addIndent bool, curs []*cursor.Curso
 		acts := make(action.Actions, 0, lineCount)
 
 		line := lines
-		for {
-			if line == nil {
-				break
-			}
-
+		for line != nil {
 			act := cur.InsertLineBelow(line.String())
 			acts = append(acts, act)
 
@@ -274,11 +270,7 @@ func (tab *Tab) pasteBeforeLineBased(text string, addIndent bool, curs []*cursor
 		acts := make(action.Actions, 0, lineCount)
 
 		line := lines.Last()
-		for {
-			if line == nil {
-				break
-			}
-
+		for line != nil {
 			act := cur.InsertLineAbove(line.String())
 			acts = append(acts, act)
 

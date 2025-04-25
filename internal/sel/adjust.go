@@ -79,10 +79,7 @@ func (s *Selection) adjust(c *cursor.Cursor) *Selection {
 	} else if first.LineNum < c.LineNum && c.LineNum < last.LineNum {
 		// First find the selection with cursor line
 		s := first.Next
-		for {
-			if s.Line == c.Line {
-				break
-			}
+		for s.Line != c.Line {
 			s = s.Next
 		}
 

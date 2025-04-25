@@ -11,11 +11,7 @@ func (s *Selection) Delete() action.Actions {
 	// Thanks to this, there is no need to inform subselections about deletions.
 	s = s.Last()
 
-	for {
-		if s == nil {
-			break
-		}
-
+	for s != nil {
 		a := s.delete()
 		if a != nil {
 			acts = append(acts, a)

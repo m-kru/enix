@@ -51,10 +51,7 @@ func (hl Highlighter) Analyze(
 	line = startLine
 	for _, sec := range sections {
 		// Progress to the start line of the current section or view.
-		for {
-			if lineIdx == sec.StartLine || lineIdx == startLineIdx {
-				break
-			}
+		for lineIdx != sec.StartLine && lineIdx != startLineIdx {
 			line = line.Next
 			lineIdx++
 		}

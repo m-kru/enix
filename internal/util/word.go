@@ -184,10 +184,7 @@ func GetWord(line []rune, idx int) string {
 	}
 
 	left := idx
-	for {
-		if left == 0 {
-			break
-		}
+	for left > 0 {
 		left--
 
 		if !IsWordRune(line[left]) {
@@ -197,10 +194,7 @@ func GetWord(line []rune, idx int) string {
 	}
 
 	right := idx
-	for {
-		if right == len(line)-1 {
-			break
-		}
+	for right < len(line)-1 {
 		right++
 
 		if !IsWordRune(line[right]) {

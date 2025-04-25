@@ -67,11 +67,7 @@ func (tb *tabBar) Update() {
 	tb.items = make([]*tabBarItem, 0, Tabs.Count())
 
 	t := Tabs
-	for {
-		if t == nil {
-			break
-		}
-
+	for t != nil {
 		i := tabBarItem{
 			menuItem: menuItem{"", 0, 0},
 			Tab:      t,

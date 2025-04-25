@@ -67,15 +67,12 @@ func (tab *Tab) LineNumWidth() int {
 }
 
 func (tab *Tab) HasChanges() bool {
-	return !(tab.UndoCount == 0 && tab.RedoCount == 0)
+	return tab.UndoCount != 0 || tab.RedoCount != 0
 }
 
 func (tab *Tab) Count() int {
 	cnt := 1
-	for {
-		if tab.Next == nil {
-			break
-		}
+	for tab.Next != nil {
 		tab = tab.Next
 		cnt++
 	}
@@ -83,20 +80,14 @@ func (tab *Tab) Count() int {
 }
 
 func (tab *Tab) First() *Tab {
-	for {
-		if tab.Prev == nil {
-			break
-		}
+	for tab.Prev != nil {
 		tab = tab.Prev
 	}
 	return tab
 }
 
 func (tab *Tab) Last() *Tab {
-	for {
-		if tab.Next == nil {
-			break
-		}
+	for tab.Next != nil {
 		tab = tab.Next
 	}
 	return tab
@@ -105,11 +96,7 @@ func (tab *Tab) Last() *Tab {
 func (tab *Tab) Exists(path string) bool {
 	t := tab.First()
 
-	for {
-		if t == nil {
-			break
-		}
-
+	for t != nil {
 		if t.Path == path {
 			return true
 		}
@@ -137,10 +124,7 @@ func (tab *Tab) Trim() {
 	var trimmedLines []*line.Line
 
 	l := tab.Lines
-	for {
-		if l == nil {
-			break
-		}
+	for l != nil {
 		if l.TrimRight() > 0 {
 			trimmedLines = append(trimmedLines, l)
 		}
@@ -193,11 +177,7 @@ func (tab *Tab) LastColumnIdx() int {
 	idx := 1
 
 	l := tab.Lines
-	for {
-		if l == nil {
-			break
-		}
-
+	for l != nil {
 		cols := l.Columns()
 		if cols > idx {
 			idx = cols

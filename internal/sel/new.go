@@ -601,10 +601,8 @@ func fromCursorPrevWordStart(c *cursor.Cursor) *Selection {
 
 // FromTo creates a selection spanning from the start cursor to the end cursor.
 func FromTo(startC, endC *cursor.Cursor) *Selection {
-	cursorOnLeft := true
-	if startC.LineNum < endC.LineNum || (startC.LineNum == endC.LineNum && startC.RuneIdx < endC.RuneIdx) {
-		cursorOnLeft = false
-	}
+	cursorOnLeft := endC.LineNum < startC.LineNum ||
+		(startC.LineNum == endC.LineNum && endC.RuneIdx < startC.RuneIdx)
 
 	if cursorOnLeft {
 		tmpC := startC

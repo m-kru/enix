@@ -27,11 +27,7 @@ func Edit(args []string, t *tab.Tab) (*tab.Tab, error) {
 			abspath = filepath.Join(wd, path)
 		}
 		t2 := t.First()
-		for {
-			if t2 == nil {
-				break
-			}
-
+		for t2 != nil {
 			abspath2 := t2.Path
 			if !filepath.IsAbs(abspath2) {
 				wd, err := os.Getwd()
@@ -64,10 +60,7 @@ func Edit(args []string, t *tab.Tab) (*tab.Tab, error) {
 	if len(errMsg) > 0 {
 		path := "error.enix"
 		idx := 2
-		for {
-			if !t.Exists(path) {
-				break
-			}
+		for t.Exists(path) {
 			path = fmt.Sprintf("error-%d.enix", idx)
 			idx++
 		}

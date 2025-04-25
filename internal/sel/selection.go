@@ -23,10 +23,7 @@ func (s *Selection) RuneCount() int {
 
 // Last returns last chunk being part of the selection s.
 func (s *Selection) Last() *Selection {
-	for {
-		if s.Next == nil {
-			break
-		}
+	for s.Next != nil {
 		s = s.Next
 	}
 	return s
@@ -58,11 +55,7 @@ func (s *Selection) View() view.View {
 	minCol := s.Line.ColumnIdx(s.StartRuneIdx)
 	maxCol := s.Line.ColumnIdx(s.EndRuneIdx)
 
-	for {
-		if s.Next == nil {
-			break
-		}
-
+	for s.Next != nil {
 		min := s.Line.ColumnIdx(s.StartRuneIdx)
 		if min < minCol {
 			minCol = min
@@ -85,17 +78,9 @@ func (s *Selection) View() view.View {
 }
 
 func (s *Selection) Overlaps(s2 *Selection) bool {
-	for {
-		if s == nil {
-			break
-		}
-
+	for s != nil {
 		subs2 := s2
-		for {
-			if subs2 == nil {
-				break
-			}
-
+		for subs2 != nil {
 			if s.LineNum == subs2.LineNum &&
 				((s.EndRuneIdx >= subs2.StartRuneIdx && s.StartRuneIdx <= subs2.StartRuneIdx) ||
 					(subs2.EndRuneIdx >= s.StartRuneIdx && subs2.StartRuneIdx <= s.StartRuneIdx)) {
@@ -178,11 +163,7 @@ func (s *Selection) SwitchCursor() {
 func (s *Selection) Lines() []*line.Line {
 	lines := make([]*line.Line, 0, 16)
 
-	for {
-		if s == nil {
-			break
-		}
-
+	for s != nil {
 		lines = append(lines, s.Line)
 
 		s = s.Next

@@ -32,11 +32,7 @@ func Search(line *line.Line, ctx *Context) []find.Find {
 	ctx.Finds = make([]find.Find, 0, 64)
 
 	lineNum := 1
-	for {
-		if line == nil {
-			break
-		}
-
+	for line != nil {
 		matches := ctx.Regexp.FindAllIndex(line.Buf, -1)
 		if len(matches) == 0 {
 			line = line.Next

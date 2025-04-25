@@ -10,11 +10,7 @@ func (s *Selection) Inform(act action.Action, informCursor bool) {
 	// about actions. This is why the last variable is required to track if the previous
 	// subselection is the last one that shall be informed about actions.
 	last := false
-	for {
-		if last {
-			break
-		}
-
+	for !last {
 		last = s.Next == nil
 
 		s.inform(act)

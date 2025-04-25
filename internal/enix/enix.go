@@ -631,10 +631,7 @@ func Start() {
 			}
 
 			tab := CurrentTab.First()
-			for {
-				if tab == nil {
-					break
-				}
+			for tab != nil {
 				tab.AutoSave()
 				tab = tab.Next
 			}

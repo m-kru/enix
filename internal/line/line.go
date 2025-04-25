@@ -63,11 +63,7 @@ func (l *Line) Columns() int {
 	cols := 0
 	bIdx := 0
 
-	for {
-		if bIdx >= len(l.Buf) {
-			break
-		}
-
+	for bIdx < len(l.Buf) {
 		r, rLen := utf8.DecodeRune(l.Buf[bIdx:])
 
 		if r == '\t' {
@@ -106,11 +102,7 @@ func (l *Line) Get(n int) *Line {
 func (l *Line) GetNextNonEmpty() *Line {
 	l = l.Next
 
-	for {
-		if l == nil {
-			break
-		}
-
+	for l != nil {
 		if len(l.Buf) > 0 {
 			return l
 		}
@@ -124,11 +116,7 @@ func (l *Line) GetNextNonEmpty() *Line {
 func (l *Line) GetPrevNonEmpty() *Line {
 	l = l.Prev
 
-	for {
-		if l == nil {
-			break
-		}
-
+	for l != nil {
 		if len(l.Buf) > 0 {
 			return l
 		}
@@ -188,11 +176,7 @@ func (l *Line) RuneIdx(colIdx int) (int, int, bool) {
 	cIdx := 1
 	rIdx := 0
 
-	for {
-		if bIdx >= len(l.Buf) {
-			break
-		}
-
+	for bIdx < len(l.Buf) {
 		r, rLen := utf8.DecodeRune(l.Buf[bIdx:])
 		rWidth := runewidth.RuneWidth(r)
 		if r == '\t' {
@@ -230,10 +214,7 @@ func (l *Line) RuneIdx(colIdx int) (int, int, bool) {
 // It does not take into account previous lines.
 func (l *Line) Count() int {
 	cnt := 1
-	for {
-		if l.Next == nil {
-			break
-		}
+	for l.Next != nil {
 		l = l.Next
 		cnt++
 	}
@@ -281,10 +262,7 @@ func (l *Line) HasOnlySpaces() bool {
 	}
 
 	bIdx := 0
-	for {
-		if bIdx >= len(l.Buf) {
-			break
-		}
+	for bIdx < len(l.Buf) {
 		r, rLen := utf8.DecodeRune(l.Buf[bIdx:])
 		if !unicode.IsSpace(r) {
 			return false

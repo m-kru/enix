@@ -10,11 +10,7 @@ func (s *Selection) Render(
 	frame frame.Frame, // Tab frame
 	view view.View,
 ) {
-	for {
-		if s == nil {
-			break
-		}
-
+	for s != nil {
 		sv := s.View()
 		if !view.IsVisible(sv) {
 			s = s.Next

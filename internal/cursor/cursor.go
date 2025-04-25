@@ -63,11 +63,7 @@ func (c *Cursor) View() view.View {
 func (c *Cursor) WithinIndent() bool {
 	bIdx := 0
 	rIdx := 0
-	for {
-		if rIdx == c.RuneIdx {
-			break
-		}
-
+	for rIdx < c.RuneIdx {
 		r, rLen := utf8.DecodeRune(c.Line.Buf[bIdx:])
 		if !unicode.IsSpace(r) {
 			return false
@@ -108,11 +104,7 @@ func (c *Cursor) WordPosition() WordPosition {
 
 // TabEnd moves cursor to the tab end.
 func (c *Cursor) TabEnd() {
-	for {
-		if c.Line.Next == nil {
-			break
-		}
-
+	for c.Line.Next != nil {
 		c.Line = c.Line.Next
 		c.LineNum++
 	}

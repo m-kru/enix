@@ -54,10 +54,7 @@ func (tab *Tab) HasCursorInLine(line *line.Line) bool {
 	} else {
 		for _, sel := range tab.Selections {
 			s := sel
-			for {
-				if s == nil {
-					break
-				}
+			for s != nil {
 				if s.Line == line && s.Cursor != nil {
 					return true
 				}
@@ -119,11 +116,7 @@ func (tab *Tab) RenderLines(line *line.Line, lineNum int, frame frame.Frame) {
 	search.Search(tab.Lines, &tab.SearchCtx)
 	finds := tab.SearchCtx.FindsFromVisible()
 
-	for {
-		if line == nil || renderedCount == frame.Height {
-			break
-		}
-
+	for line != nil && renderedCount < frame.Height {
 		hls, finds = line.Render(
 			lineNum,
 			frame.Line(0, renderedCount),
@@ -138,11 +131,7 @@ func (tab *Tab) RenderLines(line *line.Line, lineNum int, frame frame.Frame) {
 	}
 
 	// Line clearing
-	for {
-		if renderedCount == frame.Height {
-			break
-		}
-
+	for renderedCount < frame.Height {
 		for w := range frame.Width {
 			frame.SetContent(w, renderedCount, ' ', cfg.Style.Default)
 		}

@@ -13,11 +13,7 @@ import (
 func (tab *Tab) WriteTo(strWr io.StringWriter) error {
 	l := tab.Lines
 	i := 1
-	for {
-		if l == nil {
-			break
-		}
-
+	for l != nil {
 		nl := tab.Newline
 		if l.Next == nil {
 			nl = ""
