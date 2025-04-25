@@ -170,9 +170,10 @@ func (p *prompt) AskTabReload(frame frame.Frame) {
 func (p *prompt) Render() {
 	frame := PromptFrame
 
-	if p.State == Inactive {
+	switch p.State {
+	case Inactive:
 		return
-	} else if p.State == TabReloadQuestion {
+	case TabReloadQuestion:
 		p.AskTabReload(frame)
 		return
 	}
@@ -365,10 +366,11 @@ func (p *prompt) closeMenu() {
 }
 
 func (p *prompt) HandleBacktab() {
-	if p.State == InCmdMenu {
+	switch p.State {
+	case InCmdMenu:
 		p.HandleBacktabCmdMenu()
 		return
-	} else if p.State == InPathMenu {
+	case InPathMenu:
 		p.HandleBacktabPathMenu()
 		return
 	}
@@ -394,10 +396,11 @@ func (p *prompt) HandleBacktabPathMenu() {
 }
 
 func (p *prompt) HandleTab() {
-	if p.State == InCmdMenu {
+	switch p.State {
+	case InCmdMenu:
 		p.HandleTabCmdMenu()
 		return
-	} else if p.State == InPathMenu {
+	case InPathMenu:
 		p.HandleTabPathMenu()
 		return
 	}
