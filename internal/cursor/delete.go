@@ -27,6 +27,12 @@ func (c *Cursor) Delete() action.Action {
 	}
 
 	r := c.Line.DeleteRune(c.RuneIdx)
+
+	// Adjust cursor column if tab was deleted.
+	if r == '\t' {
+		c.colIdx = c.Line.ColumnIdx(c.RuneIdx)
+	}
+
 	return &action.RuneDelete{Line: c.Line, Rune: r, RuneIdx: c.RuneIdx}
 }
 
