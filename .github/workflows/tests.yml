@@ -14,9 +14,7 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: '^1.18.1'
-      - uses: golangci/golangci-lint-action@v4
-        with:
-          version: v7.0.0
+      - uses: golangci/golangci-lint-action@v7
       - run: go version
       - run: make lint
 
