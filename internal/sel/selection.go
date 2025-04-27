@@ -49,8 +49,20 @@ func (s *Selection) LastColumnNumber() int {
 	return s.Line.Columns()
 }
 
+func (s *Selection) LineView() view.View {
+	startCol := s.Line.ColumnIdx(s.StartRuneIdx)
+	endCol := s.Line.ColumnIdx(s.EndRuneIdx)
+
+	return view.View{
+		Line:   s.LineNum,
+		Column: startCol,
+		Height: 1,
+		Width:  endCol - startCol + 1,
+	}
+}
+
 func (s *Selection) View() view.View {
-	line := s.LineNum
+	startLineNum := s.LineNum
 
 	minCol := s.Line.ColumnIdx(s.StartRuneIdx)
 	maxCol := s.Line.ColumnIdx(s.EndRuneIdx)
@@ -70,9 +82,9 @@ func (s *Selection) View() view.View {
 	}
 
 	return view.View{
-		Line:   line,
+		Line:   startLineNum,
 		Column: minCol,
-		Height: s.LineNum - line + 1,
+		Height: s.LineNum - startLineNum + 1,
 		Width:  maxCol - minCol + 1,
 	}
 }

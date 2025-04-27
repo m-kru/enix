@@ -11,7 +11,7 @@ func (s *Selection) Render(
 	view view.View,
 ) {
 	for s != nil {
-		sv := s.View()
+		sv := s.LineView()
 		if !view.IsVisible(sv) {
 			s = s.Next
 			continue
@@ -22,14 +22,14 @@ func (s *Selection) Render(
 		lastColNum := s.LastColumnNumber()
 
 		for c := iv.Column; c <= iv.LastColumn(); c++ {
+			// + 1 because of the newline character rendering.
+			if c > lastColNum+1 {
+				break
+			}
+
 			x := c - view.Column
 			y := iv.Line - view.Line
 			r := frame.GetContent(x, y)
-
-			// + 1 because of the newline character rendering.
-			if c > lastColNum+1 {
-				continue
-			}
 
 			if c == sv.Column && s.CursorOnLeft() || c == sv.LastColumn() && s.CursorOnRight() {
 				frame.SetContent(x, y, r, cfg.Style.Cursor)
