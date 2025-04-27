@@ -152,8 +152,12 @@ Even if the selection starts or ends in the middle of a line.`,
 	/*
 	   "match-brace":   struct{}{},
 	   "match-bracket": struct{}{},
-	   "match-paren":   struct{}{},
 	*/
+	"mp": `mp # An alias for the 'match-paren' command.`,
+
+	"match-paren": `match-paren # Moves cursor to the matching parenthesis.
+If cursor is placed on ')', the command looks for matching '('.
+Otherwise, the command looks for ')'.`,
 
 	// Miscellaneous
 

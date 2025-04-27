@@ -92,6 +92,7 @@ func DefaultKeybindings() Keybindings {
 		"Rune[>]": "indent",
 		"Tab":     "tab",
 		"Ctrl+P":  "path",
+		"Rune[)]": "match-paren",
 		// Selection
 		"Rune[%]": "sel-all",
 		"Rune[v]": "sel-line",

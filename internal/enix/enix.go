@@ -215,6 +215,8 @@ func RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			err = exec.LineStart(c.Args, tab)
 		case "m", "mark":
 			info, err = exec.Mark(c.Args, tab)
+		case "mp", "match-paren":
+			info, err = exec.MatchParen(c.Args, tab)
 		case "newline":
 			err = exec.Newline(c.Args, tab)
 		case "path":
