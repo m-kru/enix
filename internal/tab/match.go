@@ -2,6 +2,7 @@ package tab
 
 import (
 	"github.com/m-kru/enix/internal/cursor"
+	"github.com/m-kru/enix/internal/sel"
 )
 
 func (tab *Tab) MatchParen() {
@@ -28,5 +29,16 @@ func (tab *Tab) matchParenCursors() {
 }
 
 func (tab *Tab) matchParenSelections() {
+	newSels := make([]*sel.Selection, 0, len(tab.Selections))
 
+	for _, s := range tab.Selections {
+		newS := s.MatchParen()
+		if newS != nil {
+			newSels = append(newSels, newS)
+		}
+	}
+
+	if len(newSels) > 0 {
+		tab.Selections = sel.Prune(newSels)
+	}
 }

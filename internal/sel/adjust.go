@@ -50,6 +50,8 @@ func (s *Selection) adjust(c *cursor.Cursor) *Selection {
 		s.Next = first
 		if !oldCurOnLeft {
 			first.EndRuneIdx = first.StartRuneIdx
+			first.StartRuneIdx = 0
+			first.Next = nil
 		}
 		first.StartRuneIdx = 0
 
@@ -315,5 +317,16 @@ func (s *Selection) WordStart() *Selection {
 func (s *Selection) TabEnd() *Selection {
 	c := s.GetCursor().Clone()
 	c.TabEnd()
+	return s.adjust(c)
+}
+
+func (s *Selection) MatchParen() *Selection {
+	c := s.GetCursor().Clone()
+	c = c.MatchParen()
+
+	if c == nil {
+		return s
+	}
+
 	return s.adjust(c)
 }
