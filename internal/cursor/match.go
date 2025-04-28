@@ -4,6 +4,14 @@ import (
 	"unicode/utf8"
 )
 
+func (cur *Cursor) MatchCurly() *Cursor {
+	r := cur.Line.Rune(cur.RuneIdx)
+	if r == '}' {
+		return cur.matchLeft('{', '}')
+	}
+	return cur.matchRight('}', '{')
+}
+
 func (cur *Cursor) MatchParen() *Cursor {
 	r := cur.Line.Rune(cur.RuneIdx)
 	if r == ')' {

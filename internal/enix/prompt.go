@@ -680,6 +680,8 @@ func (p *prompt) Exec() TcellEventReceiver {
 			err = exec.Newline(c.Args, tab)
 		case "m", "mark":
 			info, err = exec.Mark(c.Args, tab)
+		case "mc", "match-curly":
+			info, err = exec.MatchCurly(c.Args, tab)
 		case "mp", "match-paren":
 			info, err = exec.MatchParen(c.Args, tab)
 		case "pwd":

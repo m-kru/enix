@@ -153,6 +153,12 @@ Even if the selection starts or ends in the middle of a line.`,
 	   "match-brace":   struct{}{},
 	   "match-bracket": struct{}{},
 	*/
+	"mc": `mc # An alias for the 'match-curly' command.`,
+
+	"match-curly": `match-curly # Moves cursor to the matching curly brace.
+If cursor is placed on '}', the command looks for matching '{'.
+Otherwise, the command looks for '}'.`,
+
 	"mp": `mp # An alias for the 'match-paren' command.`,
 
 	"match-paren": `match-paren # Moves cursor to the matching parenthesis.

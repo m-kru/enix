@@ -24,7 +24,6 @@ func (s *Selection) adjust(c *cursor.Cursor) *Selection {
 			Next:         nil,
 		}
 
-		s.Prev = newFirst
 		s := newFirst
 
 		line := c.Line
@@ -48,6 +47,8 @@ func (s *Selection) adjust(c *cursor.Cursor) *Selection {
 		}
 
 		s.Next = first
+		first.Prev = s
+
 		if !oldCurOnLeft {
 			first.EndRuneIdx = first.StartRuneIdx
 			first.StartRuneIdx = 0
@@ -123,6 +124,7 @@ func (s *Selection) adjust(c *cursor.Cursor) *Selection {
 		newFirst := first
 		if oldCurOnLeft {
 			last.StartRuneIdx = last.EndRuneIdx
+			last.Prev = nil
 			newFirst = last
 		}
 		last.EndRuneIdx = last.Line.RuneCount()
@@ -139,7 +141,7 @@ func (s *Selection) adjust(c *cursor.Cursor) *Selection {
 				Line:         line,
 				LineNum:      lineNum,
 				StartRuneIdx: 0,
-				EndRuneIdx:   c.Line.RuneCount(),
+				EndRuneIdx:   line.RuneCount(),
 				Cursor:       nil,
 				Prev:         s,
 				Next:         nil,
@@ -317,6 +319,17 @@ func (s *Selection) WordStart() *Selection {
 func (s *Selection) TabEnd() *Selection {
 	c := s.GetCursor().Clone()
 	c.TabEnd()
+	return s.adjust(c)
+}
+
+func (s *Selection) MatchCurly() *Selection {
+	c := s.GetCursor().Clone()
+	c = c.MatchCurly()
+
+	if c == nil {
+		return s
+	}
+
 	return s.adjust(c)
 }
 
