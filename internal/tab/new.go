@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 	"sync"
 
 	"github.com/m-kru/enix/internal/cfg"
@@ -32,8 +31,9 @@ func Empty(
 	return &Tab{
 		Path:                 "No Name",
 		Newline:              "\n",
+		FileExt:              "",
 		Filetype:             "None",
-		IndentStr:            cfg.Cfg.GetIndent(""),
+		IndentStr:            cfg.Cfg.GetIndent("", ""),
 		State:                "",
 		RepCount:             0,
 		Lines:                lines,
@@ -104,14 +104,15 @@ func Open(
 	curs := make([]*cursor.Cursor, 1, 16)
 	curs[0] = c
 
+	fileExt := filepath.Ext(path)
+	// Drop the starting '.'
+	if len(fileExt) > 0 {
+		fileExt = fileExt[1:]
+	}
+
 	base := filepath.Base(path)
 	filetype := util.FileNameToType(base)
 	if filetype == "" {
-		ss := strings.Split(base, ".")
-		fileExt := ""
-		if len(ss) > 1 {
-			fileExt = ss[1]
-		}
 		filetype = cfg.Cfg.GetFileType(fileExt)
 	}
 	// Try to determine file type based on the shebang.
@@ -126,8 +127,9 @@ func Open(
 	return &Tab{
 		Path:                 path,
 		Newline:              "\n",
+		FileExt:              fileExt,
 		Filetype:             filetype,
-		IndentStr:            cfg.Cfg.GetIndent(filetype),
+		IndentStr:            cfg.Cfg.GetIndent(fileExt, filetype),
 		State:                "",
 		RepCount:             0,
 		Lines:                lines,
@@ -167,8 +169,9 @@ func FromString(
 	return &Tab{
 		Path:                 path,
 		Newline:              "\n",
+		FileExt:              "",
 		Filetype:             "None",
-		IndentStr:            cfg.Cfg.GetIndent(""),
+		IndentStr:            cfg.Cfg.GetIndent("", ""),
 		State:                "",
 		RepCount:             0,
 		Lines:                lines,

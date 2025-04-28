@@ -24,6 +24,7 @@ import (
 type Tab struct {
 	Path      string // File path
 	Newline   string // Newline encoding
+	FileExt   string // File name extension
 	Filetype  string
 	IndentStr string
 
@@ -251,7 +252,7 @@ func (tab *Tab) SetFiletype(ft string) error {
 	}
 	tab.Highlighter = hl
 
-	tab.IndentStr = cfg.Cfg.GetIndent(ft)
+	tab.IndentStr = cfg.Cfg.GetIndent(tab.FileExt, ft)
 
 	return nil
 }
