@@ -23,8 +23,8 @@ type Config struct {
 
 	UndoSize int // Undo and Redo stack size
 
-	Indent     map[string]string
-	Extensions map[string]string
+	Extensions     map[string]string
+	FiletypeIndent map[string]string
 }
 
 func DefaultConfig() Config {
@@ -40,19 +40,19 @@ func DefaultConfig() Config {
 		TabPadRune:            '·',
 		MouseScrollMultiplier: 5,
 		UndoSize:              1024,
-		Indent: map[string]string{
+		Extensions:            map[string]string{},
+		FiletypeIndent: map[string]string{
 			"fbdl":   "  ",
 			"python": "    ",
 			"rust":   "    ",
 			"tcl":    "    ",
 			"vhdl":   "  ",
 		},
-		Extensions: map[string]string{},
 	}
 }
 
 func (cfg Config) GetIndent(filetype string) string {
-	if indent, ok := cfg.Indent[filetype]; ok {
+	if indent, ok := cfg.FiletypeIndent[filetype]; ok {
 		return indent
 	}
 	return "\t"

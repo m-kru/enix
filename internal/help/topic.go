@@ -79,14 +79,14 @@ Extensions : map[string]string
   The key in the map is a custom file extension.
   The value in the map is a filetype recognized by enix.
 
-HighlightCursorWord : bool
-  Highlight word under cursor and all occurrence of the word in the view.
-
-Indent : map[string]string
+FiletypeIndent : map[string]string
   Indent configuration for various filetypes.
   If filetype is not recognized, then the default indent is a signle tab.
   The key in the map is the filetype.
   The value in the map is a string representing indent for the provided filetype.
+
+HighlightCursorWord : bool
+  Highlight word under cursor and all occurrence of the word in the view.
 
 LineEndRune : int
   Line end rune.
