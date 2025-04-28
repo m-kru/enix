@@ -5,6 +5,18 @@ import (
 	"github.com/m-kru/enix/internal/tab"
 )
 
+func MatchBracket(args []string, tab *tab.Tab) (string, error) {
+	if len(args) != 0 {
+		return "", fmt.Errorf(
+			"match-bracket: provided %d args, expected 0", len(args),
+		)
+	}
+
+	tab.MatchBracket()
+
+	return "", nil
+}
+
 func MatchCurly(args []string, tab *tab.Tab) (string, error) {
 	if len(args) != 0 {
 		return "", fmt.Errorf(

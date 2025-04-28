@@ -149,10 +149,12 @@ Even if the selection starts or ends in the middle of a line.`,
 
 	// Match
 
-	/*
-	   "match-brace":   struct{}{},
-	   "match-bracket": struct{}{},
-	*/
+	"mb": `mb # An alias for the 'match-bracket' command.`,
+
+	"match-bracket": `match-bracket # Moves cursor to the matching square bracket.
+If cursor is placed on ']', the command looks for matching '['.
+Otherwise, the command looks for ']'.`,
+
 	"mc": `mc # An alias for the 'match-curly' command.`,
 
 	"match-curly": `match-curly # Moves cursor to the matching curly brace.

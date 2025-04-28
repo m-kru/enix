@@ -322,6 +322,17 @@ func (s *Selection) TabEnd() *Selection {
 	return s.adjust(c)
 }
 
+func (s *Selection) MatchBracket() *Selection {
+	c := s.GetCursor().Clone()
+	c = c.MatchBracket()
+
+	if c == nil {
+		return s
+	}
+
+	return s.adjust(c)
+}
+
 func (s *Selection) MatchCurly() *Selection {
 	c := s.GetCursor().Clone()
 	c = c.MatchCurly()

@@ -5,6 +5,44 @@ import (
 	"github.com/m-kru/enix/internal/sel"
 )
 
+func (tab *Tab) MatchBracket() {
+	if len(tab.Cursors) > 0 {
+		tab.matchBracketCursors()
+	} else {
+		tab.matchBracketSelections()
+	}
+}
+
+func (tab *Tab) matchBracketCursors() {
+	newCurs := make([]*cursor.Cursor, 0, len(tab.Cursors))
+
+	for _, cur := range tab.Cursors {
+		newC := cur.MatchBracket()
+		if newC != nil {
+			newCurs = append(newCurs, newC)
+		}
+	}
+
+	if len(newCurs) > 0 {
+		tab.Cursors = cursor.Prune(newCurs)
+	}
+}
+
+func (tab *Tab) matchBracketSelections() {
+	newSels := make([]*sel.Selection, 0, len(tab.Selections))
+
+	for _, s := range tab.Selections {
+		newS := s.MatchBracket()
+		if newS != nil {
+			newSels = append(newSels, newS)
+		}
+	}
+
+	if len(newSels) > 0 {
+		tab.Selections = sel.Prune(newSels)
+	}
+}
+
 func (tab *Tab) MatchCurly() {
 	if len(tab.Cursors) > 0 {
 		tab.matchCurlyCursors()
