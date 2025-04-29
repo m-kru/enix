@@ -17,7 +17,7 @@ func (tab *Tab) matchBracketCursors() {
 	newCurs := make([]*cursor.Cursor, 0, len(tab.Cursors))
 
 	for _, cur := range tab.Cursors {
-		newC := cur.MatchBracket()
+		newC := cur.MatchBracket(0, 0)
 		if newC != nil {
 			newCurs = append(newCurs, newC)
 		}
@@ -55,7 +55,7 @@ func (tab *Tab) matchCurlyCursors() {
 	newCurs := make([]*cursor.Cursor, 0, len(tab.Cursors))
 
 	for _, cur := range tab.Cursors {
-		newC := cur.MatchCurly()
+		newC := cur.MatchCurly(0, 0)
 		if newC != nil {
 			newCurs = append(newCurs, newC)
 		}
@@ -93,7 +93,7 @@ func (tab *Tab) matchParenCursors() {
 	newCurs := make([]*cursor.Cursor, 0, len(tab.Cursors))
 
 	for _, cur := range tab.Cursors {
-		newC := cur.MatchParen()
+		newC := cur.MatchParen(0, 0)
 		if newC != nil {
 			newCurs = append(newCurs, newC)
 		}

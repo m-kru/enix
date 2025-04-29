@@ -33,6 +33,11 @@ func (c *Cursor) Column() int {
 	return c.Line.ColumnIdx(c.RuneIdx)
 }
 
+// Rune returns rune under cursor.
+func (c *Cursor) Rune() rune {
+	return c.Line.Rune(c.RuneIdx)
+}
+
 // Width returns width of the rune under the cursor.
 func (c *Cursor) Width() int {
 	if c.RuneIdx == c.Line.RuneCount() {

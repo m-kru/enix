@@ -2,11 +2,20 @@ package lang
 
 import (
 	"regexp"
+	"sort"
 
-	"github.com/m-kru/enix/internal/line"
+	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/regex"
 	"github.com/m-kru/enix/internal/util"
+
+	"github.com/gdamore/tcell/v2"
 )
+
+type match struct {
+	start int // Rune start index
+	end   int // Rune end index
+	style tcell.Style
+}
 
 type Region struct {
 	Name  string
@@ -57,175 +66,196 @@ func DefaultRegion() *Region {
 	}
 }
 
-func (reg Region) match(line *line.Line, startIdx int, endIdx int) matches {
-	matches := defaultMatches()
-
-	buf := line.Buf[startIdx:endIdx]
+func (reg Region) match(buf []byte) []match {
+	matches := make([]match, 0, 32)
 
 	if reg.CursorWord != nil {
-		words := reg.CursorWord.FindAllIndex(buf, -1)
-		if len(words) > 0 {
-			matches.CursorWords = make([]match, len(words))
-			for i, w := range words {
-				matches.CursorWords[i].start = util.ByteIdxToRuneIdx(buf, w[0]) + startIdx
-				matches.CursorWords[i].end = util.ByteIdxToRuneIdx(buf, w[1]) + startIdx
+		finds := reg.CursorWord.FindAllIndex(buf, -1)
+		for _, f := range finds {
+			m := match{
+				start: util.ByteIdxToRuneIdx(buf, f[0]),
+				end:   util.ByteIdxToRuneIdx(buf, f[1]),
+				style: cfg.Style.CursorWord,
 			}
+			matches = append(matches, m)
 		}
 	}
 
 	if reg.Attribute != nil {
-		attrs := reg.Attribute.FindAll(buf)
-		if len(attrs) > 0 {
-			matches.Attributes = make([]match, len(attrs))
-			for i, a := range attrs {
-				matches.Attributes[i].start = util.ByteIdxToRuneIdx(buf, a.Start) + startIdx
-				matches.Attributes[i].end = util.ByteIdxToRuneIdx(buf, a.End) + startIdx
+		finds := reg.Attribute.FindAll(buf)
+		for _, f := range finds {
+			m := match{
+				start: util.ByteIdxToRuneIdx(buf, f.Start),
+				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				style: cfg.Style.Attribute,
 			}
+			matches = append(matches, m)
 		}
 	}
 
 	if reg.Bold != nil {
-		bolds := reg.Bold.FindAll(buf)
-		if len(bolds) > 0 {
-			matches.Bolds = make([]match, len(bolds))
-			for i, b := range bolds {
-				matches.Bolds[i].start = util.ByteIdxToRuneIdx(buf, b.Start) + startIdx
-				matches.Bolds[i].end = util.ByteIdxToRuneIdx(buf, b.End) + startIdx
+		finds := reg.Bold.FindAll(buf)
+		for _, f := range finds {
+			m := match{
+				start: util.ByteIdxToRuneIdx(buf, f.Start),
+				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				style: cfg.Style.Bold,
 			}
+			matches = append(matches, m)
 		}
 	}
 
 	if reg.Comment != nil {
-		comments := reg.Comment.FindAll(buf)
-		if len(comments) > 0 {
-			matches.Comments = make([]match, len(comments))
-			for i, c := range comments {
-				matches.Comments[i].start = util.ByteIdxToRuneIdx(buf, c.Start) + startIdx
-				matches.Comments[i].end = util.ByteIdxToRuneIdx(buf, c.End) + startIdx
+		finds := reg.Comment.FindAll(buf)
+		for _, f := range finds {
+			m := match{
+				start: util.ByteIdxToRuneIdx(buf, f.Start),
+				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				style: cfg.Style.Comment,
 			}
+			matches = append(matches, m)
 		}
 	}
 
 	if reg.Heading != nil {
-		headings := reg.Heading.FindAll(buf)
-		if len(headings) > 0 {
-			matches.Headings = make([]match, len(headings))
-			for i, h := range headings {
-				matches.Headings[i].start = util.ByteIdxToRuneIdx(buf, h.Start) + startIdx
-				matches.Headings[i].end = util.ByteIdxToRuneIdx(buf, h.End) + startIdx
+		finds := reg.Heading.FindAll(buf)
+		for _, f := range finds {
+			m := match{
+				start: util.ByteIdxToRuneIdx(buf, f.Start),
+				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				style: cfg.Style.Heading,
 			}
+			matches = append(matches, m)
 		}
 	}
 
 	if reg.Italic != nil {
-		italics := reg.Italic.FindAll(buf)
-		if len(italics) > 0 {
-			matches.Italics = make([]match, len(italics))
-			for i, it := range italics {
-				matches.Italics[i].start = util.ByteIdxToRuneIdx(buf, it.Start) + startIdx
-				matches.Italics[i].end = util.ByteIdxToRuneIdx(buf, it.End) + startIdx
+		finds := reg.Italic.FindAll(buf)
+		for _, f := range finds {
+			m := match{
+				start: util.ByteIdxToRuneIdx(buf, f.Start),
+				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				style: cfg.Style.Italic,
 			}
+			matches = append(matches, m)
 		}
 	}
 
 	if reg.Keyword != nil {
-		keywords := reg.Keyword.FindAll(buf)
-		if len(keywords) > 0 {
-			matches.Keywords = make([]match, len(keywords))
-			for i, k := range keywords {
-				matches.Keywords[i].start = util.ByteIdxToRuneIdx(buf, k.Start) + startIdx
-				matches.Keywords[i].end = util.ByteIdxToRuneIdx(buf, k.End) + startIdx
+		finds := reg.Keyword.FindAll(buf)
+		for _, f := range finds {
+			m := match{
+				start: util.ByteIdxToRuneIdx(buf, f.Start),
+				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				style: cfg.Style.Keyword,
 			}
+			matches = append(matches, m)
 		}
 	}
 
 	if reg.Meta != nil {
-		metas := reg.Meta.FindAll(buf)
-		if len(metas) > 0 {
-			matches.Metas = make([]match, len(metas))
-			for i, m := range metas {
-				matches.Metas[i].start = util.ByteIdxToRuneIdx(buf, m.Start) + startIdx
-				matches.Metas[i].end = util.ByteIdxToRuneIdx(buf, m.End) + startIdx
+		finds := reg.Meta.FindAll(buf)
+		for _, f := range finds {
+			m := match{
+				start: util.ByteIdxToRuneIdx(buf, f.Start),
+				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				style: cfg.Style.Meta,
 			}
+			matches = append(matches, m)
 		}
 	}
 
 	if reg.Mono != nil {
-		monos := reg.Mono.FindAll(buf)
-		if len(monos) > 0 {
-			matches.Monos = make([]match, len(monos))
-			for i, m := range monos {
-				matches.Metas[i].start = util.ByteIdxToRuneIdx(buf, m.Start) + startIdx
-				matches.Metas[i].end = util.ByteIdxToRuneIdx(buf, m.End) + startIdx
+		finds := reg.Mono.FindAll(buf)
+		for _, f := range finds {
+			m := match{
+				start: util.ByteIdxToRuneIdx(buf, f.Start),
+				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				style: cfg.Style.Mono,
 			}
+			matches = append(matches, m)
 		}
 	}
 
 	if reg.Number != nil {
-		nums := reg.Number.FindAll(buf)
-		if len(nums) > 0 {
-			matches.Numbers = make([]match, len(nums))
-			for i, n := range nums {
-				matches.Numbers[i].start = util.ByteIdxToRuneIdx(buf, n.Start) + startIdx
-				matches.Numbers[i].end = util.ByteIdxToRuneIdx(buf, n.End) + startIdx
+		finds := reg.Number.FindAll(buf)
+		for _, f := range finds {
+			m := match{
+				start: util.ByteIdxToRuneIdx(buf, f.Start),
+				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				style: cfg.Style.Number,
 			}
+			matches = append(matches, m)
 		}
 	}
 
 	if reg.Operator != nil {
-		ops := reg.Operator.FindAll(buf)
-		if len(ops) > 0 {
-			matches.Operators = make([]match, len(ops))
-			for i, o := range ops {
-				matches.Operators[i].start = util.ByteIdxToRuneIdx(buf, o.Start) + startIdx
-				matches.Operators[i].end = util.ByteIdxToRuneIdx(buf, o.End) + startIdx
+		finds := reg.Operator.FindAll(buf)
+		for _, f := range finds {
+			m := match{
+				start: util.ByteIdxToRuneIdx(buf, f.Start),
+				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				style: cfg.Style.Operator,
 			}
+			matches = append(matches, m)
 		}
 	}
 
 	if reg.String != nil {
-		strs := reg.String.FindAll(buf)
-		if len(strs) > 0 {
-			matches.Strings = make([]match, len(strs))
-			for i, s := range strs {
-				matches.Strings[i].start = util.ByteIdxToRuneIdx(buf, s.Start) + startIdx
-				matches.Strings[i].end = util.ByteIdxToRuneIdx(buf, s.End) + startIdx
+		finds := reg.String.FindAll(buf)
+		for _, f := range finds {
+			m := match{
+				start: util.ByteIdxToRuneIdx(buf, f.Start),
+				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				style: cfg.Style.String,
 			}
+			matches = append(matches, m)
 		}
 	}
 
 	if reg.Type != nil {
-		types := reg.Type.FindAll(buf)
-		if len(types) > 0 {
-			matches.Types = make([]match, len(types))
-			for i, t := range types {
-				matches.Types[i].start = util.ByteIdxToRuneIdx(buf, t.Start) + startIdx
-				matches.Types[i].end = util.ByteIdxToRuneIdx(buf, t.End) + startIdx
+		finds := reg.Type.FindAll(buf)
+		for _, f := range finds {
+			m := match{
+				start: util.ByteIdxToRuneIdx(buf, f.Start),
+				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				style: cfg.Style.Type,
 			}
+			matches = append(matches, m)
 		}
 	}
 
 	if reg.Value != nil {
-		values := reg.Value.FindAll(buf)
-		if len(values) > 0 {
-			matches.Values = make([]match, len(values))
-			for i, v := range values {
-				matches.Values[i].start = util.ByteIdxToRuneIdx(buf, v.Start) + startIdx
-				matches.Values[i].end = util.ByteIdxToRuneIdx(buf, v.End) + startIdx
+		finds := reg.Value.FindAll(buf)
+		for _, f := range finds {
+			m := match{
+				start: util.ByteIdxToRuneIdx(buf, f.Start),
+				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				style: cfg.Style.Value,
 			}
+			matches = append(matches, m)
 		}
 	}
 
 	if reg.Variable != nil {
-		vars := reg.Variable.FindAll(buf)
-		if len(vars) > 0 {
-			matches.Variables = make([]match, len(vars))
-			for i, v := range vars {
-				matches.Variables[i].start = util.ByteIdxToRuneIdx(buf, v.Start) + startIdx
-				matches.Variables[i].end = util.ByteIdxToRuneIdx(buf, v.End) + startIdx
+		finds := reg.Variable.FindAll(buf)
+		for _, f := range finds {
+			m := match{
+				start: util.ByteIdxToRuneIdx(buf, f.Start),
+				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				style: cfg.Style.Variable,
 			}
+			matches = append(matches, m)
 		}
 	}
+
+	less := func(i, j int) bool {
+		mi := matches[i]
+		mj := matches[j]
+
+		return mi.start < mj.start
+	}
+	sort.Slice(matches, less)
 
 	return matches
 }

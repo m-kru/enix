@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/m-kru/enix/internal/cfg"
-	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/search"
@@ -104,13 +103,7 @@ func (tab *Tab) RenderLines(line *line.Line, lineNum int, frame frame.Frame) {
 	if endLineIdx > tab.LineCount {
 		endLineIdx = tab.LineCount
 	}
-	var cur *cursor.Cursor = nil
-	if len(tab.Cursors) > 0 {
-		cur = tab.Cursors[len(tab.Cursors)-1]
-	}
-	hls := tab.Highlighter.Analyze(
-		tab.Lines, line, lineNum, endLineIdx, cur,
-	)
+	hls := tab.Highlighter.Analyze(tab.Lines, lineNum, endLineIdx, tab.Cursors)
 
 	tab.SearchCtx.FirstVisLineNum = lineNum
 	search.Search(tab.Lines, &tab.SearchCtx)

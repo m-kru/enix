@@ -4,35 +4,44 @@ import (
 	"unicode/utf8"
 )
 
-func (cur *Cursor) MatchBracket() *Cursor {
+// lowerBound and upperBound and lower and upper line number bounds.
+// If bounds should not be applied, provide 0 value.
+//
+// The bounds are useful for working with large files, when highlighting matching
+// brackets out of the screen view makes no sense.
+// If some bracket didn't have a matching bracket, then the match functions would
+// scan the whole tab content, what would create a noticeable lag.
+//
+// The same documentation applies to the MatchCurly and MatchParen methods.
+func (cur *Cursor) MatchBracket(lowerBound int, upperBound int) *Cursor {
 	r := cur.Line.Rune(cur.RuneIdx)
 	if r == ']' {
-		return cur.matchLeft('[', ']')
+		return cur.matchLeft('[', ']', lowerBound)
 	}
-	return cur.matchRight(']', '[')
+	return cur.matchRight(']', '[', upperBound)
 }
 
-func (cur *Cursor) MatchCurly() *Cursor {
+func (cur *Cursor) MatchCurly(lowerBound int, upperBound int) *Cursor {
 	r := cur.Line.Rune(cur.RuneIdx)
 	if r == '}' {
-		return cur.matchLeft('{', '}')
+		return cur.matchLeft('{', '}', lowerBound)
 	}
-	return cur.matchRight('}', '{')
+	return cur.matchRight('}', '{', upperBound)
 }
 
-func (cur *Cursor) MatchParen() *Cursor {
+func (cur *Cursor) MatchParen(lowerBound int, upperBound int) *Cursor {
 	r := cur.Line.Rune(cur.RuneIdx)
 	if r == ')' {
-		return cur.matchLeft('(', ')')
+		return cur.matchLeft('(', ')', lowerBound)
 	}
-	return cur.matchRight(')', '(')
+	return cur.matchRight(')', '(', upperBound)
 }
 
 // Match rune r going left, cr is the counter rune.
 //
 // matchLeft performance is worse than matchRight, because line buffers are
 // traversed in the backward direction.
-func (cur *Cursor) matchLeft(r rune, cr rune) *Cursor {
+func (cur *Cursor) matchLeft(r rune, cr rune, lowerBound int) *Cursor {
 	cur = cur.Clone()
 
 	// Counter of encountered counter runes.
@@ -44,7 +53,7 @@ func (cur *Cursor) matchLeft(r rune, cr rune) *Cursor {
 
 	for {
 		cur.Left()
-		if cur.Line == line && cur.RuneIdx == rIdx {
+		if cur.LineNum < lowerBound || (cur.Line == line && cur.RuneIdx == rIdx) {
 			return nil
 		}
 
@@ -69,7 +78,7 @@ func (cur *Cursor) matchLeft(r rune, cr rune) *Cursor {
 //
 // matchRight is optimized compared to the matchLeft because when going right
 // the rune length of the current rune is required.
-func (cur *Cursor) matchRight(r rune, cr rune) *Cursor {
+func (cur *Cursor) matchRight(r rune, cr rune, upperBound int) *Cursor {
 	// Counter of encountered counter runes.
 	cnt := 0
 
@@ -82,6 +91,10 @@ func (cur *Cursor) matchRight(r rune, cr rune) *Cursor {
 	rLen := 0
 
 	for {
+		if upperBound != 0 && lineNum > upperBound {
+			return nil
+		}
+
 		if bIdx >= len(line.Buf) {
 			if line.Next == nil {
 				return nil

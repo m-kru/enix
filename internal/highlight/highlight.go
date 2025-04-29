@@ -4,8 +4,8 @@ import "github.com/gdamore/tcell/v2"
 
 type Highlight struct {
 	LineNum      int
-	StartRuneIdx int
-	EndRuneIdx   int
+	StartRuneIdx int // Inclusive
+	EndRuneIdx   int // Exclusive
 	Style        tcell.Style
 }
 
