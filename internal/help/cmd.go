@@ -342,6 +342,11 @@ If cursors is not placed on a whitespace character, nothing is selected.`,
 
 	// Tab
 
+	"t": `t  # An alias for the 'tab' command.`,
+
+	"tab": `tab regex # Switch to the tab which path matches the regex.
+If more than one tab is found, the error is reported.`,
+
 	"tab-count": `tab-count # Prints the number of tabs.`,
 
 	"tn": `tn # An alias for the 'tab-next' command.`,

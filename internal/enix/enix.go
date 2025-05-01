@@ -311,6 +311,9 @@ func RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		case "suspend":
 			err = exec.Suspend(c.Args, Screen)
 			InitScreen()
+		case "t", "tab":
+			CurrentTab, err = exec.Tab(c.Args, Tabs)
+			TabBar.Update()
 		case "tn", "tab-next":
 			CurrentTab, err = exec.TabNext(c.Args, tab)
 			TabBar.Update()
