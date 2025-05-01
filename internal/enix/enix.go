@@ -199,6 +199,8 @@ func RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			err = exec.InsertLineAbove(c.Args, tab)
 		case "insert-line-below":
 			err = exec.InsertLineBelow(c.Args, tab)
+		case "insert-tab":
+			err = exec.InsertTab(c.Args, tab)
 		case "join":
 			err = exec.Join(c.Args, tab)
 		case "left":
@@ -309,8 +311,6 @@ func RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		case "suspend":
 			err = exec.Suspend(c.Args, Screen)
 			InitScreen()
-		case "tab":
-			err = exec.Tab(c.Args, tab)
 		case "tn", "tab-next":
 			CurrentTab, err = exec.TabNext(c.Args, tab)
 			TabBar.Update()

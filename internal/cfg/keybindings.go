@@ -90,7 +90,7 @@ func DefaultKeybindings() Keybindings {
 		"Rune[y]": "yank",
 		"Rune[ ]": "space",
 		"Rune[>]": "indent",
-		"Tab":     "tab",
+		"Tab":     "insert-tab",
 		"Ctrl+P":  "path",
 		"Rune[]]": "match-bracket",
 		"Rune[}]": "match-curly",

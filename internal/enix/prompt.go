@@ -656,6 +656,8 @@ func (p *prompt) Exec() TcellEventReceiver {
 			err = exec.InsertLineAbove(c.Args, tab)
 		case "insert-line-below":
 			err = exec.InsertLineBelow(c.Args, tab)
+		case "insert-tab":
+			err = exec.InsertTab(c.Args, tab)
 		case "join":
 			err = exec.Join(c.Args, tab)
 		case "key-name":
@@ -770,8 +772,6 @@ func (p *prompt) Exec() TcellEventReceiver {
 		case "suspend":
 			err = exec.Suspend(c.Args, Screen)
 			InitScreen()
-		case "tab":
-			err = exec.Tab(c.Args, tab)
 		case "tab-count":
 			info = fmt.Sprintf("%d", Tabs.Count())
 		case "tn", "tab-next":

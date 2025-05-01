@@ -49,10 +49,10 @@ func Space(args []string, tab *tab.Tab) error {
 	return nil
 }
 
-func Tab(args []string, tab *tab.Tab) error {
+func InsertTab(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf(
-			"tab: expected 0 args, provided %d", len(args),
+			"insert-tab: expected 0 args, provided %d", len(args),
 		)
 	}
 

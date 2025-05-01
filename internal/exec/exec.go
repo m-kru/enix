@@ -67,7 +67,7 @@ func Exec(c cmd.Command, tab *tab.Tab) error {
 		case "spawn-up":
 			err = SpawnUp(c.Args, tab)
 		case "tab":
-			err = Tab(c.Args, tab)
+			err = InsertTab(c.Args, tab)
 		case "trim":
 			err = Trim(c.Args, tab)
 		case "undo":

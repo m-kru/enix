@@ -139,13 +139,13 @@ Even if the selection starts or ends in the middle of a line.`,
 
 	"insert-line-below": `insert-line-below # Adds an empty line below and enters the insert mode.`,
 
+	"insert-tab": `tab # Inserts tab rune.`,
+
 	"newline": `newline # Inserts a newline.`,
 
 	"rune": `rune r # Inserts rune r under the cursor or selection position.`,
 
 	"space": `space # Inserts space rune.`,
-
-	"tab": `tab # Inserts tab rune.`,
 
 	// Match
 
