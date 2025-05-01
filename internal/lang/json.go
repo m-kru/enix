@@ -159,13 +159,13 @@ func readFiletypeDefFromJSON(lang string) ([]RegionJSON, error) {
 
 func langDefIntoHighlighter(regionsJSON []RegionJSON) (*Highlighter, error) {
 	hl := &Highlighter{
-		Regions:         []*Region{},
-		matchingDelims:  nil,
-		lineNum:         0,
-		firstVisLineNum: 0,
-		lastVisLineNum:  0,
-		region:          nil,
-		startTokens:     []RegionToken{},
+		Regions:          []*Region{},
+		matchingBrackets: nil,
+		lineNum:          0,
+		firstVisLineNum:  0,
+		lastVisLineNum:   0,
+		region:           nil,
+		startTokens:      []RegionToken{},
 	}
 
 	if len(regionsJSON) == 0 {

@@ -13,7 +13,7 @@ import (
 )
 
 // One of bufIdx or runeIdx is not required, not sure yet which one.
-type matchingDelimiterPosition struct {
+type bracketPosition struct {
 	lineNum int
 	bufIdx  int
 	runeIdx int
@@ -22,7 +22,7 @@ type matchingDelimiterPosition struct {
 type Highlighter struct {
 	Regions []*Region
 
-	matchingDelims []matchingDelimiterPosition
+	matchingBrackets []bracketPosition
 
 	lineNum         int
 	firstVisLineNum int
@@ -36,13 +36,13 @@ type Highlighter struct {
 // DefaultHighlighter returns a highlighter highlighting only a cursor word.
 func DefaultHighlighter() *Highlighter {
 	return &Highlighter{
-		Regions:         []*Region{DefaultRegion()},
-		matchingDelims:  nil,
-		lineNum:         0,
-		firstVisLineNum: 0,
-		lastVisLineNum:  0,
-		region:          nil,
-		startTokens:     []RegionToken{},
+		Regions:          []*Region{DefaultRegion()},
+		matchingBrackets: nil,
+		lineNum:          0,
+		firstVisLineNum:  0,
+		lastVisLineNum:   0,
+		region:           nil,
+		startTokens:      []RegionToken{},
 	}
 }
 
@@ -75,7 +75,7 @@ func (hl *Highlighter) reset(
 	firstVisLineNum int,
 	lastVisLineNum int,
 ) {
-	hl.matchingDelims = make([]matchingDelimiterPosition, 0, 8)
+	hl.matchingBrackets = make([]bracketPosition, 0, 8)
 	hl.lineNum = 1
 	hl.firstVisLineNum = firstVisLineNum
 	hl.lastVisLineNum = lastVisLineNum
@@ -97,12 +97,12 @@ func (hl *Highlighter) reset(
 		}
 
 		if mdCur != nil && firstVisLineNum <= mdCur.LineNum && mdCur.LineNum <= lastVisLineNum {
-			mdPos := matchingDelimiterPosition{
+			mdPos := bracketPosition{
 				lineNum: mdCur.LineNum,
 				bufIdx:  mdCur.Line.BufIdx(mdCur.RuneIdx),
 				runeIdx: mdCur.RuneIdx,
 			}
-			hl.matchingDelims = append(hl.matchingDelims, mdPos)
+			hl.matchingBrackets = append(hl.matchingBrackets, mdPos)
 			continue
 		}
 
@@ -124,8 +124,8 @@ func (hl *Highlighter) reset(
 
 	// Sort matching delimiters
 	less := func(i, j int) bool {
-		di := hl.matchingDelims[i]
-		dj := hl.matchingDelims[j]
+		di := hl.matchingBrackets[i]
+		dj := hl.matchingBrackets[j]
 
 		if di.lineNum < dj.lineNum {
 			return true
@@ -135,7 +135,7 @@ func (hl *Highlighter) reset(
 
 		return false
 	}
-	sort.Slice(hl.matchingDelims, less)
+	sort.Slice(hl.matchingBrackets, less)
 
 	// Reset cursor word regex
 	for _, r := range hl.Regions {
