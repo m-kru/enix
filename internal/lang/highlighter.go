@@ -12,10 +12,8 @@ import (
 	"github.com/m-kru/enix/internal/util"
 )
 
-// One of bufIdx or runeIdx is not required, not sure yet which one.
 type bracketPosition struct {
 	lineNum int
-	bufIdx  int
 	runeIdx int
 }
 
@@ -109,25 +107,24 @@ func (hl *Highlighter) reset(
 	cursorWordRegex := ""
 
 	for _, cur := range cursors {
-		var mdCur *cursor.Cursor
+		var mbCur *cursor.Cursor
 
 		r := cur.Rune()
 		switch r {
 		case '[', ']':
-			mdCur = cur.MatchBracket(hl.firstVisLineNum, hl.lastVisLineNum)
+			mbCur = cur.MatchBracket(hl.firstVisLineNum, hl.lastVisLineNum)
 		case '{', '}':
-			mdCur = cur.MatchBracket(hl.firstVisLineNum, hl.lastVisLineNum)
+			mbCur = cur.MatchBracket(hl.firstVisLineNum, hl.lastVisLineNum)
 		case '(', ')':
-			mdCur = cur.MatchParen(hl.firstVisLineNum, hl.lastVisLineNum)
+			mbCur = cur.MatchParen(hl.firstVisLineNum, hl.lastVisLineNum)
 		}
 
-		if mdCur != nil && firstVisLineNum <= mdCur.LineNum && mdCur.LineNum <= lastVisLineNum {
-			mdPos := bracketPosition{
-				lineNum: mdCur.LineNum,
-				bufIdx:  mdCur.Line.BufIdx(mdCur.RuneIdx),
-				runeIdx: mdCur.RuneIdx,
+		if mbCur != nil && firstVisLineNum <= mbCur.LineNum && mbCur.LineNum <= lastVisLineNum {
+			mbPos := bracketPosition{
+				lineNum: mbCur.LineNum,
+				runeIdx: mbCur.RuneIdx,
 			}
-			hl.matchingBrackets = append(hl.matchingBrackets, mdPos)
+			hl.matchingBrackets = append(hl.matchingBrackets, mbPos)
 			continue
 		}
 
@@ -265,7 +262,7 @@ func (hl *Highlighter) analyzeLineOneRegionOnly(line *line.Line, hls *[]highligh
 	hl.highlightRegion(line.Buf, hl.lineNum, 0, len(line.Buf), hl.Regions[0], hls)
 }
 
-func (hl *Highlighter) highlightRegion(
+func (hlr *Highlighter) highlightRegion(
 	line []byte,
 	lineNum int,
 	startBufIdx int,
@@ -277,26 +274,30 @@ func (hl *Highlighter) highlightRegion(
 
 	runeOffset := util.ByteIdxToRuneIdx(line, startBufIdx)
 
+	regStyle := cfg.Style.Get(region.Style)
 	runeIdx := 0 // Current rune index
-	for _, m := range matches {
-		if runeIdx < m.start {
-			hl := highlight.Highlight{
-				LineNum:      lineNum,
-				StartRuneIdx: runeOffset + runeIdx,
-				EndRuneIdx:   runeOffset + m.start,
-				Style:        cfg.Style.Get(region.Style),
-			}
-			*hls = append(*hls, hl)
-		}
+
+	mIdx := 0
+	for mIdx < len(matches) {
+		m := matches[mIdx]
 
 		hl := highlight.Highlight{
 			LineNum:      lineNum,
-			StartRuneIdx: runeOffset + m.start,
-			EndRuneIdx:   runeOffset + m.end,
-			Style:        m.style,
+			StartRuneIdx: runeOffset + runeIdx,
+			EndRuneIdx:   runeOffset + m.start,
+			Style:        regStyle,
 		}
+
+		if runeIdx == m.start {
+			hl.EndRuneIdx = runeOffset + m.end
+			hl.Style = m.style
+			mIdx++
+			runeIdx = m.end
+		} else {
+			runeIdx = m.start
+		}
+
 		*hls = append(*hls, hl)
-		runeIdx = m.end
 	}
 
 	endRuneIdx := util.ByteIdxToRuneIdx(line, endBufIdx)
