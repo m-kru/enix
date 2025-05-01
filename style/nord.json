@@ -36,6 +36,11 @@
 	"Selection": {
 		"Bg": "Red"
 	},
+	"MatchingBracket": {
+		"Bg": "Cyan",
+		"Fg": "Black",
+		"Bold": true
+	},
 	"StatusLine": {
 		"Bg": "Black"
 	},

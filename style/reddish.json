@@ -39,6 +39,10 @@
 		"Bg": "Red",
 		"Fg": "Background"
 	},
+	"MatchingBracket": {
+		"Bg": "White",
+		"Bold": true
+	},
 	"StatusLine": {
 		"Bg": "White"
 	},

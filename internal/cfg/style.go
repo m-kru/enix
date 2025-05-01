@@ -40,39 +40,40 @@ func (is itemStyle) ToTcellStyle(dflt tcell.Style) (tcell.Style, error) {
 }
 
 type styleJSON struct {
-	Default      itemStyle
-	Error        itemStyle
-	Warning      itemStyle
-	TabBar       itemStyle
-	CurrentTab   itemStyle
-	LineNum      itemStyle
-	Whitespace   itemStyle
-	Cursor       itemStyle
-	CursorWord   itemStyle
-	Find         itemStyle
-	Selection    itemStyle
-	StatusLine   itemStyle
-	RepCount     itemStyle
-	StateMark    itemStyle
-	FindMark     itemStyle
-	Prompt       itemStyle
-	PromptShadow itemStyle
-	Menu         itemStyle
-	MenuItem     itemStyle
-	Attribute    itemStyle
-	Bold         itemStyle
-	Comment      itemStyle
-	Heading      itemStyle
-	Italic       itemStyle
-	Keyword      itemStyle
-	Meta         itemStyle
-	Mono         itemStyle
-	Number       itemStyle
-	Operator     itemStyle
-	String       itemStyle
-	Type         itemStyle
-	Value        itemStyle
-	Variable     itemStyle
+	Default         itemStyle
+	Error           itemStyle
+	Warning         itemStyle
+	TabBar          itemStyle
+	CurrentTab      itemStyle
+	LineNum         itemStyle
+	Whitespace      itemStyle
+	Cursor          itemStyle
+	CursorWord      itemStyle
+	Find            itemStyle
+	Selection       itemStyle
+	MatchingBracket itemStyle
+	StatusLine      itemStyle
+	RepCount        itemStyle
+	StateMark       itemStyle
+	FindMark        itemStyle
+	Prompt          itemStyle
+	PromptShadow    itemStyle
+	Menu            itemStyle
+	MenuItem        itemStyle
+	Attribute       itemStyle
+	Bold            itemStyle
+	Comment         itemStyle
+	Heading         itemStyle
+	Italic          itemStyle
+	Keyword         itemStyle
+	Meta            itemStyle
+	Mono            itemStyle
+	Number          itemStyle
+	Operator        itemStyle
+	String          itemStyle
+	Type            itemStyle
+	Value           itemStyle
+	Variable        itemStyle
 }
 
 func (sj styleJSON) ToStyle() (style, error) {
@@ -134,6 +135,11 @@ func (sj styleJSON) ToStyle() (style, error) {
 		return s, err
 	}
 	s.Selection = ts
+
+	if ts, err = sj.MatchingBracket.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.MatchingBracket = ts
 
 	if ts, err = sj.StatusLine.ToTcellStyle(s.Default); err != nil {
 		return s, err
@@ -268,8 +274,9 @@ type style struct {
 	Cursor     tcell.Style
 	CursorWord tcell.Style // Style of the word under cursor
 
-	Find      tcell.Style
-	Selection tcell.Style
+	Find            tcell.Style
+	Selection       tcell.Style
+	MatchingBracket tcell.Style
 
 	StatusLine tcell.Style
 	RepCount   tcell.Style
@@ -359,8 +366,9 @@ func DefaultStyle() style {
 		Cursor:     tcell.StyleDefault.Reverse(true),
 		CursorWord: tcell.StyleDefault.Foreground(tcell.ColorWhite),
 
-		Find:      tcell.StyleDefault.Background(tcell.ColorOlive),
-		Selection: tcell.StyleDefault.Background(tcell.ColorMaroon).Foreground(tcell.ColorWhite),
+		Find:            tcell.StyleDefault.Background(tcell.ColorOlive),
+		Selection:       tcell.StyleDefault.Background(tcell.ColorMaroon).Foreground(tcell.ColorWhite),
+		MatchingBracket: tcell.StyleDefault.Background(tcell.ColorGray).Bold(true),
 
 		StatusLine: tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorGray),
 		RepCount:   tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorTeal),

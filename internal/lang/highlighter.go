@@ -58,19 +58,19 @@ func NewHighlighter(lang string) (*Highlighter, error) {
 		return DefaultHighlighter(), nil
 	}
 
-	hl, err := langDefIntoHighlighter(langDef)
+	hlr, err := langDefIntoHighlighter(langDef)
 	if err != nil {
 		return DefaultHighlighter(),
 			fmt.Errorf("%s highlighter: %v", lang, err)
 	}
 
-	return hl, nil
+	return hlr, nil
 }
 
 // The line argument  must be the first line of file.
 // StartLineIdx is the index of the first visible line.
 // EndLineIdx is the index of the last visible line.
-func (hl *Highlighter) Analyze(
+func (hlr *Highlighter) Analyze(
 	line *line.Line, // First tab line
 	firstVisLineNum int,
 	lastVisLineNum int,
@@ -78,14 +78,14 @@ func (hl *Highlighter) Analyze(
 ) []highlight.Highlight {
 	hls := make([]highlight.Highlight, 0, 1024)
 
-	if len(hl.Regions) == 0 {
+	if len(hlr.Regions) == 0 {
 		return nil
 	}
 
-	hl.reset(cursors, firstVisLineNum, lastVisLineNum)
+	hlr.reset(cursors, firstVisLineNum, lastVisLineNum)
 
-	for !hl.done() {
-		hl.analyzeLine(line, &hls)
+	for !hlr.done() {
+		hlr.analyzeLine(line, &hls)
 		line = line.Next
 	}
 
@@ -93,16 +93,16 @@ func (hl *Highlighter) Analyze(
 }
 
 // Resets highlighter for a new analysis.
-func (hl *Highlighter) reset(
+func (hlr *Highlighter) reset(
 	cursors []*cursor.Cursor,
 	firstVisLineNum int,
 	lastVisLineNum int,
 ) {
-	hl.matchingBrackets = make([]bracketPosition, 0, 8)
-	hl.lineNum = 1
-	hl.firstVisLineNum = firstVisLineNum
-	hl.lastVisLineNum = lastVisLineNum
-	hl.region = hl.Regions[0]
+	hlr.matchingBrackets = make([]bracketPosition, 0, 8)
+	hlr.lineNum = 1
+	hlr.firstVisLineNum = firstVisLineNum
+	hlr.lastVisLineNum = lastVisLineNum
+	hlr.region = hlr.Regions[0]
 
 	cursorWordRegex := ""
 
@@ -112,11 +112,11 @@ func (hl *Highlighter) reset(
 		r := cur.Rune()
 		switch r {
 		case '[', ']':
-			mbCur = cur.MatchBracket(hl.firstVisLineNum, hl.lastVisLineNum)
+			mbCur = cur.MatchBracket(hlr.firstVisLineNum, hlr.lastVisLineNum)
 		case '{', '}':
-			mbCur = cur.MatchBracket(hl.firstVisLineNum, hl.lastVisLineNum)
+			mbCur = cur.MatchCurly(hlr.firstVisLineNum, hlr.lastVisLineNum)
 		case '(', ')':
-			mbCur = cur.MatchParen(hl.firstVisLineNum, hl.lastVisLineNum)
+			mbCur = cur.MatchParen(hlr.firstVisLineNum, hlr.lastVisLineNum)
 		}
 
 		if mbCur != nil && firstVisLineNum <= mbCur.LineNum && mbCur.LineNum <= lastVisLineNum {
@@ -124,7 +124,7 @@ func (hl *Highlighter) reset(
 				lineNum: mbCur.LineNum,
 				runeIdx: mbCur.RuneIdx,
 			}
-			hl.matchingBrackets = append(hl.matchingBrackets, mbPos)
+			hlr.matchingBrackets = append(hlr.matchingBrackets, mbPos)
 			continue
 		}
 
@@ -146,8 +146,8 @@ func (hl *Highlighter) reset(
 
 	// Sort matching delimiters
 	less := func(i, j int) bool {
-		di := hl.matchingBrackets[i]
-		dj := hl.matchingBrackets[j]
+		di := hlr.matchingBrackets[i]
+		dj := hlr.matchingBrackets[j]
 
 		if di.lineNum < dj.lineNum {
 			return true
@@ -157,34 +157,36 @@ func (hl *Highlighter) reset(
 
 		return false
 	}
-	sort.Slice(hl.matchingBrackets, less)
+	sort.Slice(hlr.matchingBrackets, less)
 
 	// Reset cursor word regex
-	for _, r := range hl.Regions {
+	for _, r := range hlr.Regions {
 		r.CursorWord = nil
 	}
 
 	// Compile cursor word regex
-	re, err := regexp.Compile(cursorWordRegex)
-	if err == nil {
-		for _, r := range hl.Regions {
-			r.CursorWord = re
+	if cursorWordRegex != "" {
+		re, err := regexp.Compile(cursorWordRegex)
+		if err == nil {
+			for _, r := range hlr.Regions {
+				r.CursorWord = re
+			}
 		}
 	}
 }
 
-func (hl *Highlighter) done() bool {
-	return hl.lineNum > hl.lastVisLineNum
+func (hlr *Highlighter) done() bool {
+	return hlr.lineNum > hlr.lastVisLineNum
 }
 
-func (hl *Highlighter) analyzeLine(line *line.Line, hls *[]highlight.Highlight) {
+func (hlr *Highlighter) analyzeLine(line *line.Line, hls *[]highlight.Highlight) {
 	if len(line.Buf) == 0 {
-		hl.lineNum++
+		hlr.lineNum++
 		return
 	}
 
-	if len(hl.Regions) == 1 {
-		hl.analyzeLineOneRegionOnly(line, hls)
+	if len(hlr.Regions) == 1 {
+		hlr.analyzeLineOneRegionOnly(line, hls)
 		return
 	}
 
@@ -194,30 +196,30 @@ func (hl *Highlighter) analyzeLine(line *line.Line, hls *[]highlight.Highlight) 
 	bufIdx := 0 // Current line buffer index
 
 	for bufIdx < len(line.Buf) {
-		region := hl.region
+		region := hlr.region
 		endIdx := len(line.Buf)
 
-		if hl.region.Name == "Default" {
+		if hlr.region.Name == "Default" {
 			if !startTokensValid {
-				hl.startTokens = hl.startTokens[:0]
-				lineStartTokens(line.Buf, bufIdx, hl.Regions, &hl.startTokens)
+				hlr.startTokens = hlr.startTokens[:0]
+				lineStartTokens(line.Buf, bufIdx, hlr.Regions, &hlr.startTokens)
 				startTokensValid = true
 			}
-			for i := startTokIdx; i < len(hl.startTokens); i++ {
-				tok := hl.startTokens[i]
+			for i := startTokIdx; i < len(hlr.startTokens); i++ {
+				tok := hlr.startTokens[i]
 				if bufIdx < tok.startBufIdx {
 					endIdx = tok.startBufIdx
 					break
 				} else if bufIdx == tok.startBufIdx {
-					hl.region = tok.region
+					hlr.region = tok.region
 					startTokIdx = i + 1
 					break
 				}
 			}
 		}
 
-		if hl.region.Name != "Default" {
-			region = hl.region
+		if hlr.region.Name != "Default" {
+			region = hlr.region
 
 			if endTokens == nil {
 				endTokens = make(map[string][]RegionToken)
@@ -225,41 +227,41 @@ func (hl *Highlighter) analyzeLine(line *line.Line, hls *[]highlight.Highlight) 
 
 			var endToks []RegionToken
 			var ok bool
-			endToks, ok = endTokens[hl.region.Name]
+			endToks, ok = endTokens[hlr.region.Name]
 			if !ok {
-				endToks = lineEndTokens(line.Buf, bufIdx, hl.region)
-				endTokens[hl.region.Name] = endToks
+				endToks = lineEndTokens(line.Buf, bufIdx, hlr.region)
+				endTokens[hlr.region.Name] = endToks
 			}
 
 			for _, tok := range endToks {
 				if bufIdx < tok.startBufIdx {
 					endIdx = tok.endBufIdx
-					hl.region = hl.Regions[0]
+					hlr.region = hlr.Regions[0]
 					break
 				}
 			}
 		}
 
-		if hl.lineNum < hl.firstVisLineNum {
+		if hlr.lineNum < hlr.firstVisLineNum {
 			bufIdx = endIdx
 			continue
 		}
 
-		hl.highlightRegion(line.Buf, hl.lineNum, bufIdx, endIdx, region, hls)
+		hlr.highlightRegion(line.Buf, hlr.lineNum, bufIdx, endIdx, region, hls)
 		bufIdx = endIdx
 	}
 
-	hl.lineNum++
+	hlr.lineNum++
 }
 
-func (hl *Highlighter) analyzeLineOneRegionOnly(line *line.Line, hls *[]highlight.Highlight) {
-	hl.lineNum++
-
-	if hl.lineNum < hl.firstVisLineNum {
+func (hlr *Highlighter) analyzeLineOneRegionOnly(line *line.Line, hls *[]highlight.Highlight) {
+	if hlr.lineNum < hlr.firstVisLineNum {
 		return
 	}
 
-	hl.highlightRegion(line.Buf, hl.lineNum, 0, len(line.Buf), hl.Regions[0], hls)
+	hlr.highlightRegion(line.Buf, hlr.lineNum, 0, len(line.Buf), hlr.Regions[0], hls)
+
+	hlr.lineNum++
 }
 
 func (hlr *Highlighter) highlightRegion(
@@ -268,7 +270,7 @@ func (hlr *Highlighter) highlightRegion(
 	startBufIdx int,
 	endBufIdx int,
 	region *Region,
-	hls *[]highlight.Highlight,
+	highlights *[]highlight.Highlight,
 ) {
 	matches := region.match(line[startBufIdx:endBufIdx])
 
@@ -276,6 +278,30 @@ func (hlr *Highlighter) highlightRegion(
 
 	regStyle := cfg.Style.Get(region.Style)
 	runeIdx := 0 // Current rune index
+
+	highlightMatchingBrackets := func(hl highlight.Highlight) highlight.Highlight {
+		mb := hlr.matchingBrackets[0]
+		for len(hlr.matchingBrackets) > 0 && hl.CoversCell(mb.lineNum, mb.runeIdx) {
+			mbhl := highlight.Highlight{
+				LineNum:      mb.lineNum,
+				StartRuneIdx: mb.runeIdx,
+				EndRuneIdx:   mb.runeIdx + 1,
+				Style:        cfg.Style.MatchingBracket,
+			}
+			hls := hl.Split(mbhl)
+			for i := range len(hls) - 1 {
+				*highlights = append(*highlights, hls[i])
+			}
+			hl = hls[len(hls)-1]
+			hlr.matchingBrackets = hlr.matchingBrackets[1:]
+
+			if len(hlr.matchingBrackets) > 0 {
+				mb = hlr.matchingBrackets[0]
+			}
+		}
+
+		return hl
+	}
 
 	mIdx := 0
 	for mIdx < len(matches) {
@@ -297,7 +323,11 @@ func (hlr *Highlighter) highlightRegion(
 			runeIdx = m.start
 		}
 
-		*hls = append(*hls, hl)
+		if len(hlr.matchingBrackets) > 0 && hlr.matchingBrackets[0].lineNum == lineNum {
+			hl = highlightMatchingBrackets(hl)
+		}
+
+		*highlights = append(*highlights, hl)
 	}
 
 	endRuneIdx := util.ByteIdxToRuneIdx(line, endBufIdx)
@@ -308,6 +338,11 @@ func (hlr *Highlighter) highlightRegion(
 			EndRuneIdx:   endRuneIdx,
 			Style:        cfg.Style.Get(region.Style),
 		}
-		*hls = append(*hls, hl)
+
+		if len(hlr.matchingBrackets) > 0 && hlr.matchingBrackets[0].lineNum == lineNum {
+			hl = highlightMatchingBrackets(hl)
+		}
+
+		*highlights = append(*highlights, hl)
 	}
 }
