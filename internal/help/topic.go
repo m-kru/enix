@@ -140,7 +140,7 @@ However, it is not part of the tab content.
 It solely symbolizes the line end, not the newline.
 
 At no point more than one cursor can point to the same position.
-If, due to command execution, multiple cursors point to the same position, some of them are desroyed so that only one cursor pointing to a particular position exists.
+If, due to command execution, multiple cursors point to the same position, some of them are destroyed so that only one cursor pointing to a particular position exists.
 
 The status bar displays position of the cursor on the right side in the following format: [line number]:[column].
 In the case of multiple cursors, position of the last cursor is displayed.
