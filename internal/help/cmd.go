@@ -316,6 +316,10 @@ If there are no selections within the tab, the whole tab is searched.`,
 
 	"sel-all": `sel-all # Selets all tab content.`,
 
+	"sb": `sel-bracket # An alias for the 'sel-bracket' command.`,
+
+	"sel-bracket": `sel-bracket # Selects content within matching brackets.`,
+
 	"sel-count": `sel-count # Prints the number of selections in the current tab.`,
 
 	"sel-left": `sel-left # Extends or shrinks selection one rune left.`,

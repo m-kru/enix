@@ -270,6 +270,8 @@ func RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			return &Prompt
 		case "sel-all":
 			err = exec.SelAll(c.Args, tab)
+		case "sb", "sel-bracket":
+			err = exec.SelBracket(c.Args, tab)
 		case "sel-down":
 			err = exec.SelDown(c.Args, tab)
 		case "sel-left":

@@ -17,6 +17,18 @@ func SelAll(args []string, tab *tab.Tab) error {
 	return nil
 }
 
+func SelBracket(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf(
+			"sel-bracket: provided %d args, expected 0", len(args),
+		)
+	}
+
+	tab.SelBracket()
+
+	return nil
+}
+
 func SelDown(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf(

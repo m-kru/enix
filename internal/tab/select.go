@@ -1,6 +1,7 @@
 package tab
 
 import (
+	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/sel"
 )
 
@@ -284,5 +285,54 @@ func (tab *Tab) SelSwitchCursor() {
 
 	for _, s := range tab.Selections {
 		s.SwitchCursor()
+	}
+}
+
+func (tab *Tab) SelBracket() {
+	var curs []*cursor.Cursor
+	if len(tab.Cursors) > 0 {
+		curs = tab.Cursors
+	} else {
+		curs = make([]*cursor.Cursor, 0, len(tab.Selections))
+		for _, s := range tab.Selections {
+			c := s.GetCursor()
+			curs = append(curs, c)
+		}
+	}
+
+	sels := make([]*sel.Selection, 0, len(curs))
+
+	for _, cur := range curs {
+		c1 := cur.MatchBracket(0, 0)
+		if c1 == nil {
+			continue
+		}
+
+		c2 := c1.MatchBracket(0, 0)
+		if c2 == nil {
+			continue
+		}
+
+		if c2.LineNum < c1.LineNum ||
+			(c2.LineNum == c1.LineNum && c2.RuneIdx < c1.RuneIdx) {
+			tmp := c1
+			c1 = c2
+			c2 = tmp
+		}
+
+		c1.Right()
+		if c1.LineNum == c2.LineNum && c1.RuneIdx == c2.RuneIdx {
+			continue
+		}
+		c2.Left()
+
+		s := sel.FromTo(c1, c2)
+		sels = append(sels, s)
+
+	}
+
+	if len(sels) > 0 {
+		tab.Cursors = nil
+		tab.Selections = sel.Prune(sels)
 	}
 }

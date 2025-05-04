@@ -732,6 +732,8 @@ func (p *prompt) Exec() TcellEventReceiver {
 			updateView = false
 		case "sel-all":
 			err = exec.SelAll(c.Args, tab)
+		case "sb", "sel-bracket":
+			err = exec.SelBracket(c.Args, tab)
 		case "sel-count":
 			info = fmt.Sprintf("%d", len(tab.Selections))
 		case "sel-down":

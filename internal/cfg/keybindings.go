@@ -111,6 +111,9 @@ func DefaultKeybindings() Keybindings {
 		"Rune[z]": "sel-word",
 		"Rune[;]": "sel-switch-cursor",
 		"Rune[C]": "sel-tab-end",
+		"Rune[[]": "sel-bracket",
+		"Rune[{]": "sel-curly",
+		"Rune[(]": "sel-paren",
 		// View
 		"Ctrl+W":     "view-center",
 		"Down":       "view-down",
