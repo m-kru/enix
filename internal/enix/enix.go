@@ -284,6 +284,8 @@ func RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			err = exec.SelLineEnd(c.Args, tab)
 		case "sel-line-start":
 			err = exec.SelLineStart(c.Args, tab)
+		case "sp", "sel-paren":
+			err = exec.SelParen(c.Args, tab)
 		case "sel-prev-word-start":
 			err = exec.SelPrevWordStart(c.Args, tab)
 		case "sel-right":

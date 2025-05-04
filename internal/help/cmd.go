@@ -336,6 +336,10 @@ If whole current line is already selected, it extends the selection with the nex
 	"sel-white": `sel-white # Selects sequence of whitespaces.
 If cursors is not placed on a whitespace character, nothing is selected.`,
 
+	"sp": `sel-paren # An alias for the 'sel-paren' command.`,
+
+	"sel-paren": `sel-paren # Selects content within matching parentheses.`,
+
 	"sel-prev-word-start": `sel-prev-word-start # Selects, extends or shrinks selection to the start of the previous word.`,
 
 	"sel-to-tab": `sel-to-tab [tab-path] # Opens a new tab with the content of current selections.`,
