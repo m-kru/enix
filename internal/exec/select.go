@@ -29,6 +29,18 @@ func SelBracket(args []string, tab *tab.Tab) error {
 	return nil
 }
 
+func SelCurly(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf(
+			"sel-curly: provided %d args, expected 0", len(args),
+		)
+	}
+
+	tab.SelCurly()
+
+	return nil
+}
+
 func SelDown(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf(

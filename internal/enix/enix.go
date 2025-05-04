@@ -272,6 +272,8 @@ func RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			err = exec.SelAll(c.Args, tab)
 		case "sb", "sel-bracket":
 			err = exec.SelBracket(c.Args, tab)
+		case "sc", "sel-curly":
+			err = exec.SelCurly(c.Args, tab)
 		case "sel-down":
 			err = exec.SelDown(c.Args, tab)
 		case "sel-left":

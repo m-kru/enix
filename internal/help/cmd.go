@@ -320,6 +320,10 @@ If there are no selections within the tab, the whole tab is searched.`,
 
 	"sel-bracket": `sel-bracket # Selects content within matching brackets.`,
 
+	"sc": `sel-curly # An alias for the 'sel-curly' command.`,
+
+	"sel-curly": `sel-curly # Selects content within matching curly braces.`,
+
 	"sel-count": `sel-count # Prints the number of selections in the current tab.`,
 
 	"sel-left": `sel-left # Extends or shrinks selection one rune left.`,
