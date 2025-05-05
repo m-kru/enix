@@ -100,7 +100,7 @@ func (tab *Tab) pasteCursors(text string, addIndent bool) action.Actions {
 	if strings.HasSuffix(text, "\n") {
 		actions = tab.pasteCursorsLineBased(text, addIndent)
 	} else {
-		actions = tab.pasteCursorsRegular(text, addIndent)
+		actions = tab.pasteCursorsRegular(text, addIndent, true)
 	}
 
 	tab.SearchCtx.Modified = true
@@ -114,7 +114,7 @@ func (tab *Tab) pasteCursorsLineBased(text string, addIndent bool) action.Action
 	return tab.pasteLineBased(text, addIndent, curs)
 }
 
-func (tab *Tab) pasteCursorsRegular(text string, addIndent bool) action.Actions {
+func (tab *Tab) pasteCursorsRegular(text string, addIndent bool, after bool) action.Actions {
 	actions := make(action.Actions, 0, len(tab.Cursors))
 	newSels := make([]*sel.Selection, 0, len(tab.Cursors))
 
@@ -130,7 +130,9 @@ func (tab *Tab) pasteCursorsRegular(text string, addIndent bool) action.Actions 
 			lines, lineCount = line.FromString(t[0:])
 		}
 
-		cur.Right()
+		if after {
+			cur.Right()
+		}
 		startRuneIdx := cur.RuneIdx
 		startCur := cur.Clone()
 
@@ -314,7 +316,7 @@ func (tab *Tab) pasteBeforeCursorsLineBased(text string, addIndent bool) action.
 }
 
 func (tab *Tab) pasteBeforeCursorsRegular(text string, addIndent bool) action.Actions {
-	return nil
+	return tab.pasteCursorsRegular(text, addIndent, false)
 }
 
 func (tab *Tab) pasteBeforeSelections(text string) action.Actions {
