@@ -18,7 +18,6 @@ func getNextFind(finds []find.Find, c *cursor.Cursor) find.Find {
 		return firstFind
 	}
 
-	// TODO: Not optimal, O(n) complexity, can be implemented as O(log(n)).
 	for i := range len(finds) - 1 {
 		prevF := finds[i]
 		nextF := finds[i+1]
@@ -44,7 +43,6 @@ func getPrevFind(finds []find.Find, c *cursor.Cursor) find.Find {
 		return lastFind
 	}
 
-	// TODO: Not optimal, O(n) complexity, can be implemented as O(log(n)).
 	for i := range len(finds) - 1 {
 		prev := finds[i]
 		next := finds[i+1]
@@ -157,6 +155,66 @@ func (tab *Tab) FindSel(next bool) {
 	tab.Selections = sel.Prune(tab.Selections)
 
 	if !tab.View.IsVisible(s.View()) {
+		tab.ViewCenter()
+	}
+}
+
+// next is true for find-desel-next and false for find-sel-prev.
+func (tab *Tab) FindDesel(next bool) {
+	if len(tab.Selections) == 0 {
+		tab.Find(next)
+		return
+	}
+
+	finds := tab.SearchCtx.Finds
+	cur := tab.Selections[len(tab.Selections)-1].GetCursor()
+
+	// Check if last selection is a find result.
+	lastSel := tab.LastSel()
+	for _, f := range finds {
+		if lastSel.EqualsFind(f) {
+			tab.Selections = tab.Selections[0 : len(tab.Selections)-1]
+			break
+		}
+	}
+
+	var f find.Find
+	if next {
+		f = getNextFind(finds, cur)
+	} else {
+		f = getPrevFind(finds, cur)
+	}
+
+	// If seleciton for a given find already exists, then move it to be the last selection.
+	selExists := false
+	for i, s := range tab.Selections {
+		if s.EqualsFind(f) {
+			lastIdx := len(tab.Selections) - 1
+			tmp := tab.Selections[lastIdx]
+			tab.Selections[lastIdx] = s
+			tab.Selections[i] = tmp
+			selExists = true
+			break
+		}
+	}
+
+	if !selExists {
+		line := tab.Lines.Get(f.LineNum)
+		s := &sel.Selection{
+			Line:         line,
+			LineNum:      f.LineNum,
+			StartRuneIdx: f.StartRuneIdx,
+			EndRuneIdx:   f.EndRuneIdx - 1,
+			Cursor:       cursor.New(line, f.LineNum, f.StartRuneIdx),
+			Prev:         nil,
+			Next:         nil,
+		}
+		tab.Selections = append(tab.Selections, s)
+	}
+
+	tab.Selections = sel.Prune(tab.Selections)
+
+	if !tab.View.IsVisible(tab.LastSel().View()) {
 		tab.ViewCenter()
 	}
 }

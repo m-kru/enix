@@ -2,6 +2,7 @@ package sel
 
 import (
 	"github.com/m-kru/enix/internal/cursor"
+	"github.com/m-kru/enix/internal/find"
 	"github.com/m-kru/enix/internal/line"
 	"github.com/m-kru/enix/internal/view"
 )
@@ -210,4 +211,11 @@ func Lines(sels []*Selection) []*line.Line {
 	}
 
 	return lines
+}
+
+func (s *Selection) EqualsFind(f find.Find) bool {
+	return s.Next == nil &&
+		s.LineNum == f.LineNum &&
+		s.StartRuneIdx == f.StartRuneIdx &&
+		s.EndRuneIdx == f.EndRuneIdx-1
 }

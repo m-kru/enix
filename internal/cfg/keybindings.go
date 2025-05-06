@@ -63,6 +63,8 @@ func DefaultKeybindings() Keybindings {
 		"Rune[N]": "find-sel-next",
 		"Rune[g]": "find-prev",
 		"Rune[G]": "find-sel-prev",
+		"Ctrl+N":  "find-desel-next",
+		"Ctrl+G":  "find-desel-prev",
 		// Tab
 		"Ctrl+T": "tab-open",
 		// Miscellaneous

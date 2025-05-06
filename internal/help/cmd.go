@@ -113,11 +113,25 @@ If the path to a file is not provided, then it uses the current file path.`,
 
 	// Find
 
-	"find-next": "find-next # Selects the next find.",
+	"fdn": "fdn # An alias for the 'find-desel-next' command.",
+
+	"find-desel-next": `find-desel-next # Deselects the current find and selects the next one.
+The command deselects the current find only.
+It does not modify any other selections.`,
+
+	"fdp": "fdp # An alias for the 'find-desel-prev' command.",
+
+	"find-desel-prev": `find-desel-prev # Deselects the current find and selects the previous one.
+The command deselects the current find only.
+It does not modify any other selections.`,
+
+	"find-next": `find-next # Selects the next find.
+The command clears all other selections.`,
 
 	"find-sel-next": "find-sel-next # Preserves selections and selects the next find.",
 
-	"find-prev": "find-prev # Selects the previous find.",
+	"find-prev": `find-prev # Selects the previous find.
+The command clears all other selections.`,
 
 	"find-sel-prev": "find-sel-prev # Preserves selections and selects the previous find.",
 

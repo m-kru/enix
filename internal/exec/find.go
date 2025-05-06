@@ -5,6 +5,30 @@ import (
 	"github.com/m-kru/enix/internal/tab"
 )
 
+func FindDeselNext(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf(
+			"find-desel-next: expected 0 args, provided %d", len(args),
+		)
+	}
+
+	tab.FindDesel(true)
+
+	return nil
+}
+
+func FindDeselPrev(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf(
+			"find-desel-prev: expected 0 args, provided %d", len(args),
+		)
+	}
+
+	tab.FindDesel(false)
+
+	return nil
+}
+
 func FindNext(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf(

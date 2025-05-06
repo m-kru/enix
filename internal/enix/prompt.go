@@ -635,6 +635,10 @@ func (p *prompt) Exec() TcellEventReceiver {
 			updateView, err = exec.Esc(c.Args, tab)
 		case "ft", "filetype":
 			err = exec.Filetype(c.Args, tab)
+		case "fdn", "find-desel-next":
+			err = exec.FindDeselNext(c.Args, tab)
+		case "fdp", "find-desel-prev":
+			err = exec.FindDeselPrev(c.Args, tab)
 		case "find-next":
 			err = exec.FindNext(c.Args, tab)
 		case "find-prev":
