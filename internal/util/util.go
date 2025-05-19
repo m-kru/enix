@@ -6,11 +6,12 @@ import (
 )
 
 var fileNameToType = map[string]string{
+	".bashrc": "sh", ".profile": "sh", "bspwmrc": "sh",
+	".tclshrc":       "tcl",
 	"COMMIT_EDITMSG": "git-commit",
+	"Dockerfile":     "docker",
 	"Makefile":       "make", "makefile": "make",
-	"Dockerfile": "docker",
-	".bashrc":    "sh", ".profile": "sh", "bspwmrc": "sh",
-	".tclshrc": "tcl",
+	"rc.conf": "rc-conf",
 }
 
 var fileExtToType = map[string]string{

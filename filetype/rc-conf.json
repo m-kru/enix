@@ -1,0 +1,29 @@
+[
+	{
+		"Name": "Default"
+	},
+	{
+		"Name": "Line Comment",
+		"Style": "Comment",
+		"Start": {
+			"Regex": "#"
+		},
+		"End": {
+			"Regex": "$"
+		},
+		"Bold": {
+			"Regex": "(?i)(todo|note|xxx):"
+		}
+	},
+	{
+		"Name": "String",
+		"Style": "String",
+		"Start": {
+			"Regex": "\""
+		},
+		"End": {
+			"Regex": "\"",
+			"NegativeLookBehind": "(?:[^\\\\])\\\\"
+		}
+	}
+]
