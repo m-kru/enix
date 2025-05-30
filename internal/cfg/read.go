@@ -42,7 +42,6 @@ xdg_dir_check:
 		path = filepath.Join(hd, ".config", "enix")
 	}
 	path = filepath.Join(path, file)
-	path = filepath.Join(path, file)
 	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
 		goto install_dir_check
 	}

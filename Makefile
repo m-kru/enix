@@ -10,8 +10,12 @@ help:
 	@echo "  debug    Build binary for debugging."
 	@echo "  default  Run build."
 	@echo "Installation targets:"
-	@echo "  install-bin    Install only enix binary to /usr/local/bin/ directory."
+	@echo "  install-bin    Install enix binary to /usr/local/bin/ directory."
 	@echo "  uninstall-bin  Uninstall enix binary from /usr/local/bin/ directory."
+	@echo "  install-cfg    Install configuration files to /usr/local/share/enix directory."
+	@echo "  uninstall-cfg  Uninstall configuration files from /usr/local/share/enix directory."
+	@echo "  install        Install enix binary and configuration files."
+	@echo "  uninstall      Uninstall enix binary and configuration files."
 	@echo "Quality targets:"
 	@echo "  fmt   Format files with go fmt."
 	@echo "  lint  Lint files with golangci-lint."
@@ -22,8 +26,6 @@ help:
 	@echo "  test-cmd  Run command regression tests."
 	@echo "Other targets:"
 	@echo "  help       Print help message."
-	@echo "  install    Install $(NAME) in /usr/bin."
-	@echo "  uninstall  Uninstall $(NAME) from /usr/bin."
 
 
 # Build targets
@@ -46,13 +48,22 @@ install-bin:
 uninstall-bin:
 	rm /usr/local/bin/enix
 
+.PHONY: install-cfg
+install-cfg:
+	mkdir -p /usr/local/share/enix
+	cp -r style /usr/local/share/enix
+	cp -r colors /usr/local/share/enix
+	cp -r filetype /usr/local/share/enix
+
+.PHONY: uninstall-cfg
+uninstall-cfg:
+	rm -rf /usr/local/share/enix
+
 .PHONY: install
-install:
-	./scripts/install.sh
+install: install-bin install-cfg
 
 .PHONY: uninstall
-uninstall:
-	./scripts/uninstall.sh
+uninstall: uninstall-bin uninstall-cfg
 
 # Quality targets
 
