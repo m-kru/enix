@@ -256,6 +256,7 @@ func (hlr *Highlighter) analyzeLine(line *line.Line, hls *[]highlight.Highlight)
 
 func (hlr *Highlighter) analyzeLineOneRegionOnly(line *line.Line, hls *[]highlight.Highlight) {
 	if hlr.lineNum < hlr.firstVisLineNum {
+		hlr.lineNum++
 		return
 	}
 
