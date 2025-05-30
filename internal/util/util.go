@@ -11,11 +11,11 @@ var fileNameToType = map[string]string{
 	"COMMIT_EDITMSG": "git-commit",
 	"Dockerfile":     "docker",
 	"Makefile":       "make", "makefile": "make",
-	"rc.conf": "rc-conf",
 }
 
 var fileExtToType = map[string]string{
 	"c": "c", "h": "c",
+	"conf": "conf",
 	"fbd":  "fbdl",
 	"go":   "go",
 	"json": "json",
