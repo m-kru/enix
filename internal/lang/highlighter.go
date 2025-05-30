@@ -255,13 +255,12 @@ func (hlr *Highlighter) analyzeLine(line *line.Line, hls *[]highlight.Highlight)
 }
 
 func (hlr *Highlighter) analyzeLineOneRegionOnly(line *line.Line, hls *[]highlight.Highlight) {
-	hlr.lineNum++
-
 	if hlr.lineNum < hlr.firstVisLineNum {
 		return
 	}
 
 	hlr.highlightRegion(line.Buf, hlr.lineNum, 0, len(line.Buf), hlr.Regions[0], hls)
+	hlr.lineNum++
 }
 
 func (hlr *Highlighter) highlightRegion(
