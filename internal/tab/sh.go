@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/m-kru/enix/internal/action"
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/sel"
 )
@@ -71,7 +72,6 @@ func (tab *Tab) Sh(addIndent bool, cmdName string, args []string) (string, error
 
 func (tab *Tab) shCursors(addIndent bool, cmdName string, args []string) (string, error) {
 	prevCurs := cursor.Clone(tab.Cursors)
-	prevSels := sel.Clone(tab.Selections)
 
 	var stdout, stderr bytes.Buffer
 	cmd, err := tab.prepareExecCmd(&stdout, &stderr, cmdName, args)
@@ -95,13 +95,20 @@ func (tab *Tab) shCursors(addIndent bool, cmdName string, args []string) (string
 	// Paste stdout
 	actions := tab.pasteCursors(stdoutStr, addIndent)
 	if len(actions) > 0 {
-		tab.undoPush(actions.Reverse(), prevCurs, prevSels)
+		tab.undoPush(actions.Reverse(), prevCurs, nil)
 	}
 
 	return stderr.String(), nil
 }
 
 func (tab *Tab) shSelections(addIndent bool, cmdName string, args []string) (string, error) {
+	actions := make(action.Actions, 0, len(tab.Selections))
+	prevSels := sel.Clone(tab.Selections)
+
+	if len(actions) > 0 {
+		tab.undoPush(actions.Reverse(), nil, prevSels)
+	}
+
 	return "", nil
 }
 
