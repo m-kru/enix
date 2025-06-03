@@ -53,7 +53,7 @@
 
 A usual chain of flow is as follows.
 The user triggers an event, for example, by pressing a key on the keyboard.
-The event is mapped to the specific command. 
+The event is mapped to the specific command.
 The command is executed, which leads to actions modifying the tab content.
 However, if an event is not mapped to any command, then no command is executed.
 Moreover, not all commands lead to actions.
@@ -69,7 +69,6 @@ Line-oriented commands operate on whole lines.
 Line-oriented commands by default operate on the line where the cursor is located.
 However, if a selection is present, then line oriented commands operate on all lines spanned by the selection.
 Even if the selection starts or ends in the middle of a line.
-An example of line-oriented command is `duplicate-line`.
 
 Selection-oriented commands operate on selections.
 An example of selection-oriented command is `sh`, which forwards selection as a standard input to an external program.
