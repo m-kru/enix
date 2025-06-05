@@ -10,7 +10,6 @@ import (
 )
 
 func (c *Cursor) InsertNewline(indent bool) action.Actions {
-
 	rIdx := c.RuneIdx
 	lineNum := c.LineNum
 	line := c.Line
