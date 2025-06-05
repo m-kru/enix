@@ -69,18 +69,6 @@ func DefaultRegion() *Region {
 func (reg Region) match(buf []byte) []match {
 	matches := make([]match, 0, 32)
 
-	if reg.CursorWord != nil {
-		finds := reg.CursorWord.FindAllIndex(buf, -1)
-		for _, f := range finds {
-			m := match{
-				start: util.ByteIdxToRuneIdx(buf, f[0]),
-				end:   util.ByteIdxToRuneIdx(buf, f[1]),
-				style: cfg.Style.CursorWord,
-			}
-			matches = append(matches, m)
-		}
-	}
-
 	if reg.Attribute != nil {
 		finds := reg.Attribute.FindAll(buf)
 		for _, f := range finds {
@@ -249,13 +237,25 @@ func (reg Region) match(buf []byte) []match {
 		}
 	}
 
+	if reg.CursorWord != nil {
+		finds := reg.CursorWord.FindAllIndex(buf, -1)
+		for _, f := range finds {
+			m := match{
+				start: util.ByteIdxToRuneIdx(buf, f[0]),
+				end:   util.ByteIdxToRuneIdx(buf, f[1]),
+				style: cfg.Style.CursorWord,
+			}
+			matches = append(matches, m)
+		}
+	}
+
 	less := func(i, j int) bool {
 		mi := matches[i]
 		mj := matches[j]
 
 		return mi.start < mj.start
 	}
-	sort.Slice(matches, less)
+	sort.SliceStable(matches, less)
 
 	return matches
 }
