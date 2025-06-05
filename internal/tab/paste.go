@@ -38,54 +38,22 @@ func (tab *Tab) pasteLineBased(text string, addIndent bool, curs []*cursor.Curso
 	newSels := make([]*sel.Selection, 0, len(curs))
 	actions := make(action.Actions, 0, len(curs))
 
-	var lines *line.Line
-	var lineCount int
 	for curIdx, cur := range curs {
-		// Each cursors might be in a line with a different indent.
-		if lines == nil || addIndent {
-			t := text
-			if addIndent {
-				indent := cur.Line.Indent()
-				t = util.AddIndent(text, indent, true)
-			}
-			lines, lineCount = line.FromString(t[0 : len(t)-1])
+		startCur, endCur, acts := cur.Paste(text, addIndent, true)
+
+		tab.handleAction(acts)
+
+		for _, c := range curs[curIdx+1:] {
+			c.Inform(acts)
 		}
 
-		var startCur *cursor.Cursor
-
-		// Create cursor at the line start
-		cur = cursor.New(cur.Line, cur.LineNum, 0)
-
-		acts := make(action.Actions, 0, lineCount)
-
-		line := lines
-		for line != nil {
-			act := cur.InsertLineBelow(line.String())
-			acts = append(acts, act)
-
-			tab.handleAction(act)
-
-			cur.Down()
-
-			if startCur == nil {
-				startCur = cur.Clone()
-			}
-
-			for _, c := range curs[curIdx+1:] {
-				c.Inform(act)
-			}
-
-			for _, m := range tab.Marks {
-				m.Inform(act)
-			}
-
-			line = line.Next
+		for _, m := range tab.Marks {
+			m.Inform(acts)
 		}
 
 		actions = append(actions, acts)
 
-		cur.LineEnd()
-		newSels = append(newSels, sel.FromTo(startCur, cur))
+		newSels = append(newSels, sel.FromTo(startCur, endCur))
 	}
 
 	tab.Cursors = nil
@@ -118,48 +86,8 @@ func (tab *Tab) pasteCursorsRegular(text string, addIndent bool, after bool) act
 	actions := make(action.Actions, 0, len(tab.Cursors))
 	newSels := make([]*sel.Selection, 0, len(tab.Cursors))
 
-	var lines *line.Line
-	var lineCount int
 	for curIdx, cur := range tab.Cursors {
-		if lines == nil || addIndent {
-			t := text
-			if addIndent {
-				indent := cur.Line.Indent()
-				t = util.AddIndent(text, indent, false)
-			}
-			lines, lineCount = line.FromString(t[0:])
-		}
-
-		if after {
-			cur.Right()
-		}
-		startRuneIdx := cur.RuneIdx
-		startCur := cur.Clone()
-
-		acts := make(action.Actions, 0, 2*lineCount)
-
-		line := lines
-		for i := range lineCount {
-			str := line.String()
-			if str != "" {
-				act := cur.InsertString(str)
-				acts = append(acts, act)
-				tab.handleAction(act)
-			}
-
-			if line.Next != nil {
-				act := cur.InsertNewline(false)
-				acts = append(acts, act)
-				tab.handleAction(act)
-
-				if i == 0 {
-					ni := act[0].(*action.NewlineInsert)
-					startCur = cursor.New(ni.NewLine, cur.LineNum-1, startRuneIdx)
-				}
-			}
-
-			line = line.Next
-		}
+		startCur, endCur, acts := cur.Paste(text, addIndent, after)
 
 		for _, cur2 := range tab.Cursors[curIdx+1:] {
 			cur2.Inform(acts)
@@ -175,8 +103,7 @@ func (tab *Tab) pasteCursorsRegular(text string, addIndent bool, after bool) act
 
 		actions = append(actions, acts)
 
-		cur.Left()
-		newSels = append(newSels, sel.FromTo(startCur, cur))
+		newSels = append(newSels, sel.FromTo(startCur, endCur))
 	}
 
 	tab.Cursors = nil
