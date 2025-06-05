@@ -84,8 +84,8 @@ func (tab *Tab) shCursors(addIndent bool, cmdName string, args []string) (string
 		return "", fmt.Errorf("%v: %s", err, stderr.String())
 	}
 
-	// Move cursor left for regular paste.
 	stdoutStr := stdout.String()
+	// Move cursor left for regular paste.
 	if !strings.HasSuffix(stdoutStr, "\n") {
 		for _, c := range tab.Cursors {
 			c.Left()
@@ -104,9 +104,60 @@ func (tab *Tab) shCursors(addIndent bool, cmdName string, args []string) (string
 func (tab *Tab) shSelections(addIndent bool, cmdName string, args []string) (string, error) {
 	actions := make(action.Actions, 0, len(tab.Selections))
 	prevSels := sel.Clone(tab.Selections)
+	newSels := make([]*sel.Selection, 0, len(tab.Selections))
+
+	for i, s := range tab.Selections {
+		// Append selection string to command arguments
+		str := s.ToString()
+		if i > 0 {
+			args = args[0 : len(args)-1]
+		}
+		args = append(args, "\""+str+"\"")
+
+		// Execute command
+		var stdout, stderr bytes.Buffer
+		cmd, err := tab.prepareExecCmd(&stdout, &stderr, cmdName, args)
+		if err != nil {
+			return "", err
+		}
+		err = cmd.Run()
+		if err != nil {
+			return "", fmt.Errorf("%v: %s", err, stderr.String())
+		}
+
+		// Delete selection text
+		acts := s.Delete()
+		if len(acts) > 0 {
+			actions = append(actions, acts)
+			tab.handleAction(acts)
+		}
+
+		// Inform new and remaining selections about actions.
+		for _, s2 := range newSels {
+			s2.Inform(acts, true)
+		}
+		for _, s2 := range tab.Selections[i+1:] {
+			s2.Inform(acts, true)
+		}
+
+		// Create cursor from the first selection rune.
+		cur := cursor.New(s.Line, s.LineNum, s.StartRuneIdx)
+
+		// Paste stdout text
+		startCur, endCur, acts := cur.Paste(stdout.String(), false, false)
+		if len(acts) > 0 {
+			actions = append(actions, acts)
+			tab.handleAction(acts)
+		}
+
+		// Create new selection
+		newSels = append(newSels, sel.FromTo(startCur, endCur))
+
+	}
 
 	if len(actions) > 0 {
 		tab.undoPush(actions.Reverse(), nil, prevSels)
+		tab.Selections = newSels
 	}
 
 	return "", nil
