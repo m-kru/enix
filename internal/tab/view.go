@@ -18,7 +18,13 @@ func (tab *Tab) ViewCenter() {
 	}
 	tab.View.Line = lineNum
 
-	// TODO: Should column be adjusted here as well?
+	if cur.Column() < tab.View.Column || tab.View.LastColumn() < cur.Column() {
+		col := cur.Column() - tab.View.Width/2
+		if col < 1 {
+			col = 1
+		}
+		tab.View.Column = col
+	}
 }
 
 func (tab *Tab) ViewDown() {
