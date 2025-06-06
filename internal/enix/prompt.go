@@ -209,7 +209,7 @@ func (p *prompt) Delete() {
 }
 
 func (p *prompt) Down() {
-	if p.HistoryIdx == len(p.History) {
+	if p.HistoryIdx >= len(p.History)-1 {
 		return
 	}
 
