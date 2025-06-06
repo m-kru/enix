@@ -15,6 +15,7 @@ import (
 )
 
 func (tab *Tab) prepareExecCmd(
+	stdin io.Reader,
 	stdout io.Writer,
 	stderr io.Writer,
 	cmdName string,
@@ -37,6 +38,7 @@ func (tab *Tab) prepareExecCmd(
 	execArgs = append(execArgs, b.String())
 
 	execCmd := exec.Command(shell, execArgs...)
+	execCmd.Stdin = stdin
 	execCmd.Stdout = stdout
 	execCmd.Stderr = stderr
 
@@ -71,10 +73,8 @@ func (tab *Tab) Sh(addIndent bool, cmdName string, args []string) (string, error
 }
 
 func (tab *Tab) shCursors(addIndent bool, cmdName string, args []string) (string, error) {
-	prevCurs := cursor.Clone(tab.Cursors)
-
 	var stdout, stderr bytes.Buffer
-	cmd, err := tab.prepareExecCmd(&stdout, &stderr, cmdName, args)
+	cmd, err := tab.prepareExecCmd(nil, &stdout, &stderr, cmdName, args)
 	if err != nil {
 		return "", err
 	}
@@ -84,39 +84,59 @@ func (tab *Tab) shCursors(addIndent bool, cmdName string, args []string) (string
 		return "", fmt.Errorf("%v: %s", err, stderr.String())
 	}
 
-	stdoutStr := stdout.String()
-	// Move cursor left for regular paste.
-	if !strings.HasSuffix(stdoutStr, "\n") {
-		for _, c := range tab.Cursors {
-			c.Left()
-		}
+	text := stdout.String()
+
+	prevCurs := cursor.Clone(tab.Cursors)
+	cursors := tab.Cursors
+	if strings.HasSuffix(text, "\n") {
+		cursors = cursor.Uniques(cursors, true)
 	}
 
 	// Paste stdout
-	actions := tab.pasteCursors(stdoutStr, addIndent)
-	if len(actions) > 0 {
-		tab.undoPush(actions.Reverse(), prevCurs, nil)
+	actions := make(action.Actions, 0, 2*len(cursors))
+	newSels := make([]*sel.Selection, 0, len(cursors))
+
+	for curIdx, cur := range cursors {
+		startCur, endCur, acts := cur.Paste(text, false)
+
+		for _, c := range cursors[curIdx+1:] {
+			c.Inform(acts)
+		}
+
+		for _, m := range tab.Marks {
+			m.Inform(acts)
+		}
+
+		for _, s := range newSels {
+			s.Inform(acts, true)
+		}
+
+		actions = append(actions, acts)
+		newSels = append(newSels, sel.FromTo(startCur, endCur))
 	}
+
+	tab.undoPush(actions.Reverse(), prevCurs, nil)
+
+	tab.Cursors = nil
+	tab.Selections = newSels
 
 	return stderr.String(), nil
 }
 
 func (tab *Tab) shSelections(addIndent bool, cmdName string, args []string) (string, error) {
-	actions := make(action.Actions, 0, len(tab.Selections))
 	prevSels := sel.Clone(tab.Selections)
+
+	actions := make(action.Actions, 0, 2*len(tab.Selections))
 	newSels := make([]*sel.Selection, 0, len(tab.Selections))
 
+	var stdErrStr string
+
 	for i, s := range tab.Selections {
-		// Append selection string to command arguments
 		str := s.ToString()
-		if i > 0 {
-			args = args[0 : len(args)-1]
-		}
-		args = append(args, "\""+str+"\"")
 
 		// Execute command
 		var stdout, stderr bytes.Buffer
-		cmd, err := tab.prepareExecCmd(&stdout, &stderr, cmdName, args)
+		cmd, err := tab.prepareExecCmd(strings.NewReader(str), &stdout, &stderr, cmdName, args)
 		if err != nil {
 			return "", err
 		}
@@ -125,6 +145,8 @@ func (tab *Tab) shSelections(addIndent bool, cmdName string, args []string) (str
 			return "", fmt.Errorf("%v: %s", err, stderr.String())
 		}
 
+		stdErrStr += stderr.String()
+
 		// Delete selection text
 		acts := s.Delete()
 		if len(acts) > 0 {
@@ -132,27 +154,40 @@ func (tab *Tab) shSelections(addIndent bool, cmdName string, args []string) (str
 			tab.handleAction(acts)
 		}
 
-		// Inform new and remaining selections about actions.
-		for _, s2 := range newSels {
-			s2.Inform(acts, true)
-		}
+		// Inform selections and marks about delete actions
 		for _, s2 := range tab.Selections[i+1:] {
 			s2.Inform(acts, true)
 		}
+		for _, s2 := range newSels {
+			s2.Inform(acts, true)
+		}
+		for _, m := range tab.Marks {
+			m.Inform(acts)
+		}
 
-		// Create cursor from the first selection rune.
+		// Create cursor from the first selection rune
 		cur := cursor.New(s.Line, s.LineNum, s.StartRuneIdx)
 
 		// Paste stdout text
-		startCur, endCur, acts := cur.Paste(stdout.String(), false, false)
+		startCur, endCur, acts := cur.PasteBefore(stdout.String(), false)
 		if len(acts) > 0 {
 			actions = append(actions, acts)
 			tab.handleAction(acts)
 		}
 
+		// Inform selections and marks about paste actions
+		for _, s2 := range tab.Selections[i+1:] {
+			s2.Inform(acts, true)
+		}
+		for _, s2 := range newSels {
+			s2.Inform(acts, true)
+		}
+		for _, m := range tab.Marks {
+			m.Inform(acts)
+		}
+
 		// Create new selection
 		newSels = append(newSels, sel.FromTo(startCur, endCur))
-
 	}
 
 	if len(actions) > 0 {
@@ -160,7 +195,7 @@ func (tab *Tab) shSelections(addIndent bool, cmdName string, args []string) (str
 		tab.Selections = newSels
 	}
 
-	return "", nil
+	return stdErrStr, nil
 }
 
 func filterEnixLines(str string) string {
