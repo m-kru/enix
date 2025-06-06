@@ -146,6 +146,11 @@ func (s *Selection) Merge(s2 *Selection) *Selection {
 	return first
 }
 
+// SpawnCursorOnLeft creates and returns a cursor on the left side of selection.
+func (s *Selection) SpawnCursorOnLeft() *cursor.Cursor {
+	return cursor.New(s.Line, s.LineNum, s.StartRuneIdx)
+}
+
 // SpawnCursorOnRight creates and returns a cursor on the right side of selection.
 func (s *Selection) SpawnCursorOnRight() *cursor.Cursor {
 	s = s.Last()
