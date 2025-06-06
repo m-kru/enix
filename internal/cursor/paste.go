@@ -8,11 +8,11 @@ import (
 	"github.com/m-kru/enix/internal/util"
 )
 
-func (cur *Cursor) Paste(text string, addIndent bool, after bool) (*Cursor, *Cursor, action.Actions) {
+func (cur *Cursor) Paste(text string, addIndent bool) (*Cursor, *Cursor, action.Actions) {
 	if strings.HasSuffix(text, "\n") {
 		return cur.pasteLineBased(text, addIndent)
 	}
-	return cur.pasteRegular(text, addIndent, after)
+	return cur.pasteRegular(text, addIndent, true)
 }
 
 func (cur *Cursor) pasteLineBased(text string, addIndent bool) (*Cursor, *Cursor, action.Actions) {
@@ -26,7 +26,7 @@ func (cur *Cursor) pasteLineBased(text string, addIndent bool) (*Cursor, *Cursor
 	cur = New(cur.Line, cur.LineNum, 0)
 	var startCur *Cursor
 
-	actions := make(action.Actions, 0, lineCount)
+	actions := make(action.Actions, 0, 2*lineCount)
 
 	line := lines
 	for line != nil {
@@ -87,4 +87,44 @@ func (cur *Cursor) pasteRegular(text string, addIndent bool, after bool) (*Curso
 	cur.Left()
 
 	return startCur, cur, actions
+}
+
+func (cur *Cursor) PasteBefore(text string, addIndent bool) (*Cursor, *Cursor, action.Actions) {
+	if strings.HasSuffix(text, "\n") {
+		return cur.pasteBeforeLineBased(text, addIndent)
+	}
+	return cur.pasteRegular(text, addIndent, false)
+}
+
+func (cur *Cursor) pasteBeforeLineBased(text string, addIndent bool) (*Cursor, *Cursor, action.Actions) {
+	if addIndent {
+		indent := cur.Line.Indent()
+		text = util.AddIndent(text, indent, true)
+	}
+
+	lines, lineCount := line.FromString(text[0 : len(text)-1])
+
+	actions := make(action.Actions, 0, 2*lineCount)
+
+	var endCur *Cursor
+	cur = New(cur.Line, cur.LineNum, 0)
+
+	line := lines.Last()
+	for line != nil {
+		acts := cur.InsertLineAbove(line.String())
+		actions = append(actions, acts)
+
+		cur.Up()
+
+		if endCur == nil {
+			endCur = cur.Clone()
+			endCur.LineEnd()
+		} else {
+			endCur.Inform(acts)
+		}
+
+		line = line.Prev
+	}
+
+	return cur, endCur, actions
 }
