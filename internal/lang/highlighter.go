@@ -194,6 +194,7 @@ func (hlr *Highlighter) analyzeLine(line *line.Line, hls *[]highlight.Highlight)
 	startTokIdx := 0 // Current list index of the start token
 	var endTokens map[string][]RegionToken
 	bufIdx := 0 // Current line buffer index
+	startTokEndIdx := 0
 
 	for bufIdx < len(line.Buf) {
 		region := hlr.region
@@ -213,6 +214,7 @@ func (hlr *Highlighter) analyzeLine(line *line.Line, hls *[]highlight.Highlight)
 				} else if bufIdx == tok.startBufIdx {
 					hlr.region = tok.region
 					startTokIdx = i + 1
+					startTokEndIdx = tok.endBufIdx
 					break
 				}
 			}
@@ -234,7 +236,7 @@ func (hlr *Highlighter) analyzeLine(line *line.Line, hls *[]highlight.Highlight)
 			}
 
 			for _, tok := range endToks {
-				if bufIdx < tok.startBufIdx || !startTokensValid {
+				if tok.startBufIdx >= startTokEndIdx || !startTokensValid {
 					endIdx = tok.endBufIdx
 					hlr.region = hlr.Regions[0]
 					break
