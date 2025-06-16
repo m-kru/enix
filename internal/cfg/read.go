@@ -3,8 +3,10 @@ package cfg
 import (
 	"errors"
 	"os"
+	"os/user"
 	"path/filepath"
 	"runtime"
+	"strings"
 
 	"github.com/mitchellh/go-homedir"
 )
@@ -25,6 +27,15 @@ func ReadConfigFile(file string) ([]byte, string, error) {
 	if path == "" {
 		goto xdg_dir_check
 	}
+
+	if strings.HasPrefix(path, "~") {
+		usr, err := user.Current()
+		if err != nil {
+			return bytes, path, err
+		}
+		path = filepath.Join(usr.HomeDir, path[1:])
+	}
+
 	path = filepath.Join(path, file)
 	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
 		goto xdg_dir_check
