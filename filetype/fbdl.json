@@ -2,7 +2,7 @@
 	{
 		"Name": "Default",
 		"Attribute": {
-			"Regex": "\\b(access|add-enable|atomic|byte-write-enable|clear|delay|enable-init-value|enable-reset-value|groups|init-value|in-trigger|masters|out-trigger|range|read-latency|read-value|reset|reset-value|size|width)\\b",
+			"Regex": "\\b(access|add-enable|atomic|byte-write-enable|clear|delay|enable-init-value|enable-reset-value|init-value|in-trigger|masters|out-trigger|range|read-latency|read-value|reset|reset-value|size|width)\\b",
 			"PositiveLookBehind": "(^|;)\\s*",
 			"PositiveLookAhead": "\\s*="
 		},
