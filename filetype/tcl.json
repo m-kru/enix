@@ -10,7 +10,7 @@
 			"Regex": "\\b(break|catch|continue|default|else|elseif|error|exit|for|foreach|if|namespace|proc|return|switch|while)\\b"
 		},
 		"Number": {
-			"Regex": "\\b(0(b|B|o|O|x|X)?)?\\d+(\\.\\d+)?((e|E)-?\\d+)?"
+			"Regex": "\\b(0(b|B|o|O|x|X)?)?\\d+(\\.\\d+)?((e|E)-?\\d+)?\\b"
 		},
 		"Variable": {
 			"Regex": "\\$(\\w|:)+"
