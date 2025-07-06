@@ -212,7 +212,9 @@ If the focus in on a tab editing and there is any selection, then the command cl
 
 	"ft": `ft ft # An alias for the 'filetype' command.`,
 
-	"filetype": `filetype ft # Changees filetype to ft.`,
+	"filetype": `filetype ft # Changees filetype to ft.
+If ft is "-", then the filetype is set to none.
+This might be helpful for editing huge files, when highlighting is the main performance bottleneck.`,
 
 	"h": `h # An alias for the 'help' command.`,
 

@@ -241,6 +241,14 @@ func (tab *Tab) undoPushInInsert() {
 
 // SetFiletype implicitly sets tab filetype.
 func (tab *Tab) SetFiletype(ft string) error {
+	// Handle "-", which means no filetype.
+	if ft == "-" {
+		tab.Filetype = ""
+		tab.Highlighter = lang.DefaultHighlighter()
+		tab.IndentStr = "\t"
+		return nil
+	}
+
 	if !util.IsValidFiletype(ft) {
 		return fmt.Errorf("invalid filetype '%s'", ft)
 	}
