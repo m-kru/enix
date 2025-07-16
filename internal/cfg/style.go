@@ -316,6 +316,8 @@ func (s *style) Get(name string) tcell.Style {
 		return s.Bold
 	case "Comment":
 		return s.Comment
+	case "Error":
+		return s.Error
 	case "Heading":
 		return s.Heading
 	case "Italic":

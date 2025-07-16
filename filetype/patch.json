@@ -1,0 +1,25 @@
+[
+	{
+		"Name": "Default"
+	},
+	{
+		"Name": "Deleted",
+		"Style": "Error",
+		"Start": {
+			"Regex": "^-"
+		},
+		"End": {
+			"Regex": "$"
+		}
+	},
+	{
+		"Name": "Added",
+		"Style": "Bold",
+		"Start": {
+			"Regex": "^\\+"
+		},
+		"End": {
+			"Regex": "$"
+		}
+	}
+]
