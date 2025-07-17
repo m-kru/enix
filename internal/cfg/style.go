@@ -8,8 +8,8 @@ var Style style
 var StyleJSON styleJSON
 
 type itemStyle struct {
-	Fg     string
-	Bg     string
+	Fg     string // Foreground
+	Bg     string // Background
 	Bold   bool
 	Italic bool
 }

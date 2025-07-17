@@ -1,6 +1,9 @@
 [
 	{
-		"Name": "Default"
+		"Name": "Default",
+		"Meta": {
+			"Regex": "#(include|define|undef)"
+		}
 	},
 	{
 		"Name": "Block Comment",
