@@ -1,11 +1,17 @@
 [
 	{
 		"Name": "Default",
+		"Heading": {
+			"Regex": "[a-zA-Z]\\w+:"
+		},
 		"Keyword": {
 			"Regex": "/(dts-v1|plugin)/"
 		},
 		"Meta": {
 			"Regex": "#(include|define|undef)"
+		},
+		"Type": {
+			"Regex": "&[a-zA-Z]\\w+"
 		}
 	},
 	{
