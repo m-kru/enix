@@ -218,6 +218,15 @@ func (tab *Tab) GetWord() string {
 	}
 }
 
+// GetLastSubSelString returns string of the last subselection in the last selection.
+func (tab *Tab) GetLastSubSelString() string {
+	if len(tab.Selections) == 0 {
+		return ""
+	}
+
+	return tab.Selections[len(tab.Selections)-1].Last().ToString()
+}
+
 // undoPush is a wrapper for pushing to the undo stack.
 // Each time the tab is changed because of command other than undo or redo,
 // the UndoCount has to be increment and redo stack has to be cleared.

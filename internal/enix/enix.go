@@ -270,7 +270,13 @@ func RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			info, err = exec.Save(c.Args, tab, cfg.Cfg.TrimOnSave)
 			updateView = false
 		case "search":
-			Prompt.Activate("search ", tab.GetWord())
+			regex := ""
+			if len(tab.Cursors) > 0 {
+				regex = tab.GetWord()
+			} else {
+				regex = tab.GetLastSubSelString()
+			}
+			Prompt.Activate("search ", regex)
 			return &Prompt
 		case "sel-all":
 			err = exec.SelAll(c.Args, tab)
