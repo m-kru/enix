@@ -25,7 +25,7 @@ help:
 	@echo "  test-arg  Run command line argument parsing tests."
 	@echo "  test-cmd  Run command regression tests."
 	@echo "Other targets:"
-	@echo "  help       Print help message."
+	@echo "  help  Print help message."
 
 
 # Build targets
