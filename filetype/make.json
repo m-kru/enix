@@ -1,8 +1,11 @@
 [
 	{
 		"Name": "Default",
-		"Keyword": {
+		"Heading": {
 			"Regex": "^(\\w|-)*:"
+		},
+		"Keyword": {
+			"Regex": "^\\s*(?:ifeq|ifneq|ifdef|ifndef|else|endif|export|unexport)"
 		},
 		"Variable": {
 			"Regex": "\\$\\(\\w+\\)"
