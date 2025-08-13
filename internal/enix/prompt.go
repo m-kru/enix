@@ -216,8 +216,8 @@ func (p *prompt) Down() {
 	p.HistoryIdx++
 	p.Line, _ = line.FromString("")
 	p.ShadowText = p.History[p.HistoryIdx]
+	p.Cursor = cursor.New(p.Line, 0, 0)
 	p.State = InShadow
-	p.Cursor.RuneIdx = 0
 }
 
 func (p *prompt) Up() {
@@ -228,8 +228,8 @@ func (p *prompt) Up() {
 	p.HistoryIdx--
 	p.Line, _ = line.FromString("")
 	p.ShadowText = p.History[p.HistoryIdx]
+	p.Cursor = cursor.New(p.Line, 0, 0)
 	p.State = InShadow
-	p.Cursor.RuneIdx = 0
 }
 
 func (p *prompt) Left() {
