@@ -19,6 +19,7 @@ var fileExtToType = map[string]string{
 	"dts":  "dts", "dtsi": "dts", "dtso": "dts",
 	"fbd":   "fbdl",
 	"go":    "go",
+	"html":  "html",
 	"json":  "json",
 	"tex":   "tex",
 	"md":    "markdown",
