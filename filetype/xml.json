@@ -2,8 +2,12 @@
 	{
 		"Name": "Default",
 		"Attribute": {
-			"Regex": "[\\w-:]+",
+			"Regex": "[\\w:-]+",
 			"PositiveLookAhead": "\\s*="
+		},
+		"Type": {
+			"Regex": "[\\?/]?[\\w-:]+",
+			"PositiveLookBehind": "<"
 		}
 	},
 	{
