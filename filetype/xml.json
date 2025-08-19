@@ -1,6 +1,10 @@
 [
 	{
-		"Name": "Default"
+		"Name": "Default",
+		"Attribute": {
+			"Regex": "[\\w-:]+",
+			"PositiveLookAhead": "\\s*="
+		}
 	},
 	{
 		"Name": "Block Comment",
