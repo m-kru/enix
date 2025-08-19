@@ -14,5 +14,15 @@
 		"Bold": {
 			"Regex": "(?i)(todo|note|xxx):"
 		}
+	},
+	{
+		"Name": "String",
+		"Style": "String",
+		"Start": {
+			"Regex": "\""
+		},
+		"End": {
+			"Regex": "\""
+		}
 	}
 ]
