@@ -30,6 +30,7 @@ var fileExtToType = map[string]string{
 	"typ":   "typst",
 	"vhd":   "vhdl", "vhdl": "vhdl",
 	"sh": "sh", "bash": "sh", "csh": "sh", "ksh": "sh", "mksh": "sh", "zsh": "sh",
+	"xml": "xml",
 }
 
 func IsValidFiletype(ft string) bool {

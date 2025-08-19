@@ -1,0 +1,18 @@
+[
+	{
+		"Name": "Default"
+	},
+	{
+		"Name": "Block Comment",
+		"Style": "Comment",
+		"Start": {
+			"Regex": "<!--"
+		},
+		"End": {
+			"Regex": "-->"
+		},
+		"Bold": {
+			"Regex": "(?i)(todo|note|xxx):"
+		}
+	}
+]
