@@ -1,0 +1,36 @@
+[
+	{
+		"Name": "Default",
+		"Attribute": {
+			"Regex": "[\\w:-]+",
+			"PositiveLookAhead": "\\s*="
+		},
+		"Type": {
+			"Regex": "[\\?/]?[\\w-:]+",
+			"PositiveLookBehind": "<"
+		}
+	},
+	{
+		"Name": "Block Comment",
+		"Style": "Comment",
+		"Start": {
+			"Regex": "<!--"
+		},
+		"End": {
+			"Regex": "-->"
+		},
+		"Bold": {
+			"Regex": "(?i)(todo|note|xxx):"
+		}
+	},
+	{
+		"Name": "String",
+		"Style": "String",
+		"Start": {
+			"Regex": "\""
+		},
+		"End": {
+			"Regex": "\""
+		}
+	}
+]

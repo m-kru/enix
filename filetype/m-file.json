@@ -1,0 +1,49 @@
+[
+	{
+		"Name": "Default",
+		"Attribute": {
+			"Regex": "@[\\w\\.]+"
+		},
+		"Keyword": {
+			"Regex": "\\b(break|case|catch|classdef|continue|else|elseif|end|events|for|function|global|if|methods|otherwise|parfor|persistent|properties|return|spmd|switch|try|while)\\b"
+		},
+		"Number": {
+			"Regex": "(?i)\\b((0b[01_]+)|(0o[0-7_]+)|(0x[\\da-f_]+)|(\\d+(\\.\\d+)?(e[+-]?\\d+)?))\\b"
+		}
+	},
+	{
+		"Name": "Line Comment",
+		"Style": "Comment",
+		"Start": {
+			"Regex": "%"
+		},
+		"End": {
+			"Regex": "$"
+		},
+		"Bold": {
+			"Regex": "(?i)(todo|note|xxx):"
+		}
+	},
+	{
+		"Name": "Double Quote String",
+		"Style": "String",
+		"Start": {
+			"Regex": "\""
+		},
+		"End": {
+			"Regex": "\"",
+			"NegativeLookBehind": "(?:[^\\\\])\\\\"
+		}
+	},
+	{
+		"Name": "Single Quote String",
+		"Style": "String",
+		"Start": {
+			"Regex": "'"
+		},
+		"End": {
+			"Regex": "'",
+			"NegativeLookBehind": "(?:[^\\\\])\\\\"
+		}
+	}
+]

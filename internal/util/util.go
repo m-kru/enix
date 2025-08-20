@@ -22,6 +22,7 @@ var fileExtToType = map[string]string{
 	"html":  "html",
 	"json":  "json",
 	"tex":   "tex",
+	"m":     "m-file",
 	"md":    "markdown",
 	"mk":    "make",
 	"patch": "patch",
