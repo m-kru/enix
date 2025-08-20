@@ -36,6 +36,9 @@
 		"End": {
 			"Regex": "\"",
 			"NegativeLookBehind": "(?:[^\\\\])\\\\"
+		},
+		"Meta": {
+			"Regex": "\\\\(a|b|e|f|n|r|t|v|\"|\\\\)"
 		}
 	},
 	{
@@ -48,6 +51,9 @@
 		"End": {
 			"Regex": "'",
 			"NegativeLookBehind": "(?:[^\\\\])\\\\"
+		},
+		"Meta": {
+			"Regex": "\\\\(a|b|e|f|n|r|t|v|\"|\\\\)"
 		}
 	}
 ]
