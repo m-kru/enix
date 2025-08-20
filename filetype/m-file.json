@@ -39,7 +39,8 @@
 		"Name": "Single Quote String",
 		"Style": "String",
 		"Start": {
-			"Regex": "'"
+			"Regex": "'",
+			"NegativeLookBehind": "[\\.\\]]"
 		},
 		"End": {
 			"Regex": "'",
