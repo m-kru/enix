@@ -11,6 +11,7 @@ var fileNameToType = map[string]string{
 	"COMMIT_EDITMSG": "git-commit",
 	"Dockerfile":     "docker",
 	"Makefile":       "make", "makefile": "make",
+	"sxhkdrc": "sxhkd",
 }
 
 var fileExtToType = map[string]string{
