@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 update=false
 
@@ -18,10 +18,10 @@ If no command is provided the run is assumed.
 
 while true ; do
 	case "$1" in
-		help) printf "$help_msg" ; exit 0 ;;
+		help) printf '%s\n' "$help_msg" ; exit 0 ;;
 		run) shift ;;
 		"") shift ; break ;;
-		*) echo "invalid argument '$1'" ; exit 1 ;;
+		*) printf "invalid argument '%s'\n" "$1"; exit 1 ;;
 	esac
 done
 
@@ -29,17 +29,17 @@ set -e
 
 cd tests/cmd/
 
-echo -e "\nRunning command regression tests\n"
+printf "\nRunning command regression tests\n"
 
 for dir in $(find . -maxdepth 2 -mindepth 2 -type d | sort);
 do
-	testname=`basename $dir`
+	testname=$(basename "$dir")
 	# Ignore tests starting with '_' character.
-	if [ ${testname::1} = "_" ]; then
+	if [ "${testname#_}" != "$testname" ]; then
 		continue
 	fi
 
-	echo "  $dir"
+	printf "  %s\n" "$dir"
 	cd "$dir"
 	../../../../enix -config ../../../config.json -script script file || true
 	diff --color got want
@@ -47,4 +47,4 @@ do
 	cd ../..
 done
 
-echo -e "\nAll \e[1;32mPASSED\e[0m!"
+printf "\n\033[32mAll PASSED\033[0m\n";
