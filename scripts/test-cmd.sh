@@ -20,7 +20,7 @@ while true ; do
 	case "$1" in
 		help) printf '%s\n' "$help_msg" ; exit 0 ;;
 		run) shift ;;
-		"") shift ; break ;;
+		"") break ;;
 		*) printf "invalid argument '%s'\n" "$1"; exit 1 ;;
 	esac
 done
