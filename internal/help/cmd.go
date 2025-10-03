@@ -244,6 +244,8 @@ Marks allow to record current cursor or selection position.
 Mark name must not start with a digit or '-' rune.
 To restore marks one has to use the 'go' command providing as an argument the name of a mark.`,
 
+	"lc": `lc # An alias for the 'line-count' command.`,
+
 	"line-count": `line-count # Prints the number of lines in the current tab.`,
 
 	"path": `path file/system/path # Inserts file system path.
@@ -370,7 +372,7 @@ If cursors is not placed on a whitespace character, nothing is selected.`,
 
 	// Tab
 
-	"t": `t  # An alias for the 'tab' command.`,
+	"t": `t # An alias for the 'tab' command.`,
 
 	"tab": `tab regex # Switch to the tab which path matches the regex.
 If more than one tab is found, the error is reported.`,

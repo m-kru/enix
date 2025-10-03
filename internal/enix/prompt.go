@@ -672,7 +672,7 @@ func (p *prompt) Exec() TcellEventReceiver {
 			}
 		case "left":
 			err = exec.Left(c.Args, tab)
-		case "line-count":
+		case "lc", "line-count":
 			info, err = exec.LineCount(c.Args, tab)
 		case "line-down":
 			err = exec.LineDown(c.Args, tab)
