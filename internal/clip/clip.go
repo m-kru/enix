@@ -6,9 +6,18 @@ import (
 
 var clip clipper.Clipboard
 
+var clipboards = []clipper.Clipboard{
+	&clipper.Wayland{},
+	&clipper.Xclip{},
+	&clipper.Xsel{},
+	&clipper.Wsl{},
+	&clipper.Termux{},
+	&clipper.Internal{},
+}
+
 func init() {
 	var err error
-	clip, err = clipper.GetClipboard(clipper.Clipboards...)
+	clip, err = clipper.GetClipboard(clipboards...)
 	if err != nil {
 		return
 	}
