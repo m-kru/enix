@@ -31,7 +31,12 @@ func FromString(str string) (*Line, int) {
 	var next *Line
 
 	for bIdx, r := range str {
-		if r == '\n' {
+		if r == '\r' {
+			// Ignore carriage return at the end of lines.
+			if bIdx > 0 && str[bIdx-1] == '\n' {
+				startIdx++
+			}
+		} else if r == '\n' {
 			if first == nil {
 				first = &Line{
 					Buf:  make([]byte, 0, bufCap(startIdx, bIdx)),
@@ -70,7 +75,6 @@ func FromString(str string) (*Line, int) {
 				next.InsertString(str[startIdx:bIdx+runeLen], 0)
 				prev.Next = next
 			}
-			startIdx = bIdx + runeLen
 		}
 	}
 
