@@ -26,17 +26,21 @@ func FromString(str string) (*Line, int) {
 
 	lineCount := 1
 	startIdx := 0
+	prevNewline := false
 	var first *Line = nil
 	var prev *Line
 	var next *Line
 
 	for bIdx, r := range str {
-		if r == '\r' {
-			// Ignore carriage return at the end of lines.
-			if bIdx > 0 && str[bIdx-1] == '\n' {
-				startIdx++
-			}
-		} else if r == '\n' {
+		// Ignore carriage return at the end of lines.
+		if r == '\r' && prevNewline {
+			startIdx++
+			continue
+		}
+
+		prevNewline = false
+
+		if r == '\n' {
 			if first == nil {
 				first = &Line{
 					Buf:  make([]byte, 0, bufCap(startIdx, bIdx)),
@@ -57,6 +61,7 @@ func FromString(str string) (*Line, int) {
 			}
 			startIdx = bIdx + 1
 			lineCount++
+			prevNewline = true
 		} else if bIdx == len(str)-utf8.RuneLen(r) {
 			runeLen := utf8.RuneLen(r)
 			if first == nil {
