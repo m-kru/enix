@@ -26,42 +26,46 @@ func FromString(str string) (*Line, int) {
 
 	lineCount := 1
 	startIdx := 0
-	prevNewline := false
 	var first *Line = nil
 	var prev *Line
 	var next *Line
+	var prevR rune
 
 	for bIdx, r := range str {
-		// Ignore carriage return at the end of lines.
-		if r == '\r' && prevNewline {
+		// Ignore carriage return after newline.
+		if r == '\r' && prevR == '\n' {
 			startIdx++
+			prevR = r
 			continue
 		}
 
-		prevNewline = false
-
 		if r == '\n' {
+			endIdx := bIdx
+			// Ignore carriage return before newline.
+			if prevR == '\r' {
+				endIdx--
+			}
+
 			if first == nil {
 				first = &Line{
-					Buf:  make([]byte, 0, bufCap(startIdx, bIdx)),
+					Buf:  make([]byte, 0, bufCap(startIdx, endIdx)),
 					Prev: nil,
 					Next: nil,
 				}
-				first.InsertString(str[startIdx:bIdx], 0)
+				first.InsertString(str[startIdx:endIdx], 0)
 				prev = first
 			} else {
 				next = &Line{
-					Buf:  make([]byte, 0, bufCap(startIdx, bIdx)),
+					Buf:  make([]byte, 0, bufCap(startIdx, endIdx)),
 					Prev: prev,
 					Next: nil,
 				}
-				next.InsertString(str[startIdx:bIdx], 0)
+				next.InsertString(str[startIdx:endIdx], 0)
 				prev.Next = next
 				prev = next
 			}
 			startIdx = bIdx + 1
 			lineCount++
-			prevNewline = true
 		} else if bIdx == len(str)-utf8.RuneLen(r) {
 			runeLen := utf8.RuneLen(r)
 			if first == nil {
@@ -81,6 +85,8 @@ func FromString(str string) (*Line, int) {
 				prev.Next = next
 			}
 		}
+
+		prevR = r
 	}
 
 	// Add one extra line if string ends with newline
