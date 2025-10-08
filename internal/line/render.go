@@ -24,6 +24,7 @@ func (l *Line) Render(
 	rIdx, runeSubcol, ok := l.RuneIdx(view.Column)
 
 	var r rune
+	var rw int
 
 	setTab := func(tabSubcol int, style tcell.Style) {
 		var colIdx int
@@ -74,6 +75,7 @@ func (l *Line) Render(
 	// Handle first column in a little bit different way.
 	// The column might start at the second column of a rune.
 	r = l.Rune(rIdx)
+	rw = runewidth.RuneWidth(r)
 	if r == '\t' {
 		if style != cfg.Style.Find {
 			style = cfg.Style.Whitespace
@@ -83,12 +85,13 @@ func (l *Line) Render(
 	} else if runeSubcol > 0 {
 		r = ' '
 		frame.SetContent(x, 0, r, style)
-		x += runewidth.RuneWidth(r)
+		x += rw
 		rIdx++
 	}
 
 	for rIdx != l.RuneCount() && x < frame.Width {
 		r = l.Rune(rIdx)
+		rw = runewidth.RuneWidth(r)
 
 		setStyle()
 
@@ -97,9 +100,13 @@ func (l *Line) Render(
 				style = cfg.Style.Whitespace
 			}
 			setTab(0, style)
-		} else {
+		} else if rw > 0 {
 			frame.SetContent(x, 0, r, style)
-			x += runewidth.RuneWidth(r)
+			x += rw
+		} else {
+			// Rune width is 0
+			frame.SetContent(x, 0, 0xFFFD, cfg.Style.Error)
+			x += 1
 		}
 		rIdx++
 	}

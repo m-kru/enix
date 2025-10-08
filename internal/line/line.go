@@ -69,7 +69,11 @@ func (l *Line) Columns() int {
 		if r == '\t' {
 			cols += 8
 		} else {
-			cols += runewidth.RuneWidth(r)
+			rw := runewidth.RuneWidth(r)
+			if rw == 0 {
+				rw = 1
+			}
+			cols += rw
 		}
 
 		bIdx += rLen
@@ -158,7 +162,11 @@ func (l *Line) ColumnIdx(runeIdx int) int {
 		if r == '\t' {
 			cIdx += 8 - (cIdx % 8)
 		} else {
-			cIdx += runewidth.RuneWidth(r)
+			rw := runewidth.RuneWidth(r)
+			if rw == 0 {
+				rw = 1
+			}
+			cIdx += rw
 		}
 
 		bIdx += rLen
@@ -178,7 +186,13 @@ func (l *Line) RuneIdx(colIdx int) (int, int, bool) {
 
 	for bIdx < len(l.Buf) {
 		r, rLen := utf8.DecodeRune(l.Buf[bIdx:])
-		rWidth := runewidth.RuneWidth(r)
+
+		rw := runewidth.RuneWidth(r)
+		if rw == 0 {
+			rw = 1
+		}
+		rWidth := rw
+
 		if r == '\t' {
 			if cIdx == colIdx {
 				return rIdx, 0, true

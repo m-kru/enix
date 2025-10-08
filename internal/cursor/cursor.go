@@ -48,7 +48,13 @@ func (c *Cursor) Width() int {
 	if r == '\t' {
 		return 1
 	}
-	return runewidth.RuneWidth(r)
+
+	rw := runewidth.RuneWidth(r)
+	if rw == 0 {
+		rw = 1
+	}
+
+	return rw
 }
 
 // GetWord returns word under cursor.
