@@ -42,7 +42,7 @@ func FromString(str string) (*Line, int) {
 		if r == '\n' {
 			endIdx := bIdx
 			// Ignore carriage return before newline.
-			if prevR == '\r' {
+			if prevR == '\r' && endIdx > startIdx {
 				endIdx--
 			}
 
