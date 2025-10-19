@@ -127,6 +127,10 @@ func (c *Cursor) informStringDelete(sd *action.StringDelete) {
 	}
 
 	c.RuneIdx -= sd.RuneCount
+	// In case of line clear, the rune index might be negative, reposition it.
+	if c.RuneIdx < 0 {
+		c.RuneIdx = 0
+	}
 	c.colIdx = c.Line.ColumnIdx(c.RuneIdx)
 }
 

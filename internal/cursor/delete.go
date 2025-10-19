@@ -108,3 +108,18 @@ func (c *Cursor) DeleteLine() action.Action {
 
 	return act
 }
+
+func (c *Cursor) ClearLine() action.Action {
+	act := &action.StringDelete{
+		Line:         c.Line,
+		Str:          c.Line.String(),
+		StartRuneIdx: 0,
+		RuneCount:    c.Line.RuneCount(),
+	}
+
+	c.Line.Clear()
+	c.RuneIdx = 0
+	c.colIdx = c.Line.ColumnIdx(0)
+
+	return act
+}

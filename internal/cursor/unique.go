@@ -2,7 +2,7 @@ package cursor
 
 import "sort"
 
-// LineUnique return line unique cursors.
+// LineUnique returns line unique cursors.
 // Line unique cursors are cursors pointing to different lines.
 // The ascending parameter controls the sort order.
 func LineUnique(curs []*Cursor, ascending bool) []*Cursor {

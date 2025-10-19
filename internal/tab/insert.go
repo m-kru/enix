@@ -194,11 +194,15 @@ func (tab *Tab) RxEventKeyInsert(ev *tcell.EventKey) string {
 				curs := cursor.LineUnique(tab.Cursors, true)
 				for _, c := range curs {
 					if c.Line.HasOnlySpaces() {
-						c.Line.Clear()
-						c.LineStart()
+						act := c.ClearLine()
+						for _, c2 := range tab.Cursors {
+							if c2 != c {
+								c2.Inform(act)
+							}
+						}
 					}
 				}
-				tab.Cursors = curs
+				tab.Cursors = cursor.Prune(tab.Cursors)
 
 				tab.State = "" // Go back to normal mode
 				updateView = false
