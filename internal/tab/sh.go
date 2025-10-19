@@ -89,7 +89,7 @@ func (tab *Tab) shCursors(addIndent bool, cmdName string, args []string) (string
 	prevCurs := cursor.Clone(tab.Cursors)
 	cursors := tab.Cursors
 	if strings.HasSuffix(text, "\n") {
-		cursors = cursor.Uniques(cursors, true)
+		cursors = cursor.LineUnique(cursors, true)
 	}
 
 	// Paste stdout

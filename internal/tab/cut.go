@@ -33,7 +33,7 @@ func (tab *Tab) cut() (string, action.Actions) {
 }
 
 func (tab *Tab) cutCursors() (string, action.Actions) {
-	curs := cursor.Uniques(tab.Cursors, true)
+	curs := cursor.LineUnique(tab.Cursors, true)
 
 	// Copy lines to the clipboard.
 	b := strings.Builder{}

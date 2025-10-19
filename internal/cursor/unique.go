@@ -2,10 +2,10 @@ package cursor
 
 import "sort"
 
-// Uniques return unique cursors.
-// Unique cursors are cursors pointing to different lines.
+// LineUnique return line unique cursors.
+// Line unique cursors are cursors pointing to different lines.
 // The ascending parameter controls the sort order.
-func Uniques(curs []*Cursor, ascending bool) []*Cursor {
+func LineUnique(curs []*Cursor, ascending bool) []*Cursor {
 	uniques := make([]*Cursor, 0, len(curs))
 
 	for _, c := range curs {

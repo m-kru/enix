@@ -35,7 +35,7 @@ func (tab *Tab) join() action.Actions {
 
 func (tab *Tab) joinCursors() action.Actions {
 	// Join lines only once, even if there are multiple cursors in the line.
-	curs := cursor.Uniques(tab.Cursors, true)
+	curs := cursor.LineUnique(tab.Cursors, true)
 
 	actions := make(action.Actions, 0, len(tab.Cursors))
 
@@ -130,7 +130,7 @@ func (tab *Tab) lineDownCursors() action.Actions {
 	actions := make(action.Actions, 0, len(tab.Cursors))
 
 	// Move lines down only once, even if there are multiple cursors in the line.
-	curs := cursor.Uniques(tab.Cursors, false)
+	curs := cursor.LineUnique(tab.Cursors, false)
 
 	for _, c := range curs {
 		act := c.LineDown()
@@ -224,7 +224,7 @@ func (tab *Tab) lineUpCursors() action.Actions {
 	actions := make(action.Actions, 0, len(tab.Cursors))
 
 	// Move lines up only once, even if there are multiple cursors in the line.
-	curs := cursor.Uniques(tab.Cursors, true)
+	curs := cursor.LineUnique(tab.Cursors, true)
 
 	for _, c := range curs {
 		newFirstLine := c.Line.Prev == tab.Lines

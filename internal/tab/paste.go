@@ -35,7 +35,7 @@ func (tab *Tab) Paste(text string) {
 	}
 
 	if strings.HasSuffix(text, "\n") {
-		cursors = cursor.Uniques(cursors, true)
+		cursors = cursor.LineUnique(cursors, true)
 	}
 
 	actions := make(action.Actions, 0, len(cursors))
@@ -95,7 +95,7 @@ func (tab *Tab) PasteBefore(text string) {
 	}
 
 	if strings.HasSuffix(text, "\n") {
-		cursors = cursor.Uniques(cursors, true)
+		cursors = cursor.LineUnique(cursors, true)
 	}
 
 	actions := make(action.Actions, 0, len(cursors))

@@ -26,7 +26,7 @@ func (tab *Tab) Indent() {
 
 func (tab *Tab) indentCursors() action.Actions {
 	// Create temporary cursors at the beginning of all lines with cursors.
-	curs := cursor.Uniques(tab.Cursors, true)
+	curs := cursor.LineUnique(tab.Cursors, true)
 	tmpCurs := make([]*cursor.Cursor, len(curs))
 	for i, c := range curs {
 		tmpCurs[i] = cursor.New(c.Line, c.LineNum, 0)

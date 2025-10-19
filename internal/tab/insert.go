@@ -45,7 +45,7 @@ func (tab *Tab) insertLineBelowCursors() action.Actions {
 	actions := make(action.Actions, 0, 4)
 	newCurs := make([]*cursor.Cursor, 0, len(tab.Cursors))
 
-	curs := cursor.Uniques(tab.Cursors, true)
+	curs := cursor.LineUnique(tab.Cursors, true)
 
 	for i, c := range curs {
 		indent := c.Line.Indent()
@@ -110,7 +110,7 @@ func (tab *Tab) insertLineAboveCursors() action.Actions {
 	actions := make(action.Actions, 0, 4)
 	newCurs := make([]*cursor.Cursor, 0, len(tab.Cursors))
 
-	curs := cursor.Uniques(tab.Cursors, true)
+	curs := cursor.LineUnique(tab.Cursors, true)
 
 	for i, c := range curs {
 		indent := c.Line.Indent()
@@ -191,7 +191,7 @@ func (tab *Tab) RxEventKeyInsert(ev *tcell.EventKey) string {
 			switch cmd.Name {
 			case "esc":
 				// Trim spaces from empty lines.
-				curs := cursor.Uniques(tab.Cursors, true)
+				curs := cursor.LineUnique(tab.Cursors, true)
 				for _, c := range curs {
 					if c.Line.HasOnlySpaces() {
 						c.Line.Clear()
