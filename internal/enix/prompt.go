@@ -330,7 +330,7 @@ func (p *prompt) openPathMenu(path string) {
 		return
 	}
 
-	PromptMenu = newMenu(names, 0, cfg.Style.Menu, cfg.Style.MenuItem)
+	PromptMenu = newMenu(&PromptFrame, names, 0, cfg.Style.Menu, cfg.Style.MenuItem)
 
 	path = dir + names[0]
 	fields := strings.Fields(p.Line.String())
@@ -414,7 +414,7 @@ func (p *prompt) HandleTab() {
 			return
 		}
 
-		PromptMenu = newMenu(itemNames, 0, cfg.Style.Menu, cfg.Style.MenuItem)
+		PromptMenu = newMenu(&PromptFrame, itemNames, 0, cfg.Style.Menu, cfg.Style.MenuItem)
 		p.State = InCmdMenu
 
 		text := itemNames[0]

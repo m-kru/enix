@@ -46,7 +46,7 @@ type tabBar struct {
 
 func (tb *tabBar) Init() {
 	tb.Update()
-	tb.menu = newMenu([]string{""}, 0, cfg.Style.TabBar, cfg.Style.CurrentTab)
+	tb.menu = newMenu(&TabBarFrame, []string{""}, 0, cfg.Style.TabBar, cfg.Style.CurrentTab)
 }
 
 func (tb *tabBar) getCurrentItem() (*tabBarItem, int) {
@@ -143,7 +143,7 @@ func (tb *tabBar) Render(frame frame.Frame) {
 	}
 
 	view := tb.menu.view
-	tb.menu = newMenu(names, currIdx, cfg.Style.TabBar, cfg.Style.CurrentTab)
+	tb.menu = newMenu(&TabBarFrame, names, currIdx, cfg.Style.TabBar, cfg.Style.CurrentTab)
 	tb.menu.view = view
 	if tb.updateView {
 		tb.menu.updateView()

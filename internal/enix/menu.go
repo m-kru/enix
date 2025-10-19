@@ -19,6 +19,8 @@ type menuItem struct {
 }
 
 type menu struct {
+	frame *frame.Frame
+
 	items       []menuItem
 	currItemIdx int // Current item index
 
@@ -30,6 +32,7 @@ type menu struct {
 }
 
 func newMenu(
+	frame *frame.Frame,
 	itemNames []string,
 	currItemIdx int,
 	style tcell.Style,
@@ -69,6 +72,7 @@ func newMenu(
 	}
 
 	return &menu{
+		frame:         frame,
 		items:         items,
 		currItemIdx:   currItemIdx,
 		line:          line,
@@ -149,7 +153,7 @@ func (menu *menu) Prev() (int, string) {
 // RxMouseEvent handles mouse event.
 // Returned values are the current item index and name.
 func (menu *menu) RxMouseEvent(ev mouse.Event) (int, string) {
-	frame := PromptMenuFrame
+	frame := menu.frame
 	lFrame := frame.ColumnSubframe(frame.X, 2)
 	iFrame := frame.ColumnSubframe(frame.X+2, frame.Width-4)
 	rFrame := frame.ColumnSubframe(frame.LastX()-1, 2)
