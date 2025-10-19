@@ -7,6 +7,7 @@ import (
 
 var fileNameToType = map[string]string{
 	".bashrc": "sh", ".profile": "sh", "bspwmrc": "sh",
+	".dircolors":     "dircolors",
 	".tclshrc":       "tcl",
 	"COMMIT_EDITMSG": "git-commit",
 	"Dockerfile":     "docker",
