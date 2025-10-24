@@ -368,7 +368,7 @@ func DefaultStyle() style {
 		Cursor:     tcell.StyleDefault.Reverse(true),
 		CursorWord: tcell.StyleDefault.Foreground(tcell.ColorWhite),
 
-		Find:            tcell.StyleDefault.Background(tcell.ColorOlive),
+		Find:            tcell.StyleDefault.Background(tcell.ColorOlive).Foreground(tcell.ColorBlack),
 		Selection:       tcell.StyleDefault.Background(tcell.ColorMaroon).Foreground(tcell.ColorWhite),
 		MatchingBracket: tcell.StyleDefault.Background(tcell.ColorGray).Bold(true),
 
