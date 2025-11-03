@@ -10,8 +10,8 @@ import (
 )
 
 func (tab *Tab) RxEventKeyReplace(ev *tcell.EventKey) {
-	c, _ := cfg.KeysInsert.ToCmd(ev)
-	switch c.Name {
+	cmd, _ := cfg.KeysInsert.ToCmd(ev)
+	switch cmd.Name {
 	case "esc":
 		tab.State = "" // Go back to normal mode
 		return
@@ -20,13 +20,13 @@ func (tab *Tab) RxEventKeyReplace(ev *tcell.EventKey) {
 	prevCurs := cursor.Clone(tab.Cursors)
 	prevSels := sel.Clone(tab.Selections)
 
-	actions := tab.delete()
-
 	// Preserve cursors position
 	var curs []*cursor.Cursor
 	if tab.Cursors != nil {
 		curs = cursor.Clone(tab.Cursors)
 	}
+
+	actions := tab.delete()
 
 	var insertActions action.Action
 	switch ev.Key() {
