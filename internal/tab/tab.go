@@ -204,7 +204,7 @@ func (tab *Tab) RxEventKey(ev *tcell.EventKey) string {
 }
 
 // LastSel returns tab last selection.
-// It doesn't checket whether selections exist.
+// It doesn't check whether selections exist.
 func (tab *Tab) LastSel() *sel.Selection {
 	return tab.Selections[len(tab.Selections)-1]
 }
