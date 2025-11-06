@@ -220,6 +220,8 @@ func (tab *Tab) RxEventKeyInsert(ev *tcell.EventKey) string {
 				updateView = false
 			case "path", "sh":
 				return cmd.String()
+			case "suspend":
+				return "suspend"
 			}
 		}
 	}

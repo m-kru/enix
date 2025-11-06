@@ -109,7 +109,13 @@ func RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 
 	if tab.State != "" {
 		cmd := tab.RxEventKey(ev)
-		if cmd != "" {
+		if cmd == "suspend" {
+			err = exec.Suspend(nil, Screen)
+			if err != nil {
+				Prompt.ShowError(fmt.Sprintf("%v", err))
+			}
+			InitScreen()
+		} else if cmd != "" {
 			Prompt.Activate(cmd, "")
 			return &Prompt
 		}

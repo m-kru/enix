@@ -170,5 +170,6 @@ func DefaultInsertKeybindings() Keybindings {
 		"Ctrl+Up":    "5 view-up",
 		"Left":       "view-left",
 		"Ctrl+Left":  "5 view-left",
+		"Ctrl+Z":     "suspend",
 	}
 }
