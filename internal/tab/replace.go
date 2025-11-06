@@ -46,6 +46,8 @@ func (tab *Tab) RxEventKeyReplace(ev *tcell.EventKey) {
 		tab.undoPush(actions.Reverse(), prevCurs, prevSels)
 	}
 
-	tab.Cursors = curs
+	if len(curs) > 0 {
+		tab.Cursors = curs
+	}
 	tab.State = "" // Go back to normal mode
 }
