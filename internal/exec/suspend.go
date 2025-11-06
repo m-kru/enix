@@ -2,8 +2,10 @@ package exec
 
 import (
 	"fmt"
+
 	"github.com/gdamore/tcell/v2"
-	"syscall"
+
+	enixTcell "github.com/m-kru/enix/internal/tcell"
 )
 
 func Suspend(args []string, screen tcell.Screen) error {
@@ -13,20 +15,5 @@ func Suspend(args []string, screen tcell.Screen) error {
 		)
 	}
 
-	err := screen.Suspend()
-	if err != nil {
-		return fmt.Errorf("suspend: %v", err)
-	}
-
-	err = syscall.Kill(syscall.Getpid(), syscall.SIGSTOP)
-	if err != nil {
-		return fmt.Errorf("suspend: %v", err)
-	}
-
-	err = screen.Resume()
-	if err != nil {
-		return fmt.Errorf("suspend: %v", err)
-	}
-
-	return nil
+	return enixTcell.Suspend(screen)
 }
