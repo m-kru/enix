@@ -22,7 +22,8 @@
 		"Name": "Italic",
 		"Style": "Italic",
 		"Start": {
-			"Regex": "_"
+			"Regex": "_",
+			"NegativeLookBehind": "\\\\"
 		},
 		"End": {
 			"Regex": "_"
