@@ -3,6 +3,9 @@
 		"Name": "Default",
 		"Heading": {
 			"Regex": "^\\s*=.*$"
+		},
+		"Meta": {
+			"Regex": "#\\w+"
 		}
 	},
 	{
