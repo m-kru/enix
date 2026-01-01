@@ -29,7 +29,7 @@
 		"Fg": "Background"
 	},
 	"CursorWord": {
-		"Fg": "Yellow"
+		"Bg": "BrightWhite"
 	},
 	"Find": {
 		"Bg": "BrightYellow",
@@ -95,7 +95,7 @@
 		"Bold": true
 	},
 	"Mono": {
-		"Fg": "Magenta"
+		"Fg": "Red"
 	},
 	"Number": {
 		"Fg": "Red"
