@@ -1,6 +1,7 @@
 package cursor
 
 import (
+	"fmt"
 	"unicode"
 	"unicode/utf8"
 
@@ -26,6 +27,13 @@ type Cursor struct {
 	LineNum int
 	RuneIdx int // Line rune index
 	colIdx  int // Line column index
+}
+
+func (c *Cursor) Dump() string {
+	return fmt.Sprintf(
+		"{Line: \"%s\", LineNum: %d, RuneIdx: %d, colIdx %d}",
+		c.Line, c.LineNum, c.RuneIdx, c.colIdx,
+	)
 }
 
 // Column returns column number of the cursor within the string in the buffer.
