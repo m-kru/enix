@@ -58,12 +58,13 @@ func (tab *Tab) GoMark(name string) error {
 	switch m := m.(type) {
 	case *mark.CursorMark:
 		tab.Cursors = cursor.Clone(m.Cursors)
+		tab.Selections = nil
 	default:
 		// Going to selection mark unimplemented
 		return nil
 	}
 
-	// Don't change the view if running in running in script mode.
+	// Don't change the view if running in script mode.
 	if arg.Script != "" {
 		return nil
 	}
