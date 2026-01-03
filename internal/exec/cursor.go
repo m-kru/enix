@@ -254,5 +254,5 @@ func DumpCursor(args []string, tab *tab.Tab) (string, error) {
 
 	c := tab.Cursors[n-1]
 
-	return fmt.Sprintf("%s", c.Dump()), nil
+	return fmt.Sprintf(c.Dump()), nil
 }
