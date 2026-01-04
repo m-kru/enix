@@ -43,7 +43,11 @@
 			"NegativeLookBehind": "(?:[^\\\\])\\\\"
 		},
 		"Variable": {
-			"Regex": "\\$(\\w|:)+"
+			"Regex": "\\$(\\w|:)+",
+			"NegativeLookBehind": "\\\\"
+		},
+		"Meta": {
+			"Regex": "\\\\(a|b|f|n|r|t|v|\"|\\[|]|\\$|\\\\)"
 		},
 		"Operator": {
 			"Regex": "\\[|\\]",
