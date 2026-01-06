@@ -42,8 +42,12 @@
 			"Regex": "\"",
 			"NegativeLookBehind": "(?:[^\\\\])\\\\"
 		},
+		"Meta": {
+			"Regex": "\\\\(a|b|f|n|r|t|v|\"|\\$|\\\\)"
+		},
 		"Variable": {
-			"Regex": "\\$(\\w+|#|@|\\$|!|-|\\*|\\?)"
+			"Regex": "\\$(\\w+|#|@|\\$|!|-|\\*|\\?)",
+			"NegativeLookBehind": "\\\\"
 		}
 	},
 	{
