@@ -7,7 +7,7 @@
 			"PositiveLookAhead": "(\\b)"
 		},
 		"Keyword": {
-			"Regex": "\\b(break|catch|continue|default|else|elseif|eq|error|exit|for|foreach|if|namespace|ne|proc|return|switch|variable|while)\\b"
+			"Regex": "\\b(break|catch|continue|default|else|elseif|eq|error|exit|for|foreach|if|namespace|ne|ni|proc|return|switch|variable|while)\\b"
 		},
 		"Number": {
 			"Regex": "\\b(0(b|B|o|O|x|X)?)?\\d+(\\.\\d+)?((e|E)-?\\d+)?\\b"
