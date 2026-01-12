@@ -5,7 +5,7 @@
 			"Regex": "[a-zA-Z]\\w+:"
 		},
 		"Keyword": {
-			"Regex": "/(dts-v1|plugin)/"
+			"Regex": "/(dts-v1|include|plugin)/"
 		},
 		"Meta": {
 			"Regex": "#(include|define|undef)"
