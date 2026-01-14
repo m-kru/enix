@@ -47,6 +47,7 @@ func DefaultConfig() Config {
 			"fbdl":   "  ",
 			"python": "    ",
 			"rust":   "    ",
+			"sh":     "  ",
 			"tcl":    "    ",
 			"vhdl":   "  ",
 		},
