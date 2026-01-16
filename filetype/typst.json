@@ -15,7 +15,8 @@
 		"Name": "Bold",
 		"Style": "Bold",
 		"Start": {
-			"Regex": "\\*"
+			"Regex": "\\*",
+			"NegativeLookBehind": "\\\\"
 		},
 		"End": {
 			"Regex": "\\*"
