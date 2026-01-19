@@ -321,6 +321,75 @@ func (tab *Tab) insertRuneSelections(r rune) action.Actions {
 	return actions
 }
 
+// Enforces tab insertion ignoring the configured indent style.
+func (tab *Tab) InsertTab() {
+	prevCurs := cursor.Clone(tab.Cursors)
+	prevSels := sel.Clone(tab.Selections)
+
+	actions := tab.insertTab()
+
+	if len(actions) > 0 {
+		tab.undoPush(actions.Reverse(), prevCurs, prevSels)
+	}
+}
+
+func (tab *Tab) insertTab() action.Actions {
+	var actions action.Actions
+
+	if len(tab.Cursors) > 0 {
+		actions = tab.insertTabCursors()
+	} else {
+		actions = tab.insertTabSelections()
+	}
+
+	tab.SearchCtx.Modified = true
+
+	return actions
+}
+
+func (tab *Tab) insertTabCursors() action.Actions {
+	actions := make(action.Actions, 0, len(tab.Cursors))
+
+	for _, c := range tab.Cursors {
+		act := c.InsertRune('\t')
+
+		actions = append(actions, act)
+
+		for _, c2 := range tab.Cursors {
+			if c2 != c {
+				c2.Inform(act)
+			}
+		}
+
+		for _, m := range tab.Marks {
+			m.Inform(act)
+		}
+	}
+
+	return actions
+}
+
+func (tab *Tab) insertTabSelections() action.Actions {
+	actions := make(action.Actions, 0, len(tab.Selections))
+
+	for _, s := range tab.Selections {
+		c := s.GetCursor()
+		act := c.InsertRune('\t')
+
+		actions = append(actions, act)
+
+		for _, s2 := range tab.Selections {
+			s2.Inform(act, s2 != s)
+		}
+
+		for _, m := range tab.Marks {
+			m.Inform(act)
+		}
+	}
+
+	return actions
+}
+
 func (tab *Tab) InsertNewline() {
 	prevCurs := cursor.Clone(tab.Cursors)
 	prevSels := sel.Clone(tab.Selections)

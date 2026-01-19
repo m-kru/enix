@@ -153,7 +153,9 @@ Even if the selection starts or ends in the middle of a line.`,
 
 	"insert-line-below": `insert-line-below # Adds an empty line below and enters the insert mode.`,
 
-	"insert-tab": `tab # Inserts tab rune.`,
+	"insert-tab": `tab # Inserts tab rune.
+The command ignores configured indent style.
+It is useful when you want to enofrce tab rune.`,
 
 	"newline": `newline # Inserts a newline.`,
 

@@ -56,7 +56,7 @@ func InsertTab(args []string, tab *tab.Tab) error {
 		)
 	}
 
-	tab.InsertRune('\t')
+	tab.InsertTab()
 
 	return nil
 }
