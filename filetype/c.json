@@ -65,7 +65,7 @@
 		},
 		"End": {
 			"Regex": "\"",
-			"NegativeLookBehind": "(?:[^\\\\])\\\\"
+			"NegativeLookBehind": "\\\\"
 		},
 		"Meta": {
 			"Regex": "\\\\(a|b|e|f|n|r|t|v|\"|\\\\)"
