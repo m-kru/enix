@@ -37,6 +37,22 @@
 		}
 	},
 	{
+		"Name": "Multiline String",
+		"Style": "String",
+		"Start": {
+			"Regex": "\"\"\""
+		},
+		"End": {
+			"Regex": "\"\"\""
+		},
+		"Meta": {
+			"Regex": "\\\\(b|f|n|r|t|\"|\\\\)"
+		},
+		"Variable": {
+			"Regex": "{(\\w|\\.|<|>|=|:|'|\\^|-|\\+|\\s|,|#|\\(|\\)|\\[|\\]|\\*)*}"
+		}
+	},
+	{
 		"Name": "Double Quote String",
 		"Style": "String",
 		"Start": {
