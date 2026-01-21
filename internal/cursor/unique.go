@@ -4,14 +4,20 @@ import "sort"
 
 // LineUnique returns line unique cursors.
 // Line unique cursors are cursors pointing to different lines.
+// If multiple cursors point to the same line, then the one with the
+// lowest rune index is chosen.
+//
 // The ascending parameter controls the sort order.
 func LineUnique(curs []*Cursor, ascending bool) []*Cursor {
 	uniques := make([]*Cursor, 0, len(curs))
 
 	for _, c := range curs {
 		found := false
-		for _, c2 := range uniques {
-			if c.Line == c2.Line {
+		for j, u := range uniques {
+			if c.Line == u.Line {
+				if c.RuneIdx < u.RuneIdx {
+					uniques[j] = c
+				}
 				found = true
 				break
 			}
