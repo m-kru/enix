@@ -11,6 +11,7 @@ var fileNameToType = map[string]string{
 	".dircolors":     "dircolors",
 	".tclshrc":       "tcl",
 	"COMMIT_EDITMSG": "git-commit",
+	"Config.in":      "kconfig",
 	"Dockerfile":     "docker",
 	"Makefile":       "make", "makefile": "make",
 	"sxhkdrc": "sxhkd",
