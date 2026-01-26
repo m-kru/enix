@@ -8,7 +8,7 @@
 			"Regex": "^\\s*(?:define|endef|ifeq|ifneq|ifdef|ifndef|else|endif|export|unexport)"
 		},
 		"Variable": {
-			"Regex": "\\$\\(\\w+\\)"
+			"Regex": "\\$\\(@?\\w+\\)"
 		}
 	},
 	{
