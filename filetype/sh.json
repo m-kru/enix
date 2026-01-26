@@ -12,7 +12,7 @@
 		},
 		"Keyword": {
 			"Regex": "\\b(if|then|else|elif|fi|case|esac|for|select|while|until|do|done|in|function|time|coproc)\\b",
-			"NegativeLookBehind": "-"
+			"NegativeLookBehind": "[-\\.]"
 		},
 		"Operator": {
 			"Regex": "[\\[\\]\\(\\)&|`<>\\*]"
