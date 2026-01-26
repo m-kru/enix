@@ -5,7 +5,7 @@
 			"Regex": "^(\\w|-)*:"
 		},
 		"Keyword": {
-			"Regex": "^\\s*(?:ifeq|ifneq|ifdef|ifndef|else|endif|export|unexport)"
+			"Regex": "^\\s*(?:define|endef|ifeq|ifneq|ifdef|ifndef|else|endif|export|unexport)"
 		},
 		"Variable": {
 			"Regex": "\\$\\(\\w+\\)"
