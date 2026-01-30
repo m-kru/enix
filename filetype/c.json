@@ -71,7 +71,7 @@
 			"Regex": "\\\\(a|b|e|f|n|r|t|v|\"|\\\\)"
 		},
 		"Variable": {
-			"Regex": "%(c|d|f|ld|p|s|u|x)"
+			"Regex": "%(c|d|f|ld|p[aBKxS]?|s|u|x)"
 		}
 	}
 ]
