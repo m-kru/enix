@@ -25,7 +25,7 @@
 			"Regex": "'\\\\?.'"
 		},
 		"Type": {
-			"Regex": "\\b(bool|char|double|float|int|int8_t|int16_t|int32_t|int64_t|int128_t|long|uint8_t|uint16_t|uint32_t|uint64_t|uint128_t|uintptr_t|unsigned|signed|struct|void)\\b"
+			"Regex": "\\b(bool|char|double|float|int|int8_t|int16_t|int32_t|int64_t|int128_t|long|uint8_t|uint16_t|uint32_t|uint64_t|uint128_t|uintptr_t|unsigned|signed|size_t|ssize_t|struct|void)\\b"
 		},
 		"Value": {
 			"Regex": "\\b(false|true|NULL|nullptr|stderr|stdin|stdout|EXIT_FAILURE|EXIT_SUCCESS)\\b"
