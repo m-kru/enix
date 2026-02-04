@@ -10,6 +10,9 @@
 		"Meta": {
 			"Regex": "#(include|define|undef)"
 		},
+		"Number": {
+			"Regex": "\\b(0x)?\\d+\\b"
+		},
 		"Type": {
 			"Regex": "&[a-zA-Z]\\w+"
 		}
