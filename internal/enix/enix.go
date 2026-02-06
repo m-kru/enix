@@ -461,14 +461,13 @@ func Render(renderTab bool) {
 	if Tabs.Count() > 1 {
 		TabFrame.Y++
 		TabFrame.Height--
-		f := frame.Frame{
+		TabBarFrame = frame.Frame{
 			Screen: Screen,
 			X:      0,
 			Y:      0,
 			Width:  width,
 			Height: 1,
 		}
-		TabBarFrame = f
 	} else {
 		TabBarFrame = frame.NilFrame()
 	}

@@ -414,7 +414,7 @@ func (p *prompt) HandleTab() {
 			return
 		}
 
-		PromptMenu = newMenu(&PromptFrame, itemNames, 0, cfg.Style.Menu, cfg.Style.MenuItem)
+		PromptMenu = newMenu(&PromptMenuFrame, itemNames, 0, cfg.Style.Menu, cfg.Style.MenuItem)
 		p.State = InCmdMenu
 
 		text := itemNames[0]
