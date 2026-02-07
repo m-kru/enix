@@ -478,7 +478,7 @@ func (p *prompt) RxMouseEvent(ev mouse.Event) {
 		_, text = PromptMenu.RxMouseEvent(ev)
 	}
 
-	if p.State == InCmdMenu {
+	if p.State == InCmdMenu && text != "" {
 		p.Line, _ = line.FromString(text)
 		p.Cursor = cursor.New(p.Line, 1, len(text))
 	}

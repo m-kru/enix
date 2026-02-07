@@ -151,7 +151,15 @@ func (menu *menu) Prev() (int, string) {
 }
 
 // RxMouseEvent handles mouse event.
-// Returned values are the current item index and name.
+//
+// Return values are:
+//   - -1, "" in case of events resulting with menu scroll,
+//   - index and name of the item on which the event occurred in all other cases.
+//
+// Menu handles only mouse scroll and primary click events internally.
+// All other events, for exmpale scroll click, must be handled by higher
+// abstraction layers. In such a case, call this function to get index and
+// name of the item on which the event occurred.
 func (menu *menu) RxMouseEvent(ev mouse.Event) (int, string) {
 	frame := menu.frame
 	lFrame := frame.ColumnSubframe(frame.X, 2)
@@ -162,15 +170,19 @@ func (menu *menu) RxMouseEvent(ev mouse.Event) (int, string) {
 	case mouse.PrimaryClick, mouse.DoublePrimaryClick, mouse.TriplePrimaryClick:
 		if lFrame.Within(ev.X(), ev.Y()) {
 			menu.viewLeft()
+			return -1, ""
 		} else if rFrame.Within(ev.X(), ev.Y()) {
 			menu.viewRight()
+			return -1, ""
 		} else {
 			menu.clickItemsFrame(ev.X() - iFrame.X)
 		}
 	case mouse.WheelDown:
 		menu.viewRight()
+		return -1, ""
 	case mouse.WheelUp:
 		menu.viewLeft()
+		return -1, ""
 	}
 
 	idx := menu.currItemIdx

@@ -124,9 +124,21 @@ func (tb *tabBar) extendItemsNames(confs map[string][]int, lvl int) {
 	}
 }
 
+// Returns new current tab or nil, if current tab is not changed.
 func (tb *tabBar) RxMouseEvent(ev mouse.Event) *tab.Tab {
 	idx, _ := tb.menu.RxMouseEvent(ev)
-	return tb.items[idx].Tab
+
+	// This was just a menu scroll.
+	if idx == -1 {
+		return nil
+	}
+
+	switch ev.(type) {
+	case mouse.PrimaryClick, mouse.DoublePrimaryClick, mouse.TriplePrimaryClick:
+		return tb.items[idx].Tab
+	}
+
+	return nil
 }
 
 func (tb *tabBar) Render(frame frame.Frame) {
