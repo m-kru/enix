@@ -44,10 +44,23 @@ func RxMouseEvent(ev mouse.Event) {
 	y := ev.Y()
 
 	if TabBarFrame.Within(x, y) {
-		newCurrentTab := TabBar.RxMouseEvent(ev)
-		if newCurrentTab != nil {
-			CurrentTab = newCurrentTab
+		var err error
+		CurrentTab, err = TabBar.RxMouseEvent(ev)
+
+		if err != nil {
+			Prompt.ShowError(fmt.Sprintf("%v", err))
+			return
 		}
+
+		if CurrentTab == nil {
+			Quit = true
+			return
+		}
+
+		Prompt.Clear()
+		Tabs = CurrentTab.First()
+		TabBar.Update()
+
 		return
 	}
 

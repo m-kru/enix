@@ -153,7 +153,8 @@ func (menu *menu) Prev() (int, string) {
 // RxMouseEvent handles mouse event.
 //
 // Return values are:
-//   - -1, "" in case of events resulting with menu scroll,
+//   - -1, "" in case of events resulting with menu scroll
+//     or clicks outside menu item frames,
 //   - index and name of the item on which the event occurred in all other cases.
 //
 // Menu handles only mouse scroll and primary click events internally.
@@ -166,6 +167,8 @@ func (menu *menu) RxMouseEvent(ev mouse.Event) (int, string) {
 	iFrame := frame.ColumnSubframe(frame.X+2, frame.Width-4)
 	rFrame := frame.ColumnSubframe(frame.LastX()-1, 2)
 
+	idx := 0
+
 	switch ev.(type) {
 	case mouse.PrimaryClick, mouse.DoublePrimaryClick, mouse.TriplePrimaryClick:
 		if lFrame.Within(ev.X(), ev.Y()) {
@@ -175,8 +178,13 @@ func (menu *menu) RxMouseEvent(ev mouse.Event) (int, string) {
 			menu.viewRight()
 			return -1, ""
 		} else {
-			menu.clickItemsFrame(ev.X() - iFrame.X)
+			idx = menu.clickItemsFrame(ev.X() - iFrame.X)
+			if idx >= 0 {
+				menu.currItemIdx = idx
+			}
 		}
+	case mouse.MiddleClick:
+		idx = menu.clickItemsFrame(ev.X() - iFrame.X)
 	case mouse.WheelDown:
 		menu.viewRight()
 		return -1, ""
@@ -185,22 +193,27 @@ func (menu *menu) RxMouseEvent(ev mouse.Event) (int, string) {
 		return -1, ""
 	}
 
-	idx := menu.currItemIdx
-	return idx, menu.items[idx].name
+	name := ""
+	if idx >= 0 {
+		name = menu.items[idx].name
+	}
+
+	return idx, name
 }
 
-func (menu *menu) clickItemsFrame(x int) {
+func (menu *menu) clickItemsFrame(x int) int {
 	rIdx, _, ok := menu.line.RuneIdx(menu.view.Column + x)
 	if !ok {
-		return
+		return -1
 	}
 
 	for i, item := range menu.items {
 		if item.startIdx <= rIdx && rIdx < item.endIdx {
-			menu.currItemIdx = i
-			return
+			return i
 		}
 	}
+
+	return -1
 }
 
 func (menu *menu) viewLeft() {

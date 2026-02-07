@@ -273,3 +273,22 @@ func (tab *Tab) SetFiletype(ft string) error {
 
 	return nil
 }
+
+// Returns new current tab or nil if there are no more tabs.
+func (tab *Tab) Quit() *Tab {
+	newTab := tab.Prev
+	if newTab != nil {
+		newTab.Next = tab.Next
+		if tab.Next != nil {
+			tab.Next.Prev = newTab
+		}
+	} else if tab.Next != nil {
+		newTab = tab.Next
+		newTab.Prev = tab.Prev
+		if tab.Prev != nil {
+			tab.Prev.Next = newTab
+		}
+	}
+
+	return newTab
+}

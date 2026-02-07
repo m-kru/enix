@@ -86,3 +86,30 @@ type WheelRight struct {
 func (wr WheelRight) isEvent() {}
 func (wr WheelRight) X() int   { return wr.x }
 func (wr WheelRight) Y() int   { return wr.y }
+
+type MiddleClick struct {
+	x int
+	y int
+}
+
+func (mc MiddleClick) isEvent() {}
+func (mc MiddleClick) X() int   { return mc.x }
+func (mc MiddleClick) Y() int   { return mc.y }
+
+type DoubleMiddleClick struct {
+	x int
+	y int
+}
+
+func (dc DoubleMiddleClick) isEvent() {}
+func (dc DoubleMiddleClick) X() int   { return dc.x }
+func (dc DoubleMiddleClick) Y() int   { return dc.y }
+
+type MiddleClickCtrl struct {
+	x int
+	y int
+}
+
+func (mcc MiddleClickCtrl) isEvent() {}
+func (mcc MiddleClickCtrl) X() int   { return mcc.x }
+func (mcc MiddleClickCtrl) Y() int   { return mcc.y }

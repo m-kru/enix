@@ -124,21 +124,33 @@ func (tb *tabBar) extendItemsNames(confs map[string][]int, lvl int) {
 	}
 }
 
-// Returns new current tab or nil, if current tab is not changed.
-func (tb *tabBar) RxMouseEvent(ev mouse.Event) *tab.Tab {
+// Returns new current tab or nil, if there is no current tab,
+// the last tab has been closed.
+func (tb *tabBar) RxMouseEvent(ev mouse.Event) (*tab.Tab, error) {
 	idx, _ := tb.menu.RxMouseEvent(ev)
 
 	// This was just a menu scroll.
 	if idx == -1 {
-		return nil
+		return CurrentTab, nil
 	}
+
+	tab := tb.items[idx].Tab
 
 	switch ev.(type) {
 	case mouse.PrimaryClick, mouse.DoublePrimaryClick, mouse.TriplePrimaryClick:
-		return tb.items[idx].Tab
+		return tab, nil
+	case mouse.MiddleClick:
+		if tab.HasChanges() {
+			return CurrentTab, fmt.Errorf(
+				"tab has unsaved changes, double click to force quit",
+			)
+		}
+		return tab.Quit(), nil
+	case mouse.DoubleMiddleClick: // Force quit
+		return tab.Quit(), nil
 	}
 
-	return nil
+	return CurrentTab, nil
 }
 
 func (tb *tabBar) Render(frame frame.Frame) {
