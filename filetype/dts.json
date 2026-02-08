@@ -5,13 +5,13 @@
 			"Regex": "[a-zA-Z]\\w+:"
 		},
 		"Keyword": {
-			"Regex": "/(dts-v1|include|plugin)/"
+			"Regex": "/(bits|dts-v1|include|plugin)/"
 		},
 		"Meta": {
 			"Regex": "#(include|define|undef)"
 		},
 		"Number": {
-			"Regex": "\\b(0x)?\\d+\\b"
+			"Regex": "\\b\\d+\\b|\\b(0x|@)[\\da-fA-F]+\\b"
 		},
 		"Type": {
 			"Regex": "&[a-zA-Z]\\w+"
