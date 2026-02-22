@@ -98,6 +98,7 @@ func (tab *Tab) shCursors(addIndent bool, cmdName string, args []string) (string
 
 	for curIdx, cur := range cursors {
 		startCur, endCur, acts := cur.Paste(text, false)
+		tab.handleAction(acts)
 
 		for _, c := range cursors[curIdx+1:] {
 			c.Inform(acts)
