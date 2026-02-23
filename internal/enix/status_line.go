@@ -30,13 +30,13 @@ func renderStatusLine() {
 
 	repCountStartIdx := 0
 	if tab.RepCount != 0 {
-		b.WriteString(fmt.Sprintf("%d ", tab.RepCount))
+		fmt.Fprintf(&b, "%d ", tab.RepCount)
 	}
 	repCountEndIdx := b.Len() - 1
 
 	stateStartIdx := b.Len()
 	if tab.State != "" {
-		b.WriteString(fmt.Sprintf("%s ", tab.State))
+		fmt.Fprintf(&b, "%s ", tab.State)
 	}
 	stateEndIdx := b.Len() - 1
 
@@ -45,7 +45,7 @@ func renderStatusLine() {
 		if len(tab.SearchCtx.Finds) == 1 {
 			b.WriteString("1 find ")
 		} else {
-			b.WriteString(fmt.Sprintf("%d finds ", len(tab.SearchCtx.Finds)))
+			fmt.Fprintf(&b, "%d finds ", len(tab.SearchCtx.Finds))
 		}
 	}
 	findEndIdx := b.Len() - 1
@@ -58,12 +58,12 @@ func renderStatusLine() {
 		if len(tab.Selections) == 1 {
 			b.WriteString("1 sel ")
 		} else {
-			b.WriteString(fmt.Sprintf("%d sels ", len(tab.Selections)))
+			fmt.Fprintf(&b, "%d sels ", len(tab.Selections))
 		}
 	}
-	b.WriteString(fmt.Sprintf("%d:%d | ", c.LineNum, c.RuneIdx+1))
+	fmt.Fprintf(&b, "%d:%d | ", c.LineNum, c.RuneIdx+1)
 
-	b.WriteString(fmt.Sprintf("%s ", tab.Filetype))
+	fmt.Fprintf(&b, "%s ", tab.Filetype)
 	statusStr := b.String()
 
 	if len(statusStr) > frame.Width {

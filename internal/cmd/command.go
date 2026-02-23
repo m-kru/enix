@@ -17,7 +17,7 @@ func (cmd Command) String() string {
 	b := strings.Builder{}
 
 	if cmd.RepCount > 1 {
-		b.WriteString(fmt.Sprintf("%d ", cmd.RepCount))
+		fmt.Fprintf(&b, "%d ", cmd.RepCount)
 	}
 	b.WriteString(cmd.Name)
 	b.WriteRune(' ')
