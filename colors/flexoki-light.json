@@ -1,0 +1,20 @@
+{
+	"Background": "FFFCF0",
+	"Foreground": "100F0F",
+	"Black": "6F6E69",
+	"Red": "AF3029",
+	"Green": "66800B",
+	"Yellow": "AD8301",
+	"Blue": "205EA6",
+	"Magenta": "A02F6F",
+	"Cyan": "24837B",
+	"White": "DAD8CE",
+	"BrightBlack": "B7B5AC",
+	"BrightRed": "BC5215",
+	"BrightGreen": "66800B",
+	"BrightYellow": "D0A215",
+	"BrightBlue": "205EA6",
+	"BrightMagenta": "A02F6F",
+	"BrightCyan": "24837B",
+	"BrightWhite": "E6E4D9"
+}
