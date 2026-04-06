@@ -56,9 +56,6 @@
 		"Bg": "Black",
 		"Fg": "Yellow"
 	},
-	"Prompt": {
-		"Fg": "White"
-	},
 	"PromptShadow": {
 		"Fg": "BrightBlack"
 	},

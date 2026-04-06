@@ -81,7 +81,7 @@ func (p *prompt) ShowError(msg string) {
 		x++
 	}
 	for x < frame.Width {
-		frame.SetContent(x, 0, ' ', cfg.Style.Prompt)
+		frame.SetContent(x, 0, ' ', cfg.Style.Default)
 		x++
 	}
 
@@ -169,7 +169,7 @@ func (p *prompt) Render() {
 		return
 	}
 
-	frame.SetContent(0, 0, ':', cfg.Style.Prompt)
+	frame.SetContent(0, 0, ':', cfg.Style.Default)
 
 	if !p.View.IsVisible(p.Cursor.View()) {
 		p.View = p.View.MinAdjust(p.Cursor.View())

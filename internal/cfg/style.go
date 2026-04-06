@@ -56,7 +56,6 @@ type styleJSON struct {
 	RepCount        itemStyle
 	StateMark       itemStyle
 	FindMark        itemStyle
-	Prompt          itemStyle
 	PromptShadow    itemStyle
 	Menu            itemStyle
 	MenuItem        itemStyle
@@ -160,11 +159,6 @@ func (sj styleJSON) ToStyle() (style, error) {
 		return s, err
 	}
 	s.FindMark = ts
-
-	if ts, err = sj.Prompt.ToTcellStyle(s.Default); err != nil {
-		return s, err
-	}
-	s.Prompt = ts
 
 	if ts, err = sj.PromptShadow.ToTcellStyle(s.Default); err != nil {
 		return s, err
@@ -283,7 +277,6 @@ type style struct {
 	StateMark  tcell.Style
 	FindMark   tcell.Style
 
-	Prompt       tcell.Style
 	PromptShadow tcell.Style
 
 	Menu     tcell.Style
@@ -377,7 +370,6 @@ func DefaultStyle() style {
 		StateMark:  tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorGreen),
 		FindMark:   tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorOlive),
 
-		Prompt:       tcell.StyleDefault.Foreground(tcell.ColorWhite),
 		PromptShadow: tcell.StyleDefault.Foreground(tcell.ColorGray),
 
 		Menu:     tcell.StyleDefault.Background(tcell.ColorBlack),
