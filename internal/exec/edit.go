@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/m-kru/enix/internal/tab"
+	"github.com/m-kru/enix/internal/util"
 )
 
 func Edit(args []string, t *tab.Tab) (*tab.Tab, error) {
@@ -15,8 +16,16 @@ func Edit(args []string, t *tab.Tab) (*tab.Tab, error) {
 
 	var newCurrentTab *tab.Tab
 
+	paths := args
+
+	// Handle opening at specific line
+	openLine, openCol, err := util.ParseLineAndColumnString(paths[len(paths)-1])
+	if err == nil {
+		paths = paths[0 : len(paths)-1]
+	}
+
 	errMsg := ""
-	for i, path := range args {
+	for i, path := range paths {
 		// Check if tab with given path already exists
 		abspath := path
 		if !filepath.IsAbs(abspath) {
@@ -46,6 +55,7 @@ func Edit(args []string, t *tab.Tab) (*tab.Tab, error) {
 
 		// Open new tab
 		newT, err := tab.Open(t.Frame, path)
+		newT.Go(openLine, openCol)
 		if newT != nil {
 			t.Append(newT)
 			if i == 0 {

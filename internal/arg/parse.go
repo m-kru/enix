@@ -6,38 +6,19 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"strconv"
-	"strings"
+
+	"github.com/m-kru/enix/internal/util"
 )
 
 func handleLineAndColumn(arg string) {
-	// Handle line only case
-	if !strings.Contains(arg, ":") {
-		n, err := strconv.Atoi(arg[1:])
-		if err != nil {
-			handleFile(arg)
-		}
-		Line = n
+	line, col, err := util.ParseLineAndColumnString(arg)
+	if err == nil {
+		Line = line
+		Column = col
 		return
 	}
 
-	// Handle line and column case
-	lineStr, colStr, _ := strings.Cut(arg[1:], ":")
-	var line, col int
-	var err error
-	line, err = strconv.Atoi(lineStr)
-	if err != nil {
-		handleFile(arg)
-		return
-	}
-	col, err = strconv.Atoi(colStr)
-	if err != nil {
-		handleFile(arg)
-		return
-	}
-
-	Line = line
-	Column = col
+	handleFile(arg)
 }
 
 // addFile adds file path to the Files list if the path is not yet in the list.
