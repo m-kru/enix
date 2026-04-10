@@ -37,7 +37,7 @@
 		"Fg": "Background"
 	},
 	"MatchingBracket": {
-		"Bg": "Black",
+		"Bg": "BrightBlack",
 		"Fg": "BrightWhite",
 		"Bold": true
 	},
@@ -73,7 +73,7 @@
 		"Bold": true
 	},
 	"Comment": {
-		"Fg": "Black"
+		"Fg": "BrightBlack"
 	},
 	"Heading": {
 		"Fg": "BrightRed"

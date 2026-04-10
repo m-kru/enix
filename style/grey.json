@@ -10,11 +10,13 @@
 		"Fg": "Yellow"
 	},
 	"TabBar": {
-		"Bg": "BrightWhite"
+		"Bg": "White",
+		"Fg": "Black"
 	},
 	"CurrentTab": {
-		"Bold": true,
-		"Bg": "White"
+		"Bg": "White",
+		"Fg": "Black",
+		"Bold": true
 	},
 	"LineNum": {
 		"Fg": "BrightBlack"
@@ -23,47 +25,50 @@
 		"Fg": "White"
 	},
 	"Cursor": {
-		"Bg": "Foreground",
-		"Fg": "Background"
+		"Bg": "Black",
+		"Fg": "BrightWhite"
 	},
 	"CursorWord": {
-		"Bg": "BrightWhite"
+		"Bg": "BrightWhite",
+		"Fg": "Foreground"
 	},
 	"Find": {
-		"Bg": "BrightYellow"
+		"Bg": "BrightYellow",
+		"Fg": "Black"
 	},
 	"Selection": {
 		"Bg": "Red",
-		"Fg": "Background"
+		"Fg": "BrightWhite"
 	},
 	"MatchingBracket": {
-		"Bg": "Black",
-		"Fg": "BrightWhite",
+		"Bg": "White",
 		"Bold": true
 	},
 	"StatusLine": {
-		"Bg": "BrightWhite"
+		"Bg": "White"
 	},
 	"RepCount": {
-		"Bg": "BrightWhite",
+		"Bg": "White",
 		"Fg": "Red"
 	},
 	"StateMark": {
-		"Bg": "BrightWhite",
+		"Bg": "White",
 		"Bold": true
 	},
 	"FindMark": {
-		"Bg": "BrightWhite",
-		"Fg": "Yellow"
+		"Fg": "Black",
+		"Bg": "BrightYellow"
 	},
 	"PromptShadow": {
 		"Fg": "BrightBlack"
 	},
 	"Menu": {
-		"Bg": "BrightWhite"
+		"Bg": "Black",
+		"Fg": "BrightWhite"
 	},
 	"MenuItem": {
-		"Bg": "White",
+		"Bg": "BrightBlack",
+		"Fg": "BrightWhite",
 		"Bold": true
 	},
 	"Attribute": {
@@ -73,10 +78,10 @@
 		"Bold": true
 	},
 	"Comment": {
-		"Fg": "Black"
+		"Fg": "BrightBlack"
 	},
 	"Heading": {
-		"Fg": "BrightRed"
+		"Bold": true
 	},
 	"Italic": {
 		"Italic": true
@@ -91,7 +96,7 @@
 		"Fg": "Red"
 	},
 	"Number": {
-		"Fg": "Red"
+		"Fg": "BrightRed"
 	},
 	"Operator": {
 		"Fg": "Yellow"
@@ -103,7 +108,7 @@
 		"Bold": true
 	},
 	"Value": {
-		"Fg": "Red"
+		"Fg": "BrightRed"
 	},
 	"Variable": {
 		"Fg": "Red",

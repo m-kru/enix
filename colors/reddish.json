@@ -1,14 +1,14 @@
 {
 	"Background": "F8F8F8",
 	"Foreground": "000000",
-	"Black": "000000",
+	"Black": "404040",
 	"Red": "990000",
 	"Green": "000000",
 	"Yellow": "000000",
 	"Blue": "000000",
 	"Magenta": "000000",
 	"Cyan": "000000",
-	"White": "BFBFBF",
+	"White": "D0D0D0",
 	"BrightBlack": "808080",
 	"BrightRed": "990000",
 	"BrightGreen": "000000",
@@ -16,5 +16,5 @@
 	"BrightBlue": "000000",
 	"BrightMagenta": "000000",
 	"BrightCyan": "000000",
-	"BrightWhite": "D8D8D8"
+	"BrightWhite": "E8E8E8"
 }
