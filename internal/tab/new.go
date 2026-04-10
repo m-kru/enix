@@ -124,6 +124,12 @@ func Open(
 	// Highlighter initialization
 	hl, err := lang.NewHighlighter(filetype)
 
+	initView := view.View{Line: 1, Column: 1, Height: 1, Width: 1}
+	if frame != nil {
+		initView.Height = frame.Height
+		initView.Width = frame.Width
+	}
+
 	return &Tab{
 		Path:                 path,
 		Newline:              "\n",
@@ -142,7 +148,7 @@ func Open(
 		SearchCtx:            search.InitialContext(),
 		Marks:                make(map[string]mark.Mark),
 		Frame:                frame,
-		View:                 view.View{Line: 1, Column: 1, Height: frame.Height, Width: frame.Width},
+		View:                 initView,
 		Highlighter:          hl,
 		UndoStack:            undo.NewStack(cfg.Cfg.UndoSize),
 		RedoStack:            undo.NewStack(cfg.Cfg.UndoSize),
