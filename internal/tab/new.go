@@ -142,7 +142,7 @@ func Open(
 		SearchCtx:            search.InitialContext(),
 		Marks:                make(map[string]mark.Mark),
 		Frame:                frame,
-		View:                 view.View{Line: 1, Column: 1, Height: 1, Width: 1},
+		View:                 view.View{Line: 1, Column: 1, Height: frame.Height, Width: frame.Width},
 		Highlighter:          hl,
 		UndoStack:            undo.NewStack(cfg.Cfg.UndoSize),
 		RedoStack:            undo.NewStack(cfg.Cfg.UndoSize),
