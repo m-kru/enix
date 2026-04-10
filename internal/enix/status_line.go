@@ -61,7 +61,7 @@ func renderStatusLine() {
 			fmt.Fprintf(&b, "%d sels ", len(tab.Selections))
 		}
 	}
-	fmt.Fprintf(&b, "%d:%d | ", c.LineNum, c.RuneIdx+1)
+	fmt.Fprintf(&b, "%d:%d | ", c.LineNum, c.Column())
 
 	fmt.Fprintf(&b, "%s ", tab.Filetype)
 	statusStr := b.String()
