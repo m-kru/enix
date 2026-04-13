@@ -488,7 +488,7 @@ func (tab *Tab) insertNewlineSelections() action.Actions {
 }
 
 func (tab *Tab) InsertPath(path string) {
-	tab.Paste(path)
+	tab.PasteBefore(path)
 
 	if len(tab.Selections) > 0 {
 		tab.Cursors = sel.ToCursors(tab.Selections)
