@@ -53,6 +53,18 @@ func FindPrev(args []string, tab *tab.Tab) error {
 	return nil
 }
 
+func FindSelAll(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf(
+			"find-sel-all: expected 0 args, provided %d", len(args),
+		)
+	}
+
+	tab.FindSelAll()
+
+	return nil
+}
+
 func FindSelNext(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf(

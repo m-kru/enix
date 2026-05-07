@@ -128,6 +128,10 @@ It does not modify any other selections.`,
 	"find-next": `find-next # Selects the next find.
 The command clears all other selections.`,
 
+	"fsa": "fsa # An alias for the 'find-sel-all' command.",
+
+	"find-sel-all": "find-sel-all # Select all current finds.",
+
 	"find-sel-next": "find-sel-next # Preserves selections and selects the next find.",
 
 	"find-prev": `find-prev # Selects the previous find.

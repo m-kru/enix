@@ -109,6 +109,36 @@ func (tab *Tab) Find(next bool) {
 	}
 }
 
+func (tab *Tab) FindSelAll() {
+	if len(tab.SearchCtx.Finds) == 0 {
+		return
+	}
+
+	finds := tab.SearchCtx.Finds
+	sels := make([]*sel.Selection, 0, len(finds))
+
+	for _, f := range finds {
+		line := tab.Lines.Get(f.LineNum)
+		s := &sel.Selection{
+			Line:         line,
+			LineNum:      f.LineNum,
+			StartRuneIdx: f.StartRuneIdx,
+			EndRuneIdx:   f.EndRuneIdx - 1,
+			Cursor:       cursor.New(line, f.LineNum, f.StartRuneIdx),
+			Prev:         nil,
+			Next:         nil,
+		}
+		sels = append(sels, s)
+	}
+
+	tab.Cursors = nil
+	tab.Selections = sels
+
+	if !tab.View.IsVisible(tab.LastSel().View()) {
+		tab.ViewCenter()
+	}
+}
+
 // next is true for find-sel-next and false for find-sel-prev.
 func (tab *Tab) FindSel(next bool) {
 	if len(tab.Cursors) > 0 {

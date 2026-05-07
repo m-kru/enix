@@ -643,6 +643,8 @@ func (p *prompt) Exec() TcellEventReceiver {
 			err = exec.FindNext(c.Args, tab)
 		case "find-prev":
 			err = exec.FindPrev(c.Args, tab)
+		case "fsa", "find-sel-all":
+			err = exec.FindSelAll(c.Args, tab)
 		case "find-sel-next":
 			err = exec.FindSelNext(c.Args, tab)
 		case "find-sel-prev":
