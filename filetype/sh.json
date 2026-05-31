@@ -30,7 +30,11 @@
 		},
 		"End": {
 			"Regex": "$"
+		},
+		"Bold": {
+			"Regex": "(?i)(todo|note|xxx):"
 		}
+
 	},
 	{
 		"Name": "Double Quotes",
