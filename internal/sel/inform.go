@@ -124,8 +124,14 @@ func (s *Selection) informNewlineInsert(ni *action.NewlineInsert) {
 }
 
 func (s *Selection) informRuneDelete(rd *action.RuneDelete) {
-	if s.Line == rd.Line && rd.RuneIdx < s.StartRuneIdx {
+	if s.Line != rd.Line {
+		return
+	}
+
+	if rd.RuneIdx < s.StartRuneIdx {
 		s.StartRuneIdx--
+		s.EndRuneIdx--
+	} else if rd.RuneIdx < s.EndRuneIdx {
 		s.EndRuneIdx--
 	}
 }

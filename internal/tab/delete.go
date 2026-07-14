@@ -150,42 +150,18 @@ func (tab *Tab) backspace() action.Actions {
 	return actions
 }
 
-// NOTE: Currently backspace for the selection always deletes a rune before the selection.
-// However, it is possible to implement it in such a way, that:
-//  1. It deletes a rune before the selection if the cursor is on the left side of the selection.
-//  2. It deletes a rune within the selection if the cursor is on the right side of the selection.
-//
-// So far, there was simply no use case for this more complex behavior.
 func (tab *Tab) backspaceSelections() action.Actions {
 	// Create cursors for deletions
 	curs := make([]*cursor.Cursor, 0, len(tab.Selections))
 	for _, s := range tab.Selections {
-		line := s.Line
-		lineNum := s.LineNum
-		runeIdx := s.StartRuneIdx
-
-		if lineNum == 1 && runeIdx == 0 {
-			continue
-		}
-
-		if runeIdx == 0 {
-			// Go to the previous line
-			line = line.Prev
-			lineNum--
-			runeIdx = line.RuneCount()
-		} else {
-			runeIdx--
-		}
-
-		c := cursor.New(line, lineNum, runeIdx)
-
+		c := s.GetCursor().Clone()
 		curs = append(curs, c)
 	}
 
 	actions := make(action.Actions, 0, len(tab.Selections))
 
 	for cIdx, c := range curs {
-		act := c.Delete()
+		act := c.Backspace()
 
 		if act == nil {
 			continue
