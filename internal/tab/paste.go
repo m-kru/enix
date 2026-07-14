@@ -42,7 +42,7 @@ func (tab *Tab) Paste(text string) {
 	newSels := make([]*sel.Selection, 0, len(cursors))
 
 	for curIdx, cur := range cursors {
-		startCur, endCur, acts := cur.Paste(text, false)
+		startCur, endCur, acts := cur.Paste(text, "")
 
 		tab.handleAction(acts)
 
@@ -102,7 +102,7 @@ func (tab *Tab) PasteBefore(text string) {
 	newSels := make([]*sel.Selection, 0, len(cursors))
 
 	for curIdx, cur := range cursors {
-		startCur, endCur, acts := cur.PasteBefore(text, false)
+		startCur, endCur, acts := cur.PasteBefore(text, "")
 
 		tab.handleAction(acts)
 

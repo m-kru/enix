@@ -103,7 +103,16 @@ func (tab *Tab) shCursors(addIndent bool, cmdName string, args []string) (string
 			pasteFunc = cur.Paste
 		}
 
-		startCur, endCur, acts := pasteFunc(text, addIndent)
+		indent := ""
+		if addIndent {
+			if endsWithNewline {
+				indent = cur.Line.IndentBelow()
+			} else {
+				indent = cur.Line.Indent()
+			}
+		}
+
+		startCur, endCur, acts := pasteFunc(text, indent)
 		tab.handleAction(acts)
 
 		for _, c := range cursors[curIdx+1:] {
@@ -176,7 +185,7 @@ func (tab *Tab) shSelections(addIndent bool, cmdName string, args []string) (str
 		cur := cursor.New(s.Line, s.LineNum, s.StartRuneIdx)
 
 		// Paste stdout text
-		startCur, endCur, acts := cur.PasteBefore(stdout.String(), false)
+		startCur, endCur, acts := cur.PasteBefore(stdout.String(), "")
 		if len(acts) > 0 {
 			actions = append(actions, acts)
 			tab.handleAction(acts)

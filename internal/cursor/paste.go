@@ -8,16 +8,15 @@ import (
 	"github.com/m-kru/enix/internal/util"
 )
 
-func (cur *Cursor) Paste(text string, addIndent bool) (*Cursor, *Cursor, action.Actions) {
+func (cur *Cursor) Paste(text string, indent string) (*Cursor, *Cursor, action.Actions) {
 	if strings.HasSuffix(text, "\n") {
-		return cur.pasteLineBased(text, addIndent)
+		return cur.pasteLineBased(text, indent)
 	}
-	return cur.pasteRegular(text, addIndent, true)
+	return cur.pasteRegular(text, indent, true)
 }
 
-func (cur *Cursor) pasteLineBased(text string, addIndent bool) (*Cursor, *Cursor, action.Actions) {
-	if addIndent {
-		indent := cur.Line.Indent()
+func (cur *Cursor) pasteLineBased(text string, indent string) (*Cursor, *Cursor, action.Actions) {
+	if indent != "" {
 		text = util.AddIndent(text, indent, true)
 	}
 	lines, lineCount := line.FromString(text[0 : len(text)-1])
@@ -46,9 +45,8 @@ func (cur *Cursor) pasteLineBased(text string, addIndent bool) (*Cursor, *Cursor
 	return startCur, cur, actions
 }
 
-func (cur *Cursor) pasteRegular(text string, addIndent bool, after bool) (*Cursor, *Cursor, action.Actions) {
-	if addIndent {
-		indent := cur.Line.Indent()
+func (cur *Cursor) pasteRegular(text string, indent string, after bool) (*Cursor, *Cursor, action.Actions) {
+	if indent != "" {
 		text = util.AddIndent(text, indent, false)
 	}
 	lines, lineCount := line.FromString(text)
@@ -89,16 +87,15 @@ func (cur *Cursor) pasteRegular(text string, addIndent bool, after bool) (*Curso
 	return startCur, cur, actions
 }
 
-func (cur *Cursor) PasteBefore(text string, addIndent bool) (*Cursor, *Cursor, action.Actions) {
+func (cur *Cursor) PasteBefore(text string, indent string) (*Cursor, *Cursor, action.Actions) {
 	if strings.HasSuffix(text, "\n") {
-		return cur.pasteBeforeLineBased(text, addIndent)
+		return cur.pasteBeforeLineBased(text, indent)
 	}
-	return cur.pasteRegular(text, addIndent, false)
+	return cur.pasteRegular(text, indent, false)
 }
 
-func (cur *Cursor) pasteBeforeLineBased(text string, addIndent bool) (*Cursor, *Cursor, action.Actions) {
-	if addIndent {
-		indent := cur.Line.Indent()
+func (cur *Cursor) pasteBeforeLineBased(text string, indent string) (*Cursor, *Cursor, action.Actions) {
+	if indent != "" {
 		text = util.AddIndent(text, indent, true)
 	}
 
