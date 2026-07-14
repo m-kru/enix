@@ -85,10 +85,11 @@ func (tab *Tab) shCursors(addIndent bool, cmdName string, args []string) (string
 	}
 
 	text := stdout.String()
+	endsWithNewline := strings.HasSuffix(text, "\n")
 
 	prevCurs := cursor.Clone(tab.Cursors)
 	cursors := tab.Cursors
-	if strings.HasSuffix(text, "\n") {
+	if endsWithNewline {
 		cursors = cursor.LineUnique(cursors, true)
 	}
 
@@ -97,7 +98,12 @@ func (tab *Tab) shCursors(addIndent bool, cmdName string, args []string) (string
 	newSels := make([]*sel.Selection, 0, len(cursors))
 
 	for curIdx, cur := range cursors {
-		startCur, endCur, acts := cur.Paste(text, false)
+		pasteFunc := cur.PasteBefore
+		if endsWithNewline {
+			pasteFunc = cur.Paste
+		}
+
+		startCur, endCur, acts := pasteFunc(text, false)
 		tab.handleAction(acts)
 
 		for _, c := range cursors[curIdx+1:] {
