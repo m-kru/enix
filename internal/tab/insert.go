@@ -48,15 +48,7 @@ func (tab *Tab) insertLineBelowCursors() action.Actions {
 	curs := cursor.LineUnique(tab.Cursors, true)
 
 	for i, c := range curs {
-		indent := c.Line.Indent()
-		nnel := c.Line.GetNextNonEmpty()
-		nnei := ""
-		if nnel != nil {
-			nnei = nnel.Indent()
-		}
-		if len(nnei) > len(indent) {
-			indent = nnei
-		}
+		indent := c.Line.IndentBelow()
 
 		act := c.InsertLineBelow(indent)
 		// act can't be nil here
@@ -113,15 +105,7 @@ func (tab *Tab) insertLineAboveCursors() action.Actions {
 	curs := cursor.LineUnique(tab.Cursors, true)
 
 	for i, c := range curs {
-		indent := c.Line.Indent()
-		pnel := c.Line.GetPrevNonEmpty()
-		pnei := ""
-		if pnel != nil {
-			pnei = pnel.Indent()
-		}
-		if len(pnei) > len(indent) {
-			indent = pnei
-		}
+		indent := c.Line.IndentAbove()
 
 		act := c.InsertLineAbove(indent)
 		// act can't be nil here

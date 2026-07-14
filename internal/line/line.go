@@ -270,6 +270,38 @@ func (l *Line) Indent() string {
 	return string(l.Buf[sIdx:eIdx])
 }
 
+// IndentAbove returns indent of a block above the line.
+// This indent might differ from the indent of the line.
+func (l *Line) IndentAbove() string {
+	indent := l.Indent()
+	pnel := l.GetPrevNonEmpty()
+	pnei := ""
+	if pnel != nil {
+		pnei = pnel.Indent()
+	}
+	if len(pnei) > len(indent) {
+		indent = pnei
+	}
+
+	return indent
+}
+
+// IndentBelow returns indent of a block below the line.
+// This indent might differ from the indent of the line.
+func (l *Line) IndentBelow() string {
+	indent := l.Indent()
+	nnel := l.GetNextNonEmpty()
+	nnei := ""
+	if nnel != nil {
+		nnei = nnel.Indent()
+	}
+	if len(nnei) > len(indent) {
+		indent = nnei
+	}
+
+	return indent
+}
+
 func (l *Line) HasOnlySpaces() bool {
 	if len(l.Buf) == 0 {
 		return false
