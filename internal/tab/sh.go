@@ -103,7 +103,7 @@ func (tab *Tab) shCursors(addIndent bool, cmdName string, args []string) (string
 			pasteFunc = cur.Paste
 		}
 
-		startCur, endCur, acts := pasteFunc(text, false)
+		startCur, endCur, acts := pasteFunc(text, addIndent)
 		tab.handleAction(acts)
 
 		for _, c := range cursors[curIdx+1:] {
