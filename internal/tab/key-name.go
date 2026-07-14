@@ -12,7 +12,7 @@ func (tab *Tab) RxEventKeyKeyName(ev *tcell.EventKey) {
 	cmd, _ := cfg.KeysInsert.ToCmd(ev)
 	switch cmd.Name {
 	case "esc":
-		tab.State = "" // Go back to normal mode
+		tab.Mode = "" // Go back to normal mode
 		return
 	}
 

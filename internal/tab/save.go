@@ -122,7 +122,7 @@ func (tab *Tab) AutoSave() {
 		return
 	}
 
-	if tab.State == "insert" && len(tab.InsertActions) > 0 {
+	if tab.Mode == "insert" && len(tab.InsertActions) > 0 {
 		tab.undoPushInInsert()
 	}
 

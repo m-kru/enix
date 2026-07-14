@@ -35,8 +35,8 @@ func renderStatusLine() {
 	repCountEndIdx := b.Len() - 1
 
 	stateStartIdx := b.Len()
-	if tab.State != "" {
-		fmt.Fprintf(&b, "%s ", tab.State)
+	if tab.Mode != "" {
+		fmt.Fprintf(&b, "%s ", tab.Mode)
 	}
 	stateEndIdx := b.Len() - 1
 
@@ -75,7 +75,7 @@ func renderStatusLine() {
 		style := cfg.Style.StatusLine
 		if tab.RepCount > 0 && repCountStartIdx <= i && i < repCountEndIdx {
 			style = cfg.Style.RepCount
-		} else if tab.State != "" && stateStartIdx <= i && i < stateEndIdx {
+		} else if tab.Mode != "" && stateStartIdx <= i && i < stateEndIdx {
 			style = cfg.Style.StateMark
 		} else if len(tab.SearchCtx.Finds) > 0 && findStartIdx <= i && i < findEndIdx {
 			style = cfg.Style.FindMark

@@ -13,7 +13,7 @@ import (
 )
 
 func (tab *Tab) Insert() {
-	tab.State = "insert"
+	tab.Mode = "insert"
 	tab.InsertActions = make(action.Actions, 0, 16)
 	tab.PrevInsertCursors = cursor.Clone(tab.Cursors)
 	tab.PrevInsertSelections = sel.Clone(tab.Selections)
@@ -204,7 +204,7 @@ func (tab *Tab) RxEventKeyInsert(ev *tcell.EventKey) string {
 				}
 				tab.Cursors = cursor.Prune(tab.Cursors)
 
-				tab.State = "" // Go back to normal mode
+				tab.Mode = "" // Go back to normal mode
 				updateView = false
 			case "view-down":
 				tab.ViewDown()
@@ -230,7 +230,7 @@ func (tab *Tab) RxEventKeyInsert(ev *tcell.EventKey) string {
 		tab.InsertActions = append(tab.InsertActions, act)
 	}
 
-	if (shouldInsertUndo(act) || tab.State == "") && len(tab.InsertActions) > 0 {
+	if (shouldInsertUndo(act) || tab.Mode == "") && len(tab.InsertActions) > 0 {
 		tab.undoPushInInsert()
 	}
 
