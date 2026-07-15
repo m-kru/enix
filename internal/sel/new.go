@@ -144,6 +144,41 @@ func fromCursorLine(c *cursor.Cursor) *Selection {
 	}
 }
 
+func FromCursorsPrevLine(curs []*cursor.Cursor) []*Selection {
+	sels := make([]*Selection, 0, len(curs))
+
+	for _, c := range curs {
+		s := fromCursorPrevLine(c)
+		if s == nil {
+			continue
+		}
+		sels = append(sels, s)
+	}
+
+	sels = Prune(sels)
+
+	return sels
+}
+
+func fromCursorPrevLine(c *cursor.Cursor) *Selection {
+	line := c.Line.Prev
+
+	if line == nil {
+		return nil
+	}
+
+	c = cursor.New(line, c.LineNum-1, 0)
+	return &Selection{
+		Line:         line,
+		LineNum:      c.LineNum,
+		StartRuneIdx: 0,
+		EndRuneIdx:   line.RuneCount(),
+		Cursor:       c,
+		Prev:         nil,
+		Next:         nil,
+	}
+}
+
 func FromCursorsLineEnd(curs []*cursor.Cursor) []*Selection {
 	sels := make([]*Selection, 0, len(curs))
 

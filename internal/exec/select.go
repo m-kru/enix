@@ -77,6 +77,18 @@ func SelLine(args []string, tab *tab.Tab) error {
 	return nil
 }
 
+func SelPrevLine(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf(
+			"sel-prev-line: provided %d args, expected 0", len(args),
+		)
+	}
+
+	tab.SelPrevLine()
+
+	return nil
+}
+
 func SelLineEnd(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf(

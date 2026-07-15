@@ -268,6 +268,64 @@ func (s *Selection) nextLineCursorOnRight() *Selection {
 	return first
 }
 
+func (s *Selection) PrevLine() *Selection {
+	if s.CursorOnLeft() {
+		return s.prevLineCursorOnLeft()
+	} else {
+		return s.prevLineCursorOnRight()
+	}
+}
+
+func (s *Selection) prevLineCursorOnLeft() *Selection {
+	prevLine := s.Line.Prev
+	if prevLine == nil {
+		return s
+	}
+
+	c := cursor.New(prevLine, s.LineNum-1, 0)
+	newS := &Selection{
+		Line:         prevLine,
+		LineNum:      c.LineNum,
+		StartRuneIdx: 0,
+		EndRuneIdx:   prevLine.RuneCount(),
+		Cursor:       c,
+		Prev:         nil,
+		Next:         s,
+	}
+
+	s.Prev = newS
+	s.StartRuneIdx = 0
+	s.Cursor = nil
+
+	return newS
+}
+
+func (s *Selection) prevLineCursorOnRight() *Selection {
+	prevLine := s.Line.Prev
+	if prevLine == nil {
+		return s
+	}
+
+	c := cursor.New(prevLine, s.LineNum-1, 0)
+	newS := &Selection{
+		Line:         prevLine,
+		LineNum:      c.LineNum,
+		StartRuneIdx: 0,
+		EndRuneIdx:   prevLine.RuneCount(),
+		Cursor:       c,
+		Prev:         nil,
+		Next:         s,
+	}
+
+	s.Prev = newS
+	s.StartRuneIdx = 0
+
+	lastS := s.Last()
+	lastS.Cursor = nil
+
+	return newS
+}
+
 func (s *Selection) LineEnd() *Selection {
 	c := s.GetCursor().Clone()
 	if c.RuneIdx == c.Line.RuneCount() {

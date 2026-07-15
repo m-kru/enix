@@ -90,6 +90,30 @@ func (tab *Tab) selLineEndSelections() {
 	tab.Selections = sel.Prune(tab.Selections)
 }
 
+func (tab *Tab) SelPrevLine() {
+	if len(tab.Cursors) > 0 {
+		tab.selPrevLineCursors()
+	} else {
+		tab.selPrevLineSelections()
+	}
+}
+
+func (tab *Tab) selPrevLineCursors() {
+	sels := sel.FromCursorsPrevLine(tab.Cursors)
+	if len(sels) == 0 {
+		return
+	}
+	tab.Selections = sel.FromCursorsPrevLine(tab.Cursors)
+	tab.Cursors = nil
+}
+
+func (tab *Tab) selPrevLineSelections() {
+	for i, s := range tab.Selections {
+		tab.Selections[i] = s.PrevLine()
+	}
+	tab.Selections = sel.Prune(tab.Selections)
+}
+
 func (tab *Tab) SelLineStart() {
 	if len(tab.Cursors) > 0 {
 		tab.selLineStartCursors()
