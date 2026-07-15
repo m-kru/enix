@@ -1,0 +1,28 @@
+{
+	"Colors": "",
+	"Style": "",
+	"Autosave": 30,
+	"TrimOnSave": true,
+	"SafeFileSave": true,
+	"HighlightCursorWord": true,
+	"LineEndRune": 172,
+	"TabRune": 9656,
+	"TabPadRune": 183,
+	"UndoSize": 1024,
+	"MouseScrollMultiplier": 5,
+	"Extensions": {
+		"hbs": "tcl",
+		"xdc": "tcl"
+	},
+	"ExtensionIndent": {
+		"hbs": "  "
+	},
+	"FiletypeIndent": {
+		"python": "    ",
+		"rust": "    ",
+		"sh": "  ",
+		"tcl": "    ",
+		"typst": "  ",
+		"vhdl": "  "
+	}
+}
