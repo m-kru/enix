@@ -141,8 +141,8 @@ The command clears all other selections.`,
 
 	// Indent
 
-	"deindent": `deindent # Decreases the indent of lines with cursor.
-In the case of selections, it deindents all selected lines.
+	"dedent": `dedent # Decreases the indent of lines with cursor.
+In the case of selections, it dedents all selected lines.
 Even if the selection starts or ends in the middle of a line.`,
 
 	"indent": `indent # Increases indent of lines with cursor.

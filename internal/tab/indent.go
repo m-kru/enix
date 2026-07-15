@@ -86,3 +86,61 @@ func (tab *Tab) indentSelections() action.Actions {
 
 	return actions
 }
+
+func (tab *Tab) Dedent() {
+	prevCurs := cursor.Clone(tab.Cursors)
+	prevSels := sel.Clone(tab.Selections)
+
+	var actions action.Actions
+	if len(tab.Cursors) > 0 {
+		actions = tab.dedentCursors()
+	}
+
+	if len(actions) > 0 {
+		tab.undoPush(actions.Reverse(), prevCurs, prevSels)
+	}
+}
+
+func (tab *Tab) dedentCursors() action.Actions {
+	// Create temporary cursors at the beginning of all lines with cursors.
+	curs := cursor.LineUnique(tab.Cursors, true)
+	tmpCurs := make([]*cursor.Cursor, len(curs))
+	for i, c := range curs {
+		tmpCurs[i] = cursor.New(c.Line, c.LineNum, 0)
+	}
+
+	actions := make(action.Actions, 0, len(tmpCurs))
+
+	indentStrRuneCnt := utf8.RuneCountInString(tab.IndentStr)
+
+	for _, c := range tmpCurs {
+		acts := make(action.Actions, 0, indentStrRuneCnt)
+
+		if c.Line.HasPrefix(tab.IndentStr) {
+			for range indentStrRuneCnt {
+				act := c.Delete()
+				acts = append(acts, act)
+			}
+		} else if c.Line.Rune(0) == ' ' || c.Line.Rune(0) == '\t' {
+			act := c.Delete()
+			acts = append(acts, act)
+		} else {
+			continue
+		}
+
+		actions = append(actions, acts)
+
+		tab.handleAction(acts)
+
+		for _, c := range tab.Cursors {
+			c.Inform(acts)
+		}
+		for _, m := range tab.Marks {
+			m.Inform(acts)
+		}
+	}
+
+	tab.Cursors = cursor.Prune(tab.Cursors)
+
+	return actions
+}

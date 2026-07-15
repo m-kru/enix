@@ -82,6 +82,18 @@ func Filetype(args []string, tab *tab.Tab) error {
 	return tab.SetFiletype(args[0])
 }
 
+func Dedent(args []string, tab *tab.Tab) error {
+	if len(args) > 0 {
+		return fmt.Errorf(
+			"dedent: expected 0 args, provided %d", len(args),
+		)
+	}
+
+	tab.Dedent()
+
+	return nil
+}
+
 func Indent(args []string, tab *tab.Tab) error {
 	if len(args) > 0 {
 		return fmt.Errorf(

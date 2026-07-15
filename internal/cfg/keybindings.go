@@ -91,6 +91,7 @@ func DefaultKeybindings() Keybindings {
 		"Rune[x]": "cut",
 		"Rune[y]": "yank",
 		"Rune[ ]": "space",
+		"Rune[<]": "dedent",
 		"Rune[>]": "indent",
 		"Tab":     "insert-tab",
 		"Ctrl+P":  "path",

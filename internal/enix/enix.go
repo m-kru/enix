@@ -185,6 +185,8 @@ func RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 			return &Prompt
 		case "cut":
 			info, err = exec.Cut(c.Args, tab)
+		case "dedent":
+			tab.Dedent()
 		case "del":
 			err = exec.Del(c.Args, tab)
 		case "down":

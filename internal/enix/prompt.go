@@ -618,6 +618,8 @@ func (p *prompt) Exec() TcellEventReceiver {
 			info = fmt.Sprintf("%d", len(tab.Cursors))
 		case "cut":
 			info, err = exec.Cut(c.Args, tab)
+		case "dedent":
+			tab.Dedent()
 		case "del":
 			err = exec.Del(c.Args, tab)
 		case "down":
@@ -658,6 +660,8 @@ func (p *prompt) Exec() TcellEventReceiver {
 				TabBar.Update()
 			}
 			updateView = false
+		case "indent":
+			tab.Indent()
 		case "insert-line-above":
 			err = exec.InsertLineAbove(c.Args, tab)
 		case "insert-line-below":

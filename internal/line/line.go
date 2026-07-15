@@ -1,6 +1,7 @@
 package line
 
 import (
+	"strings"
 	"unicode"
 	"unicode/utf8"
 
@@ -316,4 +317,8 @@ func (l *Line) HasOnlySpaces() bool {
 		bIdx += rLen
 	}
 	return true
+}
+
+func (l *Line) HasPrefix(prefix string) bool {
+	return strings.HasPrefix(string(l.Buf), prefix)
 }
