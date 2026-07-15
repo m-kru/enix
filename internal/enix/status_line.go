@@ -50,18 +50,23 @@ func renderStatusLine() {
 	}
 	findEndIdx := b.Len() - 1
 
-	var c *cursor.Cursor
+	var lastCur *cursor.Cursor
 	if len(tab.Cursors) > 0 {
-		c = tab.Cursors[len(tab.Cursors)-1]
+		lastCur = tab.Cursors[len(tab.Cursors)-1]
+		if len(tab.Cursors) == 1 {
+			b.WriteString("1 cur ")
+		} else {
+			fmt.Fprintf(&b, "%d curs ", len(tab.Cursors))
+		}
 	} else {
-		c = tab.LastSel().GetCursor()
+		lastCur = tab.LastSel().GetCursor()
 		if len(tab.Selections) == 1 {
 			b.WriteString("1 sel ")
 		} else {
 			fmt.Fprintf(&b, "%d sels ", len(tab.Selections))
 		}
 	}
-	fmt.Fprintf(&b, "%d:%d | ", c.LineNum, c.Column())
+	fmt.Fprintf(&b, "%d:%d | ", lastCur.LineNum, lastCur.Column())
 
 	fmt.Fprintf(&b, "%s ", tab.Filetype)
 	statusStr := b.String()
