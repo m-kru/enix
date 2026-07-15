@@ -1,7 +1,8 @@
 package sel
 
 import (
-	"github.com/m-kru/enix/internal/cfg"
+	"github.com/gdamore/tcell/v2"
+
 	"github.com/m-kru/enix/internal/frame"
 	"github.com/m-kru/enix/internal/view"
 )
@@ -9,6 +10,8 @@ import (
 func (s *Selection) Render(
 	frame frame.Frame, // Tab frame
 	view view.View,
+	selStyle tcell.Style,
+	curStyle tcell.Style,
 ) {
 	for s != nil {
 		sv := s.LineView()
@@ -32,9 +35,9 @@ func (s *Selection) Render(
 			r := frame.GetContent(x, y)
 
 			if c == sv.Column && s.CursorOnLeft() || c == sv.LastColumn() && s.CursorOnRight() {
-				frame.SetContent(x, y, r, cfg.Style.Cursor)
+				frame.SetContent(x, y, r, curStyle)
 			} else {
-				frame.SetContent(x, y, r, cfg.Style.Selection)
+				frame.SetContent(x, y, r, selStyle)
 			}
 		}
 

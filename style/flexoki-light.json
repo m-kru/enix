@@ -26,6 +26,11 @@
 		"Bg": "Foreground",
 		"Fg": "Background"
 	},
+	"CursorInsert": {
+		"Bg": "Foreground",
+		"Fg": "Background",
+		"Underline": true
+	},
 	"CursorWord": {
 		"Bg": "BrightWhite"
 	},
@@ -35,6 +40,11 @@
 	"Selection": {
 		"Bg": "Red",
 		"Fg": "Background"
+	},
+	"SelectionInsert": {
+		"Bg": "Red",
+		"Fg": "Background",
+		"Underline": true
 	},
 	"MatchingBracket": {
 		"Bg": "BrightBlack",

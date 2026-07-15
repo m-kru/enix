@@ -139,7 +139,11 @@ func (tab *Tab) RenderCursors(frame frame.Frame) {
 			continue
 		}
 
-		c.Render(frame.Line(0, c.LineNum-tab.View.Line), tab.View)
+		style := cfg.Style.Cursor
+		if tab.State == "insert" {
+			style = cfg.Style.CursorInsert
+		}
+		c.Render(frame.Line(0, c.LineNum-tab.View.Line), tab.View, style)
 	}
 }
 
@@ -149,7 +153,13 @@ func (tab *Tab) RenderSelections(frame frame.Frame) {
 			continue
 		}
 
-		s.Render(frame, tab.View)
+		selStyle := cfg.Style.Selection
+		curStyle := cfg.Style.Cursor
+		if tab.State == "insert" {
+			selStyle = cfg.Style.SelectionInsert
+			curStyle = cfg.Style.CursorInsert
+		}
+		s.Render(frame, tab.View, selStyle, curStyle)
 	}
 }
 

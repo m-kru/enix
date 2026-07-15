@@ -183,7 +183,7 @@ func (p *prompt) Render() {
 		}
 	}
 
-	p.Cursor.Render(frame.Line(1, 0), p.View)
+	p.Cursor.Render(frame.Line(1, 0), p.View, cfg.Style.Cursor)
 
 	Screen.Show()
 }

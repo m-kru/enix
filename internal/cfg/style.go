@@ -8,10 +8,11 @@ var Style style
 var StyleJSON styleJSON
 
 type itemStyle struct {
-	Fg     string // Foreground
-	Bg     string // Background
-	Bold   bool
-	Italic bool
+	Fg        string // Foreground
+	Bg        string // Background
+	Bold      bool
+	Italic    bool
+	Underline bool
 }
 
 func (is itemStyle) ToTcellStyle(dflt tcell.Style) (tcell.Style, error) {
@@ -35,6 +36,7 @@ func (is itemStyle) ToTcellStyle(dflt tcell.Style) (tcell.Style, error) {
 
 	s = s.Bold(is.Bold)
 	s = s.Italic(is.Italic)
+	s = s.Underline(is.Underline)
 
 	return s, nil
 }
@@ -48,9 +50,11 @@ type styleJSON struct {
 	LineNum         itemStyle
 	Whitespace      itemStyle
 	Cursor          itemStyle
+	CursorInsert    itemStyle
 	CursorWord      itemStyle
 	Find            itemStyle
 	Selection       itemStyle
+	SelectionInsert itemStyle
 	MatchingBracket itemStyle
 	StatusLine      itemStyle
 	RepCount        itemStyle
@@ -120,6 +124,11 @@ func (sj styleJSON) ToStyle() (style, error) {
 	}
 	s.Cursor = ts
 
+	if ts, err = sj.CursorInsert.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.CursorInsert = ts
+
 	if ts, err = sj.CursorWord.ToTcellStyle(s.Default); err != nil {
 		return s, err
 	}
@@ -134,6 +143,11 @@ func (sj styleJSON) ToStyle() (style, error) {
 		return s, err
 	}
 	s.Selection = ts
+
+	if ts, err = sj.SelectionInsert.ToTcellStyle(s.Default); err != nil {
+		return s, err
+	}
+	s.SelectionInsert = ts
 
 	if ts, err = sj.MatchingBracket.ToTcellStyle(s.Default); err != nil {
 		return s, err
@@ -265,11 +279,13 @@ type style struct {
 
 	Whitespace tcell.Style
 
-	Cursor     tcell.Style
-	CursorWord tcell.Style // Style of the word under cursor
+	Cursor       tcell.Style
+	CursorInsert tcell.Style
+	CursorWord   tcell.Style // Style of the word under cursor
 
 	Find            tcell.Style
 	Selection       tcell.Style
+	SelectionInsert tcell.Style
 	MatchingBracket tcell.Style
 
 	StatusLine tcell.Style
@@ -358,11 +374,13 @@ func DefaultStyle() style {
 
 		Whitespace: tcell.StyleDefault.Foreground(tcell.ColorBlack),
 
-		Cursor:     tcell.StyleDefault.Reverse(true),
-		CursorWord: tcell.StyleDefault.Foreground(tcell.ColorWhite),
+		Cursor:       tcell.StyleDefault.Reverse(true),
+		CursorInsert: tcell.StyleDefault.Reverse(true).Underline(true),
+		CursorWord:   tcell.StyleDefault.Foreground(tcell.ColorWhite),
 
 		Find:            tcell.StyleDefault.Background(tcell.ColorOlive).Foreground(tcell.ColorBlack),
 		Selection:       tcell.StyleDefault.Background(tcell.ColorMaroon).Foreground(tcell.ColorWhite),
+		SelectionInsert: tcell.StyleDefault.Background(tcell.ColorMaroon).Foreground(tcell.ColorWhite).Underline(true),
 		MatchingBracket: tcell.StyleDefault.Background(tcell.ColorGray).Bold(true),
 
 		StatusLine: tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorGray),
