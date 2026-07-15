@@ -182,7 +182,7 @@ func KeyName(args []string, t *tab.Tab) (*tab.Tab, error) {
 	c := newT.Cursors[0]
 	c.LineNum = 2
 	c.Line = c.Line.Next
-	newT.Mode = "key-name"
+	newT.State = "key-name"
 
 	t.Append(newT)
 

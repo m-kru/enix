@@ -120,7 +120,7 @@ func RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 	updateView := true
 	tab := CurrentTab
 
-	if tab.Mode != "" {
+	if tab.State != "" {
 		cmd := tab.RxEventKey(ev)
 		if cmd == "suspend" {
 			err = exec.Suspend(nil, Screen)
@@ -284,7 +284,7 @@ func RxTcellEventKey(ev *tcell.EventKey) TcellEventReceiver {
 		case "redo":
 			err = exec.Redo(c.Args, tab)
 		case "replace":
-			tab.Mode = "replace"
+			tab.State = "replace"
 		case "right":
 			err = exec.Right(c.Args, tab)
 		case "s", "save":

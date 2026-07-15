@@ -28,7 +28,7 @@ type Tab struct {
 	Filetype  string
 	IndentStr string
 
-	Mode     string // Valid modes: "" - normal, "insert", "replace", "key-name".
+	State    string // Valid states: "" - normal mode, "insert", "replace", "key-name".
 	RepCount int    // Command repetition count in normal mode
 
 	Lines     *line.Line // First line
@@ -191,7 +191,7 @@ func (tab *Tab) LastColumnIdx() int {
 }
 
 func (tab *Tab) RxEventKey(ev *tcell.EventKey) string {
-	switch tab.Mode {
+	switch tab.State {
 	case "insert":
 		return tab.RxEventKeyInsert(ev)
 	case "key-name":
