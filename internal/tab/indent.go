@@ -94,6 +94,8 @@ func (tab *Tab) Dedent() {
 	var actions action.Actions
 	if len(tab.Cursors) > 0 {
 		actions = tab.dedentCursors()
+	} else {
+		actions = tab.dedentSelections()
 	}
 
 	if len(actions) > 0 {
@@ -128,8 +130,6 @@ func (tab *Tab) dedentCursors() action.Actions {
 			continue
 		}
 
-		actions = append(actions, acts)
-
 		tab.handleAction(acts)
 
 		for _, c := range tab.Cursors {
@@ -138,9 +138,57 @@ func (tab *Tab) dedentCursors() action.Actions {
 		for _, m := range tab.Marks {
 			m.Inform(acts)
 		}
+
+		actions = append(actions, acts)
 	}
 
 	tab.Cursors = cursor.Prune(tab.Cursors)
+
+	return actions
+}
+
+func (tab *Tab) dedentSelections() action.Actions {
+	// Create temporary cursors at the beginning of all lines with selections.
+	lines := sel.Lines(tab.Selections)
+	tmpCurs := make([]*cursor.Cursor, len(lines))
+	for i, l := range lines {
+		// NOTE: The line number is incorrect as it is set to 0.
+		// However, rune delete action doesn't require line number.
+		tmpCurs[i] = cursor.New(l, 0, 0)
+	}
+
+	actions := make(action.Actions, 0, len(tmpCurs))
+
+	indentStrRuneCnt := utf8.RuneCountInString(tab.IndentStr)
+
+	for _, c := range tmpCurs {
+		acts := make(action.Actions, 0, indentStrRuneCnt)
+
+		if c.Line.HasPrefix(tab.IndentStr) {
+			for range indentStrRuneCnt {
+				act := c.Delete()
+				acts = append(acts, act)
+			}
+		} else if c.Line.Rune(0) == ' ' || c.Line.Rune(0) == '\t' {
+			act := c.Delete()
+			acts = append(acts, act)
+		} else {
+			continue
+		}
+
+		tab.handleAction(acts)
+
+		for _, s := range tab.Selections {
+			s.Inform(acts, true)
+		}
+		for _, m := range tab.Marks {
+			m.Inform(acts)
+		}
+
+		actions = append(actions, acts)
+	}
+
+	tab.Selections = sel.Prune(tab.Selections)
 
 	return actions
 }
