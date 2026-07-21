@@ -16,7 +16,8 @@
 		"Style": "Bold",
 		"Start": {
 			"Regex": "\\*",
-			"NegativeLookBehind": "\\\\"
+			"NegativeLookBehind": "\\\\",
+			"NegativeLookAhead": "\\s"
 		},
 		"End": {
 			"Regex": "\\*"
