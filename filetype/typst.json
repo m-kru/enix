@@ -5,7 +5,7 @@
 			"Regex": "^\\s*=.*$"
 		},
 		"Meta": {
-			"Regex": "#\\w+"
+			"Regex": "#[\\w-]+"
 		},
 		"Type": {
 			"Regex": "@[\\w-]+"
