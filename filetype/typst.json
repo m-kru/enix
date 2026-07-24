@@ -28,7 +28,8 @@
 		"Style": "Italic",
 		"Start": {
 			"Regex": "_",
-			"NegativeLookBehind": "\\\\"
+			"NegativeLookBehind": "\\\\",
+			"PositiveLookBehind": "^|\\s"
 		},
 		"End": {
 			"Regex": "_"
