@@ -88,6 +88,17 @@
 		}
 	},
 	{
+		"Name": "Math",
+		"Style": "Number",
+		"Start": {
+			"Regex": "\\$"
+		},
+		"End": {
+			"Regex": "\\$",
+			"NegativeLookBehind": "(?:[^\\\\])\\\\"
+		}
+	},
+	{
 		"Name": "String",
 		"Style": "String",
 		"Start": {
