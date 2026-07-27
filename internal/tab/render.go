@@ -155,7 +155,7 @@ func (tab *Tab) RenderSelections(frame frame.Frame) {
 
 		selStyle := cfg.Style.Selection
 		curStyle := cfg.Style.Cursor
-		if tab.State == "insert" {
+		if tab.State == "insert" || tab.State == "replace" {
 			selStyle = cfg.Style.SelectionInsert
 			curStyle = cfg.Style.CursorInsert
 		}
