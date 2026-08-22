@@ -70,6 +70,19 @@ func (l *Line) Render(
 		goto clear
 	}
 
+	// Flush unrendered finds at the beginning of line.
+	// For example, they might be out of view.
+	for findIdx < len(finds) {
+		f := finds[findIdx]
+		if f.LineNum > lineNum {
+			break
+		}
+		if view.Column < l.ColumnIdx(f.EndRuneIdx) {
+			break
+		}
+		findIdx++
+	}
+
 	setStyle()
 
 	// Handle first column in a little bit different way.
@@ -82,8 +95,10 @@ func (l *Line) Render(
 		}
 		setTab(runeSubcol, style)
 		rIdx++
-	} else if runeSubcol > 0 {
-		r = ' '
+	} else {
+		if runeSubcol > 0 {
+			r = ' '
+		}
 		frame.SetContent(x, 0, r, style)
 		x += rw
 		rIdx++
@@ -118,6 +133,16 @@ clear:
 	for x < frame.Width {
 		frame.SetContent(x, 0, ' ', cfg.Style.Default)
 		x++
+	}
+
+	// Flush unrendered finds at the end of line.
+	// For example, they might be out of view.
+	for findIdx < len(finds) {
+		f := finds[findIdx]
+		if f.LineNum > lineNum {
+			break
+		}
+		findIdx++
 	}
 
 	return hls[hlIdx:], finds[findIdx:]
