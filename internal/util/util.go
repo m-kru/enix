@@ -31,6 +31,7 @@ var fileExtToType = map[string]string{
 	"mk":    "make",
 	"patch": "patch",
 	"py":    "python",
+	"rs":    "rust",
 	"tcl":   "tcl",
 	"toml":  "toml",
 	"typ":   "typst",
