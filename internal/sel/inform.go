@@ -91,6 +91,7 @@ func (s *Selection) informNewlineInsert(ni *action.NewlineInsert) {
 
 	if s.LineNum > ni.LineNum {
 		s.LineNum++
+		return
 	}
 
 	// Assume newline insert didn't split the selection.
@@ -101,20 +102,26 @@ func (s *Selection) informNewlineInsert(ni *action.NewlineInsert) {
 	if s.EndRuneIdx < ni.RuneIdx {
 		s.Line = ni.NewLine
 	} else if s.EndRuneIdx == ni.RuneIdx {
-		// This is possbile only if this is the last subselection.
-		s.Line = ni.NewLine
-		c := s.Cursor
-		s.Cursor = nil
-		newS := &Selection{
-			Line:         ni.NewLine.Next,
-			LineNum:      c.LineNum,
-			StartRuneIdx: 0,
-			EndRuneIdx:   c.RuneIdx,
-			Cursor:       c,
-			Prev:         s,
-			Next:         nil,
+		if s.Next == nil {
+			// This is the last subselection.
+			s.Line = ni.NewLine
+			c := s.Cursor
+			s.Cursor = nil
+			newS := &Selection{
+				Line:         ni.NewLine.Next,
+				LineNum:      c.LineNum,
+				StartRuneIdx: 0,
+				EndRuneIdx:   c.RuneIdx,
+				Cursor:       c,
+				Prev:         s,
+				Next:         nil,
+			}
+			s.Next = newS
+		} else {
+			// Empty line with next subselection
+			s.Line = ni.NewLine.Next
+			s.LineNum++
 		}
-		s.Next = newS
 	} else {
 		s.Line = ni.NewLine.Next
 		s.StartRuneIdx -= ni.RuneIdx
