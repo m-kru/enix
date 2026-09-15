@@ -58,7 +58,7 @@
 			"Regex": "\\\\(a|b|e|f|n|r|t|v|\"|\\\\)"
 		},
 		"Value": {
-			"Regex": "\\{[\\w|\\s|:|\\?]+\\}"
+			"Regex": "\\{[\\w|\\s|:|\\?]*\\}"
 		},
 		"Variable": {
 			"Regex": "%(c|d|f|ld|lx|p[aBKxS]?|s|u|x)"
