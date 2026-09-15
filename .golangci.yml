@@ -1,7 +1,7 @@
 version: "2"
 linters:
   enable:
-    - exhaustruct
+    - exhaustruct_v5
     - intrange
     - misspell
     - nilerr
