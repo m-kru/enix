@@ -12,7 +12,7 @@
 			"Regex": "=|\\+|-|>|<|\\*|/|&|%|!|\\||~|:|\\.\\.|\\^"
 		},
 		"Type": {
-			"Regex": "\\b(bool|Box|Option|Result|String|Vec|isize|usize|i8|i16|i32|i64|i128|u8|u16|u32|u64|u128)|f32|f64\\b"
+			"Regex": "\\b(bool|Box|char|Option|Result|str|String|Vec|isize|usize|i8|i16|i32|i64|i128|u8|u16|u32|u64|u128)|f32|f64\\b"
 		},
 		"Value": {
 			"Regex": "\\b(_|false|true|self|Self|None|Some|Ok|Err)\\b"
