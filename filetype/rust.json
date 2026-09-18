@@ -1,8 +1,11 @@
 [
 	{
 		"Name": "Default",
+		"Attribute": {
+			"Regex": "\\b(const|mut|static)\\b"
+		},
 		"Keyword": {
-			"Regex": "\\b(as|async|await|break|const|continue|crate|dyn|else|enum|extern|fn|for|if|impl|in|let|loop|match|mod|move|mut|pub|ref|return|static|struct|super|trait|type|unsafe|use|where|while|abstract|become|box|do|final|gen|macro|override|priv|try|typeof|unsized|virtual|yield)\\b",
+			"Regex": "\\b(as|async|await|break|continue|crate|dyn|else|enum|extern|fn|for|if|impl|in|let|loop|match|mod|move|pub|ref|return|struct|super|trait|type|unsafe|use|where|while|abstract|become|box|do|final|gen|macro|override|priv|try|typeof|unsized|virtual|yield)\\b",
 			"NegativeLookBehind": "#"
 		},
 		"Meta": {
@@ -15,7 +18,7 @@
 			"Regex": "=|\\+|-|>|<|\\*|/|&|%|!|\\||~|:|\\.\\.|\\^"
 		},
 		"Type": {
-			"Regex": "\\b(bool|Box|char|Option|Result|str|String|Vec|isize|usize|i8|i16|i32|i64|i128|u8|u16|u32|u64|u128)|f32|f64\\b"
+			"Regex": "\\b(bool|char|str|isize|usize|i8|i16|i32|i64|i128|u8|u16|u32|u64|u128|f32|f64)\\b"
 		},
 		"Value": {
 			"Regex": "\\b(_|false|true|self|Self|None|Some|Ok|Err)\\b"
