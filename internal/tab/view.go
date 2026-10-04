@@ -70,5 +70,8 @@ func (tab *Tab) ViewStart() {
 
 func (tab *Tab) ViewEnd() {
 	tab.View.Line = tab.LineCount - tab.Frame.Height/2
+	if tab.View.Line < 1 {
+		tab.View.Line = 1
+	}
 	tab.View.Column = 1
 }

@@ -68,7 +68,7 @@ func (tab *Tab) HasCursorInLine(line *line.Line) bool {
 func (tab *Tab) RenderLineNums(line *line.Line, lineNum int, frame frame.Frame) {
 	y := 0
 
-	for {
+	for line != nil && y < frame.Height && lineNum <= tab.LineCount {
 		str := fmt.Sprintf("%*d ", frame.Width-1, lineNum)
 		for i, r := range str {
 			if tab.HasCursorInLine(line) && i < len(str)-1 {
@@ -81,10 +81,6 @@ func (tab *Tab) RenderLineNums(line *line.Line, lineNum int, frame frame.Frame) 
 		line = line.Next
 		lineNum++
 		y++
-
-		if y >= frame.Height || lineNum > tab.LineCount {
-			break
-		}
 	}
 
 	// Clear remaining line numbers.
