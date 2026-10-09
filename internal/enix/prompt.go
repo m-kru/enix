@@ -56,15 +56,12 @@ type prompt struct {
 }
 
 func (p *prompt) Clear() {
-	frame := PromptFrame
-
-	for x := range frame.Width {
-		frame.SetContent(x, 0, ' ', cfg.Style.Default)
+	for x := range PromptFrame.Width {
+		PromptFrame.SetContent(x, 0, ' ', cfg.Style.Default)
 	}
 
-	if PromptMenu != nil {
-		PromptMenu = nil
-	}
+	PromptMenu = nil
+	PromptMenuFrame = frame.NilFrame()
 
 	p.State = Inactive
 }
@@ -348,6 +345,7 @@ func (p *prompt) openPathMenu(path string) {
 
 func (p *prompt) closeMenu() {
 	PromptMenu = nil
+	PromptMenuFrame = frame.NilFrame()
 	p.State = InText
 
 	// The focus is still on prompt.
