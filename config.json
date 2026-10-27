@@ -11,6 +11,7 @@
 	"UndoSize": 1024,
 	"MouseScrollMultiplier": 5,
 	"Extensions": {
+		"core": "yaml",
 		"hbs": "tcl",
 		"xdc": "tcl"
 	},
