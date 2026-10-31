@@ -26,6 +26,16 @@ func (l *Line) Render(
 	var r rune
 	var rw int
 
+	setRune := func(r rune, style tcell.Style) {
+		if r == '\u00a0' {
+			r = cfg.Cfg.NonBreakingSpaceRune
+			if style != cfg.Style.Find {
+				style = cfg.Style.Whitespace
+			}
+		}
+		frame.SetContent(x, 0, r, style)
+	}
+
 	setTab := func(tabSubcol int, style tcell.Style) {
 		var colIdx int
 		if tabSubcol == 0 {
@@ -99,7 +109,7 @@ func (l *Line) Render(
 		if runeSubcol > 0 {
 			r = ' '
 		}
-		frame.SetContent(x, 0, r, style)
+		setRune(r, style)
 		x += rw
 		rIdx++
 	}
@@ -116,7 +126,7 @@ func (l *Line) Render(
 			}
 			setTab(0, style)
 		} else if rw > 0 {
-			frame.SetContent(x, 0, r, style)
+			setRune(r, style)
 			x += rw
 		} else {
 			// Rune width is 0

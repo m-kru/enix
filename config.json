@@ -8,6 +8,7 @@
 	"LineEndRune": 172,
 	"TabRune": 9656,
 	"TabPadRune": 183,
+	"NonBreakingSpaceRune": 9085,
 	"UndoSize": 1024,
 	"MouseScrollMultiplier": 5,
 	"Extensions": {

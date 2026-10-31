@@ -105,6 +105,12 @@ MouseScrollMultiplier : int
   Setting 0 disables mouse scrolling functionality.
   The default value equals 5.
 
+NonBreakingSpaceRune : int
+  Display rune for non-breaking spaces (U+00A0), using the Whitespace style.
+  The default is 9085 ('⍽', U+237D).
+  The rune must occupy exactly one terminal cell.
+  This only changes the display; the file content is preserved.
+
 TabPadRune : int
   Tab padding rune.
   Unfortunately, the value type is int, so the rune is not visible in the config file.

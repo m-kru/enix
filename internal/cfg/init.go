@@ -100,6 +100,14 @@ func configSanityChecks() error {
 		)
 	}
 
+	rw = runewidth.RuneWidth(Cfg.NonBreakingSpaceRune)
+	if rw != 1 {
+		return fmt.Errorf(
+			"width of NonBreakingSpaceRune must equal 1, width of '%c' equals %d",
+			Cfg.NonBreakingSpaceRune, rw,
+		)
+	}
+
 	if Cfg.UndoSize < 0 {
 		return fmt.Errorf("UndoSize must be natural, current value %d", Cfg.UndoSize)
 	}

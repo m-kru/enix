@@ -14,10 +14,11 @@ type Config struct {
 	SafeFileSave        bool
 	HighlightCursorWord bool
 
-	// Whiespace
-	LineEndRune rune
-	TabRune     rune
-	TabPadRune  rune
+	// Whitespace
+	LineEndRune          rune
+	TabRune              rune
+	TabPadRune           rune
+	NonBreakingSpaceRune rune
 
 	MouseScrollMultiplier int
 
@@ -39,6 +40,7 @@ func DefaultConfig() Config {
 		LineEndRune:           '¬',
 		TabRune:               '▸',
 		TabPadRune:            '·',
+		NonBreakingSpaceRune:  '⍽',
 		MouseScrollMultiplier: 5,
 		UndoSize:              1024,
 		Extensions:            map[string]string{},
