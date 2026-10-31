@@ -22,6 +22,7 @@ func (l *Line) Render(
 	findIdx := 0 // Current find index
 	x := 0       // Frame x coordinate
 	rIdx, runeSubcol, ok := l.RuneIdx(view.Column)
+	lineRuneCount := l.RuneCount()
 
 	var r rune
 	var rw int
@@ -114,7 +115,7 @@ func (l *Line) Render(
 		rIdx++
 	}
 
-	for rIdx != l.RuneCount() && x < frame.Width {
+	for x < frame.Width && rIdx != lineRuneCount {
 		r = l.Rune(rIdx)
 		rw = runewidth.RuneWidth(r)
 
