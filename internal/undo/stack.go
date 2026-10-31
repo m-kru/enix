@@ -42,7 +42,14 @@ func (s *Stack) Push(act action.Action, curs []*cursor.Cursor, sels []*sel.Selec
 	}
 
 	if s.len == s.cap {
-		s.first = s.first.next
+		first := s.first
+		s.first = first.next
+		first.next = nil
+		if s.first != nil {
+			s.first.prev = nil
+		} else {
+			s.last = nil
+		}
 		s.len--
 	}
 
@@ -72,16 +79,19 @@ func (s *Stack) Pop() *Action {
 		return nil
 	}
 
-	Action := s.last
+	act := s.last
 
 	if s.first == s.last {
 		s.first = nil
 		s.last = nil
 	} else {
 		s.last = s.last.prev
+		s.last.next = nil
 	}
 
+	act.prev = nil
+	act.next = nil
 	s.len--
 
-	return Action
+	return act
 }
