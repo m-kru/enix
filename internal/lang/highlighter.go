@@ -159,19 +159,20 @@ func (hlr *Highlighter) reset(
 	}
 	sort.Slice(hlr.matchingBrackets, less)
 
-	// Reset cursor word regex
-	for _, r := range hlr.Regions {
-		r.CursorWord = nil
+	// Reuse the compiled regex if the cursor word pattern is unchanged.
+	re := hlr.Regions[0].CursorWord
+	if cursorWordRegex == "" {
+		re = nil
+	} else if re == nil || re.String() != cursorWordRegex {
+		var err error
+		re, err = regexp.Compile(cursorWordRegex)
+		if err != nil {
+			re = nil
+		}
 	}
 
-	// Compile cursor word regex
-	if cursorWordRegex != "" {
-		re, err := regexp.Compile(cursorWordRegex)
-		if err == nil {
-			for _, r := range hlr.Regions {
-				r.CursorWord = re
-			}
-		}
+	for _, r := range hlr.Regions {
+		r.CursorWord = re
 	}
 }
 
