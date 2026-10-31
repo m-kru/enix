@@ -64,7 +64,7 @@ type Tab struct {
 }
 
 func (tab *Tab) LineNumWidth() int {
-	return util.IntWidth(tab.LineCount)
+	return util.NaturalWidth(tab.LineCount)
 }
 
 func (tab *Tab) HasChanges() bool {

@@ -1,9 +1,6 @@
 package util
 
-import (
-	"fmt"
-	"unicode"
-)
+import "unicode"
 
 type State int
 
@@ -17,10 +14,15 @@ func IsWordRune(r rune) bool {
 	return unicode.IsLetter(r) || unicode.IsDigit(r) || r == '_'
 }
 
-// IntWidth returns number of digits required to print n.
-// TODO: Improve speed, not the fastest implementation.
-func IntWidth(i int) int {
-	return len(fmt.Sprintf("%d", i))
+// NaturalWidth returns the number of decimal digits in n, assuming n >= 0.
+// Zero has width 1.
+func NaturalWidth(n int) int {
+	width := 1
+	for n >= 10 {
+		n /= 10
+		width++
+	}
+	return width
 }
 
 // PrevWordStart finds previous word start rune index.
