@@ -1,6 +1,7 @@
 package tab
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
 	"io"
@@ -10,21 +11,25 @@ import (
 	"github.com/m-kru/enix/internal/util"
 )
 
-func (tab *Tab) WriteTo(strWr io.StringWriter) error {
+func (tab *Tab) WriteTo(w io.Writer) error {
+	writer := bufio.NewWriter(w)
 	l := tab.Lines
 	i := 1
 	for l != nil {
-		nl := tab.Newline
-		if l.Next == nil {
-			nl = ""
+		_, err := writer.Write(l.Buf)
+		if err == nil && l.Next != nil {
+			_, err = writer.WriteString(tab.Newline)
 		}
-		_, err := strWr.WriteString(fmt.Sprintf("%s%s", l.String(), nl))
 		if err != nil {
 			return fmt.Errorf("%s:%d: %v", tab.Path, i, err)
 		}
 
 		l = l.Next
 		i++
+	}
+
+	if err := writer.Flush(); err != nil {
+		return fmt.Errorf("%s: %v", tab.Path, err)
 	}
 
 	tab.UndoCount = 0
@@ -61,13 +66,13 @@ func (tab *Tab) save(path string) (string, error) {
 	}
 
 	err = tab.WriteTo(file)
+	closeErr := file.Close()
 	if err != nil {
 		return "", fmt.Errorf("save: %v", err)
 	}
 
-	err = file.Close()
-	if err != nil {
-		return "", fmt.Errorf("save: %v", err)
+	if closeErr != nil {
+		return "", fmt.Errorf("save: %v", closeErr)
 	}
 
 	return fmt.Sprintf("tab saved to file %s", path), nil
@@ -87,13 +92,13 @@ func (tab *Tab) safeSave(path string) (string, error) {
 	}
 
 	err = tab.WriteTo(backupFile)
+	closeErr := backupFile.Close()
 	if err != nil {
 		return "", fmt.Errorf("save: %v", err)
 	}
 
-	err = backupFile.Close()
-	if err != nil {
-		return "", fmt.Errorf("save: %v", err)
+	if closeErr != nil {
+		return "", fmt.Errorf("save: %v", closeErr)
 	}
 
 	// Write content to the root file
