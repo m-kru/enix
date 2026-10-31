@@ -18,7 +18,8 @@ type bracketPosition struct {
 }
 
 type Highlighter struct {
-	Regions []*Region
+	Regions    []*Region
+	Highlights []highlight.Highlight // Reused on every call to Analyze.
 
 	matchingBrackets []bracketPosition
 
@@ -35,6 +36,7 @@ type Highlighter struct {
 func DefaultHighlighter() *Highlighter {
 	return &Highlighter{
 		Regions:          []*Region{DefaultRegion()},
+		Highlights:       make([]highlight.Highlight, 0, 1024),
 		matchingBrackets: nil,
 		lineNum:          0,
 		firstVisLineNum:  0,
@@ -70,26 +72,25 @@ func NewHighlighter(lang string) (*Highlighter, error) {
 // The line argument  must be the first line of file.
 // StartLineIdx is the index of the first visible line.
 // EndLineIdx is the index of the last visible line.
+// Highlights is overwritten by each call to Analyze.
 func (hlr *Highlighter) Analyze(
 	line *line.Line, // First tab line
 	firstVisLineNum int,
 	lastVisLineNum int,
 	cursors []*cursor.Cursor,
-) []highlight.Highlight {
-	hls := make([]highlight.Highlight, 0, 1024)
+) {
+	hlr.Highlights = hlr.Highlights[:0]
 
 	if len(hlr.Regions) == 0 {
-		return nil
+		return
 	}
 
 	hlr.reset(cursors, firstVisLineNum, lastVisLineNum)
 
 	for !hlr.done() {
-		hlr.analyzeLine(line, &hls)
+		hlr.analyzeLine(line)
 		line = line.Next
 	}
-
-	return hls
 }
 
 // Resets highlighter for a new analysis.
@@ -180,14 +181,14 @@ func (hlr *Highlighter) done() bool {
 	return hlr.lineNum > hlr.lastVisLineNum
 }
 
-func (hlr *Highlighter) analyzeLine(line *line.Line, hls *[]highlight.Highlight) {
+func (hlr *Highlighter) analyzeLine(line *line.Line) {
 	if len(line.Buf) == 0 {
 		hlr.lineNum++
 		return
 	}
 
 	if len(hlr.Regions) == 1 {
-		hlr.analyzeLineOneRegionOnly(line, hls)
+		hlr.analyzeLineOneRegionOnly(line)
 		return
 	}
 
@@ -250,20 +251,20 @@ func (hlr *Highlighter) analyzeLine(line *line.Line, hls *[]highlight.Highlight)
 			continue
 		}
 
-		hlr.highlightRegion(line.Buf, hlr.lineNum, bufIdx, endIdx, region, hls)
+		hlr.highlightRegion(line.Buf, hlr.lineNum, bufIdx, endIdx, region)
 		bufIdx = endIdx
 	}
 
 	hlr.lineNum++
 }
 
-func (hlr *Highlighter) analyzeLineOneRegionOnly(line *line.Line, hls *[]highlight.Highlight) {
+func (hlr *Highlighter) analyzeLineOneRegionOnly(line *line.Line) {
 	if hlr.lineNum < hlr.firstVisLineNum {
 		hlr.lineNum++
 		return
 	}
 
-	hlr.highlightRegion(line.Buf, hlr.lineNum, 0, len(line.Buf), hlr.Regions[0], hls)
+	hlr.highlightRegion(line.Buf, hlr.lineNum, 0, len(line.Buf), hlr.Regions[0])
 	hlr.lineNum++
 }
 
@@ -273,7 +274,6 @@ func (hlr *Highlighter) highlightRegion(
 	startBufIdx int,
 	endBufIdx int,
 	region *Region,
-	highlights *[]highlight.Highlight,
 ) {
 	matches := region.match(line[startBufIdx:endBufIdx])
 
@@ -293,7 +293,7 @@ func (hlr *Highlighter) highlightRegion(
 			}
 			hls := hl.Split(mbhl)
 			for i := range len(hls) - 1 {
-				*highlights = append(*highlights, hls[i])
+				hlr.Highlights = append(hlr.Highlights, hls[i])
 			}
 			hl = hls[len(hls)-1]
 			hlr.matchingBrackets = hlr.matchingBrackets[1:]
@@ -330,7 +330,7 @@ func (hlr *Highlighter) highlightRegion(
 			hl = highlightMatchingBrackets(hl)
 		}
 
-		*highlights = append(*highlights, hl)
+		hlr.Highlights = append(hlr.Highlights, hl)
 	}
 
 	endRuneIdx := util.ByteIdxToRuneIdx(line, endBufIdx)
@@ -346,6 +346,6 @@ func (hlr *Highlighter) highlightRegion(
 			hl = highlightMatchingBrackets(hl)
 		}
 
-		*highlights = append(*highlights, hl)
+		hlr.Highlights = append(hlr.Highlights, hl)
 	}
 }

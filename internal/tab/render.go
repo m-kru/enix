@@ -99,7 +99,8 @@ func (tab *Tab) RenderLines(line *line.Line, lineNum int, frame frame.Frame) {
 	if endLineIdx > tab.LineCount {
 		endLineIdx = tab.LineCount
 	}
-	hls := tab.Highlighter.Analyze(tab.Lines, lineNum, endLineIdx, tab.Cursors)
+	tab.Highlighter.Analyze(tab.Lines, lineNum, endLineIdx, tab.Cursors)
+	hls := tab.Highlighter.Highlights
 
 	tab.SearchCtx.FirstVisLineNum = lineNum
 	search.Search(tab.Lines, &tab.SearchCtx)

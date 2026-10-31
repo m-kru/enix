@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/m-kru/enix/internal/cfg"
+	"github.com/m-kru/enix/internal/highlight"
 	"github.com/m-kru/enix/internal/regex"
 )
 
@@ -160,6 +161,7 @@ func readFiletypeDefFromJSON(lang string) ([]RegionJSON, error) {
 func langDefIntoHighlighter(regionsJSON []RegionJSON) (*Highlighter, error) {
 	hl := &Highlighter{
 		Regions:          []*Region{},
+		Highlights:       make([]highlight.Highlight, 0, 1024),
 		matchingBrackets: nil,
 		lineNum:          0,
 		firstVisLineNum:  0,
