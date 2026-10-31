@@ -1,6 +1,8 @@
 package line
 
 import (
+	"unicode/utf8"
+
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/find"
 	"github.com/m-kru/enix/internal/frame"
@@ -26,6 +28,7 @@ func (l *Line) Render(
 
 	var r rune
 	var rw int
+	var bIdx, rLen int
 
 	setRune := func(r rune, style tcell.Style) {
 		if r == '\u00a0' {
@@ -98,7 +101,9 @@ func (l *Line) Render(
 
 	// Handle first column in a little bit different way.
 	// The column might start at the second column of a rune.
-	r = l.Rune(rIdx)
+	bIdx = l.BufIdx(rIdx)
+	r, rLen = utf8.DecodeRune(l.Buf[bIdx:])
+	bIdx += rLen
 	rw = runewidth.RuneWidth(r)
 	if r == '\t' {
 		if style != cfg.Style.Find {
@@ -116,7 +121,8 @@ func (l *Line) Render(
 	}
 
 	for x < frame.Width && rIdx != lineRuneCount {
-		r = l.Rune(rIdx)
+		r, rLen = utf8.DecodeRune(l.Buf[bIdx:])
+		bIdx += rLen
 		rw = runewidth.RuneWidth(r)
 
 		setStyle()
