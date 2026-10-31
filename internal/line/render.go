@@ -30,7 +30,7 @@ func (l *Line) Render(
 		if r == '\u00a0' {
 			r = cfg.Cfg.NonBreakingSpaceRune
 			if style != cfg.Style.Find {
-				style = cfg.Style.Whitespace
+				style = cfg.Style.Whitespace.Reverse(true)
 			}
 		}
 		frame.SetContent(x, 0, r, style)

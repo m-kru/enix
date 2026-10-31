@@ -110,6 +110,8 @@ NonBreakingSpaceRune : int
   The default is 9085 ('⍽', U+237D).
   The rune must occupy exactly one terminal cell.
   This only changes the display; the file content is preserved.
+  The color for no-breaking spaces is always reversed.
+  Otherwise, it is hard to spot it, even if using visible rune.
 
 TabPadRune : int
   Tab padding rune.
