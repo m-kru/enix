@@ -55,8 +55,8 @@ func Edit(args []string, t *tab.Tab) (*tab.Tab, error) {
 
 		// Open new tab
 		newT, err := tab.Open(t.Frame, path)
-		newT.Go(openLine, openCol)
 		if newT != nil {
+			newT.Go(openLine, openCol)
 			t.Append(newT)
 			if i == 0 {
 				newCurrentTab = newT

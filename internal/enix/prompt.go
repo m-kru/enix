@@ -294,6 +294,23 @@ func (p *prompt) Enter() TcellEventReceiver {
 		p.State = InText
 	}
 
+	c, err := cmd.Parse(strings.TrimSpace(p.Line.String()))
+	if err == nil && (c.Name == "e" || c.Name == "edit") && len(c.Args) > 0 {
+		path := c.Args[len(c.Args)-1]
+		if info, err := os.Stat(path); err == nil && info.IsDir() {
+			if !strings.HasSuffix(path, string(os.PathSeparator)) {
+				path += string(os.PathSeparator)
+			}
+			fields := strings.Fields(p.Line.String())
+			fields[len(fields)-1] = path
+			text := strings.Join(fields, " ")
+			p.Line, _ = line.FromString(text)
+			p.Cursor = cursor.New(p.Line, 1, utf8.RuneCountInString(text))
+			p.openPathMenu(path)
+			return p
+		}
+	}
+
 	if len(p.History) == cap(p.History) {
 		p.History = p.History[1:]
 	}
@@ -327,7 +344,7 @@ func (p *prompt) openPathMenu(path string) {
 		return
 	}
 
-	PromptMenu = newMenu(&PromptFrame, names, 0, cfg.Style.Menu, cfg.Style.MenuItem)
+	PromptMenu = newMenu(&PromptMenuFrame, names, 0, cfg.Style.Menu, cfg.Style.MenuItem)
 
 	path = dir + names[0]
 	fields := strings.Fields(p.Line.String())
