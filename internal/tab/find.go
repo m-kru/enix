@@ -116,9 +116,15 @@ func (tab *Tab) FindSelAll() {
 
 	finds := tab.SearchCtx.Finds
 	sels := make([]*sel.Selection, 0, len(finds))
+	line := tab.Lines
+	lineNum := 1
 
+	// Finds are ordered by line number, so traverse the lines only once.
 	for _, f := range finds {
-		line := tab.Lines.Get(f.LineNum)
+		for lineNum < f.LineNum {
+			line = line.Next
+			lineNum++
+		}
 		s := &sel.Selection{
 			Line:         line,
 			LineNum:      f.LineNum,
