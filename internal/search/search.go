@@ -1,9 +1,10 @@
 package search
 
 import (
+	"unicode/utf8"
+
 	"github.com/m-kru/enix/internal/find"
 	"github.com/m-kru/enix/internal/line"
-	"github.com/m-kru/enix/internal/util"
 )
 
 // Search returns a list of finds and an index of the first find after the start line.
@@ -44,11 +45,18 @@ func Search(line *line.Line, ctx *Context) []find.Find {
 			ctx.FirstVisFindIdx = len(ctx.Finds)
 		}
 
+		// Matches are ordered and non-overlapping, so decode each span once.
+		byteIdx, runeIdx := 0, 0
 		for _, m := range matches {
+			runeIdx += utf8.RuneCount(line.Buf[byteIdx:m[0]])
+			startRuneIdx := runeIdx
+			runeIdx += utf8.RuneCount(line.Buf[m[0]:m[1]])
+			byteIdx = m[1]
+
 			f := find.Find{
 				LineNum:      lineNum,
-				StartRuneIdx: util.ByteIdxToRuneIdx(line.Buf, m[0]),
-				EndRuneIdx:   util.ByteIdxToRuneIdx(line.Buf, m[1]),
+				StartRuneIdx: startRuneIdx,
+				EndRuneIdx:   runeIdx,
 			}
 			ctx.Finds = append(ctx.Finds, f)
 		}

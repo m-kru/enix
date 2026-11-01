@@ -3,10 +3,10 @@ package lang
 import (
 	"regexp"
 	"sort"
+	"unicode/utf8"
 
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/regex"
-	"github.com/m-kru/enix/internal/util"
 
 	"github.com/gdamore/tcell/v2"
 )
@@ -67,14 +67,15 @@ func DefaultRegion() *Region {
 }
 
 func (reg Region) match(buf []byte) []match {
+	// Collect byte offsets first; convert after sorting to preserve token precedence.
 	matches := make([]match, 0, 32)
 
 	if reg.Attribute != nil {
 		finds := reg.Attribute.FindAll(buf)
 		for _, f := range finds {
 			m := match{
-				start: util.ByteIdxToRuneIdx(buf, f.Start),
-				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				start: f.Start,
+				end:   f.End,
 				style: cfg.Style.Attribute,
 			}
 			matches = append(matches, m)
@@ -85,8 +86,8 @@ func (reg Region) match(buf []byte) []match {
 		finds := reg.Bold.FindAll(buf)
 		for _, f := range finds {
 			m := match{
-				start: util.ByteIdxToRuneIdx(buf, f.Start),
-				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				start: f.Start,
+				end:   f.End,
 				style: cfg.Style.Bold,
 			}
 			matches = append(matches, m)
@@ -97,8 +98,8 @@ func (reg Region) match(buf []byte) []match {
 		finds := reg.Comment.FindAll(buf)
 		for _, f := range finds {
 			m := match{
-				start: util.ByteIdxToRuneIdx(buf, f.Start),
-				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				start: f.Start,
+				end:   f.End,
 				style: cfg.Style.Comment,
 			}
 			matches = append(matches, m)
@@ -109,8 +110,8 @@ func (reg Region) match(buf []byte) []match {
 		finds := reg.Heading.FindAll(buf)
 		for _, f := range finds {
 			m := match{
-				start: util.ByteIdxToRuneIdx(buf, f.Start),
-				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				start: f.Start,
+				end:   f.End,
 				style: cfg.Style.Heading,
 			}
 			matches = append(matches, m)
@@ -121,8 +122,8 @@ func (reg Region) match(buf []byte) []match {
 		finds := reg.Italic.FindAll(buf)
 		for _, f := range finds {
 			m := match{
-				start: util.ByteIdxToRuneIdx(buf, f.Start),
-				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				start: f.Start,
+				end:   f.End,
 				style: cfg.Style.Italic,
 			}
 			matches = append(matches, m)
@@ -133,8 +134,8 @@ func (reg Region) match(buf []byte) []match {
 		finds := reg.Keyword.FindAll(buf)
 		for _, f := range finds {
 			m := match{
-				start: util.ByteIdxToRuneIdx(buf, f.Start),
-				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				start: f.Start,
+				end:   f.End,
 				style: cfg.Style.Keyword,
 			}
 			matches = append(matches, m)
@@ -145,8 +146,8 @@ func (reg Region) match(buf []byte) []match {
 		finds := reg.Meta.FindAll(buf)
 		for _, f := range finds {
 			m := match{
-				start: util.ByteIdxToRuneIdx(buf, f.Start),
-				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				start: f.Start,
+				end:   f.End,
 				style: cfg.Style.Meta,
 			}
 			matches = append(matches, m)
@@ -157,8 +158,8 @@ func (reg Region) match(buf []byte) []match {
 		finds := reg.Mono.FindAll(buf)
 		for _, f := range finds {
 			m := match{
-				start: util.ByteIdxToRuneIdx(buf, f.Start),
-				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				start: f.Start,
+				end:   f.End,
 				style: cfg.Style.Mono,
 			}
 			matches = append(matches, m)
@@ -169,8 +170,8 @@ func (reg Region) match(buf []byte) []match {
 		finds := reg.Number.FindAll(buf)
 		for _, f := range finds {
 			m := match{
-				start: util.ByteIdxToRuneIdx(buf, f.Start),
-				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				start: f.Start,
+				end:   f.End,
 				style: cfg.Style.Number,
 			}
 			matches = append(matches, m)
@@ -181,8 +182,8 @@ func (reg Region) match(buf []byte) []match {
 		finds := reg.Operator.FindAll(buf)
 		for _, f := range finds {
 			m := match{
-				start: util.ByteIdxToRuneIdx(buf, f.Start),
-				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				start: f.Start,
+				end:   f.End,
 				style: cfg.Style.Operator,
 			}
 			matches = append(matches, m)
@@ -193,8 +194,8 @@ func (reg Region) match(buf []byte) []match {
 		finds := reg.String.FindAll(buf)
 		for _, f := range finds {
 			m := match{
-				start: util.ByteIdxToRuneIdx(buf, f.Start),
-				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				start: f.Start,
+				end:   f.End,
 				style: cfg.Style.String,
 			}
 			matches = append(matches, m)
@@ -205,8 +206,8 @@ func (reg Region) match(buf []byte) []match {
 		finds := reg.Type.FindAll(buf)
 		for _, f := range finds {
 			m := match{
-				start: util.ByteIdxToRuneIdx(buf, f.Start),
-				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				start: f.Start,
+				end:   f.End,
 				style: cfg.Style.Type,
 			}
 			matches = append(matches, m)
@@ -217,8 +218,8 @@ func (reg Region) match(buf []byte) []match {
 		finds := reg.Value.FindAll(buf)
 		for _, f := range finds {
 			m := match{
-				start: util.ByteIdxToRuneIdx(buf, f.Start),
-				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				start: f.Start,
+				end:   f.End,
 				style: cfg.Style.Value,
 			}
 			matches = append(matches, m)
@@ -229,8 +230,8 @@ func (reg Region) match(buf []byte) []match {
 		finds := reg.Variable.FindAll(buf)
 		for _, f := range finds {
 			m := match{
-				start: util.ByteIdxToRuneIdx(buf, f.Start),
-				end:   util.ByteIdxToRuneIdx(buf, f.End),
+				start: f.Start,
+				end:   f.End,
 				style: cfg.Style.Variable,
 			}
 			matches = append(matches, m)
@@ -241,8 +242,8 @@ func (reg Region) match(buf []byte) []match {
 		finds := reg.CursorWord.FindAllIndex(buf, -1)
 		for _, f := range finds {
 			m := match{
-				start: util.ByteIdxToRuneIdx(buf, f[0]),
-				end:   util.ByteIdxToRuneIdx(buf, f[1]),
+				start: f[0],
+				end:   f[1],
 				style: cfg.Style.CursorWord,
 			}
 			matches = append(matches, m)
@@ -256,6 +257,17 @@ func (reg Region) match(buf []byte) []match {
 		return mi.start < mj.start
 	}
 	sort.SliceStable(matches, less)
+
+	// Starts are ordered, but ends can go backwards when token types overlap.
+	// Advance through the starts and count each match's span separately.
+	byteIdx, runeIdx := 0, 0
+	for i := range matches {
+		m := &matches[i]
+		runeIdx += utf8.RuneCount(buf[byteIdx:m.start])
+		byteIdx = m.start
+		m.start = runeIdx
+		m.end = runeIdx + utf8.RuneCount(buf[byteIdx:m.end])
+	}
 
 	return matches
 }

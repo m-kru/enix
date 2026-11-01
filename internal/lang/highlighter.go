@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"regexp"
 	"sort"
+	"unicode/utf8"
 
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/highlight"
 	"github.com/m-kru/enix/internal/line"
-	"github.com/m-kru/enix/internal/util"
 )
 
 type bracketPosition struct {
@@ -196,6 +196,7 @@ func (hlr *Highlighter) analyzeLine(line *line.Line) {
 	startTokIdx := 0 // Current list index of the start token
 	var endTokens map[string][]RegionToken
 	bufIdx := 0 // Current line buffer index
+	runeOffset := 0
 	startTokEndIdx := 0
 
 	for bufIdx < len(line.Buf) {
@@ -251,7 +252,7 @@ func (hlr *Highlighter) analyzeLine(line *line.Line) {
 			continue
 		}
 
-		hlr.highlightRegion(line.Buf, hlr.lineNum, bufIdx, endIdx, region)
+		runeOffset = hlr.highlightRegion(line.Buf, hlr.lineNum, bufIdx, endIdx, runeOffset, region)
 		bufIdx = endIdx
 	}
 
@@ -264,20 +265,20 @@ func (hlr *Highlighter) analyzeLineOneRegionOnly(line *line.Line) {
 		return
 	}
 
-	hlr.highlightRegion(line.Buf, hlr.lineNum, 0, len(line.Buf), hlr.Regions[0])
+	hlr.highlightRegion(line.Buf, hlr.lineNum, 0, len(line.Buf), 0, hlr.Regions[0])
 	hlr.lineNum++
 }
 
+// highlightRegion returns the rune index at the end of the region.
 func (hlr *Highlighter) highlightRegion(
 	line []byte,
 	lineNum int,
 	startBufIdx int,
 	endBufIdx int,
+	runeOffset int,
 	region *Region,
-) {
+) int {
 	matches := region.match(line[startBufIdx:endBufIdx])
-
-	runeOffset := util.ByteIdxToRuneIdx(line, startBufIdx)
 
 	regStyle := cfg.Style.Get(region.Style)
 	runeIdx := 0 // Current rune index
@@ -333,7 +334,7 @@ func (hlr *Highlighter) highlightRegion(
 		hlr.Highlights = append(hlr.Highlights, hl)
 	}
 
-	endRuneIdx := util.ByteIdxToRuneIdx(line, endBufIdx)
+	endRuneIdx := runeOffset + utf8.RuneCount(line[startBufIdx:endBufIdx])
 	if runeIdx < endRuneIdx {
 		hl := highlight.Highlight{
 			LineNum:      lineNum,
@@ -348,4 +349,6 @@ func (hlr *Highlighter) highlightRegion(
 
 		hlr.Highlights = append(hlr.Highlights, hl)
 	}
+
+	return endRuneIdx
 }
