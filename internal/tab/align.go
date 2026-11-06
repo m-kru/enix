@@ -2,21 +2,32 @@ package tab
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/m-kru/enix/internal/action"
 	"github.com/m-kru/enix/internal/cursor"
 	"github.com/m-kru/enix/internal/sel"
 )
 
-func (tab *Tab) Align(r rune) error {
+func (tab *Tab) Align(str string, regex bool) error {
+	var re *regexp.Regexp
+	if regex {
+		var err error
+		re, err = regexp.Compile(str)
+		if err != nil {
+			return err
+		}
+	}
+
 	prevCurs := cursor.Clone(tab.Cursors)
 	prevSels := sel.Clone(tab.Selections)
 
 	var actions action.Actions
 
 	if len(tab.Cursors) > 0 {
-		actions = tab.alignCursors(r)
+		actions = tab.alignCursors(str, re)
 	} else {
 		return fmt.Errorf("unimplemented for selections")
 	}
@@ -28,7 +39,7 @@ func (tab *Tab) Align(r rune) error {
 	return nil
 }
 
-func (tab *Tab) alignCursors(r rune) action.Actions {
+func (tab *Tab) alignCursors(str string, re *regexp.Regexp) action.Actions {
 	if len(tab.Cursors) == 1 {
 		return nil
 	}
@@ -38,20 +49,23 @@ func (tab *Tab) alignCursors(r rune) action.Actions {
 	alignCurs := make([]*cursor.Cursor, 0, len(tmpCurs))
 
 	for _, cur := range tmpCurs {
-		if r == 0 {
+		if str == "" && re == nil {
 			alignCurs = append(alignCurs, cur)
 			continue
 		}
 
-		for {
-			if cur.Rune() == r {
-				alignCurs = append(alignCurs, cur)
-				break
+		suffix := cur.Line.String()[cur.Line.BufIdx(cur.RuneIdx):]
+		idx := -1
+		if re != nil {
+			if match := re.FindStringIndex(suffix); match != nil {
+				idx = match[0]
 			}
-			cur.Right()
-			if cur.RuneIdx == cur.Line.RuneCount() {
-				break
-			}
+		} else {
+			idx = strings.Index(suffix, str)
+		}
+		if idx >= 0 {
+			runeIdx := cur.RuneIdx + utf8.RuneCountInString(suffix[:idx])
+			alignCurs = append(alignCurs, cursor.New(cur.Line, cur.LineNum, runeIdx))
 		}
 	}
 

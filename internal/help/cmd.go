@@ -191,9 +191,11 @@ Otherwise, the command looks for ')'.`,
 
 	"a": `a # An alias for the 'align' command.`,
 
-	"align": `align [rune] # Aligns columns of cursors.
-If rune is passed, then the first column containing the given rune is aligned.
-The rune search starts at the position of the cursor with the lowest rune index within the line.`,
+	"align": `align [-r] [string] # Aligns columns of cursors.
+If a string is passed, then the first column of its first occurrence in each line is aligned.
+With -r, the string is required and treated as a regular expression.
+The string search starts at the position of the cursor with the lowest rune index within the line.
+Lines without a matching string are ignored.`,
 
 	"autosave": `autosave n # Changes value for autosave period to n seconds.
 n must be natural.

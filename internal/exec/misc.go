@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	"unicode/utf8"
 
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/cmd"
@@ -12,23 +11,26 @@ import (
 )
 
 func Align(args []string, tab *tab.Tab) error {
+	regex := len(args) > 0 && args[0] == "-r"
+	if regex {
+		args = args[1:]
+		if len(args) == 0 {
+			return fmt.Errorf("align: missing regex after -r")
+		}
+	}
+
 	if len(args) > 1 {
 		return fmt.Errorf(
 			"align: expected at most 1 arg, provided %d", len(args),
 		)
 	}
 
-	var r rune = 0
+	str := ""
 	if len(args) > 0 {
-		str := args[0]
-		rc := utf8.RuneCountInString(str)
-		if rc > 1 {
-			return fmt.Errorf("align: argument must be a rune, not a string")
-		}
-		r = []rune(str)[0]
+		str = args[0]
 	}
 
-	err := tab.Align(r)
+	err := tab.Align(str, regex)
 	if err != nil {
 		return fmt.Errorf("align: %v", err)
 	}
