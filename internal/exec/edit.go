@@ -10,8 +10,11 @@ import (
 )
 
 func Edit(args []string, t *tab.Tab) (*tab.Tab, error) {
+	if len(args) > 0 && args[0] == "-h" {
+		args = args[1:]
+	}
 	if len(args) == 0 {
-		return nil, fmt.Errorf("open: expected at least 1 arg, provided 0")
+		return nil, fmt.Errorf("edit: expected at least 1 arg, provided 0")
 	}
 
 	var newCurrentTab *tab.Tab

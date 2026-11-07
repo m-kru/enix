@@ -5,11 +5,11 @@ import (
 	"strings"
 )
 
-// DirEntires returns names of entries within provided path.
-// Additionally it filters entires by provided prefix.
+// DirEntries returns names of entries within provided path.
+// Additionally it filters entries by provided prefix and hidden status.
 // Directories names are suffixed with os path separator.
 // Errors returned by os.ReadDir are ignored.
-func DirEntries(path string, prefix string) []string {
+func DirEntries(path string, prefix string, includeHidden bool) []string {
 	if path == "" {
 		path = "."
 	}
@@ -20,6 +20,9 @@ func DirEntries(path string, prefix string) []string {
 
 	for _, e := range entries {
 		name := e.Name()
+		if !includeHidden && strings.HasPrefix(name, ".") {
+			continue
+		}
 		if e.IsDir() {
 			name += string(os.PathSeparator)
 		}

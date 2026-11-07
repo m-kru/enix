@@ -96,8 +96,10 @@ If cursor is in the fisrt line, nothing happens.`,
 
 	"e": `e # An alias for the 'edit' command.`,
 
-	"edit": `edit path/to/file ... # Opens a file in a new tab.
-If path to the file is not provided, it opens a new empty tab.
+	"edit": `edit [-h] path/to/file ... # Opens a file in a new tab.
+Press Tab to complete a path, or Enter on a directory to list its entries.
+Hidden files and directories are omitted from the path completion list by default.
+Use -h before the paths to include hidden entries in the list.
 
 The command is named "edit" instead of "open" for the following reason.
 If you have an alias for the enix in a shell, then the alias is probably 'e'.
