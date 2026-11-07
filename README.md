@@ -14,6 +14,7 @@
 - Mouse support.
 - Optional automatic removal of trailing whitespaces.
 - Configurable character and style of tab, newline, and non-breaking space.
+- Configurable indentation guides (`⎸`, U+23B8, by default) for files configured to use spaces.
 - Configuration and syntax highlighting loaded dynamically.
   No need to rebuilt or wait for weeks/months to get syntax highlighting fix or improvement.
   Easy to use custom syntax highlighting.

@@ -172,7 +172,7 @@ func (p *prompt) Render() {
 		p.View = p.View.MinAdjust(p.Cursor.View())
 	}
 
-	p.Line.Render(1, frame.Line(1, 0), p.View, nil, nil)
+	p.Line.Render(1, frame.Line(1, 0), p.View, 0, nil, nil)
 
 	if len(p.ShadowText) > 0 {
 		for i, r := range p.ShadowText {

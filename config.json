@@ -5,6 +5,7 @@
 	"TrimOnSave": true,
 	"SafeFileSave": true,
 	"HighlightCursorWord": true,
+	"IndentRune": 9144,
 	"LineEndRune": 172,
 	"TabRune": 9656,
 	"TabPadRune": 183,

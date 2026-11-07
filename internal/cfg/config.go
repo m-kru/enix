@@ -15,6 +15,7 @@ type Config struct {
 	HighlightCursorWord bool
 
 	// Whitespace
+	IndentRune           rune
 	LineEndRune          rune
 	TabRune              rune
 	TabPadRune           rune
@@ -37,6 +38,7 @@ func DefaultConfig() Config {
 		TrimOnSave:            true,
 		SafeFileSave:          true,
 		HighlightCursorWord:   true,
+		IndentRune:            '⎸',
 		LineEndRune:           '¬',
 		TabRune:               '▸',
 		TabPadRune:            '·',

@@ -2,6 +2,7 @@ package tab
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/m-kru/enix/internal/cfg"
 	"github.com/m-kru/enix/internal/frame"
@@ -94,6 +95,10 @@ func (tab *Tab) RenderLineNums(line *line.Line, lineNum int, frame frame.Frame) 
 // Line is first visible line
 func (tab *Tab) RenderLines(line *line.Line, lineNum int, frame frame.Frame) {
 	renderedCount := 0
+	indentWidth := 0
+	if strings.Trim(tab.IndentStr, " ") == "" {
+		indentWidth = len(tab.IndentStr)
+	}
 
 	endLineIdx := tab.View.LastLine()
 	if endLineIdx > tab.LineCount {
@@ -111,6 +116,7 @@ func (tab *Tab) RenderLines(line *line.Line, lineNum int, frame frame.Frame) {
 			lineNum,
 			frame.Line(0, renderedCount),
 			tab.View,
+			indentWidth,
 			hls,
 			finds,
 		)

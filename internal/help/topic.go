@@ -95,6 +95,14 @@ FiletypeIndent : map[string]string
 HighlightCursorWord : bool
   Highlight word under cursor and all occurrence of the word in the view.
 
+IndentRune : int
+  Display rune for indentation guides in files configured to use spaces, using the Whitespace style.
+  The default is 9144 ('⎸', U+23B8).
+  Set the value to 32 (' ', U+0020) to disable visible indentation guides.
+  The rune must occupy exactly one terminal cell.
+  For an indent of N spaces, guides appear at columns N+1, 2N+1, and so on within leading spaces.
+  This only changes the display; the file content is preserved.
+
 LineEndRune : int
   Line end rune.
   Unfortunately, the value type is int, so the rune is not visible in the config file.

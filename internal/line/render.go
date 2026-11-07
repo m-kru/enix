@@ -17,6 +17,7 @@ func (l *Line) Render(
 	lineNum int,
 	frame frame.Frame,
 	view view.View,
+	indentWidth int,
 	hls []highlight.Highlight,
 	finds []find.Find,
 ) ([]highlight.Highlight, []find.Find) {
@@ -24,12 +25,23 @@ func (l *Line) Render(
 	findIdx := 0 // Current find index
 	x := 0       // Frame x coordinate
 	rIdx, runeSubcol, ok := l.RuneIdx(view.Column)
+	indentRuneCount := 0
+	if indentWidth > 0 {
+		indentRuneCount = utf8.RuneCountInString(l.Indent())
+	}
 
 	var r rune
 	var rw int
 	var bIdx, rLen int
 
 	setRune := func(r rune, style tcell.Style) {
+		column := view.Column + x
+		if r == ' ' && rIdx < indentRuneCount && indentWidth > 0 && column > indentWidth && (column-1)%indentWidth == 0 {
+			r = cfg.Cfg.IndentRune
+			if style != cfg.Style.Find {
+				style = cfg.Style.Whitespace
+			}
+		}
 		if r == '\u00a0' {
 			r = cfg.Cfg.NonBreakingSpaceRune
 			if style != cfg.Style.Find {

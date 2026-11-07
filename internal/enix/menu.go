@@ -258,7 +258,7 @@ func (menu *menu) Render(frame frame.Frame) {
 	}
 
 	iFrame := frame.ColumnSubframe(frame.X+2, frame.Width-4)
-	line.Render(1, iFrame, menu.view, hls, nil)
+	line.Render(1, iFrame, menu.view, 0, hls, nil)
 
 	// Fill missing space
 	for x := line.Columns(); x < iFrame.Width; x++ {

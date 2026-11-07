@@ -92,7 +92,15 @@ func configSanityChecks() error {
 		return fmt.Errorf("AutoSave must be natural, current value %d", Cfg.AutoSave)
 	}
 
-	rw := runewidth.RuneWidth(Cfg.LineEndRune)
+	rw := runewidth.RuneWidth(Cfg.IndentRune)
+	if rw != 1 {
+		return fmt.Errorf(
+			"width of IndentRune must equal 1, width of '%c' equals %d",
+			Cfg.IndentRune, rw,
+		)
+	}
+
+	rw = runewidth.RuneWidth(Cfg.LineEndRune)
 	if rw != 1 {
 		return fmt.Errorf(
 			"width of LineEndRune must equal 1, width of '%c' equals %d",
