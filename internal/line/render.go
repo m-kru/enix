@@ -28,6 +28,15 @@ func (l *Line) Render(
 	indentRuneCount := 0
 	if indentWidth > 0 {
 		indentRuneCount = utf8.RuneCountInString(l.Indent())
+		if len(l.Buf) == 0 {
+			// Continue guides across empty lines without adding any text.
+			if prev := l.GetPrevNonEmpty(); prev != nil {
+				indentRuneCount = utf8.RuneCountInString(prev.Indent())
+			}
+			if next := l.GetNextNonEmpty(); next != nil {
+				indentRuneCount = max(indentRuneCount, utf8.RuneCountInString(next.Indent()))
+			}
+		}
 	}
 
 	var r rune
@@ -155,11 +164,18 @@ func (l *Line) Render(
 	}
 
 clear:
-	frame.SetContent(x, 0, cfg.Cfg.LineEndRune, cfg.Style.Whitespace)
-	x++
+	if len(l.Buf) > 0 || view.Column == 1 {
+		frame.SetContent(x, 0, cfg.Cfg.LineEndRune, cfg.Style.Whitespace)
+		x++
+	}
 
 	for x < frame.Width {
-		frame.SetContent(x, 0, ' ', cfg.Style.Default)
+		column := view.Column + x
+		if len(l.Buf) == 0 && indentWidth > 0 && column <= indentRuneCount && column > indentWidth && (column-1)%indentWidth == 0 {
+			frame.SetContent(x, 0, cfg.Cfg.IndentRune, cfg.Style.Whitespace)
+		} else {
+			frame.SetContent(x, 0, ' ', cfg.Style.Default)
+		}
 		x++
 	}
 

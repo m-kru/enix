@@ -101,6 +101,8 @@ IndentRune : int
   Set the value to 32 (' ', U+0020) to disable visible indentation guides.
   The rune must occupy exactly one terminal cell.
   For an indent of N spaces, guides appear at columns N+1, 2N+1, and so on within leading spaces.
+  Empty lines continue guides using the deeper indent of the nearest non-empty lines above and below.
+  The line end rune stays in the first column of empty lines.
   This only changes the display; the file content is preserved.
 
 LineEndRune : int
