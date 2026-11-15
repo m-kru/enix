@@ -337,8 +337,6 @@ func (p *prompt) openPathMenu(path string) {
 		base = filepath.Base(path)
 	}
 
-	p.PathDir = dir
-
 	c, _ := cmd.Parse(p.Line.String())
 	isEdit := c.Name == "e" || c.Name == "edit"
 	hiddenFlag := isEdit && len(c.Args) > 0 && c.Args[0] == "-h"
@@ -347,6 +345,7 @@ func (p *prompt) openPathMenu(path string) {
 		return
 	}
 
+	p.PathDir = dir
 	PromptMenu = newMenu(&PromptMenuFrame, names, 0, cfg.Style.Menu, cfg.Style.MenuItem)
 
 	path = dir + names[0]
@@ -473,6 +472,11 @@ func (p *prompt) HandleTabPathMenu() {
 
 	path := p.PathDir + name
 	fields := strings.Fields(p.Line.String())
+	if len(PromptMenu.items) == 1 && (fields[0] == "e" || fields[0] == "edit") &&
+		strings.HasSuffix(path, string(os.PathSeparator)) {
+		p.openPathMenu(path)
+		return
+	}
 	fields = fields[0 : len(fields)-1]
 	fields = append(fields, path)
 	text := strings.Join(fields, " ")
